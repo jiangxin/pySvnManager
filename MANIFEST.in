@@ -1,0 +1,4 @@
+recursive-include svnadmin/public *
+recursive-include svnadmin/templates *
+recursive-include svnadmin/config *
+recursive-include svnadmin/i18n *

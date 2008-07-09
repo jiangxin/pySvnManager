@@ -1,0 +1,474 @@
+# English translations for svnadmin.
+# Copyright (C) 2008 ORGANIZATION
+# This file is distributed under the same license as the svnadmin project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: svnadmin 0.0.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2008-07-03 22:14+0800\n"
+"PO-Revision-Date: 2008-07-05 02:02+0800\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.2\n"
+
+#: svnadmin/controllers/authz.py:22 svnadmin/templates/authz/index.mako:159
+#: svnadmin/templates/check/index.mako:10
+msgid "All users(with anon)"
+msgstr ""
+
+#: svnadmin/controllers/authz.py:23 svnadmin/templates/authz/index.mako:161
+#: svnadmin/templates/check/index.mako:11
+msgid "Known users"
+msgstr ""
+
+#: svnadmin/controllers/authz.py:24 svnadmin/templates/authz/index.mako:163
+#: svnadmin/templates/check/index.mako:12
+msgid "Anonymous"
+msgstr ""
+
+#: svnadmin/controllers/authz.py:30 svnadmin/controllers/role.py:56
+#: svnadmin/controllers/role.py:80 svnadmin/templates/authz/index.mako:155
+#: svnadmin/templates/check/index.mako:17 svnadmin/templates/role/index.mako:18
+#: svnadmin/templates/role/index.mako:37 svnadmin/templates/role/index.mako:164
+#: svnadmin/templates/role/index.mako:240
+msgid "Group:"
+msgstr ""
+
+#: svnadmin/controllers/authz.py:36 svnadmin/controllers/role.py:63
+#: svnadmin/controllers/role.py:82 svnadmin/templates/authz/index.mako:157
+#: svnadmin/templates/check/index.mako:19 svnadmin/templates/role/index.mako:23
+#: svnadmin/templates/role/index.mako:42 svnadmin/templates/role/index.mako:166
+#: svnadmin/templates/role/index.mako:242
+msgid "Alias:"
+msgstr ""
+
+#: svnadmin/controllers/authz.py:71 svnadmin/controllers/authz.py:95
+#: svnadmin/controllers/role.py:49 svnadmin/templates/check/index.mako:9
+#: svnadmin/templates/check/index.mako:23 svnadmin/templates/role/index.mako:12
+#: svnadmin/templates/role/index.mako:27
+msgid "Please choose..."
+msgstr ""
+
+#: svnadmin/controllers/authz.py:159
+#, python-format
+msgid "Repository %s not exist."
+msgstr ""
+
+#: svnadmin/controllers/authz.py:166
+#, python-format
+msgid "Module %s not exist."
+msgstr ""
+
+#: svnadmin/controllers/authz.py:175
+#, python-format
+msgid "User %(user)s changed authz rules. (rev:%(rev)s,%(msg)s)"
+msgstr ""
+
+#: svnadmin/controllers/authz.py:199
+#, python-format
+msgid "User %(user)s delete authz rules. (rev:%(rev)s,%(msg)s)"
+msgstr ""
+
+#: svnadmin/controllers/check.py:74 svnadmin/templates/auth_failed.mako:4
+msgid "Permission denied."
+msgstr ""
+
+#: svnadmin/controllers/check.py:102 svnadmin/templates/check/index.mako:31
+msgid "All modules"
+msgstr ""
+
+#: svnadmin/controllers/check.py:114
+msgid "Select module"
+msgstr ""
+
+#: svnadmin/controllers/check.py:125 svnadmin/templates/check/index.mako:124
+#: svnadmin/templates/check/index.mako:137
+msgid "Manual input"
+msgstr ""
+
+#: svnadmin/controllers/login.py:35
+#, python-format
+msgid "User %s logged in"
+msgstr ""
+
+#: svnadmin/controllers/login.py:49
+#, python-format
+msgid "User %s logged out"
+msgstr ""
+
+#: svnadmin/controllers/role.py:122
+#, python-format
+msgid "User %(user)s changed group: %(grp)s. (rev:%(rev)s,%(msg)s)"
+msgstr ""
+
+#: svnadmin/controllers/role.py:142
+#, python-format
+msgid "User %(user)s delete group: %(grp)s. (rev:%(rev)s,%(msg)s)"
+msgstr ""
+
+#: svnadmin/controllers/role.py:162
+#, python-format
+msgid "User %(user)s changed alias: %(alias)s. (rev:%(rev)s,%(msg)s)"
+msgstr ""
+
+#: svnadmin/controllers/role.py:182
+#, python-format
+msgid "User %(user)s delete alias: %(alias)s. (rev:%(rev)s,%(msg)s)"
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:40
+msgid "Name is not given."
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:42
+msgid "Name is not string."
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:46
+msgid "Name contains invalid characters."
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:205
+msgid "Aliasname is not provided."
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:207
+msgid "Aliasname should not begin with &."
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:388
+msgid "Group name is not provided."
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:390
+msgid "Group name should not begin with @."
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:460
+#, python-format
+msgid "Recursive group membership for %s"
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:551
+#, python-format
+msgid "Not a valide username: %s"
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:676
+#, python-format
+msgid "Group %s is referenced by group %s."
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:1240
+msgid "Update failed! You are working on a out-of-date revision."
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:1424 svnadmin/model/svnauthz.py:1431
+#: svnadmin/model/svnauthz.py:1435
+#, python-format
+msgid "Unknown rule format: %s"
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:1449
+#, python-format
+msgid "No module exist for %s:%s"
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:1554
+#, python-format
+msgid "Alias %s is used by rules."
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:1562
+#, python-format
+msgid "Alias %s is referenced by group %s."
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:1576
+#, python-format
+msgid "%s is referenced by [%s]."
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:1716
+#, python-format
+msgid "User %(username)s has Full (RW) rights for module %(repos)s:%(path)s"
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:1718
+#, python-format
+msgid "User %(username)s has ReadOnly (RO) rights for module %(repos)s:%(path)s"
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:1720
+#, python-format
+msgid "User %(username)s can *NOT* access to module %(repos)s:%(path)s"
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:1762
+#, python-format
+msgid ""
+"\n"
+"%(user)s => [%(repos)s]\n"
+"%(sep)s\n"
+"RW: %(write)s\n"
+"RO: %(read)s\n"
+"XX: %(deny)s\n"
+"\n"
+msgstr ""
+
+#: svnadmin/model/svnauthz.py:1781
+#, python-format
+msgid ""
+"\n"
+"%(heading)s\n"
+"Access map on '%(repos)s' for user '%(user)s'\n"
+"%(heading)s\n"
+"  * Writable:\n"
+"%(write)s\n"
+"%(sep)s\n"
+"  * Readable:\n"
+"%(read)s\n"
+"%(sep)s\n"
+"  * Denied:\n"
+"%(deny)s\n"
+"%(sep)s\n"
+msgstr ""
+
+#: svnadmin/templates/base.mako:84
+msgid "Loading, please wait..."
+msgstr ""
+
+#: svnadmin/templates/base.mako:88
+msgid "Check permissions"
+msgstr ""
+
+#: svnadmin/templates/base.mako:89
+msgid "Role management"
+msgstr ""
+
+#: svnadmin/templates/base.mako:90 svnadmin/templates/authz/index.mako:5
+#: svnadmin/templates/authz/index.mako:603
+msgid "ACL management"
+msgstr ""
+
+#: svnadmin/templates/base.mako:92
+msgid "Logout"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:165
+msgid "User:"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:174
+msgid "Readonly"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:178
+#: svnadmin/templates/authz/index.mako:677
+msgid "Full"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:182
+#: svnadmin/templates/authz/index.mako:678
+msgid "Denied"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:380
+msgid "No rights selected! Please check proper rights for selected users."
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:391
+msgid "Unknown rights: "
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:479
+msgid "Please input module path."
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:485
+msgid "Please input repository name."
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:490
+msgid "Save failed."
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:539
+msgid "No path selected."
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:544
+msgid "Are you sure to delete module:"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:546
+#: svnadmin/templates/role/index.mako:450
+#: svnadmin/templates/role/index.mako:541
+msgid "Click Ok to proceed, or click cancel"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:567
+msgid "Can not delete module "
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:574
+msgid "Successfully delete module:"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:610
+msgid "Repository:"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:613
+msgid "New repository"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:617
+msgid "Repository Name:"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:622
+msgid "Administrators:"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:634
+msgid "Module:"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:637
+msgid "New module"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:643
+msgid "Module Path:"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:657
+msgid "ACL"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:662
+msgid "Users"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:676
+msgid "ReadOnly"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:693
+#: svnadmin/templates/role/index.mako:727
+msgid "Save"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:694
+#: svnadmin/templates/role/index.mako:728
+msgid "Delete"
+msgstr ""
+
+#: svnadmin/templates/authz/index.mako:695
+#: svnadmin/templates/role/index.mako:729
+msgid "Cancel"
+msgstr ""
+
+#: svnadmin/templates/check/index.mako:5 svnadmin/templates/check/index.mako:91
+#: svnadmin/templates/check/index.mako:151
+msgid "Check Permissions"
+msgstr ""
+
+#: svnadmin/templates/check/index.mako:23
+msgid "All repos"
+msgstr ""
+
+#: svnadmin/templates/check/index.mako:25
+msgid "Default"
+msgstr ""
+
+#: svnadmin/templates/check/index.mako:111
+msgid "Account"
+msgstr ""
+
+#: svnadmin/templates/check/index.mako:112
+msgid "Repository"
+msgstr ""
+
+#: svnadmin/templates/check/index.mako:113
+msgid "Modules"
+msgstr ""
+
+#: svnadmin/templates/check/index.mako:119
+msgid "Select username"
+msgstr ""
+
+#: svnadmin/templates/check/index.mako:131
+msgid "Select repository"
+msgstr ""
+
+#: svnadmin/templates/login/login.mako:2 svnadmin/templates/login/login.mako:6
+msgid "Login"
+msgstr ""
+
+#: svnadmin/templates/login/login.mako:4
+msgid "Username:"
+msgstr ""
+
+#: svnadmin/templates/login/login.mako:5
+msgid "Password:"
+msgstr ""
+
+#: svnadmin/templates/role/index.mako:5 svnadmin/templates/role/index.mako:638
+msgid "Role Management"
+msgstr ""
+
+#: svnadmin/templates/role/index.mako:448
+msgid "Are you sure to delete group:"
+msgstr ""
+
+#: svnadmin/templates/role/index.mako:539
+msgid "Are you sure to delete alias:"
+msgstr ""
+
+#: svnadmin/templates/role/index.mako:645
+msgid "Select a role name:"
+msgstr ""
+
+#: svnadmin/templates/role/index.mako:649
+msgid "New Group"
+msgstr ""
+
+#: svnadmin/templates/role/index.mako:650
+msgid "New Alias"
+msgstr ""
+
+#: svnadmin/templates/role/index.mako:654
+msgid "New group name:"
+msgstr ""
+
+#: svnadmin/templates/role/index.mako:658
+msgid "New alias name:"
+msgstr ""
+
+#: svnadmin/templates/role/index.mako:670
+msgid "Members list"
+msgstr ""
+
+#: svnadmin/templates/role/index.mako:675
+msgid "Other users"
+msgstr ""
+
+#: svnadmin/templates/role/index.mako:694
+msgid "Ignore recursive"
+msgstr ""
+
+#: svnadmin/templates/role/index.mako:706
+msgid "User name:"
+msgstr ""
+
+#~ msgid "Not a valid userobj: %s."
+#~ msgstr ""
+

@@ -1,0 +1,78 @@
+#
+# svnadmin - Pylons configuration
+#
+# The %(here)s variable will be replaced with the parent directory of this file
+#
+[DEFAULT]
+debug = true
+email_to = you@yourdomain.com
+smtp_server = localhost
+error_email_from = paste@localhost
+
+[server:main]
+use = egg:Paste#http
+host = 0.0.0.0
+port = 5000
+
+[app:main]
+use = egg:svnadmin
+full_stack = true
+cache_dir = %(here)s/data
+beaker.session.key = svnadmin
+beaker.session.secret = ${app_instance_secret}
+app_instance_uuid = ${app_instance_uuid}
+
+# If you'd like to fine-tune the individual locations of the cache data dirs
+# for the Cache data, or the Session saves, un-comment the desired settings
+# here:
+#beaker.cache.data_dir = %(here)s/data/cache
+#beaker.session.data_dir = %(here)s/data/sessions
+beaker.session.cookie_expires = False
+beaker.session.timeout = 3600
+
+# WARNING: *THE LINE BELOW MUST BE UNCOMMENTED ON A PRODUCTION ENVIRONMENT*
+# Debug mode will enable the interactive debugging tool, allowing ANYONE to
+# execute malicious code after an exception is raised.
+set debug = false
+
+# If want to serve webapp with a prefix, un-comment this line, and add a
+# [filter:proxy-prefix] section
+#filter-with = proxy-prefix
+
+# Set unittest to True only for unittest mode. (nosetests)
+# Warning: if unitest is enabled, i18n for svnauthz module not work any more.
+#unittest = True
+
+# authn_file: a .htpasswd style password file, used for svnadmin authentication.
+authn_file = %(here)s/config/svn.passwd
+
+# authz_file: svn authz config file with administrative extension. (ossxp.com)
+authz_file = %(here)s/config/svn.access
+
+
+#[filter:proxy-prefix]
+#use = egg:PasteDeploy#prefix
+#prefix = /svnadmin
+
+# Logging configuration
+[loggers]
+keys = root
+
+[handlers]
+keys = console
+
+[formatters]
+keys = generic
+
+[logger_root]
+level = INFO
+handlers = console
+
+[handler_console]
+class = StreamHandler
+args = (sys.stderr,)
+level = NOTSET
+formatter = generic
+
+[formatter_generic]
+format = %(asctime)s %(levelname)-5.5s [%(name)s] %(message)s
