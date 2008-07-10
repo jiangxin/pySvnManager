@@ -10,6 +10,7 @@ setup-app) with the project's test.ini configuration file.
 """
 import os
 import sys
+from shutil import copyfile
 from unittest import TestCase
 
 import pkg_resources
@@ -40,6 +41,11 @@ class TestController(TestCase):
         wsgiapp = loadapp('config:test.ini', relative_to=conf_dir)
         self.app = paste.fixture.TestApp(wsgiapp)
         TestCase.__init__(self, *args, **kwargs)
+
+    def rollback(self):
+        src = os.path.dirname(__file__) + '/../config/svn.access.in'
+        dest = os.path.dirname(__file__) + '/../../config/svn.access.test'
+        copyfile(src, dest)
 
     def login(self, username, password=""):
         res = self.app.get(url_for(controller='login'))

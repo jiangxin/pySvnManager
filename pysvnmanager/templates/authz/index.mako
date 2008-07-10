@@ -507,14 +507,14 @@ function save_authz_complete(message, reposname)
 {
 	if (message)
 	{
-		message = '${"Update ACL failed:"}' + message;
+		message = '${_("Update ACL failed:")}' + message;
 		alert(message);
 		document.getElementById('result').innerHTML = message;
 		document.getElementById('result').style.visibility = 'visible'; 
 	}
 	else
 	{
-		message = '${"Update ACL successfully."}';
+		message = '${_("Update ACL successfully.")}';
 		document.getElementById('result').innerHTML = message;
 		alert(message);
 		if (document.main_form.repos_list.value == reposname)

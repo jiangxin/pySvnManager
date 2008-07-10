@@ -141,7 +141,7 @@ class AuthzController(BaseController):
         msg = ""
 
         reposname = d.get('reposname')
-        admins    = d.get('admins')
+        admins    = d.get('admins', '')
         path      = d.get('path')
         rules     = d.get('rules')
         # mode1: new or edit repository
@@ -158,14 +158,21 @@ class AuthzController(BaseController):
             if not repos:
                 raise Exception, _("Repository %s not exist.") % reposname
             
-            if mode2 == "new":
-                module = self.authz.add_module(reposname, path)
+            if path:
+                if mode2 == "new":
+                    module = self.authz.add_module(reposname, path)
+                else:
+                    module = self.authz.get_module(reposname, path)
+                if not module:
+                    raise Exception, _("Module %s not exist.") % path
             else:
-                module = self.authz.get_module(reposname, path)
-            if path and not module:
-                raise Exception, _("Module %s not exist.") % path
+                module = None
             
             repos.admins = admins
+            if not repos.is_admin(self.login_as) and \
+                not (repos.name != '/' and self.authz.is_super_user(self.login_as)):
+                raise Exception, _("You can not delete yourself from admin list.")
+            
             if module:
                 self.authz.set_rules(reposname, path, rules);
             self.authz.save(revision)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pySvnManager 0.1.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2008-07-10 20:03+0800\n"
+"POT-Creation-Date: 2008-07-10 22:14+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,12 +70,16 @@ msgstr ""
 msgid "Module %s not exist."
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:175
+#: pysvnmanager/controllers/authz.py:171
+msgid "You can not delete yourself from admin list."
+msgstr ""
+
+#: pysvnmanager/controllers/authz.py:179
 #, python-format
 msgid "User %(user)s changed authz rules. (rev:%(rev)s,%(msg)s)"
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:199
+#: pysvnmanager/controllers/authz.py:203
 #, python-format
 msgid "User %(user)s delete authz rules. (rev:%(rev)s,%(msg)s)"
 msgstr ""
@@ -308,6 +312,14 @@ msgstr ""
 
 #: pysvnmanager/templates/authz/index.mako:490
 msgid "Save failed."
+msgstr ""
+
+#: pysvnmanager/templates/authz/index.mako:510
+msgid "Update ACL failed:"
+msgstr ""
+
+#: pysvnmanager/templates/authz/index.mako:517
+msgid "Update ACL successfully."
 msgstr ""
 
 #: pysvnmanager/templates/authz/index.mako:539

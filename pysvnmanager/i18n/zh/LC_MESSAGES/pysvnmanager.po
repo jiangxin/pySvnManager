@@ -1,23 +1,25 @@
 # translation of pysvnmanager.po to
 # Chinese (China) translations for pysvnmanager.
 # Copyright (C) 2008 ORGANIZATION
-# This file is distributed under the same license as the pysvnmanager project.
+# This file is distributed under the same license as the pysvnmanager
+# project.
 #
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
 # Jiang Xin <worldhello.net@gmail.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version:  pysvnmanager\n"
+"Project-Id-Version: pysvnmanager\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2008-07-03 22:14+0800\n"
-"PO-Revision-Date: 2008-07-10 20:03+0800\n"
+"PO-Revision-Date: 2008-07-10 22:15+0800\n"
 "Last-Translator: Jiang Xin <worldhello.net@gmail.com>\n"
-"Language-Team: <zh@li.org>\n"
+"Language-Team:  <zh@li.org>\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.2\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: pysvnmanager/controllers/authz.py:22
 #: pysvnmanager/templates/authz/index.mako:159
@@ -78,12 +80,16 @@ msgstr "版本库 %s 不存在。"
 msgid "Module %s not exist."
 msgstr "模组 %s 不存在。"
 
-#: pysvnmanager/controllers/authz.py:175
+#: pysvnmanager/controllers/authz.py:171
+msgid "You can not delete yourself from admin list."
+msgstr "您不能将自己从管理员列表中删除。"
+
+#: pysvnmanager/controllers/authz.py:179
 #, python-format
 msgid "User %(user)s changed authz rules. (rev:%(rev)s,%(msg)s)"
 msgstr "用户 %(user)s 修改了授权策略。(rev:%(rev)s,%(msg)s)"
 
-#: pysvnmanager/controllers/authz.py:199
+#: pysvnmanager/controllers/authz.py:203
 #, python-format
 msgid "User %(user)s delete authz rules. (rev:%(rev)s,%(msg)s)"
 msgstr "用户 %(user)s 删除了授权策略。(rev:%(rev)s,%(msg)s)"
@@ -136,7 +142,7 @@ msgstr "用户 %s 登录"
 #: pysvnmanager/controllers/security.py:43
 #, python-format
 msgid "Login failed for user: %s"
-msgstr ""
+msgstr "以 %s 身份登录失败"
 
 #: pysvnmanager/controllers/security.py:51
 #, python-format
@@ -340,6 +346,15 @@ msgstr "请输入版本库名称。"
 #: pysvnmanager/templates/authz/index.mako:490
 msgid "Save failed."
 msgstr "保存失败。"
+
+#: pysvnmanager/templates/authz/index.mako:510
+#| msgid "Save failed."
+msgid "Update ACL failed:"
+msgstr "更新ACL失败："
+
+#: pysvnmanager/templates/authz/index.mako:517
+msgid "Update ACL successfully."
+msgstr "成功更新ACL。"
 
 #: pysvnmanager/templates/authz/index.mako:539
 msgid "No path selected."

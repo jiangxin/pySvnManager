@@ -2,7 +2,6 @@ from pysvnmanager.tests import *
 from pysvnmanager.controllers import authz
 
 class TestAuthzController(TestController):
-
     def test_index(self):
         # Test redirect to login pange
         res = self.app.get(url_for(controller='authz'))
@@ -72,6 +71,48 @@ total=4;
 admin_users="admin1, admin2, admin3";
 revision="0.2.1";
 ''' == res.body, res.body
+
+    def test_delete_admin(self):
+        # Login as superuser
+        self.login('root')
+        params = {'reposname':'/', 'admins':''}
+        res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+        assert res.status == 200
+        assert "You can not delete yourself from admin list." == res.body, res.body
+        
+        params = {'reposname':'/', 'admins':'root'}
+        res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+        assert res.status == 200
+        assert "" == res.body, res.body
+        self.rollback()
+        
+        self.login('root')
+        params = {'reposname':'/repos1', 'admins':'user1'}
+        res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+        assert res.status == 200
+        assert "" == res.body, res.body
+        self.rollback()
+    
+        self.login('root')
+        params = {'reposname':'/repos1', 'admins':'user1, root'}
+        res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+        assert res.status == 200
+        assert "" == res.body, res.body
+        self.rollback()
+    
+        self.login('admin1')
+        params = {'reposname':'/repos1', 'admins':'user1, root'}
+        res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+        assert res.status == 200
+        assert "You can not delete yourself from admin list." == res.body, res.body
+
+        self.login('admin1')
+        params = {'reposname':'/repos1', 'admins':'admin1, admin2'}
+        res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+        assert res.status == 200
+        assert "" == res.body, res.body
+        self.rollback()
+    
 
     def test_save_authz(self):
         pass
