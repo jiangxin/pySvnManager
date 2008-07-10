@@ -1,4 +1,4 @@
-recursive-include svnadmin/public *
-recursive-include svnadmin/templates *
-recursive-include svnadmin/config *
-recursive-include svnadmin/i18n *
+recursive-include pysvnmanager/public *
+recursive-include pysvnmanager/templates *
+recursive-include pysvnmanager/config *
+recursive-include pysvnmanager/i18n *

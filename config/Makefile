@@ -1,5 +1,5 @@
 
-SRCDIR=../svnadmin/config
+SRCDIR=../pysvnmanager/config
 CONFFILE=localconfig.py svn.access svn.passwd
 
 all: $(CONFFILE)

@@ -1,0 +1,516 @@
+# translation of pysvnmanager.po to
+# Chinese (China) translations for pysvnmanager.
+# Copyright (C) 2008 ORGANIZATION
+# This file is distributed under the same license as the pysvnmanager project.
+#
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
+# Jiang Xin <worldhello.net@gmail.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version:  pysvnmanager\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2008-07-03 22:14+0800\n"
+"PO-Revision-Date: 2008-07-10 20:03+0800\n"
+"Last-Translator: Jiang Xin <worldhello.net@gmail.com>\n"
+"Language-Team: <zh@li.org>\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.2\n"
+
+#: pysvnmanager/controllers/authz.py:22
+#: pysvnmanager/templates/authz/index.mako:159
+#: pysvnmanager/templates/check/index.mako:10
+msgid "All users(with anon)"
+msgstr "所有用户(含匿名)"
+
+#: pysvnmanager/controllers/authz.py:23
+#: pysvnmanager/templates/authz/index.mako:161
+#: pysvnmanager/templates/check/index.mako:11
+msgid "Known users"
+msgstr "注册用户"
+
+#: pysvnmanager/controllers/authz.py:24
+#: pysvnmanager/templates/authz/index.mako:163
+#: pysvnmanager/templates/check/index.mako:12
+msgid "Anonymous"
+msgstr "匿名用户"
+
+#: pysvnmanager/controllers/authz.py:30 pysvnmanager/controllers/role.py:56
+#: pysvnmanager/controllers/role.py:80
+#: pysvnmanager/templates/authz/index.mako:155
+#: pysvnmanager/templates/check/index.mako:17
+#: pysvnmanager/templates/role/index.mako:18
+#: pysvnmanager/templates/role/index.mako:37
+#: pysvnmanager/templates/role/index.mako:164
+#: pysvnmanager/templates/role/index.mako:240
+msgid "Group:"
+msgstr "团队:"
+
+#: pysvnmanager/controllers/authz.py:36 pysvnmanager/controllers/role.py:63
+#: pysvnmanager/controllers/role.py:82
+#: pysvnmanager/templates/authz/index.mako:157
+#: pysvnmanager/templates/check/index.mako:19
+#: pysvnmanager/templates/role/index.mako:23
+#: pysvnmanager/templates/role/index.mako:42
+#: pysvnmanager/templates/role/index.mako:166
+#: pysvnmanager/templates/role/index.mako:242
+msgid "Alias:"
+msgstr "别名:"
+
+#: pysvnmanager/controllers/authz.py:71 pysvnmanager/controllers/authz.py:95
+#: pysvnmanager/controllers/role.py:49
+#: pysvnmanager/templates/check/index.mako:9
+#: pysvnmanager/templates/check/index.mako:23
+#: pysvnmanager/templates/role/index.mako:12
+#: pysvnmanager/templates/role/index.mako:27
+msgid "Please choose..."
+msgstr "请选择..."
+
+#: pysvnmanager/controllers/authz.py:159
+#, python-format
+msgid "Repository %s not exist."
+msgstr "版本库 %s 不存在。"
+
+#: pysvnmanager/controllers/authz.py:166
+#, python-format
+msgid "Module %s not exist."
+msgstr "模组 %s 不存在。"
+
+#: pysvnmanager/controllers/authz.py:175
+#, python-format
+msgid "User %(user)s changed authz rules. (rev:%(rev)s,%(msg)s)"
+msgstr "用户 %(user)s 修改了授权策略。(rev:%(rev)s,%(msg)s)"
+
+#: pysvnmanager/controllers/authz.py:199
+#, python-format
+msgid "User %(user)s delete authz rules. (rev:%(rev)s,%(msg)s)"
+msgstr "用户 %(user)s 删除了授权策略。(rev:%(rev)s,%(msg)s)"
+
+#: pysvnmanager/controllers/check.py:74
+#: pysvnmanager/templates/auth_failed.mako:4
+msgid "Permission denied."
+msgstr "没有权限。"
+
+#: pysvnmanager/controllers/check.py:102
+#: pysvnmanager/templates/check/index.mako:31
+msgid "All modules"
+msgstr "所有模组"
+
+#: pysvnmanager/controllers/check.py:114
+msgid "Select module"
+msgstr "选择模组"
+
+#: pysvnmanager/controllers/check.py:125
+#: pysvnmanager/templates/check/index.mako:124
+#: pysvnmanager/templates/check/index.mako:137
+msgid "Manual input"
+msgstr "手工输入"
+
+#: pysvnmanager/controllers/role.py:122
+#, python-format
+msgid "User %(user)s changed group: %(grp)s. (rev:%(rev)s,%(msg)s)"
+msgstr "用户 %(user)s 修改用户组: %(grp)s。(rev:%(rev)s,%(msg)s)"
+
+#: pysvnmanager/controllers/role.py:142
+#, python-format
+msgid "User %(user)s delete group: %(grp)s. (rev:%(rev)s,%(msg)s)"
+msgstr "用户 %(user)s 删除用户组: %(grp)s。(rev:%(rev)s,%(msg)s)"
+
+#: pysvnmanager/controllers/role.py:162
+#, python-format
+msgid "User %(user)s changed alias: %(alias)s. (rev:%(rev)s,%(msg)s)"
+msgstr "用户 %(user)s 修改别名: %(alias)s。(rev:%(rev)s,%(msg)s)"
+
+#: pysvnmanager/controllers/role.py:182
+#, python-format
+msgid "User %(user)s delete alias: %(alias)s. (rev:%(rev)s,%(msg)s)"
+msgstr "用户 %(user)s 删除别名: %(alias)s。(rev:%(rev)s,%(msg)s)"
+
+#: pysvnmanager/controllers/security.py:34
+#, python-format
+msgid "User %s logged in"
+msgstr "用户 %s 登录"
+
+#: pysvnmanager/controllers/security.py:43
+#, python-format
+msgid "Login failed for user: %s"
+msgstr ""
+
+#: pysvnmanager/controllers/security.py:51
+#, python-format
+msgid "User %s logged out"
+msgstr "用户 %s 登出"
+
+#: pysvnmanager/model/svnauthz.py:40
+msgid "Name is not given."
+msgstr "未能提供名称。"
+
+#: pysvnmanager/model/svnauthz.py:42
+msgid "Name is not string."
+msgstr "名称不是字符串"
+
+#: pysvnmanager/model/svnauthz.py:46
+msgid "Name contains invalid characters."
+msgstr "名称中包含非法字符。"
+
+#: pysvnmanager/model/svnauthz.py:205
+msgid "Aliasname is not provided."
+msgstr "未能提供别名。"
+
+#: pysvnmanager/model/svnauthz.py:207
+msgid "Aliasname should not begin with &."
+msgstr "别名的首字符不能是 &。"
+
+#: pysvnmanager/model/svnauthz.py:388
+msgid "Group name is not provided."
+msgstr "未能提供团队名称。"
+
+#: pysvnmanager/model/svnauthz.py:390
+msgid "Group name should not begin with @."
+msgstr "团队名称的首字符不能是 @。"
+
+#: pysvnmanager/model/svnauthz.py:460
+#, python-format
+msgid "Recursive group membership for %s"
+msgstr "%s 出现了循环组引用。"
+
+#: pysvnmanager/model/svnauthz.py:551
+#, python-format
+msgid "Not a valide username: %s"
+msgstr "非法用户名: %s"
+
+#: pysvnmanager/model/svnauthz.py:676
+#, python-format
+msgid "Group %s is referenced by group %s."
+msgstr "用户组 %s 被组 %s 引用。"
+
+#: pysvnmanager/model/svnauthz.py:1240
+msgid "Update failed! You are working on a out-of-date revision."
+msgstr "更新失败！您的更改是基于一个过期的版本，请先刷新再更改。"
+
+#: pysvnmanager/model/svnauthz.py:1424 pysvnmanager/model/svnauthz.py:1431
+#: pysvnmanager/model/svnauthz.py:1435
+#, python-format
+msgid "Unknown rule format: %s"
+msgstr "未知策略格式: %s"
+
+#: pysvnmanager/model/svnauthz.py:1449
+#, python-format
+msgid "No module exist for %s:%s"
+msgstr "模块不存在: %s:%s"
+
+#: pysvnmanager/model/svnauthz.py:1554
+#, python-format
+msgid "Alias %s is used by rules."
+msgstr "别名 %s 为策略引用。"
+
+#: pysvnmanager/model/svnauthz.py:1562
+#, python-format
+msgid "Alias %s is referenced by group %s."
+msgstr "别名 %s 为用户组 %s 引用。"
+
+#: pysvnmanager/model/svnauthz.py:1576
+#, python-format
+msgid "%s is referenced by [%s]."
+msgstr "%s 在 [%s] 中被引用。"
+
+#: pysvnmanager/model/svnauthz.py:1716
+#, python-format
+msgid "User %(username)s has Full (RW) rights for module %(repos)s:%(path)s"
+msgstr "用户 %(username)s 对模组 %(repos)s:%(path)s 具有完全权限 (RW)"
+
+#: pysvnmanager/model/svnauthz.py:1718
+#, python-format
+msgid "User %(username)s has ReadOnly (RO) rights for module %(repos)s:%(path)s"
+msgstr "用户 %(username)s 对模组 %(repos)s:%(path)s 具有只读权限 (RO)"
+
+#: pysvnmanager/model/svnauthz.py:1720
+#, python-format
+msgid "User %(username)s can *NOT* access to module %(repos)s:%(path)s"
+msgstr "用户 %(username)s 对模组 %(repos)s:%(path)s 没有访问权限 (XX)"
+
+#: pysvnmanager/model/svnauthz.py:1762
+#, python-format
+msgid ""
+"\n"
+"%(user)s => [%(repos)s]\n"
+"%(sep)s\n"
+"RW: %(write)s\n"
+"RO: %(read)s\n"
+"XX: %(deny)s\n"
+"\n"
+msgstr ""
+"\n"
+"%(user)s => [%(repos)s]\n"
+"%(sep)s\n"
+"读写: %(write)s\n"
+"只读: %(read)s\n"
+"禁用: %(deny)s\n"
+"\n"
+
+#: pysvnmanager/model/svnauthz.py:1781
+#, python-format
+msgid ""
+"\n"
+"%(heading)s\n"
+"Access map on '%(repos)s' for user '%(user)s'\n"
+"%(heading)s\n"
+"  * Writable:\n"
+"%(write)s\n"
+"%(sep)s\n"
+"  * Readable:\n"
+"%(read)s\n"
+"%(sep)s\n"
+"  * Denied:\n"
+"%(deny)s\n"
+"%(sep)s\n"
+msgstr ""
+"\n"
+"%(heading)s\n"
+"用户 %(user)s 对版本库 [%(repos)s] 的访问权限为\n"
+"%(heading)s\n"
+"  * 读写:\n"
+"%(write)s\n"
+"%(sep)s\n"
+"  * 只读:\n"
+"%(read)s\n"
+"%(sep)s\n"
+"  * 禁用:\n"
+"%(deny)s\n"
+"%(sep)s\n"
+
+#: pysvnmanager/templates/base.mako:84
+msgid "Loading, please wait..."
+msgstr "数据加载中，请稍后..."
+
+#: pysvnmanager/templates/base.mako:88
+msgid "Check permissions"
+msgstr "权限检查"
+
+#: pysvnmanager/templates/base.mako:89
+msgid "Role management"
+msgstr "角色管理"
+
+#: pysvnmanager/templates/base.mako:90
+#: pysvnmanager/templates/authz/index.mako:5
+#: pysvnmanager/templates/authz/index.mako:603
+msgid "ACL management"
+msgstr "权限控制"
+
+#: pysvnmanager/templates/base.mako:92
+msgid "Logout"
+msgstr "登出"
+
+#: pysvnmanager/templates/authz/index.mako:165
+msgid "User:"
+msgstr "用户:"
+
+#: pysvnmanager/templates/authz/index.mako:174
+msgid "Readonly"
+msgstr "只读"
+
+#: pysvnmanager/templates/authz/index.mako:178
+#: pysvnmanager/templates/authz/index.mako:677
+msgid "Full"
+msgstr "完全权限"
+
+#: pysvnmanager/templates/authz/index.mako:182
+#: pysvnmanager/templates/authz/index.mako:678
+msgid "Denied"
+msgstr "禁用"
+
+#: pysvnmanager/templates/authz/index.mako:380
+msgid "No rights selected! Please check proper rights for selected users."
+msgstr "未选择权限！请为用户选择合适的权限。"
+
+#: pysvnmanager/templates/authz/index.mako:391
+msgid "Unknown rights: "
+msgstr "未知权限: "
+
+#: pysvnmanager/templates/authz/index.mako:479
+msgid "Please input module path."
+msgstr "请输入模组路径。"
+
+#: pysvnmanager/templates/authz/index.mako:485
+msgid "Please input repository name."
+msgstr "请输入版本库名称。"
+
+#: pysvnmanager/templates/authz/index.mako:490
+msgid "Save failed."
+msgstr "保存失败。"
+
+#: pysvnmanager/templates/authz/index.mako:539
+msgid "No path selected."
+msgstr "未选择路径。"
+
+#: pysvnmanager/templates/authz/index.mako:544
+msgid "Are you sure to delete module:"
+msgstr "您确认要删除模组:"
+
+#: pysvnmanager/templates/authz/index.mako:546
+#: pysvnmanager/templates/role/index.mako:450
+#: pysvnmanager/templates/role/index.mako:541
+msgid "Click Ok to proceed, or click cancel"
+msgstr "点击 OK 继续，或者点击取消"
+
+#: pysvnmanager/templates/authz/index.mako:567
+msgid "Can not delete module "
+msgstr "无法删除模组 "
+
+#: pysvnmanager/templates/authz/index.mako:574
+msgid "Successfully delete module:"
+msgstr "成功删除模组:"
+
+#: pysvnmanager/templates/authz/index.mako:610
+msgid "Repository:"
+msgstr "版本库:"
+
+#: pysvnmanager/templates/authz/index.mako:613
+msgid "New repository"
+msgstr "新版本库"
+
+#: pysvnmanager/templates/authz/index.mako:617
+msgid "Repository Name:"
+msgstr "版本库名称:"
+
+#: pysvnmanager/templates/authz/index.mako:622
+msgid "Administrators:"
+msgstr "管理员:"
+
+#: pysvnmanager/templates/authz/index.mako:634
+msgid "Module:"
+msgstr "模组:"
+
+#: pysvnmanager/templates/authz/index.mako:637
+msgid "New module"
+msgstr "新模组"
+
+#: pysvnmanager/templates/authz/index.mako:643
+msgid "Module Path:"
+msgstr "模组路径:"
+
+#: pysvnmanager/templates/authz/index.mako:657
+msgid "ACL"
+msgstr "ACL"
+
+#: pysvnmanager/templates/authz/index.mako:662
+msgid "Users"
+msgstr "用户"
+
+#: pysvnmanager/templates/authz/index.mako:676
+msgid "ReadOnly"
+msgstr "只读"
+
+#: pysvnmanager/templates/authz/index.mako:693
+#: pysvnmanager/templates/role/index.mako:727
+msgid "Save"
+msgstr "保存"
+
+#: pysvnmanager/templates/authz/index.mako:694
+#: pysvnmanager/templates/role/index.mako:728
+msgid "Delete"
+msgstr "删除"
+
+#: pysvnmanager/templates/authz/index.mako:695
+#: pysvnmanager/templates/role/index.mako:729
+msgid "Cancel"
+msgstr "取消"
+
+#: pysvnmanager/templates/check/index.mako:5
+#: pysvnmanager/templates/check/index.mako:91
+#: pysvnmanager/templates/check/index.mako:151
+msgid "Check Permissions"
+msgstr "权限检查"
+
+#: pysvnmanager/templates/check/index.mako:23
+msgid "All repos"
+msgstr "所有版本库"
+
+#: pysvnmanager/templates/check/index.mako:25
+msgid "Default"
+msgstr "缺省"
+
+#: pysvnmanager/templates/check/index.mako:111
+msgid "Account"
+msgstr "帐号"
+
+#: pysvnmanager/templates/check/index.mako:112
+msgid "Repository"
+msgstr "版本库"
+
+#: pysvnmanager/templates/check/index.mako:113
+msgid "Modules"
+msgstr "模组"
+
+#: pysvnmanager/templates/check/index.mako:119
+msgid "Select username"
+msgstr "选择用户名"
+
+#: pysvnmanager/templates/check/index.mako:131
+msgid "Select repository"
+msgstr "选择版本库"
+
+#: pysvnmanager/templates/login/login.mako:2
+#: pysvnmanager/templates/login/login.mako:7
+msgid "Login"
+msgstr "登录"
+
+#: pysvnmanager/templates/login/login.mako:4
+msgid "Username:"
+msgstr "用户名:"
+
+#: pysvnmanager/templates/login/login.mako:5
+msgid "Password:"
+msgstr "口令:"
+
+#: pysvnmanager/templates/role/index.mako:5
+#: pysvnmanager/templates/role/index.mako:638
+msgid "Role Management"
+msgstr "角色管理"
+
+#: pysvnmanager/templates/role/index.mako:448
+msgid "Are you sure to delete group:"
+msgstr "您确认要删除用户组:"
+
+#: pysvnmanager/templates/role/index.mako:539
+msgid "Are you sure to delete alias:"
+msgstr "您确认要删除别名:"
+
+#: pysvnmanager/templates/role/index.mako:645
+msgid "Select a role name:"
+msgstr "选择一个角色:"
+
+#: pysvnmanager/templates/role/index.mako:649
+msgid "New Group"
+msgstr "新用户组"
+
+#: pysvnmanager/templates/role/index.mako:650
+msgid "New Alias"
+msgstr "新别名"
+
+#: pysvnmanager/templates/role/index.mako:654
+msgid "New group name:"
+msgstr "新用户组名称:"
+
+#: pysvnmanager/templates/role/index.mako:658
+msgid "New alias name:"
+msgstr "新别名名称:"
+
+#: pysvnmanager/templates/role/index.mako:670
+msgid "Members list"
+msgstr "成员列表"
+
+#: pysvnmanager/templates/role/index.mako:675
+msgid "Other users"
+msgstr "其他用户"
+
+#: pysvnmanager/templates/role/index.mako:694
+msgid "Ignore recursive"
+msgstr "忽略组间循环引用"
+
+#: pysvnmanager/templates/role/index.mako:706
+msgid "User name:"
+msgstr "用户名:"
+
