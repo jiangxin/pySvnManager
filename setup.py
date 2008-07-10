@@ -11,7 +11,7 @@ setup(
     description='SVN authz web management tools.',
     author='Jiang Xin',
     author_email='jiangxin@ossxp.com',
-    url='http://www.ossxp.com/',
+    url='https://sourceforge.net/projects/pysvnmanager',
     install_requires=["Pylons>=0.9.6.2"],
     packages=find_packages(exclude=['ez_setup']),
     include_package_data=True,
