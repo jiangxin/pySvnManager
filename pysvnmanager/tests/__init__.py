@@ -48,7 +48,7 @@ class TestController(TestCase):
         copyfile(src, dest)
 
     def login(self, username, password=""):
-        res = self.app.get(url_for(controller='login'))
+        res = self.app.get(url_for(controller='security'))
         form = res.forms[0]
         form['username'] = username
         if not password:
