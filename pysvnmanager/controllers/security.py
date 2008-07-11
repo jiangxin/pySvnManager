@@ -39,7 +39,9 @@ class SecurityController(BaseController):
                 redirect_to(session['path_before_login'])
             else: # if previous target is unknown just send the user to a welcome page
                 redirect_to(h.url_for(controller='check'))
-        else: #
+        else:
+            session.clear()
+            session.save()
             c.login_message = _("Login failed for user: %s") % username
             return render('/login/login.mako')
 
