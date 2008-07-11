@@ -168,11 +168,12 @@ class AuthzController(BaseController):
             else:
                 module = None
             
-            repos.admins = admins
-            if not repos.is_admin(self.login_as) and \
+            if not self.authz.is_admin(self.login_as, repos.name, admins) and \
                 not (repos.name != '/' and self.authz.is_super_user(self.login_as)):
                 raise Exception, _("You can not delete yourself from admin list.")
             
+            self.authz.set_admin(admins, repos)
+
             if module:
                 self.authz.set_rules(reposname, path, rules);
             self.authz.save(revision)

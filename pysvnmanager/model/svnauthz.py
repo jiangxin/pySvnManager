@@ -32,16 +32,16 @@ RIGHTS_ALL = RIGHTS_R | RIGHTS_W
 def is_valide_name(name, type=""):
     msg = ''
     if type == 'repos':
-        pattern = r'''[,\s!\\'"]'''
+        bad_chars = r'''[,\s!\\'"]'''
     else:
-        pattern = r'''[,\s!\\/'"]'''
+        bad_chars = r'''[,\s!\\/'"]'''
         
     if not name:
         msg = _("Name is not given.")
     elif not isinstance(name, basestring):
         msg = _("Name is not string.")
     else:
-        p = re.compile(pattern)
+        p = re.compile(bad_chars)
         if p.search(name):
             msg = _("Name contains invalid characters.")
     return msg
@@ -260,7 +260,7 @@ class Alias(object):
             obj = obj.username
         elif isinstance(obj, (User, Group)):
             obj = obj.uname
-        else:
+        elif isinstance(obj, basestring):
             obj = obj.strip()
 
         if not obj:
@@ -926,7 +926,7 @@ class Repos(object):
     def __init__(self, name):
         name = name.strip()
         self.__repos_name = name
-        self.__admins = set()
+        self.__admins = []
         self.module_list = []
         self.authz = ''
 
@@ -948,51 +948,35 @@ class Repos(object):
     path_list = property(__get_path_list)
 
     def __get_admins(self):
-        return ', '.join(sorted(self.__admins))
+        alist = [i.uname for i in self.__admins]
+        return ', '.join(sorted(alist))
 
     def __set_admins(self, admins):
-        self.__admins.clear()
+        self.__admins = []
         return self.add_admin(admins)
     
-    def add_admin(self, users):
-        """x.add_admin(users) -> bool"""
-        if isinstance(users, set):
-            self.__admins = self.__admins.union(users)
-        elif isinstance(users, (list, tuple)):
-            self.__admins = self.__admins.union(set(users))
-        elif isinstance(users, (str, unicode)):
-            for user in users.split(','):
-                user = user.strip()
-                if user:
-                    self.__admins.add(user)
+    def add_admin(self, admin):
+        """x.add_admin(admin)"""
+        if isinstance(admin, (User, Group, Alias)):
+            if not admin in self.__admins:
+                self.__admins.append(admin)
+        elif isinstance(admin, (list, tuple, set)):
+            for i in admin:
+                self.add_admin(i)
         else:
-            raise Exception, "unknown user: %s, type: %s" % (users, type(users))
-        return True
+            raise Exception, "unknown user: %s, type: %s" % (admin, type(admin))
 
-    def del_admin(self, users):
-        if isinstance(users, set):
-            self.__admins = self.__admins.difference(users)
-        elif isinstance(users, (list, tuple)):
-            self.__admins = self.__admins.difference(set(users))
-        elif isinstance(users, (str, unicode)):
-            for user in users.split(','):
-                self.__admins.discard(user.strip())
+    def del_admin(self, admin):
+        if isinstance(admin, (list, tuple, set)):
+            for i in admin:
+                self.del_admin(i)
+        elif isinstance(admin, (User, Group, Alias)):
+            self.__admins.remove(admin)
         else:
-            raise Exception, "unknown user: %s, type: %s" % (users, type(users))
-        return True
+            raise Exception, "unknown user: %s, type: %s" % (admin, type(admin))
     
     admins = property(__get_admins, __set_admins)
     
-    def is_admin(self, user):
-        """x.is_admin(user) -> bool
-        Whether user is the adminstrator of this Repos."""
-        if isinstance(user, User):
-            name = user.name
-        else:
-            name = user
-        name = normalize_user(name)
-        return name in self.__admins
-
     def add_module(self, path):
         path = normalize_path(path)
 
@@ -1292,7 +1276,7 @@ class SvnAuthz(object):
                     admin = i.group(2).strip()
                     if name and admin:
                         repos = self.__reposlist.get_or_set(name)
-                        repos.add_admin(admin)
+                        self.set_admin(admin, repos)
 
     def parse_version(self):
         ic = self.config.initial_comment
@@ -1334,12 +1318,33 @@ class SvnAuthz(object):
                 buff += "# admin : %s = %s\n" % (repos.name, admins)
         return buff
 
-    def is_admin(self, user, repos='/'):
-        repos = self.__reposlist.get(repos)
+    def is_admin(self, user, repos='/', admins=None):
+        if isinstance(user, User):
+            user = user.uname
+        elif isinstance(user, Alias):
+            user = user.username
+        elif not user:
+            return False
 
-        if repos and repos.is_admin(user):
-            return True
-        elif not repos or repos.name != '/':
+        repos = self.__reposlist.get(repos)
+        
+        if repos:
+            if admins is None:
+                admins = repos.admins
+            for i in admins.split(','):
+                if i: i = i.strip()
+                
+                if not i: continue
+                
+                if user == i:
+                    return True
+
+                i = self.get_userobj(i, autocreate=False)
+
+                if i and user in i:
+                    return True
+
+        if not repos or repos.name != '/':
             return self.is_admin(user, '/')
         else:
             return False
@@ -1347,25 +1352,32 @@ class SvnAuthz(object):
     def is_super_user(self, user):
         return self.is_admin(user, '/')
     
-    def add_admin(self, user, reposname=None):
-        user = normalize_user(user)
-        if not user:
+    def set_admin(self, admins, repos=None):
+        if not isinstance(repos, Repos):
+            repos = self.__reposlist.get(repos)
+        if not repos:
             return False
+        
+        if isinstance(admins, basestring):
+            alist = [x.strip() for x in admins.split(',')]
+        elif isinstance(admins, (list, tuple, set)):
+            alist = admins
+        else:
+            alist = [admins]
+        ulist = []
+        for i in alist:
+            if isinstance(i, (User, Group, Alias)):
+                ulist.append(i)
+            elif not i:
+                continue
+            elif isinstance(i, basestring):
+                ulist.append(self.get_userobj(i, autocreate=True))
+            else:
+                raise Exception, "unknown user: %s, type: %s" % (i, type(i))
 
-        repos = self.__reposlist.get(reposname)
-        if repos:
-            return repos.add_admin(user)
-        return False
+        repos.admins = ulist
 
-    def del_admin(self, user, reposname=None):
-        user = normalize_user(user)
-        if not user:
-            return False
-
-        repos = self.__reposlist.get(reposname)
-        if repos:
-            return repos.del_admin(user)
-        return False
+        return True
 
     def add_repos(self, reposname):
         repos = self.__reposlist.get_or_set(reposname)

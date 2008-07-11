@@ -26,13 +26,15 @@ class TestModels(TestController):
 
         buff = '''
 # version = 0.1.1
-# admin : / = jiangxin
-# admin : repos1 = aq, zf
-# admin : repos2 = jky
+# admin : / = root, &admin
+# admin : repos1 = @admin
+# admin : repos2 = admin2
+# admin : repos3 = admin3
 # admin : reposx = 
 
 [groups]
 admins=&admin,&007
+admin=&admin, admin1, admin2, admin3
 team1=user1,user11, @team2
 team2=user2,user22,@team3,
 # Wrong configuration: cyclic dependancies
@@ -189,62 +191,50 @@ jiang =
         pass
 
     def testReposAdmin(self):
-        user_list  = UserList()
-        alias_list = AliasList()
-        group_list = GroupList()
-        repos_list = ReposList()
+        authz = SvnAuthz()
+        u1=authz.add_user('u1')
+        u2=authz.add_user('u2')
+        u3=authz.add_user('u3')
+        u4=authz.add_user('u4')
+        u5=authz.add_user('u5')
+        u6=authz.add_user('u6')
+        u7=authz.add_user('u7')
+        admin = authz.add_alias('admin', 'u1')
+        team1 = authz.add_group('team1', 'u2, u3, u4')
+        repos1 = authz.add_repos('repos1')
+        
+        authz.set_admin('&admin, u7')
+        authz.set_admin('@team1', 'repos1')
+        self.assert_(authz.get_repos('/').admins == '&admin, u7')
+        self.assert_(authz.get_repos('/repos1').admins == '@team1')
+        authz.set_admin(', @team1, ', 'repos1')
+        self.assert_(authz.get_repos('repos1').admins == '@team1')
+        authz.set_admin(['&admin', 'u6'])
+        self.assert_(authz.get_repos('/').admins == '&admin, u6')
+        authz.set_admin([admin, u5])
+        self.assert_(authz.get_repos('/').admins == '&admin, u5')
 
-        repos = Repos('myrepos')
-
-        self.assert_(repos.admins == '')
-
-        repos.add_admin('u1, u2, ')
-        self.assert_(repos.admins == 'u1, u2')
-
-        repos.add_admin(u'u3')
-        self.assert_(repos.admins == 'u1, u2, u3')
-
-        repos.admins = 'u1,u2,u3,u4'
-        self.assert_(repos.admins == 'u1, u2, u3, u4')
-
-        repos.add_admin(('u5', 'u6',))
-        self.assert_(repos.admins == 'u1, u2, u3, u4, u5, u6')
-
-        repos.add_admin(set(['u6', 'u7', 'u8']))
-        self.assert_(repos.admins == 'u1, u2, u3, u4, u5, u6, u7, u8')
-
-        #print repos.admins
-
-        repos.del_admin(set(['u7', 'u8', 'u9']))
-        self.assert_(repos.admins == 'u1, u2, u3, u4, u5, u6')
-
-        repos.del_admin(['u5', 'u6', 'u9'])
-        self.assert_(repos.admins == 'u1, u2, u3, u4')
-
-        repos.del_admin(('u3', 'u6', 'u9'))
-        self.assert_(repos.admins == 'u1, u2, u4')
-
-        repos.del_admin(ur'u2, u4, u9')
-        self.assert_(repos.admins == 'u1')
-
-        self.assertRaises(Exception, repos.add_admin, {'name':'user1'})
-        self.assertRaises(Exception, repos.add_admin, None)
-        self.assertRaises(Exception, repos.del_admin, {'name':'user1'})
-        self.assertRaises(Exception, repos.del_admin, None)
+        authz.set_admin('')
+        self.assert_(authz.get_repos('/').admins == '')
+        authz.set_admin([])
+        self.assert_(authz.get_repos('/').admins == '')
+        authz.set_admin(None)
+        self.assert_(authz.get_repos('/').admins == '')
 
     def testAuthzConfAcl(self):
         if not self.authz: self.load_config()
         rl = self.authz.reposlist
         self.assert_(rl.get('/').name == '/')
-        self.assert_(rl.get('/').admins == 'jiangxin')
+        self.assert_(rl.get('/').admins == '&admin, root', rl.get('/').admins)
         self.assert_(rl.get('repos1').name == 'repos1')
-        self.assert_(rl.get('repos1').admins == 'aq, zf')
+        self.assert_(rl.get('repos1').admins == '@admin', rl.get('repos1').admins)
         self.assert_(rl.get('repos2').name == 'repos2', 'name: %s' % rl.get('repos2').name)
-        self.assert_(rl.get('repos2').admins == 'jky')
+        self.assert_(rl.get('repos2').admins == 'admin2', rl.get('repos2').admins)
         self.assert_(self.authz.compose_acl() == 
-'''# admin : / = jiangxin
-# admin : repos1 = aq, zf
-# admin : repos2 = jky
+'''# admin : / = &admin, root
+# admin : repos1 = @admin
+# admin : repos2 = admin2
+# admin : repos3 = admin3
 ''', self.authz.compose_acl())
         pass
 
@@ -268,6 +258,7 @@ jiang =
                      sorted(gl.get('all').membernames))
         self.assert_(str(gl) == 
             '''[groups]
+admin = &admin, admin1, admin2, admin3
 admins = &007, &admin
 all = @team1, user3, user4
 team1 = @team2, user1, user11
@@ -286,10 +277,9 @@ team3 = user3, user33
                      '/,repos1,repos2', ','.join(map(lambda x:x.name,
                                                      self.authz.reposlist)))
         # add_admin
-        self.assert_(self.authz.is_admin('admin1') == False)
-        self.assert_(self.authz.add_admin('admin1,admin2') == True)
+        self.assert_(self.authz.set_admin('admin1,admin2') == True)
         self.assert_(self.authz.is_admin('admin1','/') == True)
-        self.assert_(self.authz.add_admin('adminx', 'repos1') == True)
+        self.assert_(self.authz.set_admin('adminx', 'repos1') == True)
         self.assert_(self.authz.is_admin('adminx', 'repos1') == True)
         self.assert_(self.authz.is_super_user('admin1') == True)
         self.assert_(self.authz.is_super_user('adminx') == False)
@@ -445,34 +435,37 @@ team3 = user3, user33
         self.load_config(init=True)
         # is_admin()
         self.assert_(self.authz.is_admin('jiangxin') == True)
-        self.assert_(self.authz.is_admin('jiangxin', '/') == True)
-        self.assert_(self.authz.is_admin('jiangxin','repos2') == True)
-        self.assert_(self.authz.is_admin('jky') == False)
-        self.assert_(self.authz.is_admin('jky','repos2') == True)
-        self.assert_(self.authz.is_admin('jky','repos3') == False)
+        self.assert_(self.authz.is_admin('root') == True, self.authz.is_admin('root'))
+        self.assert_(self.authz.is_super_user('jiangxin') == True)
+        self.assert_(self.authz.is_admin('&admin') == True)
+        self.assert_(self.authz.is_admin('admin1') == False)
+        self.assert_(self.authz.is_admin('admin1','repos1') == True)
+        self.assert_(self.authz.is_admin('admin4','repos1') == False)
+        self.assert_(self.authz.is_admin('admin1','repos2') == False)
+        self.assert_(self.authz.is_admin('admin2','repos2') == True)
+        self.assert_(self.authz.is_admin('admin10','repos2') == False)
         self.assert_(self.authz.is_admin('','repos3') == False)
+        self.assert_(self.authz.is_admin('jiangxin','repos123') == True)
 
         # add_admin() test
-        self.assert_(self.authz.add_admin('admin1,admin2') == True)
-        self.assert_(self.authz.add_admin(['admin1','admin2'],'repos1') == True)
+        self.assert_(self.authz.set_admin('admin1,admin2') == True)
+        self.assert_(self.authz.set_admin(['admin1','admin2'],'repos1') == True)
         # reposx does not exist.
-        self.assert_(self.authz.add_admin('admin2','reposx') == False)
+        self.assert_(self.authz.set_admin('admin2','reposx') == False)
         self.assert_(self.authz.is_admin('admin1','repos2') == True)
-
-        # del_admin() test
-        self.assert_(self.authz.del_admin('admin2') == True)
-        # repos2 is blank if acl is clean.
-        self.assert_(self.authz.del_admin('jky','repos2') == True)
 
 
         # SvnAuthz __str__ test
         self.authz.update_revision()
         self.assert_(str(self.authz) ==
 """# version : 0.1.2
-# admin : / = admin1, jiangxin
-# admin : repos1 = admin1, admin2, aq, zf
+# admin : / = admin1, admin2
+# admin : repos1 = admin1, admin2
+# admin : repos2 = admin2
+# admin : repos3 = admin3
 
 [groups]
+admin = &admin, admin1, admin2, admin3
 admins = &007, &admin
 all = @team1, user3, user4
 team1 = @team2, user1, user11

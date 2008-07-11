@@ -1,6 +1,6 @@
 # version : 0.2.1
-# admin : / = root, jiangxin
-# admin : repos1 = admin1, admin2, admin3
+# admin : / = root, &admin
+# admin : repos1 = @admin
 # admin : repos2 = admin2
 # admin : repos3 = admin3
 
