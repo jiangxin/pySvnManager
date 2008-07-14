@@ -1,7 +1,12 @@
 MANIFEST.in
 README.txt
+development.ini
 setup.cfg
 setup.py
+test.ini
+config/Makefile
+config/README
+docs/index.txt
 pySvnManager.egg-info/PKG-INFO
 pySvnManager.egg-info/SOURCES.txt
 pySvnManager.egg-info/dependency_links.txt

@@ -7,7 +7,7 @@ except ImportError:
 
 setup(
     name='pySvnManager',
-    version="0.1.1",
+    version="0.1.2",
     description='SVN authz web management tools.',
     author='Jiang Xin',
     author_email='jiangxin@ossxp.com',
