@@ -35,7 +35,7 @@ class DefaultConfig:
     ldap_binddn = ''
     ldap_bindpw = ''
     ldap_base = 'dc=foo,dc=bar'
-    ldap_scope = ldap.SCOPE_SUBTREE
+    ldap_scope = 2 # ldap.SCOPE_SUBTREE = 2
     ldap_filter = '(&(uid=%(username)s)(authorizedService=svn)(ossxpConfirmed=TRUE))'
     ldap_timeout = 10 # how long we wait for the ldap server [s]
     ldap_coding = 'utf-8' # coding used for ldap queries and result values
