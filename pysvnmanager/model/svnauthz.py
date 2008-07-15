@@ -111,11 +111,11 @@ class User(object):
         self.__realname = realname
         self.__email = email
 
-    def __get_unique_name__(self):
+    def __get_unique_name(self):
         return self.__name
 
-    uname = property(__get_unique_name__)
-    name  = property(__get_unique_name__)
+    uname = property(__get_unique_name)
+    name  = property(__get_unique_name)
 
     def __cmp__(self, obj):
         """For userlist sorting"""
@@ -141,6 +141,9 @@ class User(object):
             return False
 
         return obj.lower() == self.uname.lower()
+    
+    def __str__(self):
+        return self.__name
 
 
 class Alias(object):
@@ -210,40 +213,40 @@ class Alias(object):
         self.__userobj = userobj
 
 
-    def __get_name__(self):
+    def __get_name(self):
         if self.__name:
             return self.__name
         else:
             return ''
 
-    name = property(__get_name__)
-    aliasname = property(__get_name__)
+    name = property(__get_name)
+    aliasname = property(__get_name)
 
-    def __get_unique_name__(self):
+    def __get_unique_name(self):
         if self.__name:
             return '&'+self.__name
         else:
             return ''
 
-    uname = property(__get_unique_name__)
+    uname = property(__get_unique_name)
 
-    def __get_username__(self):
+    def __get_username(self):
         if self.__userobj:
             return self.__userobj.name
         else:
             return ''
 
-    username = property(__get_username__)
+    username = property(__get_username)
 
-    def __get_user__(self):
+    def __get_user(self):
         return self.__userobj.name
 
-    def __set_user__(self, userobj):
+    def __set_user(self, userobj):
         if not isinstance(userobj, object):
             raise Exception, 'Wrong parameter for userobj.'
         self.__userobj = userobj
 
-    user = property(__get_user__, __set_user__)
+    user = property(__get_user, __set_user)
 
     def __str__(self):
         return "%s = %s" % (self.name, self.username)
@@ -392,7 +395,7 @@ class Group(object):
         self.name = name
         self.__members = []
 
-    def __get_unique_name__(self):
+    def __get_unique_name(self):
         if self.name:
             if self.name[0] != '$' and self.name != '*':
                 return '@'+self.name
@@ -401,20 +404,20 @@ class Group(object):
         else:
             return ''
 
-    uname = property(__get_unique_name__)
+    uname = property(__get_unique_name)
 
-    def __get_member_names__(self):
+    def __get_member_names(self):
         if self.__members:
             return map(lambda x: x.uname, self.__members)
         else:
             return []
 
-    membernames = property(__get_member_names__)
+    membernames = property(__get_member_names)
 
-    def __get_member_objs__(self):
+    def __get_member_objs(self):
         return self.__members
 
-    memberobjs = property(__get_member_objs__)
+    memberobjs = property(__get_member_objs)
 
     def __str__(self):
         if self.name[0] != '$' and self.name != '*':
@@ -426,7 +429,7 @@ class Group(object):
         for i in self.__members:
             yield i
     
-    def __valid_group__(self, groupobj, checked_groups=None):
+    def __valid_group(self, groupobj, checked_groups=None):
         """x.valid_group(groupobj) -> bool
 
         Check if there is cycle reference in group defination."""
@@ -440,35 +443,40 @@ class Group(object):
             # Add group to hash of checked groups.
             checked_groups.append(member)
             # Check for deadly loop recursively.
-            if not self.__valid_group__(member, checked_groups):
+            if not self.__valid_group(member, checked_groups):
                 return False
             # Remove group to hash of checked groups. 
             # Other group members may contain this group
             checked_groups.remove(member)
         return True
 
-    def append(self, member, autodrop=False):
-        if isinstance(member, (list, tuple)):
-            for i in member:
-                self.append(i, autodrop)
-            return True
-        if not member in self.__members:
-            self.__members.append(member)
-            if not self.__valid_group__(self):
-                self.__members.remove(member)
-                if not autodrop:
-                    raise Exception, _('Recursive group membership for %s') \
-                        % member.uname
-        return True
+    def append(self, *members, **opts):
+        '''**opts: autodrop=False, raise Exception if recursive found.'''
+        autodrop = opts.get('autodrop', False)
+        for member in members:
+            if isinstance(member, (list, tuple)):
+                for i in member:
+                    self.append(i, autodrop=autodrop)
+                continue
+            if not member in self.__members:
+                self.__members.append(member)
+                if not self.__valid_group(self):
+                    self.__members.remove(member)
+                    if not autodrop:
+                        raise Exception, _('Recursive group membership for %s') \
+                            % member.uname
+        return
 
-    def remove(self, members):
+    def remove(self, *members):
         ulist = []
-        if isinstance(members, (str, unicode)):
-            for user in members.split(','):
-                if user.strip():
-                    ulist.append(user.strip())
-        elif isinstance(members, (list, tuple)):
-            ulist.extend(members)
+        for member in members:
+            if isinstance(member, (str, unicode)):
+                for user in member.split(','):
+                    if user.strip():
+                        ulist.append(user.strip())
+            elif isinstance(member, (list, tuple)):
+                ulist.extend(member)
+        
         for user in ulist:
             if isinstance(user, (str, unicode)):
                 mlist = map(lambda x: x.uname, self.__members)
@@ -609,11 +617,8 @@ class AliasList(object):
             alias = self.get(name.strip())
         else:
             alias = name
-        if alias:
+        if alias and alias in self.alias_list:
             self.alias_list.remove(alias)
-            return True
-        else:
-            return False
 
     def __str__(self):
         buff = "[aliases]\n"
@@ -706,12 +711,12 @@ class Rule(object):
         self.userobj = userobj
         self.__rights = RIGHTS_NONE
 
-    def __get_unique_name__(self):
+    def __get_unique_name(self):
         return self.userobj.uname
 
-    uname = property(__get_unique_name__)
+    uname = property(__get_unique_name)
 
-    def __set_rights__(self, rights):
+    def __set_rights(self, rights):
         if isinstance(rights, (str, unicode)):
             rights = rights.strip().lower()
             rbit = RIGHTS_NONE
@@ -725,10 +730,10 @@ class Rule(object):
 
         self.__rights = rights
 
-    def __get_rights__(self):
+    def __get_rights(self):
         return self.__rights
 
-    rights = property(__get_rights__, __set_rights__)
+    rights = property(__get_rights, __set_rights)
 
     def get_permission(self, userobj):
         """x.get_permission(userobj) -> (permit_bits, deny_bits)
@@ -776,10 +781,10 @@ class Module(object):
         for i in self.__rule_list:
             yield i
     
-    def __get_fullame__(self):
+    def __get_fullame(self):
         return self.repos+':'+self.path
 
-    fullname = property(__get_fullame__)
+    fullname = property(__get_fullame)
 
     def clean_rules(self):
         self.__rule_list = []
@@ -934,13 +939,13 @@ class Repos(object):
         for i in self.module_list:
             yield i
     
-    def __get_name__(self):
+    def __get_name(self):
         return self.__repos_name
 
-    def __set_name__(self, name):
+    def __set_name(self, name):
         self.__repos_name = name.strip()
 
-    name = property(__get_name__, __set_name__)
+    name = property(__get_name, __set_name)
 
     def __get_path_list(self):
         return map(lambda x:x.path, self.module_list)
@@ -1135,25 +1140,25 @@ class SvnAuthz(object):
         if fileobj:
             self.load(fileobj)
 
-    def __get_userlist__(self):
+    def __get_userlist(self):
         return self.__userlist
 
-    userlist = property(__get_userlist__)
+    userlist = property(__get_userlist)
 
-    def __get_aliaslist__(self):
+    def __get_aliaslist(self):
         return self.__aliaslist
 
-    aliaslist = property(__get_aliaslist__)
+    aliaslist = property(__get_aliaslist)
 
-    def __get_grouplist__(self):
+    def __get_grouplist(self):
         return self.__grouplist
 
-    grouplist = property(__get_grouplist__)
+    grouplist = property(__get_grouplist)
 
-    def __get_reposlist__(self):
+    def __get_reposlist(self):
         return self.__reposlist
 
-    reposlist = property(__get_reposlist__)
+    reposlist = property(__get_reposlist)
 
     def __get_version(self):
         return self.__version
@@ -1577,7 +1582,7 @@ class SvnAuthz(object):
 
     def __check_ref_by_rules(self, name):
         if not name:
-            return False
+            return
 
         if isinstance(name, (User, Group, Alias)):
             name = name.uname
@@ -1598,7 +1603,7 @@ class SvnAuthz(object):
         if isinstance(name, (str, unicode)):
             if name and name[0] != '@' and name[0] != '$' and name != '*' :
                 name = '@'+name
-        self.__check_ref_by_rules(name)
+        return self.__check_ref_by_rules(name)
 
     def check_rights(self, user, repos, path, required):
         if isinstance(user, (str, unicode)):

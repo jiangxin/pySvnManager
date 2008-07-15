@@ -380,7 +380,7 @@ team3 = user3, user33
 
         # del_alias
         self.authz.chk_alias_ref_by_rules('&root')
-        self.assert_(self.authz.del_alias('&root') == True)
+        self.authz.del_alias('&root')
         self.assertRaises(Exception, self.authz.chk_alias_ref_by_rules, '&superuser')
         self.assertRaises(Exception, self.authz.del_alias, '&superuser')
         self.assert_(','.join(map(lambda x:x.name, self.authz.aliaslist)) ==
