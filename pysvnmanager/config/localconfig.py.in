@@ -2,8 +2,6 @@
 
 from pysvnmanager.config.DefaultConfig import DefaultConfig
 
-import ldap
-
 class LocalConfig(DefaultConfig):
     
     # Svn authz file
@@ -14,15 +12,17 @@ class LocalConfig(DefaultConfig):
     # You can also implement your own auth module.
     from pysvnmanager.model.auth.http import htpasswd_login
     auth = [htpasswd_login]
-    #from pysvnmanager.model.auth.ldap_login import ldap_login
-    #auth = [ldap_login, htpasswd_login]
-   
+
     # Htpasswd login parameters
     # Note: custom `authn_file' in your <deploy>.ini file
 
+    #import ldap
+    #from pysvnmanager.model.auth.ldap_login import ldap_login
+    #auth = [ldap_login]
+
     # LDAP login parameters
-    ldap_uri = 'ldap://localhost'
-    ldap_binddn = 'cn=ldapadmin,dc=foo,dc=bar'
-    ldap_bindpw = 'guess'
-    ldap_base = 'dc=foo,dc=bar'
-    ldap_filter = '(&(uid=%(username)s)(authorizedService=svn)(ossxpConfirmed=TRUE))'
+    #ldap_uri = 'ldap://localhost'
+    #ldap_binddn = 'cn=ldapadmin,dc=foo,dc=bar'
+    #ldap_bindpw = 'guess'
+    #ldap_base = 'dc=foo,dc=bar'
+    #ldap_filter = '(&(uid=%(username)s)(authorizedService=svn)(ossxpConfirmed=TRUE))'

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from pylons import config
-import ldap
 
 class DefaultConfig:
     """ Default config values 
@@ -21,9 +20,15 @@ class DefaultConfig:
     # You can use htpasswd_login, or ldap_login, or both.
     # You can also implement your own auth module.
     #from pysvnmanager.model.auth.http import htpasswd_login
-    #from pysvnmanager.model.auth.ldap_login import ldap_login
     #auth = [htpasswd_login, ] # single auth method
+
+    # Htpasswd login parameters
+    # Note: custom `authn_file' in your <deploy>.ini file
+
+    #import ldap
+    #from pysvnmanager.model.auth.ldap_login import ldap_login
     #auth = [ldap_login, htpasswd_login] # both
+    #auth = [ldap_login] # ldap auth only
     
     # LDAP parameters
     ldap_uri = 'ldap://localhost'

@@ -12,6 +12,7 @@ setup(
     author='Jiang Xin',
     author_email='jiangxin@ossxp.com',
     url='https://sourceforge.net/projects/pysvnmanager',
+    #install_requires=["Pylons>=0.9.6.2", "python-ldap"],
     install_requires=["Pylons>=0.9.6.2"],
     packages=find_packages(exclude=['ez_setup']),
     include_package_data=True,
