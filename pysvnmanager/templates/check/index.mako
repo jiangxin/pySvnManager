@@ -61,31 +61,46 @@ function select_path(form)
 function update_path(form)
 {
     var repos = "";
-    var path = "";
-    var type = "";
     if (form.reposinput[0].checked) {
         repos = form.reposselector.options[form.reposselector.selectedIndex].value;
     } else {
         repos = form.reposname.value;
     }
-    if (form.pathinput) {
-        if (form.pathinput[0].checked) {
-        	if (form.pathselector.selectedIndex > -1)
-            	path = form.pathselector.options[form.pathselector.selectedIndex].value;
-            type = 'select';
-        } else {
-            path = form.pathname.value;
-            type = 'manual';
-        }
-    }
-    var params = {repos:repos, path:path, type:type};
+    var params = {repos:repos};
     showNoticesPopup();
-    new Ajax.Updater(
-        'path', 
-        '${h.url_for(controller="check", action="get_path_options")}', 
-        {asynchronous:true, evalScripts:true, parameters: params});
-    hideNoticesPopup();
+    new Ajax.Request(
+		'${h.url_for(controller="check", action="get_auth_path")}', 
+		{asynchronous:true, evalScripts:true, method:'post',
+			onComplete:
+				function(request)
+					{hideNoticesPopup();ajax_update_path(request.responseText);},
+			parameters:params
+		});	
 }
+function ajax_update_path(code)
+{
+	var id = new Array();
+	var name = new Array();
+	var total = 0;
+	
+	pathselector = document.forms[0].pathselector;
+	lastselect = pathselector.value;
+	pathselector.options.length = 0;
+
+	try {
+		eval(code);
+		for (var i=0; i < total; i++)
+		{
+			pathselector.options[i] = new Option(name[i], id[i]);
+			if (id[i]==lastselect)
+				pathselector.options[i].selected = true;
+		}
+	}
+	catch(exception) {
+    	alert(exception);
+	}
+}
+
 </SCRIPT>
 
 <h2>${_("Check Permissions")}</h2>
@@ -94,10 +109,10 @@ function update_path(form)
 ##     ${h.form(h.url(action='permission'), method='post')}
 
 ## AJAX Form
-<% 
+<%
     context.write( 
         h.form_remote_tag(
-            html={'id':'checkform'}, 
+            html={'id':'main_form'}, 
             url=h.url(action='access_map'), 
             update=dict(success="acl_msg", failure="acl_error"), 
             method='post', before='showNoticesPopup()',
@@ -141,6 +156,16 @@ function update_path(form)
     </td>
 
     <td>
+        <input type="radio" name="pathinput" value="select" Checked>
+            ${_("Select module")}
+            <select name="pathselector" size="0" onFocus="select_path(this.form)">
+            </select><br/>
+        <input type="radio" name="pathinput" value="manual"> 
+            ${_("Manual input")}
+            <input type="text" name="pathname"" 
+                onFocus="edit_path(this.form)">
+    </td>
+        <td>
         <div id="path">
         ## classic form: ${c.path_options}
         </div>

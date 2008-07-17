@@ -80,52 +80,26 @@ class CheckController(BaseController):
 
         return msg
         
-    def get_path_options(self, repos=None, type=None, path=None):
+    def get_auth_path(self, repos=None, type=None, path=None):
         if self.__auth_failed():
             return render('/auth_failed.mako')
 
-        # get params from arguments or from request
-        buff = ''
-        opts = ''
+        total = 0;
+        msg = ''
+        d = request.params
+        reposname = d.get('repos')
+        repos = self.authz.get_repos(reposname)
         if not repos:
-            d = request.params
-            repos = d.get('repos')
-            type = d.get('type', 'select')
-            if type == 'manual':
-                path = d.get('path')
-            else:
-                type = 'select'
-                path = d.get('path', '...')
+            return msg;
 
-        if repos and repos != '...' and repos in self.reposlist:
-            pathlist = self.authz.get_repos_path_list(repos)
-            opts = u"<option value='*'>%s</option>" % _("All modules")
-            for i in pathlist:
-                if i == path:
-                    selected = 'selected'
-                else:
-                    selected = ''
-                opts += "<option value='%(path)s' %(selected)s>%(path)s</option>" % {'path':i, 'selected':selected}
+        # get javascript code for top_form's role_selector
+        msg += 'id[0]="%s";' % '...'
+        msg += 'name[0]="%s";\n' % _("Please choose...")
+        total += 1;
+        for path in repos.path_list:
+            msg += 'id[%d]="%s";' % (total, path)
+            msg += 'name[%d]="%s";\n' % (total, path)
+            total += 1;
+        msg += 'total=%d;\n' % total
         
-        buff = u'''<input type='radio' name='pathinput' value='select' '''
-        if type == 'select':
-            buff += ' checked '
-        buff += '>'
-        buff += _("Select module")
-        buff += u'''
-<select name="pathselector" size="0" onFocus="select_path(this.form)">
-%s
-</select>
-<br />''' % opts
-        
-        buff += '''<input type="radio" name="pathinput" value="manual" '''
-        if type == 'manual':
-            buff += ' checked '
-        buff += '>'
-        buff += _("Manual input")
-        buff += '<input type="text" name="pathname" value="'
-        if type == 'manual' and path:
-            buff += path
-        buff += '" onFocus="edit_path(this.form)">'
-
-        return buff
+        return msg
