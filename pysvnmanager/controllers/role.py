@@ -12,11 +12,9 @@ class RoleController(BaseController):
     def __init__(self):
         self.authz = SvnAuthz(cfg.authz_file)
         self.login_as = session.get('user')
-
-        c.revision = self.authz.version
-        c.aliaslist  = map(lambda x:x.uname, self.authz.aliaslist)
-        c.userlist = map(lambda x:x.uname, self.authz.userlist)
-        c.grouplist = map(lambda x:x.uname, self.authz.grouplist)
+        self.aliaslist  = map(lambda x:x.uname, self.authz.aliaslist)
+        self.userlist = map(lambda x:x.uname, self.authz.userlist)
+        self.grouplist = map(lambda x:x.uname, self.authz.grouplist)
 
     def __auth_failed(self):
         if self.authz.is_super_user(self.login_as):
@@ -25,12 +23,13 @@ class RoleController(BaseController):
             return True
 
     def index(self):
-        # Return a rendered template
-        #   return render('/some/template.mako')
-        # or, Return a response
         if self.__auth_failed():
             return render('/auth_failed.mako')
         
+        c.revision = self.authz.version
+        c.aliaslist  = self.aliaslist
+        c.userlist = self.userlist
+        c.grouplist = self.grouplist
         return render('/role/index.mako')
     
     def get_role_info(self, role=None):
@@ -48,7 +47,7 @@ class RoleController(BaseController):
             msg += 'id[0]="%s";' % '...'
             msg += 'name[0]="%s";\n' % _("Please choose...")
             members_count += 1;
-            for uname in c.grouplist:
+            for uname in self.grouplist:
                 if uname == '*' or uname[0] == '$':
                     continue
                 msg += 'id[%d]="%s";' % (members_count, uname)
@@ -57,7 +56,7 @@ class RoleController(BaseController):
                 else:
                     msg += 'name[%d]="%s";\n' % (members_count, uname)
                 members_count += 1;
-            for uname in c.aliaslist:
+            for uname in self.aliaslist:
                 msg += 'id[%d]="%s";' % (members_count, uname)
                 if uname[0] == '&':
                     msg += 'name[%d]="%s";\n' % (members_count, _("Alias:")+uname[1:])

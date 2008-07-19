@@ -12,13 +12,7 @@ class CheckController(BaseController):
     def __init__(self):
         self.authz = SvnAuthz(cfg.authz_file)
         self.login_as = session.get('user')
-
         self.reposlist = self.authz.get_manageable_repos_list(self.login_as)
-        c.reposlist = self.reposlist
-        c.userlist = map(lambda x:x.uname, self.authz.grouplist)
-        c.userlist.extend(map(lambda x:x.uname, self.authz.aliaslist))
-        c.userlist.extend(map(lambda x:x.uname, self.authz.userlist))
-        c.pathlist = []
 
     def __auth_failed(self, reposname=None):
         if not self.reposlist:
@@ -29,12 +23,14 @@ class CheckController(BaseController):
             return False
     
     def index(self):
-        # Return a rendered template
-        #   return render('/some/template.mako')
-        # or, Return a response
         if self.__auth_failed():
             return render('/auth_failed.mako')
 
+        c.reposlist = self.reposlist
+        c.userlist = map(lambda x:x.uname, self.authz.grouplist)
+        c.userlist.extend(map(lambda x:x.uname, self.authz.aliaslist))
+        c.userlist.extend(map(lambda x:x.uname, self.authz.userlist))
+        c.pathlist = []
         return render('/check/index.mako')
     
     def access_map(self):
@@ -67,7 +63,7 @@ class CheckController(BaseController):
         
         if username != '...' and repos != '...':
             if repos == '*':
-                repos = c.reposlist
+                repos = self.reposlist
             if not '/' in self.reposlist:
                 if not repos or \
                     ( isinstance(repos, basestring) and not repos in self.reposlist ):

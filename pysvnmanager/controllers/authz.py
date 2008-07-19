@@ -12,10 +12,21 @@ class AuthzController(BaseController):
     def __init__(self):
         self.authz = SvnAuthz(cfg.authz_file)
         self.login_as = session.get('user')
-        
-        c.revision = self.authz.version
-
         self.reposlist = self.authz.get_manageable_repos_list(self.login_as)
+        
+    def __auth_failed(self, reposname=None):
+        if not self.reposlist:
+            return True
+        elif reposname and not reposname in self.reposlist:
+            return True
+        else:
+            return False
+
+    def index(self):
+        if self.__auth_failed():
+            return render('/auth_failed.mako')
+
+        c.revision = self.authz.version
         c.reposlist = self.reposlist
         
         all_avail_users = []
@@ -41,21 +52,6 @@ class AuthzController(BaseController):
             all_avail_users.append([i, i])
         
         c.all_avail_users = all_avail_users
-
-    def __auth_failed(self, reposname=None):
-        if not self.reposlist:
-            return True
-        elif reposname and not reposname in self.reposlist:
-            return True
-        else:
-            return False
-
-    def index(self):
-        # Return a rendered template
-        #   return render('/some/template.mako')
-        # or, Return a response
-        if self.__auth_failed():
-            return render('/auth_failed.mako')
 
         return render('/authz/index.mako')
 

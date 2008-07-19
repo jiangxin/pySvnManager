@@ -47,7 +47,6 @@ class TestCheckController(TestController):
                   }
         res = self.app.get(url_for(controller='check', action='access_map'), params)
         assert res.status == 200
-        assert res.c.reposlist == ['/', u'repos1', u'repos2', u'repos3', u'document'], res.c.reposlist
         assert '''<div id='acl_path_msg'>[repos1:/trunk/src/test] user1 =</div>''' in res.body, res.body
 
         params['userselector'] = 'user1'
@@ -122,7 +121,6 @@ class TestCheckController(TestController):
                   }
         res = self.app.get(url_for(controller='check', action='access_map'), params)
         assert res.status == 200
-        assert res.c.reposlist == [u'repos1'], res.c.reposlist
         assert '''<div id='acl_path_msg'>[repos1:/trunk/src/test] user1 =</div>''' in res.body, res.body
 
         params['reposselector'] = 'reposX'
