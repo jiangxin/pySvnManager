@@ -6,7 +6,7 @@ class TestAuthzController(TestController):
         # Test redirect to login pange
         res = self.app.get(url_for(controller='authz'))
         assert res.status == 302
-        self.assertEqual(res.header('location'), '/login')
+        self.assertEqual(res.header('location'), '/security')
 
         # Login as common user
         self.login('nobody')

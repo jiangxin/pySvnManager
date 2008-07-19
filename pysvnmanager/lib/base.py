@@ -39,7 +39,7 @@ class BaseController(WSGIController):
             if 'user' not in session:
                 session['path_before_login'] = request.path_info
                 session.save()
-                return redirect_to(h.url_for(controller='login'))
+                return redirect_to(h.url_for(controller='security'))
 
     def __call__(self, environ, start_response):
         """Invoke the Controller"""
