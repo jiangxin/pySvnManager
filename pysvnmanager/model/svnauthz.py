@@ -29,7 +29,7 @@ RIGHTS_NONE = 0
 RIGHTS_RW = RIGHTS_R | RIGHTS_W
 RIGHTS_ALL = RIGHTS_R | RIGHTS_W
 
-def is_valide_name(name, type=""):
+def is_valid_name(name, type=""):
     msg = ''
     if type == 'repos':
         bad_chars = r'''[,\s!\\'"]'''
@@ -99,17 +99,13 @@ class User(object):
     Exception: Username is not provided
     """
 
-    def __init__(self, name, realname='', email=''):
+    def __init__(self, name):
         name = name.strip()
-        realname = realname.strip()
-        email = email.strip()
 
         if not name:
             raise Exception, 'Username is not provided'
 
         self.__name = name
-        self.__realname = realname
-        self.__email = email
 
     def __get_unique_name(self):
         return self.__name
@@ -214,19 +210,13 @@ class Alias(object):
 
 
     def __get_name(self):
-        if self.__name:
-            return self.__name
-        else:
-            return ''
+        return self.__name
 
     name = property(__get_name)
     aliasname = property(__get_name)
 
     def __get_unique_name(self):
-        if self.__name:
-            return '&'+self.__name
-        else:
-            return ''
+        return '&'+self.__name
 
     uname = property(__get_unique_name)
 
@@ -238,15 +228,12 @@ class Alias(object):
 
     username = property(__get_username)
 
-    def __get_user(self):
-        return self.__userobj.name
-
     def __set_user(self, userobj):
-        if not isinstance(userobj, object):
+        if not isinstance(userobj, User):
             raise Exception, 'Wrong parameter for userobj.'
         self.__userobj = userobj
 
-    user = property(__get_user, __set_user)
+    user = property(__get_username, __set_user)
 
     def __str__(self):
         return "%s = %s" % (self.name, self.username)
@@ -396,19 +383,16 @@ class Group(object):
         self.__members = []
 
     def __get_unique_name(self):
-        if self.name:
-            if self.name[0] != '$' and self.name != '*':
-                return '@'+self.name
-            else:
-                return self.name
+        if self.name[0] != '$' and self.name != '*':
+            return '@'+self.name
         else:
-            return ''
+            return self.name
 
     uname = property(__get_unique_name)
 
     def __get_member_names(self):
         if self.__members:
-            return map(lambda x: x.uname, self.__members)
+            return sorted(map(lambda x: x.uname, self.__members))
         else:
             return []
 
@@ -465,10 +449,10 @@ class Group(object):
                     if not autodrop:
                         raise Exception, _('Recursive group membership for %s') \
                             % member.uname
-        return
 
     def remove(self, *members):
         ulist = []
+        isRemoved = False
         for member in members:
             if isinstance(member, (str, unicode)):
                 for user in member.split(','):
@@ -477,16 +461,20 @@ class Group(object):
             elif isinstance(member, (list, tuple)):
                 ulist.extend(member)
         
+        mlist = map(lambda x: x.uname, self.__members)
         for user in ulist:
             if isinstance(user, (str, unicode)):
-                mlist = map(lambda x: x.uname, self.__members)
                 if user not in mlist:
                     continue
                 del self.__members[mlist.index(user)]
+                isRemoved = True
             else:
-                self.__members.remove(user)
-
-        return True
+                if user in self.__members:
+                    self.__members.remove(user)
+                    isRemoved = True
+            mlist = map(lambda x: x.uname, self.__members)
+        
+        return isRemoved
 
     def remove_all(self):
         self.__members = []
@@ -499,13 +487,9 @@ class Group(object):
             return -1
 
     def __contains__(self, obj):
-        if not obj: 
-            obj = '*'
 
         if isinstance(obj, Alias):
-            if self.__contains__(obj.username):
-                return True
-            obj = obj.uname
+            obj = obj.username
         elif isinstance(obj, (User, Group)):
             obj = obj.uname
         elif isinstance(obj, (str, unicode)):
@@ -549,20 +533,19 @@ class UserList(object):
         return self.get_or_set(name, autocreate=False)
 
     def get_or_set(self, name, autocreate = True):
-        if isinstance(name, User):
-            return name
+        assert isinstance(name, basestring)
         
         name = normalize_user(name)
         if not name:
             return None
-        if name[0] == '&' or name[0] == '@' or name[0] == '$':
-            raise Exception, _("Not a valide username: %s") % name
+        if name[0] == '&' or name[0] == '@' or name[0] == '$' or name=='*':
+            raise Exception, _("Not a valid username: %s") % name
 
         for user in self.user_list:
             if user.name == name:
                 return user
 
-        msg = is_valide_name(name)
+        msg = is_valid_name(name)
         if msg:
             raise Exception, msg
 
@@ -589,10 +572,10 @@ class AliasList(object):
         return self.get_or_set(name, False)
 
     def get_or_set(self, name, autocreate = True):
-        if isinstance(name, Alias):
-            return name
-        
+        assert isinstance(name, basestring)
+
         name = normalize_user(name)
+
         if not name:
             return None
         if name[0] == '&':
@@ -601,7 +584,7 @@ class AliasList(object):
             if alias.aliasname == name:
                 return alias
 
-        msg = is_valide_name(name)
+        msg = is_valid_name(name)
         if msg:
             raise Exception, msg
 
@@ -619,6 +602,9 @@ class AliasList(object):
             alias = name
         if alias and alias in self.alias_list:
             self.alias_list.remove(alias)
+            return True
+        else:
+            return False
 
     def __str__(self):
         buff = "[aliases]\n"
@@ -629,8 +615,8 @@ class AliasList(object):
 
 
 class GroupList(object):
-    """Store all group objects defined by [group] section or referenced in 
-    [group], [repos:/path/to] but not be set.
+    """Store all group objects defined by [groups] section or referenced in 
+    [groups], [repos:/path/to] but not be set.
     """
     def __init__(self):
         self.group_list = []
@@ -643,8 +629,7 @@ class GroupList(object):
         return self.get_or_set(name, False)
 
     def get_or_set(self, name, autocreate = True):
-        if isinstance(name, Group):
-            return name
+        assert isinstance(name, basestring)
         
         name = normalize_user(name)
         if not name:
@@ -655,7 +640,7 @@ class GroupList(object):
             if group.name == name:
                 return group
 
-        msg = is_valide_name(name)
+        msg = is_valid_name(name)
         if msg:
             raise Exception, msg
 
@@ -667,7 +652,10 @@ class GroupList(object):
             return None
 
     def remove(self, name, force=False):
-        name = name.strip()
+        if isinstance(name, Group):
+            name = name.name
+        else:
+            name = name.strip()
         item = self.get(name)
         if item:
             for group in self.group_list:
@@ -676,6 +664,7 @@ class GroupList(object):
                 if item in group.memberobjs:
                     if force:
                         group.memberobjs.remove(item)
+                        assert not item in group.memberobjs
                     else:
                         raise Exception, \
                                 _('Group %s is referenced by group %s.') \
@@ -809,6 +798,7 @@ class Module(object):
 
             if user in unamelist:
                 del self.__rule_list[unamelist.index(user)]
+                unamelist = map(lambda x: x.uname, self.__rule_list)
 
         return True
 
@@ -959,6 +949,8 @@ class Repos(object):
     def __set_admins(self, admins):
         self.__admins = []
         return self.add_admin(admins)
+
+    admins = property(__get_admins, __set_admins)
     
     def add_admin(self, admin):
         """x.add_admin(admin)"""
@@ -979,8 +971,6 @@ class Repos(object):
             self.__admins.remove(admin)
         else:
             raise Exception, "unknown user: %s, type: %s" % (admin, type(admin))
-    
-    admins = property(__get_admins, __set_admins)
     
     def add_module(self, path):
         path = normalize_path(path)
@@ -1004,7 +994,6 @@ class Repos(object):
 
     def del_all_modules(self):
         self.module_list = []
-        return True
 
     def get_module(self, path):
         path = normalize_path(path)
@@ -1040,6 +1029,7 @@ class Repos(object):
 class ReposList(object):
     def __init__(self):
         self.repos_list = []
+        self.get_or_set('/')
 
     def __iter__(self):
         for i in self.repos_list:
@@ -1049,16 +1039,14 @@ class ReposList(object):
         return self.get_or_set(name, False)
 
     def get_or_set(self, name, autocreate = True):
-        if isinstance(name, Repos):
-            return name
-        
         name = normalize_repos(name)
+        assert isinstance(name, basestring)
 
         for repos in self.repos_list:
             if repos.name == name:
                 return repos
 
-        msg = is_valide_name(name, 'repos')
+        msg = is_valid_name(name, 'repos')
         if msg:
             raise Exception, msg
 
@@ -1070,6 +1058,9 @@ class ReposList(object):
             return None
 
     def remove(self, name, recursive=False):
+        if isinstance(name, Repos):
+            name = name.name
+
         name = normalize_repos(name)
 
         if name == '/' and not recursive:
@@ -1087,16 +1078,16 @@ class ReposList(object):
         if recursive:
             if name == '/':
                 self.repos_list[idx].del_all_modules()
-                return True
             else:
                 del self.repos_list[idx]
-                return True
-
-        if repos.is_blank():
-            del self.repos_list[idx]
             return True
+
         else:
-            return False
+            if repos.is_blank():
+                del self.repos_list[idx]
+                return True
+            else:
+                return False
 
     def __str__(self):
         buff = ''
@@ -1130,15 +1121,18 @@ class SvnAuthz(object):
                                           str right
     '''
     def __init__(self, fileobj=None):
+        self.__clear()
+        if fileobj:
+            self.load(fileobj)
+    
+    def __clear(self):
         self.__userlist  = UserList()
         self.__aliaslist = AliasList()
         self.__grouplist = GroupList()
         self.__reposlist = ReposList()
         self.__version = '0.1.0'
         self.config = None
-        self.add_repos('/')
-        if fileobj:
-            self.load(fileobj)
+        self.add_repos('/')        
 
     def __get_userlist(self):
         return self.__userlist
@@ -1194,11 +1188,13 @@ class SvnAuthz(object):
                     for k in j:
                         yield k
 
-    def load(self, fileobj):
+    def load(self, fileobj=None):
         '''
         Initial SvnAuthz from authz file.
         file can be filename, or file handler, StingIO,...
         '''
+        self.__clear()
+        
         if not fileobj:
             return
 
@@ -1331,7 +1327,8 @@ class SvnAuthz(object):
         elif not user:
             return False
 
-        repos = self.__reposlist.get(repos)
+        if isinstance(repos, basestring):
+            repos = self.__reposlist.get(repos)
         
         if repos:
             if admins is None:
@@ -1518,7 +1515,10 @@ class SvnAuthz(object):
         return False
 
     def add_group_member(self, group, members, autodrop=False):
-        groupobj = self.__grouplist.get_or_set(group)
+        if isinstance(group, basestring):
+            groupobj = self.__grouplist.get_or_set(group)
+        else:
+            groupobj = group
 
         ulist = []
         if isinstance(members, (str, unicode)):
@@ -1550,13 +1550,15 @@ class SvnAuthz(object):
         userobj = self.__userlist.get_or_set(username)
         return userobj
 
-    def add_alias(self, aliasname, username=None):
+    def add_alias(self, aliasname, user=None):
         alias = self.__aliaslist.get_or_set(aliasname)
         if not alias:
             return None
 
-        userobj = self.__userlist.get_or_set(username)
-        alias.user = userobj
+        if isinstance(user, basestring):
+            user = self.__userlist.get_or_set(user)
+            
+        alias.user = user
 
         return alias
 
@@ -1750,13 +1752,9 @@ class SvnAuthz(object):
         maps = []
         msgs = []
         if not reposname or reposname=='*' or reposname=='...':
-            for i in sorted(self.__reposlist):
-                map = self.get_access_map(user, i.name, descend=False)
-                if map:
-                    map['user'] = unicode(user)
-                    map['repos'] = i.name
-                    maps.append(map)
-        elif isinstance(reposname, (list, tuple)):
+            reposname = [r.name for r in sorted(self.__reposlist)]
+        
+        if isinstance(reposname, (list, tuple)):
             for i in reposname:
                 map = self.get_access_map(user, i, descend=False)
                 if map:
@@ -1818,23 +1816,6 @@ Access map on '%(repos)s' for user '%(user)s'
                 }
             msgs.append(msg)
         return msgs
-
-    def show_access_map(self, user='*', reposname=None, abbr=False):
-        msgs = self.get_access_map_msgs(user, reposname, abbr=abbr)
-        for msg in msgs:
-            print msg
-
-    def get_repos_path_list(self, reposname, descend=True):
-        plist = set()
-        repos = self.get_repos(reposname)
-        if repos:
-            plist = set(repos.path_list)
-            
-        if descend and (repos==None or repos.name != '/'):
-            repos = self.get_repos('/')
-            if repos:
-                plist = plist.union(set(repos.path_list))
-        return sorted(plist)
 
 
 if __name__ == '__main__':
