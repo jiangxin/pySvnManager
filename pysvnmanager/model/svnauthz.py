@@ -20,9 +20,9 @@ if config.get('package') and not config.has_key('unittest'):
 else:
     def _(message): return message
 
-reload(sys) # in Python2.5, method sys.setdefaultencoding 
+#reload(sys) # in Python2.5, method sys.setdefaultencoding 
             #will be delete after initialize. we need reload it.
-sys.setdefaultencoding('utf-8')
+#sys.setdefaultencoding('utf-8')
 
 RIGHTS_W = 4
 RIGHTS_R = 2
@@ -39,7 +39,7 @@ def check_valid_aliasname(name):
 
 def check_valid_groupname(name):
     if name == '*':
-        return ''
+        return
     else:
         if name[0]=='$':
             name = name[1:]
@@ -47,12 +47,13 @@ def check_valid_groupname(name):
 
 def check_valid_reposname(name):
     if name == '/':
-        return ''
+        return
     else:
         bad_chars = r'''^[\.$&@-]|[\\/:]|[*?"'<>|,;%#$]'''
         return check_valid_string(name, bad_chars=bad_chars)
     
 def check_valid_string(check_str, bad_chars=""):
+    check_str = normalize_user(check_str)
     msg = ''
     if not check_str:
         msg = _("Name is not given.")
@@ -61,12 +62,18 @@ def check_valid_string(check_str, bad_chars=""):
     else:
         p = re.compile(bad_chars)
         if p.search(check_str):
-            msg = _("Name (%s) contains invalid characters.") % check_str
-    return msg
+            msg = _(u"Name (%s) contains invalid characters.") % check_str
+
+    if msg:
+        raise Exception, msg
 
 def normalize_user(name):
     if isinstance(name, basestring):
         name = name.strip()
+
+    if isinstance(name, str):
+        name = unicode(name, 'utf-8')
+
     return name
 
 def normalize_repos(name):
@@ -75,6 +82,10 @@ def normalize_repos(name):
         name = name.strip('/')
     if not name:
         name = '/'
+
+    if isinstance(name, str):
+        name = unicode(name, 'utf-8')
+
     return name
 
 def normalize_path(name):
@@ -85,7 +96,10 @@ def normalize_path(name):
         name = '/'
     elif isinstance(name, basestring) and name[0] != '/':
         name = '/'+name
-        
+    
+    if isinstance(name, str):
+        name = unicode(name, 'utf-8')
+
     return name
 
 class User(object):
@@ -118,7 +132,7 @@ class User(object):
     """
 
     def __init__(self, name):
-        name = name.strip()
+        name = normalize_user(name)
 
         if not name:
             raise Exception, 'Username is not provided'
@@ -147,7 +161,7 @@ class User(object):
         elif isinstance(obj, Alias):
             obj = obj.username
         elif isinstance(obj, (str, unicode)):
-            obj = obj.strip()
+            obj = normalize_user(obj)
         else:
             return False
 
@@ -179,13 +193,13 @@ class Alias(object):
     >>> a = Alias('aliasname', user)
     >>> a.uname
     '&aliasname'
-    >>> str(a)
+    >>> unicode(a)
     'aliasname = username'
     >>> user in a
     True
     >>> user = User('jiangxin')
     >>> a.user = user
-    >>> str(a)
+    >>> unicode(a)
     'aliasname = jiangxin'
     >>> 'JiangXin' in a
     True
@@ -196,7 +210,7 @@ class Alias(object):
     >>> a in a
     True
     >>> a = Alias('admin')
-    >>> str(a)
+    >>> unicode(a)
     'admin = '
     >>> a.username
     ''
@@ -216,13 +230,8 @@ class Alias(object):
         if userobj != None and (not isinstance(userobj, User)) :
             raise Exception, 'Wrong parameter for userobj.'
 
-        aliasname = aliasname.strip()
-
-        if not aliasname:
-            raise Exception, _('Aliasname is not provided.')
-        elif aliasname and aliasname[0]=='&':
-            raise Exception, _('Aliasname should not begin with &.')
-
+        aliasname = normalize_user(aliasname)
+        check_valid_aliasname(aliasname)
         self.__name = aliasname
         self.__userobj = userobj
 
@@ -234,7 +243,7 @@ class Alias(object):
     aliasname = property(__get_name)
 
     def __get_unique_name(self):
-        return '&'+self.__name
+        return u'&'+self.__name
 
     uname = property(__get_unique_name)
 
@@ -242,7 +251,7 @@ class Alias(object):
         if self.__userobj:
             return self.__userobj.name
         else:
-            return ''
+            return u''
 
     username = property(__get_username)
 
@@ -254,7 +263,7 @@ class Alias(object):
     user = property(__get_username, __set_user)
 
     def __str__(self):
-        return "%s = %s" % (self.name, self.username)
+        return u"%s = %s" % (self.aliasname, self.username)
 
     def __cmp__(self, obj):
         """For list sorting"""
@@ -269,7 +278,7 @@ class Alias(object):
         elif isinstance(obj, (User, Group)):
             obj = obj.uname
         elif isinstance(obj, basestring):
-            obj = obj.strip()
+            obj = normalize_user(obj)
 
         if not obj:
             return False
@@ -391,19 +400,14 @@ class Group(object):
     """
 
     def __init__(self, name=''):
-        name = name.strip()
-
-        if not name:
-            raise Exception, _('Group name is not provided.')
-        elif name and name[0]=='@':
-            raise Exception, _('Group name should not begin with @.')
-
+        name = normalize_user(name)
+        check_valid_groupname(name)
         self.name = name
         self.__members = []
 
     def __get_unique_name(self):
         if self.name[0] != '$' and self.name != '*':
-            return '@'+self.name
+            return u'@'+self.name
         else:
             return self.name
 
@@ -424,9 +428,9 @@ class Group(object):
 
     def __str__(self):
         if self.name[0] != '$' and self.name != '*':
-            return "%s = %s" % (self.name, ', '.join(sorted(self.membernames)))
+            return u"%s = %s" % (self.name, ', '.join(sorted(self.membernames)))
         else:
-            return "# Built-in group: %s" % self.name
+            return u"# Built-in group: %s" % self.name
 
     def __iter__(self):
         for i in self.__members:
@@ -475,14 +479,16 @@ class Group(object):
         for member in members:
             if isinstance(member, (str, unicode)):
                 for user in member.split(','):
-                    if user.strip():
-                        ulist.append(user.strip())
+                    user = normalize_user(user)
+                    if user:
+                        ulist.append(user)
             elif isinstance(member, (list, tuple)):
                 ulist.extend(member)
         
         mlist = map(lambda x: x.uname, self.__members)
         for user in ulist:
             if isinstance(user, (str, unicode)):
+                user = normalize_user(user)
                 if user not in mlist:
                     continue
                 del self.__members[mlist.index(user)]
@@ -512,7 +518,7 @@ class Group(object):
         elif isinstance(obj, (User, Group)):
             obj = obj.uname
         elif isinstance(obj, (str, unicode)):
-            obj = obj.strip()
+            obj = normalize_user(obj)
         else:
             return False
 
@@ -565,9 +571,7 @@ class UserList(object):
                 return user
 
         if autocreate:
-            msg = check_valid_username(name)
-            if msg:
-                raise Exception, msg
+            check_valid_username(name)
             user = User(name)
             self.user_list.append(user)
             return user
@@ -591,7 +595,6 @@ class AliasList(object):
 
     def get_or_set(self, name, autocreate = True):
         assert isinstance(name, basestring)
-
         name = normalize_user(name)
 
         if not name:
@@ -603,9 +606,7 @@ class AliasList(object):
                 return alias
 
         if autocreate:
-            msg = check_valid_aliasname(name)
-            if msg:
-                raise Exception, msg
+            check_valid_aliasname(name)
             alias = Alias(name)
             self.alias_list.append(alias)
             return alias
@@ -614,7 +615,7 @@ class AliasList(object):
 
     def remove(self, name):
         if isinstance(name, (str, unicode)):
-            alias = self.get(name.strip())
+            alias = self.get(name)
         else:
             alias = name
         if alias and alias in self.alias_list:
@@ -624,7 +625,7 @@ class AliasList(object):
             return False
 
     def __str__(self):
-        buff = "[aliases]\n"
+        buff = u"[aliases]\n"
         for alias in sorted(self.alias_list):
             buff += unicode(alias)
             buff += '\n'
@@ -647,7 +648,6 @@ class GroupList(object):
 
     def get_or_set(self, name, autocreate = True):
         assert isinstance(name, basestring)
-        
         name = normalize_user(name)
         if not name:
             return None
@@ -658,9 +658,7 @@ class GroupList(object):
                 return group
 
         if autocreate:
-            msg = check_valid_groupname(name)
-            if msg:
-                raise Exception, msg
+            check_valid_groupname(name)
             group = Group(name)
             self.group_list.append(group)
             return group
@@ -671,7 +669,7 @@ class GroupList(object):
         if isinstance(name, Group):
             name = name.name
         else:
-            name = name.strip()
+            name = normalize_user(name)
         item = self.get(name)
         if item:
             for group in self.group_list:
@@ -810,7 +808,7 @@ class Module(object):
 
         unamelist = map(lambda x: x.uname, self.__rule_list)
         for (user, rights) in rules.items():
-            user = user.strip()
+            user = normalize_user(user)
 
             if user in unamelist:
                 del self.__rule_list[unamelist.index(user)]
@@ -935,11 +933,10 @@ class Repos(object):
     These modules share the same repos name, and have the same administrator(s).
     """
     def __init__(self, name):
-        name = name.strip()
+        name = normalize_repos(name)
         self.__repos_name = name
         self.__admins = []
         self.module_list = []
-        self.authz = ''
 
     def __iter__(self):
         for i in self.module_list:
@@ -949,7 +946,7 @@ class Repos(object):
         return self.__repos_name
 
     def __set_name(self, name):
-        self.__repos_name = name.strip()
+        self.__repos_name = normalize_repos(name)
 
     name = property(__get_name, __set_name)
 
@@ -1063,9 +1060,7 @@ class ReposList(object):
                 return repos
 
         if autocreate:
-            msg = check_valid_reposname(name)
-            if msg:
-                raise Exception, msg
+            check_valid_reposname(name)
             repos = Repos(name)
             self.repos_list.append(repos)
             return repos
@@ -1180,7 +1175,7 @@ class SvnAuthz(object):
             rev = int(minor)+1
         else:
             rev = 0
-        self.__version = "%s.%d" % (major, rev)
+        self.__version = u"%s.%d" % (major, rev)
         
     def modulelist(self):
         for i in self.reposlist:
@@ -1235,7 +1230,7 @@ class SvnAuthz(object):
             else:
                 f = self.__file
                 f.truncate(0)
-            f.write(unicode(self))
+            f.write(unicode(self).encode('utf-8'))
             if isinstance(self.__file, (basestring)):
                 f.close()
             else:
@@ -1243,7 +1238,7 @@ class SvnAuthz(object):
                 f.flush()
         
     def __str__(self):
-        buff = ""
+        buff = u""
         buff += self.compose_version()
         buff += self.compose_acl()
         buff += '\n'
@@ -1268,15 +1263,15 @@ class SvnAuthz(object):
             reposname = '/'
             path = section
 
-        reposname = reposname.strip()
-        path = path.strip()
+        reposname = normalize_repos(reposname)
+        path = normalize_path(path)
 
         self.add_rules(reposname, path, contents, force=True)
 
     def parse_aliases(self, aliases):
         for (name, username) in aliases.items():
-            name = name.strip()
-            username = username.strip()
+            name = normalize_user(name)
+            username = normalize_user(username)
             self.add_alias(name, username)
 
     def parse_acl(self):
@@ -1286,8 +1281,8 @@ class SvnAuthz(object):
             for acl in acls:
                 i = pattern.search(acl)
                 if i:
-                    name  = i.group(1).strip()
-                    admin = i.group(2).strip()
+                    name  = normalize_repos(i.group(1))
+                    admin = normalize_user(i.group(2))
                     if name and admin:
                         repos = self.__reposlist.get_or_set(name)
                         self.set_admin(admin, repos)
@@ -1338,7 +1333,7 @@ class SvnAuthz(object):
         for repos in self.__reposlist:
             admins = repos.admins
             if admins:
-                buff += "# admin : %s = %s\n" % (repos.name, admins)
+                buff += u"# admin : %s = %s\n" % (repos.name, admins)
         return buff
 
     def is_admin(self, user, repos='/', admins=None):
@@ -1346,6 +1341,8 @@ class SvnAuthz(object):
             user = user.uname
         elif isinstance(user, Alias):
             user = user.username
+        elif isinstance(user, basestring):
+            user = normalize_user(user)
         elif not user:
             return False
 
@@ -1356,7 +1353,7 @@ class SvnAuthz(object):
             if admins is None:
                 admins = repos.admins
             for i in admins.split(','):
-                if i: i = i.strip()
+                if i: i = normalize_user(i)
                 
                 if not i: continue
                 
@@ -1545,7 +1542,7 @@ class SvnAuthz(object):
         ulist = []
         if isinstance(members, (str, unicode)):
             for user in members.split(','):
-                user = user.strip()
+                user = normalize_user(user)
                 if user:
                     ulist.append(user)
         elif isinstance(members, (list, tuple)):
@@ -1580,8 +1577,6 @@ class SvnAuthz(object):
         return alias
 
     def del_alias(self, name, force=False):
-        name = name.strip()
-
         alias = self.__aliaslist.get(name)
         if not alias:
             return False
@@ -1623,11 +1618,11 @@ class SvnAuthz(object):
 
     def check_rights(self, user, repos, path, required):
         if isinstance(user, (str, unicode)):
-            user = user.strip()
+            user = normalize_user(user)
         if isinstance(repos, (str, unicode)):
-            repos = repos.strip()
+            repos = normalize_repos(repos)
         if isinstance(path, (str, unicode)):
-            path  = path.strip().rstrip('/')
+            path  = normalize_path(path)
 
         if isinstance(required, (str, unicode)):
             required = required.strip()
@@ -1682,7 +1677,7 @@ class SvnAuthz(object):
 
     def get_access_map(self, user=None, reposname='/', descend=True):
         if isinstance(user, (str, unicode)):
-            user = user.strip()
+            user = normalize_user(user)
         if not user:
             user = '*'
         reposname = normalize_repos(reposname)
@@ -1717,7 +1712,7 @@ class SvnAuthz(object):
 
     def get_path_access_msgs(self, user, reposname, path, abbr=False):
         if isinstance(user, (str, unicode)):
-            user = user.strip()
+            user = normalize_user(user)
         if not user:
             user = '*'
 
@@ -1753,7 +1748,7 @@ class SvnAuthz(object):
 
     def get_access_map_msgs(self, user='*', reposname=None, abbr=False):
         if isinstance(user, (str, unicode)):
-            user = user.strip()
+            user = normalize_user(user)
         if not user:
             user = '*'
 

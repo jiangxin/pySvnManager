@@ -14,16 +14,14 @@ class CheckController(BaseController):
         self.login_as = session.get('user')
         self.reposlist = self.authz.get_manageable_repos_list(self.login_as)
 
-    def __auth_failed(self, reposname=None):
+    def __authz_failed(self):
         if not self.reposlist:
-            return True
-        elif reposname and not reposname in self.reposlist:
             return True
         else:
             return False
     
     def index(self):
-        if self.__auth_failed():
+        if self.__authz_failed():
             return render('/auth_failed.mako')
 
         c.reposlist = self.reposlist
@@ -34,7 +32,7 @@ class CheckController(BaseController):
         return render('/check/index.mako')
     
     def access_map(self):
-        if self.__auth_failed():
+        if self.__authz_failed():
             return render('/auth_failed.mako')
 
         msg = ""
@@ -77,7 +75,7 @@ class CheckController(BaseController):
         return msg
         
     def get_auth_path(self, repos=None, type=None, path=None):
-        if self.__auth_failed():
+        if self.__authz_failed():
             return render('/auth_failed.mako')
 
         total = 0;

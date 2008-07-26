@@ -14,10 +14,8 @@ class AuthzController(BaseController):
         self.login_as = session.get('user')
         self.reposlist = self.authz.get_manageable_repos_list(self.login_as)
         
-    def __auth_failed(self, reposname=None):
+    def __auth_failed(self):
         if not self.reposlist:
-            return True
-        elif reposname and not reposname in self.reposlist:
             return True
         else:
             return False
@@ -37,16 +35,10 @@ class AuthzController(BaseController):
             i = group.uname
             if i == '*' or i =='$authenticated' or i == '$anonymous':
                 continue
-            if i[0] == '@':
-                all_avail_users.append([_("Group:")+i[1:], i])
-            else:
-                all_avail_users.append([i, i])
+            all_avail_users.append([_("Group:")+i[1:], i])
         for alias in self.authz.aliaslist:
             i = alias.uname
-            if i[0] == '&':
-                all_avail_users.append([_("Alias:")+i[1:], i])
-            else:
-                all_avail_users.append([i, i])
+            all_avail_users.append([_("Alias:")+i[1:], i])
         for user in self.authz.userlist:
             i = user.uname
             all_avail_users.append([i, i])
@@ -110,7 +102,6 @@ class AuthzController(BaseController):
         d = request.params
         reposname = d.get('reposname')
         path = d.get('path')
-
         module = self.authz.get_module(reposname, path)
         if not module:
             return msg;

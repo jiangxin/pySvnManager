@@ -27,6 +27,7 @@ class TestModels(TestController):
 # admin : repos2 = admin2
 # admin : repos3 = admin3
 # admin : reposx = 
+# admin : 版本库1 = @管理组1
 
 [groups]
 admins=&admin,&007
@@ -38,10 +39,13 @@ team2=user2,user22,@team3,
 # We can detect and fix.
 team3=user3,user33,@team1
 all=@team1,user3,user4
+组1=&别名1, 用户2
+管理组1=&别名1, 蒋鑫
 
 [aliases]
 admin=jiangxin
 007=james
+别名1=用户1
 
 [repos1:/trunk/src]
 user1=
@@ -74,6 +78,15 @@ $authenticated = r
 * = 
 @all = r
 @admins = rw
+
+[版本库1:/]
+* = 
+@管理组1 = rw
+
+[版本库1:/项目1]
+* = 
+@组1 = rw
+用户3 = r
         '''
         assert(self.f.tell()==0)
         self.f.write(buff)
@@ -85,7 +98,7 @@ $authenticated = r
     
     def testUser(self):
         user1 = User('Tom')
-        self.assert_(str(user1) == 'Tom')
+        self.assert_(unicode(user1) == 'Tom')
         self.assertRaises(Exception, User, "")
         user2 = User('Jerry')
         user3 = User('Zeb')
@@ -104,9 +117,9 @@ $authenticated = r
         user1 = User('Tom')
         alias1=Alias('admin')
         alias1.user = user1
-        self.assert_(str(alias1) == 'admin = Tom', str(alias1))
+        self.assert_(unicode(alias1) == 'admin = Tom', unicode(alias1))
         alias2=Alias('manager', user1)
-        self.assert_(str(alias2) == 'manager = Tom', str(alias1))
+        self.assert_(unicode(alias2) == 'manager = Tom', unicode(alias1))
 
         self.assert_('&Manager' in alias2)
         self.assert_(not 'manager' in alias2)
@@ -145,7 +158,7 @@ $authenticated = r
         self.assert_(group1.membernames == ['user1','user2'], group1.membernames)
 
         group1.append([group2, alias])
-        self.assert_(str(group1) == 'team1 = &admin, @team2, user1, user2', str(group1))
+        self.assert_(unicode(group1) == 'team1 = &admin, @team2, user1, user2', unicode(group1))
         self.assert_([m.uname for m in group1] == ['user1', 'user2', '@team2', '&admin'], [m.uname for m in group1])
         
         group1.remove('user1, &admin')
@@ -185,15 +198,15 @@ $authenticated = r
         self.assert_(group1.membernames == [], group1.membernames)
         
         g = Group('$authenticated')
-        self.assert_(str(g) == "# Built-in group: $authenticated")
+        self.assert_(unicode(g) == "# Built-in group: $authenticated")
 
     def testIsValidName(self):
-        self.assert_(check_valid_username('蒋,鑫')=="Name (蒋,鑫) contains invalid characters.")
-        self.assert_(check_valid_username('jiang;xin')=="Name (jiang;xin) contains invalid characters.")
-        self.assert_(check_valid_username('')=="Name is not given.", check_valid_username(''))
-        self.assert_(check_valid_username(User('user'))=="Name is not string.")
-        self.assert_(check_valid_reposname('my/repos')=="Name (my/repos) contains invalid characters.")
-        self.assert_(check_valid_reposname('/')=="")
+        self.assertRaises(Exception, check_valid_username, '蒋,鑫')
+        self.assertRaises(Exception, check_valid_username, 'jiang;xin')
+        self.assertRaises(Exception, check_valid_username, '')
+        self.assertRaises(Exception, check_valid_username, User('user'))
+        self.assertRaises(Exception, check_valid_reposname, 'my/repos')
+        check_valid_reposname('/')
         
     def testUserList(self):
         ulist = UserList()
@@ -231,7 +244,7 @@ $authenticated = r
         self.assert_(list(alist)== [alias1, alias2])
         self.assert_([a.uname for a in alist] == ['&admin', '&root'], [a.uname for a in alist])
 
-        self.assert_(str(alist)=="[aliases]\nadmin = \nroot = \n", repr(str(alist)))
+        self.assert_(unicode(alist)=="[aliases]\nadmin = \nroot = \n", repr(unicode(alist)))
         
         self.assert_(alist.get_or_set('')==None)
         self.assert_(alist.get_or_set('  ')==None)
@@ -268,7 +281,7 @@ $authenticated = r
 
         self.assert_([g.uname for g in glist] == ['@team1', '@team2'], [g.uname for g in glist])
 
-        self.assert_(str(glist)=="[groups]\nteam1 = @team2, user1\nteam2 = &admin, user2\n", repr(str(glist)))
+        self.assert_(unicode(glist)=="[groups]\nteam1 = @team2, user1\nteam2 = &admin, user2\n", repr(unicode(glist)))
         
         self.assert_(glist.get_or_set('')==None)
         self.assert_(glist.get_or_set('  ')==None)
@@ -281,10 +294,10 @@ $authenticated = r
         g1.append(user1, g2)
         self.assertRaises(Exception, glist.remove, '@team2')
         self.assertRaises(Exception, glist.remove, g2)
-        self.assert_(str(glist)=='[groups]\nteam1 = @team2, user1\nteam2 = &admin, user2\n', repr(str(glist)))
+        self.assert_(unicode(glist)=='[groups]\nteam1 = @team2, user1\nteam2 = &admin, user2\n', repr(unicode(glist)))
         glist.remove('@team2',force=True)
         glist.remove('notexist')
-        self.assert_(str(glist)=="[groups]\nteam1 = user1\n", repr(str(glist)))
+        self.assert_(unicode(glist)=="[groups]\nteam1 = user1\n", repr(unicode(glist)))
         
     def testRules(self):
         user1 = User('user1')
@@ -301,7 +314,7 @@ $authenticated = r
         self.assert_(rule1.rights == RIGHTS_ALL)
         rule1.rights = RIGHTS_ALL
         self.assert_(rule1.rights == RIGHTS_R|RIGHTS_W)
-        self.assert_(str(rule1)=='@group1 = rw', repr(str(rule1)))
+        self.assert_(unicode(rule1)=='@group1 = rw', repr(unicode(rule1)))
         self.assert_(rule1.get_permission(group1) == (RIGHTS_ALL, RIGHTS_NONE))
         self.assert_(rule1.get_permission(user1) == (RIGHTS_ALL, RIGHTS_NONE))
         self.assert_(rule1.get_permission(user2) == (RIGHTS_ALL, RIGHTS_NONE))
@@ -312,15 +325,15 @@ $authenticated = r
         rule0 = Rule(group0)
         rulelist = [rule1, rule0]
         rulelist.append('@choose...')
-        self.assert_([str(r) for r in rulelist]==['@group1 = rw', '@group0 = ', '@choose...'], [str(r) for r in rulelist])
-        self.assert_([str(r) for r in sorted(rulelist)]==['@group0 = ', '@group1 = rw', '@choose...'], [str(r) for r in sorted(rulelist)])
+        self.assert_([unicode(r) for r in rulelist]==['@group1 = rw', '@group0 = ', '@choose...'], [unicode(r) for r in rulelist])
+        self.assert_([unicode(r) for r in sorted(rulelist)]==['@group0 = ', '@group1 = rw', '@choose...'], [unicode(r) for r in sorted(rulelist)])
         
 
     def testModule(self):
         module = Module('/', '/trunk')
         self.assert_(module.path == '/trunk')
         self.assert_(module.fullname == '/:/trunk')
-        self.assert_(str(module)=='')
+        self.assert_(unicode(module)=='')
         
         obj = Group('* ')
         module.update_rule(obj,'')
@@ -332,18 +345,18 @@ $authenticated = r
         module.update_rule(obj, '')
         obj = Group(' $authenticated ')
         module.update_rule(obj, 'r')
-        self.assert_(str(module) == 
+        self.assert_(unicode(module) == 
 '''[/trunk]
 $authenticated = r
 * = r
 @admins = rw
 jiang = 
-''', repr(str(module)))
-        self.assert_([str(r) for r in module]==['* = r', '@admins = rw', 'jiang = ', '$authenticated = r'], [str(r) for r in module])
-        self.assert_([str(r) for r in module.rules]==['* = r', '@admins = rw', 'jiang = ', '$authenticated = r'], [str(r) for r in module.rules])
+''', repr(unicode(module)))
+        self.assert_([unicode(r) for r in module]==['* = r', '@admins = rw', 'jiang = ', '$authenticated = r'], [unicode(r) for r in module])
+        self.assert_([unicode(r) for r in module.rules]==['* = r', '@admins = rw', 'jiang = ', '$authenticated = r'], [unicode(r) for r in module.rules])
         
         module.del_rule('@admins= rw')
-        self.assert_([str(r) for r in module]==['* = r', 'jiang = ', '$authenticated = r'], [str(r) for r in module])
+        self.assert_([unicode(r) for r in module]==['* = r', 'jiang = ', '$authenticated = r'], [unicode(r) for r in module])
         
         module = Module('myrepos', '')
         groupstar = Group('* ')
@@ -356,12 +369,12 @@ jiang =
         module.update_rule(user1,'')
         groupauth = Group('$authenticated')
         module.update_rule(groupauth,'r')
-        self.assert_(str(module) == '''[myrepos:/]
+        self.assert_(unicode(module) == '''[myrepos:/]
 $authenticated = r
 * = 
 @team1 = rw
 jiang = 
-''', repr(str(module)))
+''', repr(unicode(module)))
         self.assert_(module.get_permit_bits(user1)==(RIGHTS_R, RIGHTS_ALL),module.get_permit_bits(user1))
         self.assert_(module.get_permit_str(user1)=='r',module.get_permit_str(user1))
         self.assert_(module.get_permit_str('@team1')=='rw',module.get_permit_str('@team1'))
@@ -377,7 +390,7 @@ jiang =
         self.assertRaises(Exception, module.del_rule, 'norepos', '/nopath', 'nobody=')
         
         module.clean_rules()
-        self.assert_([str(r) for r in module]==[], [str(r) for r in module])
+        self.assert_([unicode(r) for r in module]==[], [unicode(r) for r in module])
 
         self.assert_(Module('repos1', '/trunk')>Module('repos0', '/trunk'))
         self.assert_(Module('repos1', '/trunk')<"choice...")
@@ -427,7 +440,7 @@ jiang =
         mod1.update_rule(user1,'r')
         mod2.update_rule(alias1,'rw')
 
-        self.assert_(str(repos1)=='[repos1:/tags]\n&alias1 = rw\n\n[repos1:/trunk]\nuser1 = r\n\n', repr(str(repos1)))
+        self.assert_(unicode(repos1)=='[repos1:/tags]\n&alias1 = rw\n\n[repos1:/trunk]\nuser1 = r\n\n', repr(unicode(repos1)))
         
         repos1.del_all_modules()
         self.assert_(repos1.path_list == [], repos1.path_list)
@@ -460,7 +473,7 @@ jiang =
         self.assert_(rlist.get('noexist')==None)
         self.assertRaises(Exception, rlist.get_or_set, 'wrong/repos')
         
-        self.assert_(str(rlist)=='[repos2:/trunk]\nuser1 = r\n\n', repr(str(rlist)))
+        self.assert_(unicode(rlist)=='[repos2:/trunk]\nuser1 = r\n\n', repr(unicode(rlist)))
         
         self.assert_([r.name for r in rlist] == ['/', 'repos1', 'repos2'], [r.name for r in rlist])
         rlist.remove(r1)
@@ -485,13 +498,13 @@ jiang =
         u7=authz.add_user('u7')
         admin = authz.add_alias('admin', 'u1')
         team1 = authz.add_group('team1')
-        self.assert_(str(team1)=='team1 = ', str(team1))
+        self.assert_(unicode(team1)=='team1 = ', unicode(team1))
         team1 = authz.set_group('team1', None)
-        self.assert_(str(team1)=='team1 = ', str(team1))
+        self.assert_(unicode(team1)=='team1 = ', unicode(team1))
         team1 = authz.set_group('team1', 'u2, u3')
-        self.assert_(str(team1)=='team1 = u2, u3', str(team1))
+        self.assert_(unicode(team1)=='team1 = u2, u3', unicode(team1))
         team1 = authz.add_group_member('team1', u4)
-        self.assert_(str(team1)=='team1 = u2, u3, u4', str(team1))
+        self.assert_(unicode(team1)=='team1 = u2, u3, u4', unicode(team1))
         repos1 = authz.add_repos('repos1')
         
         authz.set_admin('&admin, u7')
@@ -521,17 +534,18 @@ jiang =
         self.assert_(rl.get('repos2').name == 'repos2', 'name: %s' % rl.get('repos2').name)
         self.assert_(rl.get('repos2').admins == 'admin2', rl.get('repos2').admins)
         self.assert_(self.authz.compose_acl() == 
-'''# admin : / = &admin, root
+u'''# admin : / = &admin, root
 # admin : repos1 = @admin
 # admin : repos2 = admin2
 # admin : repos3 = admin3
-''', self.authz.compose_acl())
+# admin : 版本库1 = @管理组1
+''', repr(self.authz.compose_acl()))
         pass
 
     def testAuthzConfAliases(self):
         al = self.authz.aliaslist
-        self.assert_(al.get('admin').username == 'jiangxin', str(al.get('admin')))
-        self.assert_(str(al) == '[aliases]\n007 = james\nadmin = jiangxin\n', repr(str(al)))
+        self.assert_(al.get('admin').username == 'jiangxin', unicode(al.get('admin')))
+        self.assert_(unicode(al) == u'[aliases]\n007 = james\nadmin = jiangxin\n别名1 = 用户1\n', repr(unicode(al)))
         pass
 
     def testAuthzConfGroups(self):
@@ -544,15 +558,17 @@ jiang =
         self.assert_(sorted(gl.get('all').membernames) == 
                      ['@team1', 'user3', 'user4'],
                      sorted(gl.get('all').membernames))
-        self.assert_(str(gl) == 
-            '''[groups]
+        self.assert_(unicode(gl) == 
+            u'''[groups]
 admin = &admin, admin1, admin2, admin3
 admins = &007, &admin
 all = @team1, user3, user4
 team1 = @team2, user1, user11
 team2 = @team3, user2, user22
 team3 = user3, user33
-''', repr(str(gl)))
+管理组1 = &别名1, 蒋鑫
+组1 = &别名1, 用户2
+''', repr(unicode(gl)))
 
     
     def testAuthzConfVersion(self):
@@ -621,18 +637,18 @@ team3 = user3, user33
         user = self.authz.add_user('jiangxin')
         self.assert_(isinstance(self.authz.add_alias('superuser', user), Alias))
         self.assert_(isinstance(self.authz.add_alias('root', user), Alias))
-        self.assert_(str(self.authz.aliaslist) == '[aliases]\nroot = jiangxin\nsuperuser = jiangxin\n', repr(str(self.authz.aliaslist)))
+        self.assert_(unicode(self.authz.aliaslist) == '[aliases]\nroot = jiangxin\nsuperuser = jiangxin\n', repr(unicode(self.authz.aliaslist)))
         self.assert_(','.join(map(lambda x:x.name, self.authz.aliaslist)) ==
                      'superuser,root', ','.join(map(lambda x:x.name,
                                                     self.authz.aliaslist)))
 
         # add_group
-        self.assert_(str(self.authz.grouplist) == '[groups]\n', repr(str(self.authz.grouplist)))
+        self.assert_(unicode(self.authz.grouplist) == '[groups]\n', repr(unicode(self.authz.grouplist)))
         self.assert_(isinstance(self.authz.add_group('myteam','user1'), Group))
-        self.assert_(str(self.authz.grouplist) == '[groups]\nmyteam = user1\n', repr(str(self.authz.grouplist)))
+        self.assert_(unicode(self.authz.grouplist) == '[groups]\nmyteam = user1\n', repr(unicode(self.authz.grouplist)))
         self.assert_(isinstance(self.authz.add_group_member('myteam','user2,user3'), Group))
         self.assert_(isinstance(self.authz.add_group_member('myteam','user2,user3'), Group))
-        self.assert_(str(self.authz.grouplist) == '[groups]\nmyteam = user1, user2, user3\n', repr(str(self.authz.grouplist)))
+        self.assert_(unicode(self.authz.grouplist) == '[groups]\nmyteam = user1, user2, user3\n', repr(unicode(self.authz.grouplist)))
         self.assert_(','.join(map(lambda x:x.name, self.authz.grouplist)) ==
                      'myteam', ','.join(map(lambda x:x.name,
                                             self.authz.grouplist)))
@@ -642,24 +658,24 @@ team3 = user3, user33
         self.assert_(isinstance(self.authz.add_group_member('team3','@team4'),Group))
         self.assert_(isinstance(self.authz.add_group_member('team4','@myteam'),Group))
         self.assertRaises(Exception, self.authz.add_group_member, 'myteam','@team3, @team4, @team5')
-        self.assert_(str(self.authz.grouplist.get('@myteam')) == 
+        self.assert_(unicode(self.authz.grouplist.get('@myteam')) == 
                      'myteam = $authenticated, *, @team1, @team2, user1, user2, user3', 
-                     repr(str(self.authz.grouplist.get('@myteam')))) 
+                     repr(unicode(self.authz.grouplist.get('@myteam')))) 
         self.assert_(isinstance(self.authz.add_group_member('myteam','@team3, @team4, @team5', True),Group))
-        self.assert_(str(self.authz.grouplist.get('@myteam')) == 
+        self.assert_(unicode(self.authz.grouplist.get('@myteam')) == 
                      'myteam = $authenticated, *, @team1, @team2, @team5, user1, user2, user3', 
-                     repr(str(self.authz.grouplist.get('@myteam')))) 
+                     repr(unicode(self.authz.grouplist.get('@myteam')))) 
         self.assertRaises(Exception, self.authz.del_group, '@team2')
-        self.assert_(str(self.authz.grouplist.get('@team2')) == 'team2 = $authenticated, *', 
+        self.assert_(unicode(self.authz.grouplist.get('@team2')) == 'team2 = $authenticated, *', 
                      self.authz.grouplist.get('@team2'))
         self.authz.del_group('@team2',force=True)
         self.assert_(self.authz.grouplist.get('@team2') == None, 
-                     str(self.authz.grouplist.get('@team2')))
-        self.assert_(str(self.authz.grouplist.get('@myteam')) == 
+                     unicode(self.authz.grouplist.get('@team2')))
+        self.assert_(unicode(self.authz.grouplist.get('@myteam')) == 
                      'myteam = $authenticated, *, @team1, @team5, user1, user2, user3',
-                     repr(str(self.authz.grouplist.get('@myteam')))) 
-        self.assert_(str(self.authz.grouplist.get('@team1')) == 'team1 = ',
-                     repr(str(self.authz.grouplist.get('@team1')))) 
+                     repr(unicode(self.authz.grouplist.get('@myteam')))) 
+        self.assert_(unicode(self.authz.grouplist.get('@team1')) == 'team1 = ',
+                     repr(unicode(self.authz.grouplist.get('@team1')))) 
 
         # add_rule 
         module = self.authz.get_module('/', '/trunk/')
@@ -681,12 +697,12 @@ team3 = user3, user33
         self.assert_(self.authz.add_rules('repos1', '/', '*=') == True, self.authz.add_rules('repos1', '/', '*=r'))
         self.assert_(self.authz.add_rules('/', '/trunk/', '&superuser=r; *=rw') == True, self.authz.add_rules('/', '/trunk/', '&superuser=rw'))
         self.assert_(self.authz.add_rules('/', '/trunk/', '&superuser=rw\n *=r') == True, self.authz.add_rules('/', '/trunk/', '&superuser=rw'))
-        self.assert_(str(self.authz.get_module('repos1', '/')) == '[repos1:/]\n* = r\n', repr(str(self.authz.get_module('repos1', '/'))))
+        self.assert_(unicode(self.authz.get_module('repos1', '/')) == '[repos1:/]\n* = r\n', repr(unicode(self.authz.get_module('repos1', '/'))))
         self.assert_(self.authz.add_rules('repos1', '/', ['*=', '@team1=rw']) == True)
-        self.assert_(str(self.authz.get_module('repos1', '/')) == '[repos1:/]\n* = \n@team1 = rw\n', repr(str(self.authz.get_module('repos1', '/'))))
-        self.assert_(','.join(map(lambda x:str(x), self.authz.rulelist())) ==
+        self.assert_(unicode(self.authz.get_module('repos1', '/')) == '[repos1:/]\n* = \n@team1 = rw\n', repr(unicode(self.authz.get_module('repos1', '/'))))
+        self.assert_(','.join(map(lambda x:unicode(x), self.authz.rulelist())) ==
                      '&superuser = rw,* = r,* = ,@team1 = rw', ','.join(map(lambda
-                                                                      x:str(x),
+                                                                      x:unicode(x),
                                                                       self.authz.rulelist())))
         self.assertRaises(Exception, self.authz.chk_grp_ref_by_rules, '*')
         self.assertRaises(Exception, self.authz.chk_grp_ref_by_rules, '@team1')
@@ -694,7 +710,7 @@ team3 = user3, user33
 
         self.assert_(self.authz.del_rule('norepos', '/nopath', ['*=rw']) == False)
         self.assert_(self.authz.del_rule('repos1', '/', ['*=rw']) == True)
-        self.assert_(str(self.authz.get_module('repos1', '/')) == '[repos1:/]\n@team1 = rw\n', repr(str(self.authz.get_module('repos1', '/'))))
+        self.assert_(unicode(self.authz.get_module('repos1', '/')) == '[repos1:/]\n@team1 = rw\n', repr(unicode(self.authz.get_module('repos1', '/'))))
         self.assert_(','.join(map(lambda x:x.name, self.authz.grouplist)) ==
                      'myteam,team1,*,$authenticated,team3,team4,team5',
                      ','.join(map(lambda x:x.name, self.authz.grouplist)))
@@ -726,9 +742,9 @@ team3 = user3, user33
         # remove
         self.assert_(isinstance(self.authz.add_group_member('myteam','user1,user2,user3'),Group))
         self.assert_(self.authz.del_group_member('myteam','user1,user3') == True)
-        self.assert_(str(self.authz.grouplist) == 
+        self.assert_(unicode(self.authz.grouplist) == 
                      '[groups]\nmyteam = user2\nteam1 = \nteam3 = @team4\nteam4 = \nteam5 = \n',
-                     repr(str(self.authz.grouplist)))
+                     repr(unicode(self.authz.grouplist)))
 
         # del_module
         self.assert_(self.authz.del_module('norepos', '/nopath') == False)
@@ -738,7 +754,7 @@ team3 = user3, user33
         self.assert_(self.authz.get_module('repos1', '/') == None)
 
         # del_repos
-        #self.assert_(str(self.authz) == '', str(self.authz))
+        #self.assert_(unicode(self.authz) == '', unicode(self.authz))
         self.assert_(self.authz.get_repos('/').is_blank() == False)
         self.assert_(self.authz.get_repos('repos2').is_blank() == True)
         self.assert_(self.authz.get_repos('repos1').is_blank() == False)
@@ -750,9 +766,9 @@ team3 = user3, user33
         self.assert_(self.authz.del_repos('repos1',recursive=True) == True)
 
         # output config from __str__
-        self.assert_(str(self.authz) == 
+        self.assert_(unicode(self.authz) == 
                      '# version : 0.0\n# admin : / = admin1, admin2\n\n[groups]\nmyteam = user2\nteam1 = \nteam3 = @team4\nteam4 = \nteam5 = \n\n[aliases]\nsuperuser = jiangxin\n\n', 
-                     repr(str(self.authz)))
+                     repr(unicode(self.authz)))
 
     def testAuthzConfDefault(self):
         # test save config
@@ -793,12 +809,13 @@ team3 = user3, user33
 
         # SvnAuthz __str__ test
         self.authz.update_revision()
-        self.assert_(str(self.authz) ==
-"""# version : 0.1.3
+        self.assert_(unicode(self.authz) ==
+u"""# version : 0.1.3
 # admin : / = admin1, admin2
 # admin : repos1 = admin1, admin2
 # admin : repos2 = admin2
 # admin : repos3 = admin3
+# admin : 版本库1 = @管理组1
 
 [groups]
 admin = &admin, admin1, admin2, admin3
@@ -807,10 +824,13 @@ all = @team1, user3, user4
 team1 = @team2, user1, user11
 team2 = @team3, user2, user22
 team3 = user3, user33
+管理组1 = &别名1, 蒋鑫
+组1 = &别名1, 用户2
 
 [aliases]
 007 = james
 admin = jiangxin
+别名1 = 用户1
 
 [/]
 user3 = r
@@ -843,7 +863,16 @@ user2 =
 &007 = r
 user1 = 
 
-""", (repr(str(self.authz))))
+[版本库1:/]
+* = 
+@管理组1 = rw
+
+[版本库1:/项目1]
+* = 
+@组1 = rw
+用户3 = r
+
+""", (repr(unicode(self.authz))))
 
         self.assert_(self.authz.check_rights('*','/','/trunk/src/test','r') == False)
         self.assert_(self.authz.check_rights(None,None,'/trunk/src/test','r') == False)
@@ -908,7 +937,7 @@ XX: /, /trunk
                      self.authz.get_path_access_msgs('jiangxin', 'noexist', '/new', abbr=True))
 
         self.assert_(self.authz.get_access_map_msgs('  ', abbr=True) == 
-["""
+[u"""
 * => [/]
 ----------------------------------------
 RW: 
@@ -916,7 +945,7 @@ RO:
 XX: /, /branches, /tags, /trunk, /trunk/src
 
 """, 
-"""
+u"""
 * => [repos1]
 ----------------------------------------
 RW: 
@@ -924,7 +953,7 @@ RO:
 XX: /, /branches, /tags, /trunk, /trunk/src
 
 """,
-"""
+u"""
 * => [repos2]
 ----------------------------------------
 RW: 
@@ -932,18 +961,30 @@ RO:
 XX: /, /branches, /tags, /trunk, /trunk/src
 
 """,
-"""
+u"""
 * => [repos3]
 ----------------------------------------
 RW: 
 RO: 
 XX: /, /branches, /tags, /trunk, /trunk/src
 
+""",
+u"""
+* => [版本库1]
+----------------------------------------
+RW: 
+RO: 
+XX: /, /branches, /tags, /trunk, /trunk/src, /项目1
+
 """]
 , repr(self.authz.get_access_map_msgs('  ', abbr=True)))
 
         self.assert_(self.authz.get_path_access_msgs(' ', '*', '/trunk/src/mod1', abbr=True) == 
-                     [u'[/:/trunk/src/mod1] * =', u'[repos1:/trunk/src/mod1] * =', u'[repos2:/trunk/src/mod1] * =', u'[repos3:/trunk/src/mod1] * ='],
+                     [u'[/:/trunk/src/mod1] * =', 
+                      u'[repos1:/trunk/src/mod1] * =', 
+                      u'[repos2:/trunk/src/mod1] * =', 
+                      u'[repos3:/trunk/src/mod1] * =',
+                      u'[版本库1:/trunk/src/mod1] * =',],
                      self.authz.get_path_access_msgs(' ', '*', '/trunk/src/mod1', abbr=True))
 
         gadmin = self.authz.get_userobj('@admin')

@@ -1,3 +1,5 @@
+## -*- coding: utf-8 -*-
+
 from pysvnmanager.tests import *
 from pysvnmanager.controllers import authz
 
@@ -29,6 +31,17 @@ class TestAuthzController(TestController):
         assert """<input type="button" name="save_btn"   value='Save'""" in res.body, res.body
 
     def test_init_repos_list(self):
+        # authn test
+        res = self.app.get(url_for(controller='authz', action='init_repos_list'))
+        assert res.status == 302
+        self.assertEqual(res.header('location'), '/security')
+
+        # authz test
+        self.login('nobody')
+        res = self.app.get(url_for(controller='authz', action='init_repos_list'))
+        assert res.status == 200, res.status
+        self.assert_('Permission denied.' in res.body, res.body)
+
         # Login as superuser
         self.login('root')
         res = self.app.get(url_for(controller='authz', action='init_repos_list'))
@@ -44,6 +57,17 @@ revision="0.2.1";
 """ == res.body, res.body
     
     def test_repos_changed(self):
+        # authn test
+        res = self.app.get(url_for(controller='authz', action='repos_changed'))
+        assert res.status == 302
+        self.assertEqual(res.header('location'), '/security')
+
+        # authz test
+        self.login('nobody')
+        res = self.app.get(url_for(controller='authz', action='repos_changed'))
+        assert res.status == 200, res.status
+        self.assert_('Permission denied.' in res.body, res.body)
+
         # Login as superuser
         self.login('root')
         params = {'select':'/',}
@@ -72,7 +96,64 @@ admin_users="@admin";
 revision="0.2.1";
 ''' == res.body, res.body
 
-    def test_delete_admin(self):
+    def test_path_changed(self):
+        params={}
+        # authn test
+        res = self.app.get(url_for(controller='authz', action='path_changed'))
+        assert res.status == 302
+        self.assertEqual(res.header('location'), '/security')
+
+        # authz test
+        self.login('nobody')
+        res = self.app.get(url_for(controller='authz', action='path_changed'))
+        assert res.status == 200, res.status
+        self.assert_('Permission denied.' in res.body, res.body)
+
+        self.login('root')
+        params = {'reposname':'/', 'path':u'/tags//'}
+        res = self.app.get(url_for(controller='authz', action='path_changed'), params)
+        assert res.status == 200
+        assert '''user[0]="&pm";
+rights[0]="rw";
+user[1]="$authenticated";
+rights[1]="r";
+total=2;
+revision="0.2.1";
+''' == res.body, res.body
+
+        self.login('root')
+        params = {'reposname':'document', 'path':'/trunk/商务部'}
+        res = self.app.get(url_for(controller='authz', action='path_changed'), params)
+        assert res.status == 200
+        assert '''user[0]="*";
+rights[0]="";
+user[1]="@admin";
+rights[1]="rw";
+user[2]="@biz";
+rights[2]="rw";
+total=3;
+revision="0.2.1";
+''' == res.body, res.body
+
+        self.login('root')
+        params = {'reposname':'/', 'path':'/noexist'}
+        res = self.app.get(url_for(controller='authz', action='path_changed'), params)
+        assert res.status == 200
+        assert '' == res.body, res.body
+
+
+    def test_save_authz(self):
+        # authn test
+        res = self.app.get(url_for(controller='authz', action='save_authz'))
+        assert res.status == 302
+        self.assertEqual(res.header('location'), '/security')
+
+        # authz test
+        self.login('nobody')
+        res = self.app.get(url_for(controller='authz', action='save_authz'))
+        assert res.status == 200, res.status
+        self.assert_('Permission denied.' in res.body, res.body)
+        
         # Login as superuser
         self.login('root')
         params = {'reposname':'/', 'admins':''}
@@ -94,46 +175,48 @@ revision="0.2.1";
         assert "" == res.body, res.body
         self.rollback()
         
+        self.login('jiangxin')
         params = {'reposname':'/', 'admins':'root'}
         res = self.app.get(url_for(controller='authz', action='save_authz'), params)
         assert res.status == 200
         assert "You can not delete yourself from admin list." == res.body, res.body
         self.rollback()
 
-
-
-        
         self.login('root')
         params = {'reposname':'/repos1', 'admins':'user1'}
         res = self.app.get(url_for(controller='authz', action='save_authz'), params)
-        #assert res.status == 200
-        #assert "" == res.body, res.body
+        assert res.status == 200
+        assert "" == res.body, res.body
         self.rollback()
     
         self.login('root')
         params = {'reposname':'/repos1', 'admins':'user1, root'}
         res = self.app.get(url_for(controller='authz', action='save_authz'), params)
-        #assert res.status == 200
-        #assert "" == res.body, res.body
+        assert res.status == 200
+        assert "" == res.body, res.body
         self.rollback()
     
         self.login('admin1')
         params = {'reposname':'/repos1', 'admins':'user1, root'}
         res = self.app.get(url_for(controller='authz', action='save_authz'), params)
-        #assert res.status == 200
-        #assert "You can not delete yourself from admin list." == res.body, res.body
+        assert res.status == 200
+        assert "You can not delete yourself from admin list." == res.body, res.body
 
         self.login('admin1')
         params = {'reposname':'/repos1', 'admins':'admin1, admin2'}
         res = self.app.get(url_for(controller='authz', action='save_authz'), params)
-        #assert res.status == 200
-        #assert "" == res.body, res.body
+        assert res.status == 200
+        assert "" == res.body, res.body
         self.rollback()
     
-
-    def test_save_authz(self):
-        pass
-    
     def test_delete_authz(self):
-        pass
-        
+        # authn test
+        res = self.app.get(url_for(controller='authz', action='delete_authz'))
+        assert res.status == 302
+        self.assertEqual(res.header('location'), '/security')
+
+        # authz test
+        self.login('nobody')
+        res = self.app.get(url_for(controller='authz', action='delete_authz'))
+        assert res.status == 200, res.status
+        self.assert_('Permission denied.' in res.body, res.body)

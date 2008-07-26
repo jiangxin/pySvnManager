@@ -1,3 +1,5 @@
+## -*- coding: utf-8 -*-
+
 from pysvnmanager.tests import *
 from pysvnmanager.controllers import role
 
@@ -28,6 +30,17 @@ class TestRoleController(TestController):
         assert """<input type="button" name="save_btn"   value='Save'""" in res.body, res.body
 
     def test_get_role_info(self):
+        # authn test
+        res = self.app.get(url_for(controller='role', action='get_role_info'))
+        assert res.status == 302
+        self.assertEqual(res.header('location'), '/security')
+
+        # authz test
+        self.login('nobody')
+        res = self.app.get(url_for(controller='role', action='get_role_info'))
+        assert res.status == 200, res.status
+        self.assert_('Permission denied.' in res.body, res.body)
+        
         # Login as superuser
         self.login('root')
         params = {'role':'',}
@@ -80,14 +93,49 @@ revision="0.2.1";
 """ == res.body, res.body
 
     def test_save_group(self):
-        pass
+        # authn test
+        res = self.app.get(url_for(controller='role', action='save_group'))
+        assert res.status == 302
+        self.assertEqual(res.header('location'), '/security')
+
+        # authz test
+        self.login('nobody')
+        res = self.app.get(url_for(controller='role', action='save_group'))
+        assert res.status == 200, res.status
+        self.assert_('Permission denied.' in res.body, res.body)
 
     def test_delete_group(self):
-        pass
+        # authn test
+        res = self.app.get(url_for(controller='role', action='delete_group'))
+        assert res.status == 302
+        self.assertEqual(res.header('location'), '/security')
+
+        # authz test
+        self.login('nobody')
+        res = self.app.get(url_for(controller='role', action='delete_group'))
+        assert res.status == 200, res.status
+        self.assert_('Permission denied.' in res.body, res.body)
 
     def test_save_alias(self):
-        pass
+        # authn test
+        res = self.app.get(url_for(controller='role', action='save_alias'))
+        assert res.status == 302
+        self.assertEqual(res.header('location'), '/security')
+
+        # authz test
+        self.login('nobody')
+        res = self.app.get(url_for(controller='role', action='save_alias'))
+        assert res.status == 200, res.status
+        self.assert_('Permission denied.' in res.body, res.body)
 
     def test_delete_alias(self):
-        pass
+        # authn test
+        res = self.app.get(url_for(controller='role', action='delete_alias'))
+        assert res.status == 302
+        self.assertEqual(res.header('location'), '/security')
 
+        # authz test
+        self.login('nobody')
+        res = self.app.get(url_for(controller='role', action='delete_alias'))
+        assert res.status == 200, res.status
+        self.assert_('Permission denied.' in res.body, res.body)

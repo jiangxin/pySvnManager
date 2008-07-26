@@ -118,7 +118,7 @@ class RoleController(BaseController):
         except Exception, e:
             msg = unicode(e)
 
-        log.info(_("User %(user)s changed group: %(grp)s. (rev:%(rev)s,%(msg)s)") % \
+        log.info(_(u"User %(user)s changed group: %(grp)s. (rev:%(rev)s,%(msg)s)") % \
                  {'user':session.get('user'), 'grp': rolename, 'rev': revision, 'msg': msg} )
         
         return msg

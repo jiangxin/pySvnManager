@@ -1,4 +1,4 @@
 ## -*- coding: utf-8 -*-
-<%inherit file="/base.mako" />
-
+<h2>
 ${_("Permission denied.")}
+</h2>
