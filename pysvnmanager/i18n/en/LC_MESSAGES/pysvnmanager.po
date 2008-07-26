@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: pysvnmanager 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2008-07-03 22:14+0800\n"
-"PO-Revision-Date: 2008-07-10 22:14+0800\n"
+"PO-Revision-Date: 2008-07-26 11:16+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -18,26 +18,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.2\n"
 
-#: pysvnmanager/controllers/authz.py:22
+#: pysvnmanager/controllers/authz.py:33
 #: pysvnmanager/templates/authz/index.mako:159
 #: pysvnmanager/templates/check/index.mako:10
 msgid "All users(with anon)"
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:23
+#: pysvnmanager/controllers/authz.py:34
 #: pysvnmanager/templates/authz/index.mako:161
 #: pysvnmanager/templates/check/index.mako:11
 msgid "Known users"
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:24
+#: pysvnmanager/controllers/authz.py:35
 #: pysvnmanager/templates/authz/index.mako:163
 #: pysvnmanager/templates/check/index.mako:12
 msgid "Anonymous"
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:30 pysvnmanager/controllers/role.py:56
-#: pysvnmanager/controllers/role.py:80
+#: pysvnmanager/controllers/authz.py:41 pysvnmanager/controllers/role.py:55
+#: pysvnmanager/controllers/role.py:79
 #: pysvnmanager/templates/authz/index.mako:155
 #: pysvnmanager/templates/check/index.mako:17
 #: pysvnmanager/templates/role/index.mako:18
@@ -47,8 +47,8 @@ msgstr ""
 msgid "Group:"
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:36 pysvnmanager/controllers/role.py:63
-#: pysvnmanager/controllers/role.py:82
+#: pysvnmanager/controllers/authz.py:47 pysvnmanager/controllers/role.py:62
+#: pysvnmanager/controllers/role.py:81
 #: pysvnmanager/templates/authz/index.mako:157
 #: pysvnmanager/templates/check/index.mako:19
 #: pysvnmanager/templates/role/index.mako:23
@@ -58,8 +58,8 @@ msgstr ""
 msgid "Alias:"
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:71 pysvnmanager/controllers/authz.py:95
-#: pysvnmanager/controllers/role.py:49
+#: pysvnmanager/controllers/authz.py:67 pysvnmanager/controllers/authz.py:91
+#: pysvnmanager/controllers/check.py:93 pysvnmanager/controllers/role.py:48
 #: pysvnmanager/templates/check/index.mako:9
 #: pysvnmanager/templates/check/index.mako:23
 #: pysvnmanager/templates/role/index.mako:12
@@ -67,17 +67,17 @@ msgstr ""
 msgid "Please choose..."
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:159
+#: pysvnmanager/controllers/authz.py:155
 #, python-format
 msgid "Repository %s not exist."
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:166
+#: pysvnmanager/controllers/authz.py:163
 #, python-format
 msgid "Module %s not exist."
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:171
+#: pysvnmanager/controllers/authz.py:169
 msgid "You can not delete yourself from admin list."
 msgstr ""
 
@@ -91,42 +91,27 @@ msgstr ""
 msgid "User %(user)s delete authz rules. (rev:%(rev)s,%(msg)s)"
 msgstr ""
 
-#: pysvnmanager/controllers/check.py:74
+#: pysvnmanager/controllers/check.py:70
 #: pysvnmanager/templates/auth_failed.mako:4
 msgid "Permission denied."
 msgstr ""
 
-#: pysvnmanager/controllers/check.py:102
-#: pysvnmanager/templates/check/index.mako:31
-msgid "All modules"
-msgstr ""
-
-#: pysvnmanager/controllers/check.py:114
-msgid "Select module"
-msgstr ""
-
-#: pysvnmanager/controllers/check.py:125
-#: pysvnmanager/templates/check/index.mako:124
-#: pysvnmanager/templates/check/index.mako:137
-msgid "Manual input"
-msgstr ""
-
-#: pysvnmanager/controllers/role.py:122
+#: pysvnmanager/controllers/role.py:121
 #, python-format
 msgid "User %(user)s changed group: %(grp)s. (rev:%(rev)s,%(msg)s)"
 msgstr ""
 
-#: pysvnmanager/controllers/role.py:142
+#: pysvnmanager/controllers/role.py:141
 #, python-format
 msgid "User %(user)s delete group: %(grp)s. (rev:%(rev)s,%(msg)s)"
 msgstr ""
 
-#: pysvnmanager/controllers/role.py:162
+#: pysvnmanager/controllers/role.py:161
 #, python-format
 msgid "User %(user)s changed alias: %(alias)s. (rev:%(rev)s,%(msg)s)"
 msgstr ""
 
-#: pysvnmanager/controllers/role.py:182
+#: pysvnmanager/controllers/role.py:181
 #, python-format
 msgid "User %(user)s delete alias: %(alias)s. (rev:%(rev)s,%(msg)s)"
 msgstr ""
@@ -136,105 +121,101 @@ msgstr ""
 msgid "User %s logged in"
 msgstr ""
 
-#: pysvnmanager/controllers/security.py:43
+#: pysvnmanager/controllers/security.py:45
 #, python-format
 msgid "Login failed for user: %s"
 msgstr ""
 
-#: pysvnmanager/controllers/security.py:51
+#: pysvnmanager/controllers/security.py:53
 #, python-format
 msgid "User %s logged out"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:40
+#: pysvnmanager/model/svnauthz.py:58
 msgid "Name is not given."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:42
+#: pysvnmanager/model/svnauthz.py:60
 msgid "Name is not string."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:46
-msgid "Name contains invalid characters."
+#: pysvnmanager/model/svnauthz.py:64
+#, python-format
+msgid "Name (%s) contains invalid characters."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:205
+#: pysvnmanager/model/svnauthz.py:222
 msgid "Aliasname is not provided."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:207
+#: pysvnmanager/model/svnauthz.py:224
 msgid "Aliasname should not begin with &."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:388
+#: pysvnmanager/model/svnauthz.py:397
 msgid "Group name is not provided."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:390
+#: pysvnmanager/model/svnauthz.py:399
 msgid "Group name should not begin with @."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:460
+#: pysvnmanager/model/svnauthz.py:469
 #, python-format
 msgid "Recursive group membership for %s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:551
+#: pysvnmanager/model/svnauthz.py:561
 #, python-format
-msgid "Not a valide username: %s"
+msgid "Not a valid username: %s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:676
+#: pysvnmanager/model/svnauthz.py:686
 #, python-format
 msgid "Group %s is referenced by group %s."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1240
+#: pysvnmanager/model/svnauthz.py:1229
 msgid "Update failed! You are working on a out-of-date revision."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1424 pysvnmanager/model/svnauthz.py:1431
-#: pysvnmanager/model/svnauthz.py:1435
+#: pysvnmanager/model/svnauthz.py:1461 pysvnmanager/model/svnauthz.py:1468
+#: pysvnmanager/model/svnauthz.py:1472
 #, python-format
 msgid "Unknown rule format: %s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1449
+#: pysvnmanager/model/svnauthz.py:1486
 #, python-format
 msgid "No module exist for %s:%s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1554
-#, python-format
-msgid "Alias %s is used by rules."
-msgstr ""
-
-#: pysvnmanager/model/svnauthz.py:1562
+#: pysvnmanager/model/svnauthz.py:1597
 #, python-format
 msgid "Alias %s is referenced by group %s."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1576
+#: pysvnmanager/model/svnauthz.py:1609
 #, python-format
 msgid "%s is referenced by [%s]."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1716
+#: pysvnmanager/model/svnauthz.py:1746
 #, python-format
 msgid "User %(username)s has Full (RW) rights for module %(repos)s:%(path)s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1718
+#: pysvnmanager/model/svnauthz.py:1748
 #, python-format
 msgid "User %(username)s has ReadOnly (RO) rights for module %(repos)s:%(path)s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1720
+#: pysvnmanager/model/svnauthz.py:1750
 #, python-format
 msgid "User %(username)s can *NOT* access to module %(repos)s:%(path)s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1762
+#: pysvnmanager/model/svnauthz.py:1788
 #, python-format
 msgid ""
 "\n"
@@ -246,7 +227,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1781
+#: pysvnmanager/model/svnauthz.py:1807
 #, python-format
 msgid ""
 "\n"
@@ -410,8 +391,8 @@ msgid "Cancel"
 msgstr ""
 
 #: pysvnmanager/templates/check/index.mako:5
-#: pysvnmanager/templates/check/index.mako:91
-#: pysvnmanager/templates/check/index.mako:151
+#: pysvnmanager/templates/check/index.mako:106
+#: pysvnmanager/templates/check/index.mako:176
 msgid "Check Permissions"
 msgstr ""
 
@@ -423,24 +404,38 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: pysvnmanager/templates/check/index.mako:111
+#: pysvnmanager/templates/check/index.mako:31
+msgid "All modules"
+msgstr ""
+
+#: pysvnmanager/templates/check/index.mako:126
 msgid "Account"
 msgstr ""
 
-#: pysvnmanager/templates/check/index.mako:112
+#: pysvnmanager/templates/check/index.mako:127
 msgid "Repository"
 msgstr ""
 
-#: pysvnmanager/templates/check/index.mako:113
+#: pysvnmanager/templates/check/index.mako:128
 msgid "Modules"
 msgstr ""
 
-#: pysvnmanager/templates/check/index.mako:119
+#: pysvnmanager/templates/check/index.mako:134
 msgid "Select username"
 msgstr ""
 
-#: pysvnmanager/templates/check/index.mako:131
+#: pysvnmanager/templates/check/index.mako:139
+#: pysvnmanager/templates/check/index.mako:152
+#: pysvnmanager/templates/check/index.mako:164
+msgid "Manual input"
+msgstr ""
+
+#: pysvnmanager/templates/check/index.mako:146
 msgid "Select repository"
+msgstr ""
+
+#: pysvnmanager/templates/check/index.mako:160
+msgid "Select module"
 msgstr ""
 
 #: pysvnmanager/templates/login/login.mako:2
@@ -504,4 +499,13 @@ msgstr ""
 #: pysvnmanager/templates/role/index.mako:706
 msgid "User name:"
 msgstr ""
+
+#~ msgid "Name contains invalid characters."
+#~ msgstr ""
+
+#~ msgid "Not a valide username: %s"
+#~ msgstr ""
+
+#~ msgid "Alias %s is used by rules."
+#~ msgstr ""
 
