@@ -113,7 +113,7 @@ class RoleController(BaseController):
         member_list.extend(map(lambda x: x.strip(), members.split(',')))
         
         try:
-            self.authz.update_group(rolename, member_list, autodrop=autodrop)
+            self.authz.set_group(rolename, member_list, autodrop=autodrop)
             self.authz.save(revision)
         except Exception, e:
             msg = unicode(e)

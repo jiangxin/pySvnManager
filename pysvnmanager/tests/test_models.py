@@ -15,6 +15,7 @@ class TestModels(TestController):
     
     def __init__(self, *args):
         self.authz = SvnAuthz()
+        self.f = StringIO.StringIO()
         super(TestModels, self).__init__(*args)
 
     def setUp(self):
@@ -41,7 +42,6 @@ all=@team1,user3,user4
 [aliases]
 admin=jiangxin
 007=james
-
 
 [repos1:/trunk/src]
 user1=
@@ -75,12 +75,13 @@ $authenticated = r
 @all = r
 @admins = rw
         '''
-
-        file = StringIO.StringIO(buff)
-        self.authz.load(file)
+        assert(self.f.tell()==0)
+        self.f.write(buff)
+        self.f.seek(0,0)
+        self.authz.load(self.f)
 
     def tearDown(self):
-        pass
+        self.f.truncate(0)
     
     def testUser(self):
         user1 = User('Tom')
@@ -187,13 +188,12 @@ $authenticated = r
         self.assert_(str(g) == "# Built-in group: $authenticated")
 
     def testIsValidName(self):
-        self.assert_(is_valid_name('jiang"xin')=="Name contains invalid characters.")
-        self.assert_(is_valid_name('jiang xin')=="Name contains invalid characters.")
-        self.assert_(is_valid_name('jiang"xin')=="Name contains invalid characters.")
-        self.assert_(is_valid_name('')=="Name is not given.")
-        self.assert_(is_valid_name(User('user'))=="Name is not string.")
-        self.assert_(is_valid_name('my repos', "repos")=="Name contains invalid characters.")
-        self.assert_(is_valid_name('/', "repos")=="")
+        self.assert_(check_valid_username('蒋,鑫')=="Name (蒋,鑫) contains invalid characters.")
+        self.assert_(check_valid_username('jiang;xin')=="Name (jiang;xin) contains invalid characters.")
+        self.assert_(check_valid_username('')=="Name is not given.", check_valid_username(''))
+        self.assert_(check_valid_username(User('user'))=="Name is not string.")
+        self.assert_(check_valid_reposname('my/repos')=="Name (my/repos) contains invalid characters.")
+        self.assert_(check_valid_reposname('/')=="")
         
     def testUserList(self):
         ulist = UserList()
@@ -215,7 +215,7 @@ $authenticated = r
         self.assertRaises(Exception, ulist.get_or_set, '&alias1')
         self.assertRaises(Exception, ulist.get_or_set, '@team1')
         self.assertRaises(Exception, ulist.get_or_set, '$anonymous')
-        self.assertRaises(Exception, ulist.get_or_set, 'jiang xin')
+        self.assertRaises(Exception, ulist.get_or_set, 'jiang,xin')
 
     def testAliasList(self):
         alist = AliasList()
@@ -236,7 +236,7 @@ $authenticated = r
         self.assert_(alist.get_or_set('')==None)
         self.assert_(alist.get_or_set('  ')==None)
         self.assert_(alist.get('noexist')==None)
-        self.assertRaises(Exception, alist.get_or_set, 'admin user')
+        self.assertRaises(Exception, alist.get_or_set, 'admin/user')
         
         assert alist.remove(alias1)==True
         self.assert_([a.uname for a in alist] == ['&root'], [a.uname for a in alist])
@@ -273,7 +273,7 @@ $authenticated = r
         self.assert_(glist.get_or_set('')==None)
         self.assert_(glist.get_or_set('  ')==None)
         self.assert_(glist.get('noexist')==None)
-        self.assertRaises(Exception, glist.get, 'admin user')
+        self.assertRaises(Exception, glist.get_or_set, 'admin,user')
         
         glist.remove(g1)
         self.assert_([g.uname for g in glist] == ['@team2'], [g.uname for g in glist])
@@ -374,6 +374,7 @@ jiang =
         self.assert_(module.access_is_granted(user1,''))
         self.assert_(module.access_is_determined(User("nobody"))==False)
         self.assertRaises(Exception, module.del_rule, None)
+        self.assertRaises(Exception, module.del_rule, 'norepos', '/nopath', 'nobody=')
         
         module.clean_rules()
         self.assert_([str(r) for r in module]==[], [str(r) for r in module])
@@ -457,7 +458,7 @@ jiang =
         self.assert_([r.name for r in rlist] == ['/', 'repos1', 'repos2'], [r.name for r in rlist])
 
         self.assert_(rlist.get('noexist')==None)
-        self.assertRaises(Exception, rlist.get, 'wrong repos')
+        self.assertRaises(Exception, rlist.get_or_set, 'wrong/repos')
         
         self.assert_(str(rlist)=='[repos2:/trunk]\nuser1 = r\n\n', repr(str(rlist)))
         
@@ -483,7 +484,14 @@ jiang =
         u6=authz.add_user('u6')
         u7=authz.add_user('u7')
         admin = authz.add_alias('admin', 'u1')
-        team1 = authz.add_group('team1', 'u2, u3, u4')
+        team1 = authz.add_group('team1')
+        self.assert_(str(team1)=='team1 = ', str(team1))
+        team1 = authz.set_group('team1', None)
+        self.assert_(str(team1)=='team1 = ', str(team1))
+        team1 = authz.set_group('team1', 'u2, u3')
+        self.assert_(str(team1)=='team1 = u2, u3', str(team1))
+        team1 = authz.add_group_member('team1', u4)
+        self.assert_(str(team1)=='team1 = u2, u3, u4', str(team1))
         repos1 = authz.add_repos('repos1')
         
         authz.set_admin('&admin, u7')
@@ -520,7 +528,7 @@ jiang =
 ''', self.authz.compose_acl())
         pass
 
-    def _testAuthzConfAliases(self):
+    def testAuthzConfAliases(self):
         al = self.authz.aliaslist
         self.assert_(al.get('admin').username == 'jiangxin', str(al.get('admin')))
         self.assert_(str(al) == '[aliases]\n007 = james\nadmin = jiangxin\n', repr(str(al)))
@@ -545,7 +553,32 @@ team1 = @team2, user1, user11
 team2 = @team3, user2, user22
 team3 = user3, user33
 ''', repr(str(gl)))
-        pass
+
+    
+    def testAuthzConfVersion(self):
+        self.authz.load()
+        self.assert_(self.authz.version == '0.0', self.authz.version)
+        self.assert_(self.authz.get_revision_from_file() == '', self.authz.get_revision_from_file())
+        
+        buffs=[
+               "",
+               "#  version  : 0.1.100\n# admin:  /=admin\n[xxx]",
+               "#version: 0.2.3a\n\n[groups]",
+               ]
+        result1=['',    "0.1.100", "0.2.3a"]
+        result2=['0.0', "0.1.100", "0.2.3a"]
+        result3=['0.1', "0.1.101", "0.2.0"]
+        assert len(buffs)==len(result1)==len(result2)
+        for i in range(0, len(buffs)):
+            f=StringIO.StringIO(buffs[i])
+            self.authz.load(f)
+            self.assert_(self.authz.get_revision_from_file() == result1[i], self.authz.get_revision_from_file())
+            self.assert_(self.authz.version == result2[i], self.authz.version)
+            lastv = self.authz.version
+            self.authz.save(self.authz.version)
+            self.assert_(self.authz.version == result3[i], self.authz.version)
+            self.assertRaises(Exception, self.authz.save, lastv)
+
 
     def testAuthzConfRepos(self):
         # blank configuration
@@ -632,6 +665,7 @@ team3 = user3, user33
         module = self.authz.get_module('/', '/trunk/')
         tmpstr = "%s" % module
         self.assert_(tmpstr =='', tmpstr)
+        self.assertRaises(Exception, self.authz.set_rules, 'norepos', '/nopath', '*=')
         self.authz.set_rules('/', '/trunk', 'user1=r\nuser1 = rw\n user2 =\n')
         tmpstr = "%s" % module
         self.assert_(tmpstr ==u'[/trunk]\nuser1 = rw\nuser2 = \n', repr(tmpstr))
@@ -639,19 +673,26 @@ team3 = user3, user33
         tmpstr = "%s" % module
         self.assert_(tmpstr ==u'', repr(tmpstr))
 
-        self.assert_(self.authz.add_rules('/', '/trunk/', '&superuser=rw') == True, self.authz.add_rules('/', '/trunk/', '&superuser=rw'))
-        self.assert_(self.authz.add_rules('repos1', '/', '*=r') == True, self.authz.add_rules('repos1', '/', '*=r'))
+        self.assertRaises(Exception, self.authz.add_rules, 'norepos', '/nopath', '*=')
+        self.assertRaises(Exception, self.authz.add_rules, '/', '/trunk', '*')
+        self.assertRaises(Exception, self.authz.add_rules, '/', '/trunk', ['*'])
+        self.assertRaises(Exception, self.authz.add_rules, '/', '/trunk', None)
+        self.assert_(self.authz.add_rules('/', '/trunk/', '&superuser=r') == True, self.authz.add_rules('/', '/trunk/', '&superuser=rw'))
+        self.assert_(self.authz.add_rules('repos1', '/', '*=') == True, self.authz.add_rules('repos1', '/', '*=r'))
+        self.assert_(self.authz.add_rules('/', '/trunk/', '&superuser=r; *=rw') == True, self.authz.add_rules('/', '/trunk/', '&superuser=rw'))
+        self.assert_(self.authz.add_rules('/', '/trunk/', '&superuser=rw\n *=r') == True, self.authz.add_rules('/', '/trunk/', '&superuser=rw'))
         self.assert_(str(self.authz.get_module('repos1', '/')) == '[repos1:/]\n* = r\n', repr(str(self.authz.get_module('repos1', '/'))))
         self.assert_(self.authz.add_rules('repos1', '/', ['*=', '@team1=rw']) == True)
         self.assert_(str(self.authz.get_module('repos1', '/')) == '[repos1:/]\n* = \n@team1 = rw\n', repr(str(self.authz.get_module('repos1', '/'))))
         self.assert_(','.join(map(lambda x:str(x), self.authz.rulelist())) ==
-                     '&superuser = rw,* = ,@team1 = rw', ','.join(map(lambda
+                     '&superuser = rw,* = r,* = ,@team1 = rw', ','.join(map(lambda
                                                                       x:str(x),
                                                                       self.authz.rulelist())))
         self.assertRaises(Exception, self.authz.chk_grp_ref_by_rules, '*')
         self.assertRaises(Exception, self.authz.chk_grp_ref_by_rules, '@team1')
         self.authz.chk_grp_ref_by_rules('@team2')
 
+        self.assert_(self.authz.del_rule('norepos', '/nopath', ['*=rw']) == False)
         self.assert_(self.authz.del_rule('repos1', '/', ['*=rw']) == True)
         self.assert_(str(self.authz.get_module('repos1', '/')) == '[repos1:/]\n@team1 = rw\n', repr(str(self.authz.get_module('repos1', '/'))))
         self.assert_(','.join(map(lambda x:x.name, self.authz.grouplist)) ==
@@ -660,7 +701,9 @@ team3 = user3, user33
 
         # del_alias
         self.authz.chk_alias_ref_by_rules('&root')
+        self.authz.chk_alias_ref_by_rules('root')
         self.authz.del_alias('&root')
+        self.assert_(self.authz.del_alias('notexist')==False)
         self.assertRaises(Exception, self.authz.chk_alias_ref_by_rules, '&superuser')
         self.assertRaises(Exception, self.authz.del_alias, '&superuser')
         self.assert_(','.join(map(lambda x:x.name, self.authz.aliaslist)) ==
@@ -688,7 +731,9 @@ team3 = user3, user33
                      repr(str(self.authz.grouplist)))
 
         # del_module
+        self.assert_(self.authz.del_module('norepos', '/nopath') == False)
         self.assert_(self.authz.del_module('repos2', '/') == False)
+        self.assert_(self.authz.del_module('repos2', '/noexist') == False)
         self.assert_(self.authz.del_module('repos1', '/') == True)
         self.assert_(self.authz.get_module('repos1', '/') == None)
 
@@ -706,12 +751,25 @@ team3 = user3, user33
 
         # output config from __str__
         self.assert_(str(self.authz) == 
-                     '# version : 0.1.0\n# admin : / = admin1, admin2\n\n[groups]\nmyteam = user2\nteam1 = \nteam3 = @team4\nteam4 = \nteam5 = \n\n[aliases]\nsuperuser = jiangxin\n\n', 
+                     '# version : 0.0\n# admin : / = admin1, admin2\n\n[groups]\nmyteam = user2\nteam1 = \nteam3 = @team4\nteam4 = \nteam5 = \n\n[aliases]\nsuperuser = jiangxin\n\n', 
                      repr(str(self.authz)))
 
     def testAuthzConfDefault(self):
+        # test save config
+        self.assert_(self.authz.version=='0.1.1', self.authz.version)
+        self.authz.save(self.authz.version)
+        self.assert_(self.authz.version=='0.1.2', self.authz.version)
+        
+        self.assertRaises(Exception, self.authz.del_alias, "007", force=True)
+        self.assertRaises(Exception, self.authz.del_alias, "admin", force=False)
+        
         # is_admin()
+        self.assert_(self.authz.get_userobj('noexistuser')==None)
+        self.assert_(self.authz.get_userobj('')==None)
         self.assert_(self.authz.is_admin('jiangxin') == True)
+        self.assert_(self.authz.is_admin(User('jiangxin')) == True)
+        self.assert_(self.authz.is_admin(self.authz.get_userobj('&admin')) == True)
+        self.assert_(self.authz.is_admin('') == False)
         self.assert_(self.authz.is_admin('root') == True, self.authz.is_admin('root'))
         self.assert_(self.authz.is_super_user('jiangxin') == True)
         self.assert_(self.authz.is_admin('&admin') == True)
@@ -727,6 +785,7 @@ team3 = user3, user33
         # add_admin() test
         self.authz.set_admin('admin1,admin2')
         self.authz.set_admin(['admin1','admin2'],'repos1')
+        self.assertRaises(Exception, self.authz.set_admin, 1,'repos1')
         # reposx does not exist.
         self.authz.set_admin('admin2','reposx')
         self.assert_(self.authz.is_admin('admin1','repos2') == True)
@@ -735,7 +794,7 @@ team3 = user3, user33
         # SvnAuthz __str__ test
         self.authz.update_revision()
         self.assert_(str(self.authz) ==
-"""# version : 0.1.2
+"""# version : 0.1.3
 # admin : / = admin1, admin2
 # admin : repos1 = admin1, admin2
 # admin : repos2 = admin2
@@ -786,7 +845,10 @@ user1 =
 
 """, (repr(str(self.authz))))
 
+        self.assert_(self.authz.check_rights('*','/','/trunk/src/test','r') == False)
+        self.assert_(self.authz.check_rights(None,None,'/trunk/src/test','r') == False)
         self.assert_(self.authz.check_rights('user1','repos1','/trunk/src/test','r') == False)
+        self.assert_(self.authz.check_rights('user1','repos1','/trunk/src/test',RIGHTS_R) == False)
         self.assert_(self.authz.check_rights('user1','GLOBAL','/trunk/src/test','r') == True)
         self.assert_(self.authz.check_rights('user2','repos1','/trunk/src/test','r') == True)
         self.assert_(self.authz.check_rights('user2','repos1','/trunk','r') == False)
@@ -801,6 +863,7 @@ user1 =
         self.assert_(self.authz.get_access_map("", "reposnoexist", descend=False)==None,
                      self.authz.get_access_map("", "reposnoexist", descend=False))
          
+        self.authz.add_rules('/','/trunk/src', 'jiangxin=r')
         self.assert_(self.authz.get_access_map_msgs('jiangxin', 'reposnoexist') == 
 ["""
 ==================================================
@@ -811,15 +874,38 @@ Access map on 'reposnoexist' for user 'jiangxin'
     /tags
 ----------------------------------------
   * Readable:
-    
+    /trunk/src
 ----------------------------------------
   * Denied:
     /
     /trunk
-    /trunk/src
 ----------------------------------------
 """], repr(self.authz.get_access_map_msgs('jiangxin', 'reposnoexist')))
 
+        self.assert_(self.authz.get_access_map_msgs('jiangxin', 'reposnoexist', abbr=True) == 
+[u'''
+jiangxin => [reposnoexist]
+----------------------------------------
+RW: /branches, /tags
+RO: /trunk/src
+XX: /, /trunk
+
+'''], repr(self.authz.get_access_map_msgs('jiangxin', 'reposnoexist', abbr=True)))
+
+        self.assert_(self.authz.get_path_access_msgs('jiangxin', 'noexist', '/branches/1.0') == ['User jiangxin has Full (RW) rights for module noexist:/branches/1.0'],
+                     self.authz.get_path_access_msgs('jiangxin', 'noexist', '/branches/1.0'))
+        self.assert_(self.authz.get_path_access_msgs('jiangxin', 'noexist', '/branches/1.0', abbr=True) == ['[noexist:/branches/1.0] jiangxin = rw'],
+                     self.authz.get_path_access_msgs('jiangxin', 'noexist', '/branches/1.0', abbr=True))
+
+        self.assert_(self.authz.get_path_access_msgs('jiangxin', 'noexist', '/trunk/src') == ['User jiangxin has ReadOnly (RO) rights for module noexist:/trunk/src'],
+                     self.authz.get_path_access_msgs('jiangxin', 'noexist', '/trunk/src'))
+        self.assert_(self.authz.get_path_access_msgs('jiangxin', 'noexist', '/trunk/src', abbr=True) == ['[noexist:/trunk/src] jiangxin = r'],
+                     self.authz.get_path_access_msgs('jiangxin', 'noexist', '/trunk/src', abbr=True))
+
+        self.assert_(self.authz.get_path_access_msgs('jiangxin', 'noexist', '/new') == ['User jiangxin can *NOT* access to module noexist:/new'],
+                     self.authz.get_path_access_msgs('jiangxin', 'noexist', '/new'))
+        self.assert_(self.authz.get_path_access_msgs('jiangxin', 'noexist', '/new', abbr=True) == ['[noexist:/new] jiangxin ='],
+                     self.authz.get_path_access_msgs('jiangxin', 'noexist', '/new', abbr=True))
 
         self.assert_(self.authz.get_access_map_msgs('  ', abbr=True) == 
 ["""
@@ -856,12 +942,22 @@ XX: /, /branches, /tags, /trunk, /trunk/src
 """]
 , repr(self.authz.get_access_map_msgs('  ', abbr=True)))
 
-        self.assert_(self.authz.get_path_access_msgs('jiangxin', 'repos2', '/trunk/src/mod1') == ['User jiangxin can *NOT* access to module repos2:/trunk/src/mod1'],
-                     self.authz.get_path_access_msgs('jiangxin', 'repos2', '/trunk/src/mod1'))
-
         self.assert_(self.authz.get_path_access_msgs(' ', '*', '/trunk/src/mod1', abbr=True) == 
                      [u'[/:/trunk/src/mod1] * =', u'[repos1:/trunk/src/mod1] * =', u'[repos2:/trunk/src/mod1] * =', u'[repos3:/trunk/src/mod1] * ='],
                      self.authz.get_path_access_msgs(' ', '*', '/trunk/src/mod1', abbr=True))
+
+        gadmin = self.authz.get_userobj('@admin')
+        gadmins= self.authz.get_userobj('@admins')
+        self.assert_('&admin' in gadmin)
+        self.assert_('&admin' in gadmins)
+        self.authz.del_alias("admin", force=True)
+        self.assert_(not '&admin' in gadmin)
+        self.assert_(not '&admin' in gadmins)
+        self.authz.add_alias('008', 'zhouxx')
+        self.authz.del_alias('008')
+        self.authz.add_alias('008', 'zhouxx')
+        self.authz.add_rules('repos1', '/trunk/src', '&008=')
+        self.assertRaises(Exception, self.authz.del_alias, '008')
 
 if __name__ == '__main__': 
     import unittest

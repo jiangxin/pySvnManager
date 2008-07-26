@@ -9,6 +9,7 @@ Basic classes used for Subversion authz management.
 from configobj import ConfigObj
 import re
 import sys
+import StringIO
 import logging
 log = logging.getLogger(__name__)
 
@@ -29,21 +30,38 @@ RIGHTS_NONE = 0
 RIGHTS_RW = RIGHTS_R | RIGHTS_W
 RIGHTS_ALL = RIGHTS_R | RIGHTS_W
 
-def is_valid_name(name, type=""):
-    msg = ''
-    if type == 'repos':
-        bad_chars = r'''[,\s!\\'"]'''
+def check_valid_username(name):
+    bad_chars = r'''^[\.$&@~-]|[\\/:]|[*?"'<>|,;%#$]'''
+    return check_valid_string(name, bad_chars=bad_chars)
+
+def check_valid_aliasname(name):
+    return check_valid_username(name)
+
+def check_valid_groupname(name):
+    if name == '*':
+        return ''
     else:
-        bad_chars = r'''[,\s!\\/'"]'''
-        
-    if not name:
+        if name[0]=='$':
+            name = name[1:]
+        return check_valid_username(name)
+
+def check_valid_reposname(name):
+    if name == '/':
+        return ''
+    else:
+        bad_chars = r'''^[\.$&@-]|[\\/:]|[*?"'<>|,;%#$]'''
+        return check_valid_string(name, bad_chars=bad_chars)
+    
+def check_valid_string(check_str, bad_chars=""):
+    msg = ''
+    if not check_str:
         msg = _("Name is not given.")
-    elif not isinstance(name, basestring):
+    elif not isinstance(check_str, basestring):
         msg = _("Name is not string.")
     else:
         p = re.compile(bad_chars)
-        if p.search(name):
-            msg = _("Name contains invalid characters.")
+        if p.search(check_str):
+            msg = _("Name (%s) contains invalid characters.") % check_str
     return msg
 
 def normalize_user(name):
@@ -313,6 +331,7 @@ class Group(object):
     <...Group object at ...>
     >>>
     >>> print authz # doctest: +NORMALIZE_WHITESPACE
+    # version : 0.0
     <BLANKLINE>
     [groups]
     admins = &N007, &admin
@@ -545,11 +564,10 @@ class UserList(object):
             if user.name == name:
                 return user
 
-        msg = is_valid_name(name)
-        if msg:
-            raise Exception, msg
-
         if autocreate:
+            msg = check_valid_username(name)
+            if msg:
+                raise Exception, msg
             user = User(name)
             self.user_list.append(user)
             return user
@@ -584,11 +602,10 @@ class AliasList(object):
             if alias.aliasname == name:
                 return alias
 
-        msg = is_valid_name(name)
-        if msg:
-            raise Exception, msg
-
         if autocreate:
+            msg = check_valid_aliasname(name)
+            if msg:
+                raise Exception, msg
             alias = Alias(name)
             self.alias_list.append(alias)
             return alias
@@ -640,11 +657,10 @@ class GroupList(object):
             if group.name == name:
                 return group
 
-        msg = is_valid_name(name)
-        if msg:
-            raise Exception, msg
-
         if autocreate:
+            msg = check_valid_groupname(name)
+            if msg:
+                raise Exception, msg
             group = Group(name)
             self.group_list.append(group)
             return group
@@ -1046,11 +1062,10 @@ class ReposList(object):
             if repos.name == name:
                 return repos
 
-        msg = is_valid_name(name, 'repos')
-        if msg:
-            raise Exception, msg
-
         if autocreate:
+            msg = check_valid_reposname(name)
+            if msg:
+                raise Exception, msg
             repos = Repos(name)
             self.repos_list.append(repos)
             return repos
@@ -1122,15 +1137,15 @@ class SvnAuthz(object):
     '''
     def __init__(self, fileobj=None):
         self.__clear()
-        if fileobj:
-            self.load(fileobj)
+        self.__file = None
+        self.load(fileobj)
     
     def __clear(self):
         self.__userlist  = UserList()
         self.__aliaslist = AliasList()
         self.__grouplist = GroupList()
         self.__reposlist = ReposList()
-        self.__version = '0.1.0'
+        self.__version = '0.0'
         self.config = None
         self.add_repos('/')        
 
@@ -1160,33 +1175,23 @@ class SvnAuthz(object):
     version = property(__get_version)
     
     def update_revision(self):
-        if not self.__version:
-            return
-        major, minor = self.__version.rsplit('.',1)
+        major, minor = self.version.rsplit('.',1)
         if minor.isdigit():
             rev = int(minor)+1
         else:
             rev = 0
         self.__version = "%s.%d" % (major, rev)
         
-    def modulelist(self, reposobj=None):
-        if reposobj:
-            for i in reposobj.module_list:
-                yield i 
-        else:
-            for i in self.reposlist:
-                for j in i.module_list:
-                    yield j
+    def modulelist(self):
+        for i in self.reposlist:
+            for j in i.module_list:
+                yield j
 
-    def rulelist(self, module=None):
-        if module:
-            for i in module:
-                yield i
-        else:
-            for i in self.reposlist:
-                for j in i.module_list:
-                    for k in j:
-                        yield k
+    def rulelist(self):
+        for i in self.reposlist:
+            for j in i.module_list:
+                for k in j:
+                    yield k
 
     def load(self, fileobj=None):
         '''
@@ -1195,39 +1200,47 @@ class SvnAuthz(object):
         '''
         self.__clear()
         
-        if not fileobj:
-            return
+        self.__file = fileobj
+        if self.__file:
+            assert isinstance(self.__file, (basestring, file, StringIO.StringIO))
+            # set encoding to 'utf8'
+            self.config = ConfigObj(self.__file, encoding='utf8', default_encoding='utf8')
 
-        # set encoding to 'utf8'
-        self.config = ConfigObj(fileobj, encoding='utf8', default_encoding='utf8')
-        if not self.config:
-            return
-
-        self.parse_acl()
-        self.parse_version()
-        if self.config.has_key('groups'):
-            self.parse_groups(self.config['groups'])
-        if self.config.has_key('aliases'):
-            self.parse_aliases(self.config['aliases'])
-        for (section, contents) in self.config.items():
-            if section == 'groups' or section == 'aliases':
-                continue
-            self.parse_module(section, contents)
+            if self.config:
+                self.parse_acl()
+                self.parse_version()
+                if self.config.has_key('groups'):
+                    self.parse_groups(self.config['groups'])
+                if self.config.has_key('aliases'):
+                    self.parse_aliases(self.config['aliases'])
+                for (section, contents) in self.config.items():
+                    if section == 'groups' or section == 'aliases':
+                        continue
+                    self.parse_module(section, contents)
 
     def save(self, revision):
-        filename = self.config.filename
-        
-        if not revision:
-            revision = self.version
-        last_rev = self.get_revision_from_file(filename)
-        log.debug("this revision: %s, last: %s" % (revision, last_rev))
-        if last_rev and revision != last_rev:
-            raise Exception, _("Update failed! You are working on a out-of-date revision.") + " (%s <> %s)" % (revision, last_rev)
+        if self.__file:
+            assert isinstance(self.__file, (basestring, file, StringIO.StringIO))
+            #if not revision:
+            #    revision = self.version
+            last_rev = self.get_revision_from_file()
+            log.debug("this revision: %s, last: %s" % (revision, last_rev))
+            if last_rev and revision != last_rev:
+                raise Exception, _("Update failed! You are working on a out-of-date revision.") + " (%s <> %s)" % (revision, last_rev)
 
-        self.update_revision()        
-        f = open(filename, 'w')
-        f.write(unicode(self))
-        f.close()
+            self.update_revision()
+
+            if isinstance(self.__file, basestring):
+                f = open(self.__file, 'w')
+            else:
+                f = self.__file
+                f.truncate(0)
+            f.write(unicode(self))
+            if isinstance(self.__file, (basestring)):
+                f.close()
+            else:
+                f.seek(0,0)
+                f.flush()
         
     def __str__(self):
         buff = ""
@@ -1289,26 +1302,35 @@ class SvnAuthz(object):
                     version  = i.group(1)
                     if version:
                         self.__version = version
+                        break
 
-    def get_revision_from_file(self, filename=None):
-        if not filename:
-            filename = self.config.filename
-        pattern = re.compile(r'^#\s*version\s*[:=]\s*(.+?)\s*(?:#.*)?$')
-        version = ""
-        f = open(filename)
-        for line in f:
-            i = pattern.search(line)
-            if i:
-                version  = i.group(1)
-                break
-        return version
-            
-        
+    def get_revision_from_file(self):
+        if not self.__file:
+            return ''
+        else:
+            assert isinstance(self.__file, (basestring, file, StringIO.StringIO))
+            if isinstance(self.__file, basestring):
+                f = open(self.__file)
+            else:
+                f = self.__file
+                f.seek(0,0)
+            pattern = re.compile(r'^#\s*version\s*[:=]\s*(.+?)\s*(?:#.*)?$')
+            version = ""
+            for line in f:
+                i = pattern.search(line)
+                if i:
+                    version  = i.group(1)
+                    break
+            if isinstance(self.__file, (basestring)):
+                f.close()
+            else:
+                f.seek(0,0)
+            return version
+
     def compose_version(self):
+        buff = ""
         if self.__version:
             buff = "# version : %s\n" % self.__version
-        else:
-            buff = ""
         return buff
 
     def compose_acl(self):
@@ -1421,6 +1443,7 @@ class SvnAuthz(object):
 
         rdict = {}
         if isinstance(rules, (str, unicode)):
+            rules = rules.strip()
             if '\n' in rules:
                 rule_list = rules.split('\n')
             elif ';' in rules:
@@ -1457,10 +1480,10 @@ class SvnAuthz(object):
     def set_rules(self,reposname, path, rules, reset=True, force=False):
         module = self.get_module(reposname, path)
         if not module:
-            if force:
-                module = self.add_module(reposname, path)
-            else:
-                raise Exception, _('No module exist for %s:%s') % (reposname, path)
+            #if force:
+            #    module = self.add_module(reposname, path)
+            #else:
+            raise Exception, _('No module exist for %s:%s') % (reposname, path)
 
         if reset:
             module.clean_rules()
@@ -1473,11 +1496,11 @@ class SvnAuthz(object):
         if not name:
             return None
         if name[0] == '@' or name[0] == '$' or name == '*':
-            obj = self.__grouplist.get_or_set(name, autocreate = autocreate)
+            obj = self.grouplist.get_or_set(name, autocreate = autocreate)
         elif name[0] == '&':
-            obj = self.__aliaslist.get_or_set(name, autocreate = autocreate)
+            obj = self.aliaslist.get_or_set(name, autocreate = autocreate)
         else:
-            obj = self.__userlist.get_or_set(name, autocreate = autocreate)
+            obj = self.userlist.get_or_set(name, autocreate = autocreate)
         return obj
 
     def get_manageable_repos_list(self, username):
@@ -1502,7 +1525,7 @@ class SvnAuthz(object):
             return self.add_group_member(group, members, autodrop=autodrop)
         return group
 
-    def update_group(self, name, members, autodrop=False):
+    def set_group(self, name, members, autodrop=False):
         group = self.__grouplist.get_or_set(name)
         group.remove_all()
         if members:
@@ -1510,9 +1533,8 @@ class SvnAuthz(object):
         return group
 
     def del_group(self, name, force=False):
-        if not self.chk_grp_ref_by_rules(name):
-            return self.__grouplist.remove(name, force=force)
-        return False
+        self.chk_grp_ref_by_rules(name)
+        return self.__grouplist.remove(name, force=force)
 
     def add_group_member(self, group, members, autodrop=False):
         if isinstance(group, basestring):
@@ -1547,19 +1569,14 @@ class SvnAuthz(object):
 
     def add_user(self, username):
         username = normalize_user(username)
-        userobj = self.__userlist.get_or_set(username)
+        userobj = self.userlist.get_or_set(username)
         return userobj
 
     def add_alias(self, aliasname, user=None):
         alias = self.__aliaslist.get_or_set(aliasname)
-        if not alias:
-            return None
-
         if isinstance(user, basestring):
-            user = self.__userlist.get_or_set(user)
-            
+            user = self.userlist.get_or_set(user)
         alias.user = user
-
         return alias
 
     def del_alias(self, name, force=False):
@@ -1569,8 +1586,7 @@ class SvnAuthz(object):
         if not alias:
             return False
 
-        if self.chk_alias_ref_by_rules(alias):
-            raise Exception, _('Alias %s is used by rules.') % alias.uname
+        self.chk_alias_ref_by_rules(alias)
 
         for group in self.__grouplist:
             if alias in group.memberobjs:
@@ -1583,17 +1599,15 @@ class SvnAuthz(object):
         return self.__aliaslist.remove(name)
 
     def __check_ref_by_rules(self, name):
-        if not name:
-            return
+        if name:
+            if isinstance(name, (User, Group, Alias)):
+                name = name.uname
 
-        if isinstance(name, (User, Group, Alias)):
-            name = name.uname
-
-        for i in self.modulelist():
-            ulist = map(lambda x:x.uname, self.rulelist(i))
-            if name in ulist:
-                raise Exception, _("%s is referenced by [%s].") % \
-                        (name, i.fullname)
+            for i in self.modulelist():
+                ulist = map(lambda x:x.uname, i)
+                if name in ulist:
+                    raise Exception, _("%s is referenced by [%s].") % \
+                            (name, i.fullname)
 
     def chk_alias_ref_by_rules(self, name):
         if isinstance(name, (str, unicode)):
@@ -1645,10 +1659,7 @@ class SvnAuthz(object):
             return False
 
     def get_rights(self, user, repos, path):
-        if isinstance(user, (str, unicode)):
-            user = user.strip()
-        if not user:
-            user = '*'
+        user = normalize_user(user)
         repos = normalize_repos(repos)
         path = normalize_path(path)
 
@@ -1819,6 +1830,5 @@ Access map on '%(repos)s' for user '%(user)s'
 
 
 if __name__ == '__main__':
-	#sys.exit(main())
     import doctest
     doctest.testmod()
