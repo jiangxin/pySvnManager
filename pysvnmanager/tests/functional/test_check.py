@@ -62,60 +62,151 @@ class TestCheckController(TestController):
         assert res.status == 200
         assert '''<div id='acl_path_msg'>[repos1:/trunk/src/test] user1 =</div>''' in res.body, res.body
 
-        params['userinput'] = 'select'
-        params['reposinput'] = 'select'
-        params['pathinput'] = 'select'
-        params['userselector'] = 'user1'
-        params['reposselector'] = 'reposX'
-        params['pathselector'] = '/trunk/src/test'
+        params = {
+                  'userinput':'select', 
+                  'reposinput':'select', 
+                  'pathinput':'select',
+                  'userselector':'user1',
+                  'reposselector':'reposX',
+                  'pathselector':'/trunk/src/test',
+                  'abbr':'False',
+                  }
         res = self.app.get(url_for(controller='check', action='access_map'), params)
-        assert '''<div id='acl_path_msg'>[reposX:/trunk/src/test] user1 = r</div>''' in res.body, res.body
+        assert '''<div id='acl_path_msg'>User user1 has ReadOnly (RO) rights for module reposX:/trunk/src/test</div><pre>
+==================================================
+Access map on 'reposX' for user 'user1'
+==================================================
+  * Writable:
+    
+----------------------------------------
+  * Readable:
+    /branches
+    /tags
+    /trunk/src
+----------------------------------------
+  * Denied:
+    /
+    /trunk
+----------------------------------------
+''' in res.body, res.body
 
-        params['userinput'] = 'manual'
-        params['reposinput'] = 'manual'
-        params['pathinput'] = 'manual'
-        params['username'] = 'user2'
-        params['reposname'] = 'repos1'
-        params['pathname'] = '/trunk/src/test'
+        params = {
+                  'userinput':'manual', 
+                  'reposinput':'manual', 
+                  'pathinput':'manual',
+                  'username':'user2',
+                  'reposname':'repos1',
+                  'pathname':'/trunk/src/test',
+                  'abbr':'1',
+                  }
         res = self.app.get(url_for(controller='check', action='access_map'), params)
         assert '''<div id='acl_path_msg'>[repos1:/trunk/src/test] user2 = r</div>''' in res.body, res.body
 
-        params['userinput'] = 'select'
-        params['reposinput'] = 'select'
-        params['pathinput'] = 'manual'
-        params['userselector'] = 'user2'
-        params['reposselector'] = 'reposX'
-        params['pathname'] = '/trunk/'
+        params = {
+                  'userinput':'select', 
+                  'reposinput':'select', 
+                  'pathinput':'manual',
+                  'userselector':'user2',
+                  'reposselector':'reposX',
+                  'pathname':'/trunk/',
+                  'abbr':'1',
+                  }
         res = self.app.get(url_for(controller='check', action='access_map'), params)
         assert '''<div id='acl_path_msg'>[reposX:/trunk] user2 =</div>''' in res.body, res.body
 
-        params['userinput'] = 'select'
-        params['reposinput'] = 'select'
-        params['pathinput'] = 'select'
-        params['userselector'] = 'user3'
-        params['reposselector'] = 'repos1'
-        params['pathselector'] = '/trunk'
+        params = {
+                  'userinput':'select', 
+                  'reposinput':'select', 
+                  'pathinput':'select',
+                  'userselector':'user3',
+                  'reposselector':'repos1',
+                  'pathselector':'/trunk',
+                  'abbr':'1',
+                  }
         res = self.app.get(url_for(controller='check', action='access_map'), params)
         assert '''<div id='acl_path_msg'>[repos1:/trunk] user3 =</div>''' in res.body, res.body
 
-        params['userselector'] = 'user4'
-        params['reposselector'] = 'repos1'
-        params['pathselector'] = '/trunk'
+        params = {
+                  'userinput':'select', 
+                  'reposinput':'select', 
+                  'pathinput':'select',
+                  'userselector':'user4',
+                  'reposselector':'repos1',
+                  'pathselector':'/trunk',
+                  'abbr':'1',
+                  }
         res = self.app.get(url_for(controller='check', action='access_map'), params)
         assert '''<div id='acl_path_msg'>[repos1:/trunk] user4 = r</div>''' in res.body, res.body
 
-        params['userselector'] = 'user4'
-        params['reposselector'] = 'reposX'
-        params['pathselector'] = '/trunk'
+        params = {
+                  'userinput':'select', 
+                  'reposinput':'select', 
+                  'pathinput':'select',
+                  'userselector':'user4',
+                  'reposselector':'reposX',
+                  'pathselector':'/trunk',
+                  'abbr':'1',
+                  }
         res = self.app.get(url_for(controller='check', action='access_map'), params)
         assert '''<div id='acl_path_msg'>[reposX:/trunk] user4 = r</div>''' in res.body, res.body
 
-        params['userselector'] = 'user5'
-        params['reposselector'] = 'reposX'
-        params['pathselector'] = '/trunk'
+        params = {
+                  'userinput':'select', 
+                  'reposinput':'select', 
+                  'pathinput':'select',
+                  'userselector':'user5',
+                  'reposselector':'reposX',
+                  'pathselector':'/trunk',
+                  'abbr':'1',
+                  }
         res = self.app.get(url_for(controller='check', action='access_map'), params)
         assert '''<div id='acl_path_msg'>[reposX:/trunk] user5 =</div>''' in res.body, res.body
 
+        # Repos = *
+        self.login('admin2')
+        params = {
+                  'userinput':'select', 
+                  'userselector':'user1',
+                  'reposinput':'select', 
+                  'reposselector':'*',
+                  'pathinput':'select',
+                  'pathselector':'/trunk/src/test',
+                  'abbr':'True',
+                  }
+        res = self.app.get(url_for(controller='check', action='access_map'), params)
+        assert res.status == 200, res.status
+        assert '''<div id='acl_path_msg'>[repos1:/trunk/src/test] user1 =<br>
+[repos2:/trunk/src/test] user1 = r</div><pre>
+user1 => [repos1]
+----------------------------------------
+RW: 
+RO: /branches, /tags, /trunk
+XX: /, /trunk/src
+
+
+
+user1 => [repos2]
+----------------------------------------
+RW: /, /trunk
+RO: /branches, /tags, /trunk/src
+XX: 
+
+</pre>''' in res.body, repr(res.body)
+
+        # permision deny test
+        self.login('admin2')
+        params = {
+                  'userinput':'select', 
+                  'reposinput':'select', 
+                  'pathinput':'select',
+                  'userselector':'user1',
+                  'reposselector':'repos3',
+                  'pathselector':'/trunk/src/test',
+                  'abbr':'True',
+                  }
+        res = self.app.get(url_for(controller='check', action='access_map'), params)
+        assert res.status == 200
+        assert 'Permission denied.' in res.body, res.body
 
     def test_authz_path(self):
         # authn test

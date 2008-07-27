@@ -142,73 +142,175 @@ revision="0.2.1";
         assert '' == res.body, res.body
 
 
-    def test_save_authz(self):
+    def test_set_repos_admin(self):
         # authn test
-        res = self.app.get(url_for(controller='authz', action='save_authz'))
-        assert res.status == 302
-        self.assertEqual(res.header('location'), '/security')
+        try:
+            res = self.app.get(url_for(controller='authz', action='save_authz'))
+            assert res.status == 302
+            self.assertEqual(res.header('location'), '/security')
 
-        # authz test
-        self.login('nobody')
-        res = self.app.get(url_for(controller='authz', action='save_authz'))
-        assert res.status == 200, res.status
-        self.assert_('Permission denied.' in res.body, res.body)
+            # authz test
+            self.login('nobody')
+            res = self.app.get(url_for(controller='authz', action='save_authz'))
+            assert res.status == 200, res.status
+            self.assert_('Permission denied.' in res.body, res.body)
+            
+            # Login as superuser
+            self.login('root')
+            params = {'reposname':'/', 'admins':''}
+            res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+            assert res.status == 200
+            assert "You can not delete yourself from admin list." == res.body, res.body
+        finally:
+            self.rollback()
+            
+        try:
+            params = {'reposname':'/', 'admins':'root, @some'}
+            res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+            assert res.status == 200
+            assert "" == res.body, res.body
+        finally:
+            self.rollback()
+
+        try:
+            self.login('jiangxin')
+            params = {'reposname':'/', 'admins':'&admin'}
+            res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+            assert res.status == 200
+            assert "" == res.body, res.body
+        finally:
+            self.rollback()
+            
+        try:
+            self.login('jiangxin')
+            params = {'reposname':'/', 'admins':'root'}
+            res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+            assert res.status == 200
+            assert "You can not delete yourself from admin list." == res.body, res.body
+        finally:
+            self.rollback()
+
+        try:
+            self.login('root')
+            params = {'reposname':'/repos1', 'admins':'user1'}
+            res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+            assert res.status == 200
+            assert "" == res.body, res.body
+        finally:
+            self.rollback()
         
-        # Login as superuser
-        self.login('root')
-        params = {'reposname':'/', 'admins':''}
-        res = self.app.get(url_for(controller='authz', action='save_authz'), params)
-        assert res.status == 200
-        assert "You can not delete yourself from admin list." == res.body, res.body
-        self.rollback()
+        try:
+            self.login('root')
+            params = {'reposname':'/repos1', 'admins':'user1, root'}
+            res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+            assert res.status == 200
+            assert "" == res.body, res.body
+        finally:
+            self.rollback()
         
-        params = {'reposname':'/', 'admins':'root, @some'}
-        res = self.app.get(url_for(controller='authz', action='save_authz'), params)
-        assert res.status == 200
-        assert "" == res.body, res.body
-        self.rollback()
+        try:
+            self.login('admin1')
+            params = {'reposname':'/repos1', 'admins':'user1, root'}
+            res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+            assert res.status == 200
+            assert "You can not delete yourself from admin list." == res.body, res.body
 
-        self.login('jiangxin')
-        params = {'reposname':'/', 'admins':'&admin'}
-        res = self.app.get(url_for(controller='authz', action='save_authz'), params)
-        assert res.status == 200
-        assert "" == res.body, res.body
-        self.rollback()
+            self.login('admin1')
+            params = {'reposname':'/repos1', 'admins':'admin1, admin2'}
+            res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+            assert res.status == 200
+            assert "" == res.body, res.body
+        finally:
+            self.rollback()
+
+    def test_set_rules(self):
+        # Modify rules for repos
+        try:
+            authz = self.load_authz()
+            module1 = authz.get_module('repos1', u'trunk/src')
+            self.assert_(module1 != None, type(module1))
+            self.assert_(unicode(module1)=='[repos1:/trunk/src]\nuser1 = \n', unicode(module1).encode('utf-8'))
+
+            self.login('root')
+            params = {'reposname':'/repos1', 'path':'/trunk/src', 'admins':'蒋鑫', 'rules':'@管理员=rw\n&别名1=r\n*=\nuser2=r', 'mode1':'edit', 'mode2':'edit' }
+            res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+            assert res.status == 200
+            assert "" == res.body, res.body
+            
+            authz = self.load_authz()
+            module1 = authz.get_module('repos1', u'trunk/src')
+            self.assert_(module1 != None, type(module1))
+            self.assert_(unicode(module1)==u'[repos1:/trunk/src]\n&别名1 = r\n* = \n@管理员 = rw\nuser2 = r\n', unicode(module1).encode('utf-8'))
+            
+            # Test login using chinese username
+            self.login('蒋鑫')
+            params = {'reposname':'/repos1', 'path':'/trunk/src', 'admins':'其他', 'rules':'@管理员=rw\n&别名1=r\n*=\nuser2=r', 'mode1':'edit', 'mode2':'edit' }
+            res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+            assert res.status == 200, res.headers
+            assert "You can not delete yourself from admin list." in res.body, res.body
+        finally:
+            self.rollback()
+
+        # Add New Repos
+        try:
+            authz = self.load_authz()
+            repos1 = authz.get_repos('reposX')
+            self.assert_(repos1 == None, type(repos1))
+
+            self.login('root')
+            params = {'reposname':'reposX', 'admins':'蒋鑫', 'rules':'@管理员=rw\n&别名1=r\n*=\nuser2=r', 'mode1':'new', 'mode2':'new' }
+            res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+            assert res.status == 200
+            assert "" == res.body, res.body
         
-        self.login('jiangxin')
-        params = {'reposname':'/', 'admins':'root'}
-        res = self.app.get(url_for(controller='authz', action='save_authz'), params)
-        assert res.status == 200
-        assert "You can not delete yourself from admin list." == res.body, res.body
-        self.rollback()
+            authz = self.load_authz()
+            repos1 = authz.get_repos('reposX')
+            self.assert_(repos1 != None, type(repos1))
+            self.assert_(unicode(repos1)==u'', unicode(repos1).encode('utf-8'))
+            self.assert_(repos1.admins==u'蒋鑫', repos1.admins.encode('utf-8'))
+        finally:
+            self.rollback()
 
-        self.login('root')
-        params = {'reposname':'/repos1', 'admins':'user1'}
-        res = self.app.get(url_for(controller='authz', action='save_authz'), params)
-        assert res.status == 200
-        assert "" == res.body, res.body
-        self.rollback()
-    
-        self.login('root')
-        params = {'reposname':'/repos1', 'admins':'user1, root'}
-        res = self.app.get(url_for(controller='authz', action='save_authz'), params)
-        assert res.status == 200
-        assert "" == res.body, res.body
-        self.rollback()
-    
-        self.login('admin1')
-        params = {'reposname':'/repos1', 'admins':'user1, root'}
-        res = self.app.get(url_for(controller='authz', action='save_authz'), params)
-        assert res.status == 200
-        assert "You can not delete yourself from admin list." == res.body, res.body
+        # Add New Repos with Module/Rules
+        try:
+            authz = self.load_authz()
+            repos1 = authz.get_repos('reposX')
+            self.assert_(repos1 == None, type(repos1))
 
-        self.login('admin1')
-        params = {'reposname':'/repos1', 'admins':'admin1, admin2'}
-        res = self.app.get(url_for(controller='authz', action='save_authz'), params)
-        assert res.status == 200
-        assert "" == res.body, res.body
-        self.rollback()
-    
+            self.login('root')
+            params = {'reposname':'reposX', 'admins':'蒋鑫', 'path':'/项目a', 'rules':'@管理员=rw\n&别名1=r\n*=\nuser2=r', 'mode1':'new', 'mode2':'new' }
+            res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+            assert res.status == 200
+            assert "" == res.body, res.body
+        
+            authz = self.load_authz()
+            repos1 = authz.get_repos('reposX')
+            self.assert_(unicode(repos1)==u'[reposX:/项目a]\n&别名1 = r\n* = \n@管理员 = rw\nuser2 = r\n\n', unicode(repos1).encode('utf-8'))
+            self.assert_(repos1.admins==u'蒋鑫', repos1.admins.encode('utf-8'))
+        finally:
+            self.rollback()
+        
+        # Test Repos/Module not exist Exception
+        try:
+            self.login('root')
+            params = {'reposname':'reposX', 'path':'/trunk/src', 'admins':'蒋鑫', 'rules':'@管理员=rw\n&别名1=r\n*=\nuser2=r', 'mode1':'edit', 'mode2':'edit' }
+            res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+            assert res.status == 200
+            assert "Repository reposX not exist." == res.body, res.body
+        finally:
+            self.rollback()
+        
+        # Test Repos/Module not exist Exception
+        try:
+            self.login('root')
+            params = {'reposname':'repos1', 'path':'/trunk/myproject', 'admins':'蒋鑫', 'rules':'@管理员=rw\n&别名1=r\n*=\nuser2=r', 'mode1':'edit', 'mode2':'edit' }
+            res = self.app.get(url_for(controller='authz', action='save_authz'), params)
+            assert res.status == 200
+            assert "Module /trunk/myproject not exist." == res.body, res.body
+        finally:
+            self.rollback()
+        
+        
     def test_delete_authz(self):
         # authn test
         res = self.app.get(url_for(controller='authz', action='delete_authz'))
@@ -220,3 +322,24 @@ revision="0.2.1";
         res = self.app.get(url_for(controller='authz', action='delete_authz'))
         assert res.status == 200, res.status
         self.assert_('Permission denied.' in res.body, res.body)
+
+        authz = self.load_authz()
+        module1 = authz.get_module('document', u'/trunk/行政部')
+        self.assert_(module1 != None, type(module1))
+ 
+        self.login('root')
+        params = {'reposname':'document', 'path':'/trunk/行政部'}
+        res = self.app.get(url_for(controller='authz', action='delete_authz'), params)
+
+        authz = self.load_authz()
+        module1 = authz.get_module('document', u'/trunk/行政部')
+        self.assert_(module1 == None, type(module1))        
+        
+        try:
+            self.login('root')
+            params = {'reposname':'document', 'path':'/trunk/行政部', 'revision':'123'}
+            res = self.app.get(url_for(controller='authz', action='delete_authz'), params)
+            assert res.status == 200
+            assert "Update failed! You are working on a out-of-date revision." in res.body, res.body
+        finally:
+            self.rollback()

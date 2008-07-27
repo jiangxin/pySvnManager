@@ -75,20 +75,19 @@ class AuthzController(BaseController):
         d = request.params
         select = d.get('select')
         repos = self.authz.get_repos(select)
-        if not repos:
-            return msg;
 
-        # get javascript code for top_form's role_selector
-        msg += 'id[0]="%s";' % '...'
-        msg += 'name[0]="%s";\n' % _("Please choose...")
-        total += 1;
-        for path in repos.path_list:
-            msg += 'id[%d]="%s";' % (total, path)
-            msg += 'name[%d]="%s";\n' % (total, path)
+        if repos:
+            # get javascript code for top_form's role_selector
+            msg += 'id[0]="%s";' % '...'
+            msg += 'name[0]="%s";\n' % _("Please choose...")
             total += 1;
-        msg += 'total=%d;\n' % total
-        msg += 'admin_users="%s";\n' % repos.admins
-        msg += 'revision="%s";\n' % self.authz.version
+            for path in repos.path_list:
+                msg += 'id[%d]="%s";' % (total, path)
+                msg += 'name[%d]="%s";\n' % (total, path)
+                total += 1;
+            msg += 'total=%d;\n' % total
+            msg += 'admin_users="%s";\n' % repos.admins
+            msg += 'revision="%s";\n' % self.authz.version
         
         return msg
 
@@ -131,14 +130,24 @@ class AuthzController(BaseController):
         admins    = d.get('admins', '')
         path      = d.get('path')
         rules     = d.get('rules')
-        # mode1: new or edit repository
-        mode1     = d.get('mode1')
-        # mode2: new or edit module
-        mode2     = d.get('mode2')
         revision  = d.get('revision', self.authz.version)
         
+        # mode1: new or edit repository
+        mode1     = d.get('mode1')
+        if mode1 == "new":
+            isAddRepos = True
+        else:
+            isAddRepos = False
+        
+        # mode2: new or edit module
+        mode2     = d.get('mode2')
+        if mode2 == "new":
+            isAddModule = True
+        else:
+            isAddModule = False
+
         try:
-            if mode1 == "new":
+            if isAddRepos:
                 repos = self.authz.add_repos(reposname)
             else:
                 repos = self.authz.get_repos(reposname)
@@ -146,10 +155,10 @@ class AuthzController(BaseController):
                 raise Exception, _("Repository %s not exist.") % reposname
             
             if path:
-                if mode2 == "new":
-                    module = self.authz.add_module(reposname, path)
+                if isAddModule:
+                    module = repos.add_module(path)
                 else:
-                    module = self.authz.get_module(reposname, path)
+                    module = repos.get_module(path)
                 if not module:
                     raise Exception, _("Module %s not exist.") % path
             else:
@@ -164,10 +173,10 @@ class AuthzController(BaseController):
             if module:
                 self.authz.set_rules(reposname, path, rules);
             self.authz.save(revision)
-        except Exception, e:
-            msg = unicode(e)
+        except Exception, (e,):
+            msg = unicode(e).encode('utf-8')
 
-        log.info(_("User %(user)s changed authz rules. (rev:%(rev)s,%(msg)s)") % \
+        log.info(_(u"User %(user)s changed authz rules. (rev:%(rev)s,%(msg)s)") % \
                  {'user':session.get('user'), 'rev': revision, 'msg': msg} )
         
         return msg
@@ -188,10 +197,10 @@ class AuthzController(BaseController):
         try:
             self.authz.del_module(reposname, path);
             self.authz.save(revision)
-        except Exception, e:
-            msg = unicode(e)
+        except Exception, (e,):
+            msg = unicode(e).encode('utf-8')
         
-        log.info(_("User %(user)s delete authz rules. (rev:%(rev)s,%(msg)s)") % \
+        log.info(_(u"User %(user)s delete authz rules. (rev:%(rev)s,%(msg)s)") % \
                  {'user':session.get('user'), 'rev': revision, 'msg': msg} )
 
         return msg

@@ -417,14 +417,14 @@ function save_group_complete(message, rolename)
 {
 	if (message)
 	{
-		message = '${"Update group failed:"}' + message;
+		message = '${_("Update group failed:")}' + message;
 		alert(message);
 		document.getElementById('result').innerHTML = message;
 		document.getElementById('result').style.visibility = 'visible'; 
 	}
 	else
 	{
-		message = '${"Update group successfully."}';
+		message = '${_("Update group successfully.")}';
 		document.getElementById('result').innerHTML = message;
 		alert(message);
 		if (document.main_form.role_list.value == rolename)
@@ -468,14 +468,14 @@ function delete_group_complete(message, rolename)
 {
 	if (message)
 	{
-		message = '${"Delete group failed:"}' + message;
+		message = '${_("Delete group failed:")}' + message;
 		alert(message);
 		document.getElementById('result').innerHTML = message;
 		document.getElementById('result').style.visibility = 'visible'; 
 	}
 	else
 	{
-		message = '${"Delete group successfully."}';
+		message = '${_("Delete group successfully.")}';
 		document.getElementById('result').innerHTML = message;
 		alert(message);
 		reset_main_form();
@@ -509,14 +509,14 @@ function save_alias_complete(message, aliasname)
 {
 	if (message)
 	{
-		message = '${"Update alias failed:"}' + message;
+		message = '${_("Update alias failed:")}' + message;
 		alert(message);
 		document.getElementById('result').innerHTML = message;
 		document.getElementById('result').style.visibility = 'visible'; 
 	}
 	else
 	{
-		message = '${"Update alias successfully."}';
+		message = '${_("Update alias successfully.")}';
 		document.getElementById('result').innerHTML = message;
 		alert(message);
 		if (document.main_form.role_list.value == aliasname)
@@ -559,14 +559,14 @@ function delete_alias_complete(message, aliasname)
 {
 	if (message)
 	{
-		message = '${"Delete alias failed:"}' + message;
+		message = '${_("Delete alias failed:")}' + message;
 		alert(message);
 		document.getElementById('result').innerHTML = message;
 		document.getElementById('result').style.visibility = 'visible'; 
 	}
 	else
 	{
-		message = '${"Delete alias successfully."}';
+		message = '${_("Delete alias successfully.")}';
 		document.getElementById('result').innerHTML = message;
 		alert(message);
 		reset_main_form();

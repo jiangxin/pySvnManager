@@ -330,6 +330,10 @@ $authenticated = r
         
 
     def testModule(self):
+        module = self.authz.get_module(u'版本库1', u'/项目1')
+        self.assert_(module.fullname==u'版本库1:/项目1', module.fullname.encode('utf8'))
+        self.assert_(unicode(module)==u'[版本库1:/项目1]\n* = \n@组1 = rw\n用户3 = r\n', unicode(module).encode('utf8'))
+
         module = Module('/', '/trunk')
         self.assert_(module.path == '/trunk')
         self.assert_(module.fullname == '/:/trunk')
@@ -396,6 +400,9 @@ jiang =
         self.assert_(Module('repos1', '/trunk')<"choice...")
 
     def testRepos(self):
+        repos1 = self.authz.get_repos(u'版本库1')
+        self.assert_(repos1.name==u'版本库1', repos1.name.encode('utf8'))
+
         user1=User('user1')
         user2=User('user2')
         user3=User('user3')

@@ -20,8 +20,8 @@ class SecurityController(BaseController):
         """
         auth_passed = False
         # Both fields filled?
-        username = str(request.params.get('username'))
-        password = str(request.params.get('password'))
+        username = request.params.get('username')
+        password = request.params.get('password')
 
         for auth in cfg.auth:
             if auth(username=username, password=password, config=cfg):

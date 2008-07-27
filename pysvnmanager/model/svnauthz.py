@@ -628,7 +628,7 @@ class AliasList(object):
         buff = u"[aliases]\n"
         for alias in sorted(self.alias_list):
             buff += unicode(alias)
-            buff += '\n'
+            buff += u'\n'
         return buff
 
 
@@ -689,11 +689,11 @@ class GroupList(object):
             return False
 
     def __str__(self):
-        buff = "[groups]\n"
+        buff = u"[groups]\n"
         for group in sorted(self.group_list):
             if group.name[0] != '$' and group.name != '*':
                 buff += unicode(group)
-                buff += '\n'
+                buff += u'\n'
         return buff
 
 
@@ -752,13 +752,13 @@ class Rule(object):
         return (perm, deny)
 
     def __str__(self):
-        rstr = ''
+        rstr = u''
         rbit = self.__rights
         if rbit & RIGHTS_R:
-            rstr += 'r'
+            rstr += u'r'
         if rbit & RIGHTS_W:
-            rstr += 'w'
-        return "%s = %s" % (self.userobj.uname, rstr)
+            rstr += u'w'
+        return u"%s = %s" % (self.userobj.uname, rstr)
 
     def __cmp__(self, obj):
         """For list sorting"""
@@ -834,16 +834,16 @@ class Module(object):
     
     def __str__(self):
         if not self.__rule_list:
-            return ''
+            return u''
         if self.repos == '/' or not self.repos:
-            buff = "[%s]\n" % self.path
+            buff = u"[%s]\n" % self.path
         else:
-            buff = "[%s:%s]\n" % (self.repos, self.path)
+            buff = u"[%s:%s]\n" % (self.repos, self.path)
         for rule in sorted(self.__rule_list):
             tmp = unicode(rule)
             if tmp:
                 buff += tmp
-                buff += '\n'
+                buff += u'\n'
         return buff
 
     def __cmp__(self, obj):
@@ -1023,12 +1023,12 @@ class Repos(object):
             return True
 
     def __str__(self):
-        buff = ''
+        buff = u''
         for i in sorted(self.module_list):
             tmp = unicode(i)
             if tmp:
                 buff += tmp
-                buff += '\n'
+                buff += u'\n'
         return buff
 
     def __cmp__(self, obj):
@@ -1100,7 +1100,7 @@ class ReposList(object):
                 return False
 
     def __str__(self):
-        buff = ''
+        buff = u''
         for repos in sorted(self.repos_list):
             tmp = unicode(repos)
             if tmp:
@@ -1241,11 +1241,11 @@ class SvnAuthz(object):
         buff = u""
         buff += self.compose_version()
         buff += self.compose_acl()
-        buff += '\n'
+        buff += u'\n'
         buff += unicode(self.__grouplist)
-        buff += '\n'
+        buff += u'\n'
         buff += unicode(self.__aliaslist)
-        buff += '\n'
+        buff += u'\n'
         buff += unicode(self.__reposlist)
         return buff
 
@@ -1325,11 +1325,11 @@ class SvnAuthz(object):
     def compose_version(self):
         buff = ""
         if self.__version:
-            buff = "# version : %s\n" % self.__version
+            buff = u"# version : %s\n" % self.__version
         return buff
 
     def compose_acl(self):
-        buff = ""
+        buff = u""
         for repos in self.__reposlist:
             admins = repos.admins
             if admins:
@@ -1573,7 +1573,8 @@ class SvnAuthz(object):
         alias = self.__aliaslist.get_or_set(aliasname)
         if isinstance(user, basestring):
             user = self.userlist.get_or_set(user)
-        alias.user = user
+        if user:
+            alias.user = user
         return alias
 
     def del_alias(self, name, force=False):

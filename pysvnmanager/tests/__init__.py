@@ -38,15 +38,20 @@ cmd.run([test_file])
 class TestController(TestCase):
 
     def __init__(self, *args, **kwargs):
+        self.authz_file = os.path.dirname(__file__) + '/../../config/svn.access.test'
         wsgiapp = loadapp('config:test.ini', relative_to=conf_dir)
         self.app = paste.fixture.TestApp(wsgiapp)
         TestCase.__init__(self, *args, **kwargs)
 
     def rollback(self):
         src = os.path.dirname(__file__) + '/../config/svn.access.in'
-        dest = os.path.dirname(__file__) + '/../../config/svn.access.test'
+        dest = self.authz_file
         copyfile(src, dest)
-
+        
+    def load_authz(self):
+        from pysvnmanager.model import svnauthz
+        return svnauthz.SvnAuthz(self.authz_file)
+        
     def login(self, username, password=""):
         res = self.app.get(url_for(controller='security'))
         form = res.forms[0]

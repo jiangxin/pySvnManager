@@ -51,17 +51,13 @@ class RoleController(BaseController):
                 if uname == '*' or uname[0] == '$':
                     continue
                 msg += 'id[%d]="%s";' % (members_count, uname)
-                if uname[0] == '@':
-                    msg += 'name[%d]="%s";\n' % (members_count, _("Group:")+uname[1:])
-                else:
-                    msg += 'name[%d]="%s";\n' % (members_count, uname)
+                assert uname[0] == '@'
+                msg += 'name[%d]="%s";\n' % (members_count, _("Group:")+uname[1:])
                 members_count += 1;
             for uname in self.aliaslist:
                 msg += 'id[%d]="%s";' % (members_count, uname)
-                if uname[0] == '&':
-                    msg += 'name[%d]="%s";\n' % (members_count, _("Alias:")+uname[1:])
-                else:
-                    msg += 'name[%d]="%s";\n' % (members_count, uname)
+                assert uname[0] == '&'
+                msg += 'name[%d]="%s";\n' % (members_count, _("Alias:")+uname[1:])
                 members_count += 1;
             msg += 'members_count=%d;\n' % members_count
 
@@ -72,8 +68,8 @@ class RoleController(BaseController):
             if roleobj and role[0] == '@':
                 for i in roleobj:
                     uname = i.uname
-                    if uname == '*' or uname[0] == '$':
-                        continue
+                    #if uname == '*' or uname[0] == '$':
+                    #    continue
                     msg += 'id[%d]="%s";' % (members_count, uname)
                     if uname[0] == '@':
                         msg += 'name[%d]="%s";\n' % (members_count, _("Group:")+uname[1:])
@@ -115,7 +111,7 @@ class RoleController(BaseController):
         try:
             self.authz.set_group(rolename, member_list, autodrop=autodrop)
             self.authz.save(revision)
-        except Exception, e:
+        except Exception, (e,):
             msg = unicode(e)
 
         log.info(_(u"User %(user)s changed group: %(grp)s. (rev:%(rev)s,%(msg)s)") % \
@@ -135,10 +131,10 @@ class RoleController(BaseController):
             try:
                 self.authz.del_group(rolename)
                 self.authz.save(revision)
-            except Exception, e:
+            except Exception, (e,):
                 msg = unicode(e)
 
-        log.info(_("User %(user)s delete group: %(grp)s. (rev:%(rev)s,%(msg)s)") % \
+        log.info(_(u"User %(user)s delete group: %(grp)s. (rev:%(rev)s,%(msg)s)") % \
                  {'user':session.get('user'), 'grp': rolename, 'rev': revision, 'msg': msg} )
 
         return msg
@@ -155,10 +151,10 @@ class RoleController(BaseController):
         try:
             self.authz.add_alias(aliasname, username)
             self.authz.save(revision)
-        except Exception, e:
+        except Exception, (e,):
             msg = unicode(e)
 
-        log.info(_("User %(user)s changed alias: %(alias)s. (rev:%(rev)s,%(msg)s)") % \
+        log.info(_(u"User %(user)s changed alias: %(alias)s. (rev:%(rev)s,%(msg)s)") % \
                  {'user':session.get('user'), 'alias': aliasname, 'rev': revision, 'msg': msg} )
         
         return msg
@@ -175,10 +171,10 @@ class RoleController(BaseController):
             try:
                 self.authz.del_alias(aliasname)
                 self.authz.save(revision)
-            except Exception, e:
+            except Exception, (e,):
                 msg = unicode(e)
 
-        log.info(_("User %(user)s delete alias: %(alias)s. (rev:%(rev)s,%(msg)s)") % \
+        log.info(_(u"User %(user)s delete alias: %(alias)s. (rev:%(rev)s,%(msg)s)") % \
                  {'user':session.get('user'), 'alias': aliasname, 'rev': revision, 'msg': msg} )
 
         return msg
