@@ -19,6 +19,9 @@ if config_path not in sys.path:
     sys.path.insert(0, config_path)
 from localconfig import LocalConfig as cfg
 
+#import logging
+#log = logging.getLogger(__name__)
+
 class BaseController(WSGIController):
     requires_auth = []
 
@@ -26,8 +29,11 @@ class BaseController(WSGIController):
         
         if 'lang' in session:
             set_lang(session['lang'])
+        #log.debug(request.languages)
         for lang in request.languages:
-            if lang in ['zh', 'en']:
+            if lang.lower() in ['zh-cn', 'zh']:
+                add_fallback('zh')
+            elif lang in ['en']:
                 add_fallback(lang)
 
         if isinstance(self.requires_auth, bool) and not self.requires_auth:
