@@ -26,14 +26,14 @@ def get_unicode(msg, escape=False):
     if isinstance(msg, basestring) and not isinstance(msg, unicode):
         msg = unicode(msg, 'utf-8')
     if escape and isinstance(msg, basestring):
-        msg = msg.encode('unicode_internal')
+        msg = msg.encode('raw_unicode_escape')
     return msg
 
 def get_utf8(msg, escape=False):
     if isinstance(msg, unicode):
         msg = msg.encode('utf-8')
     if escape and isinstance(msg, basestring):
-        msg = msg.encode('unicode_internal')
+        msg = repr(msg)[1:-1]
     return msg
 
 class BaseController(WSGIController):

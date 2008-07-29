@@ -39,6 +39,7 @@ def backup(wcfile, comment='', user=''):
     if not comment:
         comment = "no message."
     
+    wcfile = get_utf8(wcfile)
     comment = get_utf8(comment)
     user = get_utf8(user, escape=True)
     
@@ -53,6 +54,7 @@ def backup(wcfile, comment='', user=''):
 
     for i in cmd:
         log.debug("Command: "+i)
+        continue
         try:
             buff = os.popen(i).read().strip()
         except Exception, e:
