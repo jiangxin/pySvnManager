@@ -52,8 +52,7 @@ def backup(wcfile, comment='', user=''):
                 {"file":wcfile, "msg":comment, "user":user})
 
     for i in cmd:
-        log.debug("Command 1: "+i)
-        log.debug("Command 2: "+i.decode('utf-8'))
+        log.debug("Command: "+i)
         try:
             buff = os.popen(i).read().strip()
         except Exception, e:

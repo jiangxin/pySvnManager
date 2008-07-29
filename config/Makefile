@@ -7,6 +7,7 @@ all: $(CONFFILE)
 clean:
 	@-rm $(CONFFILE) >/dev/null 2>&1
 	@-rm localconfig.pyc >/dev/null 2>&1
+	@-rm *,v 2>&1
 
 %: $(SRCDIR)/%.in
 	cp $< $@

@@ -12,6 +12,8 @@ class CheckController(BaseController):
     def __init__(self):
         self.authz = SvnAuthz(cfg.authz_file)
         self.login_as = session.get('user')
+        # Used as checked in user to rcs file.
+        self.authz.login_as = self.login_as
         self.reposlist = self.authz.get_manageable_repos_list(self.login_as)
 
     def __authz_failed(self):
