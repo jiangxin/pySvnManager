@@ -20,6 +20,8 @@ def setup_config(command, filename, section, vars):
 
     if not os.path.exists(here+'/config'):
         os.mkdir(here+'/config')
+    if not os.path.exists(here+'/config/RCS'):
+        os.mkdir(here+'/config/RCS')
     filelist = ['svn.access', 'svn.passwd', 'localconfig.py']
     for f in filelist:
         src  = resource_filename('pysvnmanager', 'config/' + f+'.in')

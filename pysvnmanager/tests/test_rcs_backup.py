@@ -13,18 +13,20 @@ import time
 
 class TestRcsBackup(TestController):
     wcfile  = "%s/%s" % (os.path.dirname(os.path.abspath(__file__)), 'rcstest.txt')
-    rcsfile = wcfile+',v'
+    wcpath = os.path.dirname(os.path.abspath(wcfile))
+    if os.path.isdir(wcpath+'/RCS'):
+        rcsfile = wcpath+'/RCS/'+os.path.basename(wcfile)+',v'
+    else:
+        rcsfile = wcfile+',v'
 
     #def __init__(self, *args):
     #    super(TestController, self).__init__(*args)
-
  
     def setUp(self):
         if os.access(self.wcfile, os.R_OK):
             os.remove(self.wcfile)
         if os.access(self.rcsfile, os.R_OK):
             os.remove(self.rcsfile)
-
 
     def tearDown(self):
         if os.access(self.wcfile, os.R_OK):
@@ -59,11 +61,13 @@ class TestRcsBackup(TestController):
     def testBackup(self):
         # Backup test. (rcs file not exist yet)
         self.writefile()
+        assert self.get_revision() == 1, self.get_revision()
         assert os.access(self.wcfile, os.R_OK)
         assert not os.access(self.rcsfile, os.R_OK)
         rcs.backup(self.wcfile)
         assert os.access(self.wcfile, os.R_OK)
-        assert os.access(self.rcsfile, os.R_OK)
+        assert os.path.exists(self.rcsfile)
+        assert os.access(self.rcsfile, os.R_OK), self.rcsfile
 
         # Backup test. (rcs exist already)
         self.writefile()

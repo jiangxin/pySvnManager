@@ -12,8 +12,12 @@ import sys
 #sys.setdefaultencoding('utf-8')
 
 def is_rcs_exist(wcfile):
-    rcsfile = wcfile+',v'
-    return os.access(rcsfile, os.F_OK)
+    wcpath = os.path.dirname(os.path.abspath(wcfile))
+    if os.path.isdir(wcpath+'/RCS'):
+        rcsfile = wcpath+'/RCS/'+os.path.basename(wcfile)+',v'
+    else:
+        rcsfile = wcfile+',v'
+    return os.path.exists(rcsfile)
 
 def get_unicode(msg, escape=False):
     if isinstance(msg, basestring) and not isinstance(msg, unicode):
@@ -54,7 +58,6 @@ def backup(wcfile, comment='', user=''):
 
     for i in cmd:
         log.debug("Command: "+i)
-        continue
         try:
             buff = os.popen(i).read().strip()
         except Exception, e:
