@@ -7,8 +7,10 @@ Basic classes used for Subversion authz management.
 """
 
 from configobj import ConfigObj
+import rcsbackup as rcs
 import re
 import sys
+import os
 import StringIO
 import logging
 log = logging.getLogger(__name__)
@@ -1133,6 +1135,10 @@ class SvnAuthz(object):
     def __init__(self, fileobj=None):
         self.__clear()
         self.__file = None
+        # Used as check-in username to rcs file.
+        self.login_as = None
+        # Used as check-in message to rcs file.
+        self.comment = []
         self.load(fileobj)
     
     def __clear(self):
@@ -1213,9 +1219,11 @@ class SvnAuthz(object):
                         continue
                     self.parse_module(section, contents)
 
-    def save(self, revision):
+    def save(self, revision, comment=""):
+        if comment: self.comment.append(comment)
+            
         if self.__file:
-            assert isinstance(self.__file, (basestring, file, StringIO.StringIO))
+            assert isinstance(self.__file, (basestring, StringIO.StringIO))
             #if not revision:
             #    revision = self.version
             last_rev = self.get_revision_from_file()
@@ -1236,7 +1244,27 @@ class SvnAuthz(object):
             else:
                 f.seek(0,0)
                 f.flush()
-        
+
+            if isinstance(self.__file, basestring):
+                try:
+                    self.validate_authz_file(self.__file)
+                except Exception, e:
+                    rcs.restore(self.__file)
+                    raise Exception, e
+                else:
+                    rcs.backup(self.__file, comment=self.comment, user=self.login_as)
+
+        self.comment = []
+    
+    def validate_authz_file(self, filename):
+        if isinstance(filename, basestring):
+            stat = os.stat(filename)
+            if stat.st_size == 0:
+                raise Exception, "Size of file (%s) is zero!" % filename
+            
+            from svn import repos as _repos
+            _repos.authz_read(filename, 1)
+    
     def __str__(self):
         buff = u""
         buff += self.compose_version()

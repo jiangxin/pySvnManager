@@ -146,6 +146,9 @@ class AuthzController(BaseController):
         else:
             isAddModule = False
 
+        log_message = _(u"User %(user)s changed authz rules. (rev:%(rev)s)") % \
+                 {'user':session.get('user'), 'rev': revision}
+
         try:
             if isAddRepos:
                 repos = self.authz.add_repos(reposname)
@@ -172,12 +175,12 @@ class AuthzController(BaseController):
 
             if module:
                 self.authz.set_rules(reposname, path, rules);
-            self.authz.save(revision)
-        except Exception, (e,):
-            msg = unicode(e).encode('utf-8')
+            self.authz.save(revision, comment=log_message)
+        except Exception, e:
+            msg = get_unicode(e[0])
 
-        log.info(_(u"User %(user)s changed authz rules. (rev:%(rev)s,%(msg)s)") % \
-                 {'user':session.get('user'), 'rev': revision, 'msg': msg} )
+        log.info(log_message)
+        if msg: log.error(msg)
         
         return msg
 
@@ -194,14 +197,16 @@ class AuthzController(BaseController):
         path  = d.get('path')
         revision  = d.get('revision', self.authz.version)
         
+        log_message = _(u"User %(user)s delete authz rules. (rev:%(rev)s)") % \
+                         {'user':session.get('user'), 'rev': revision}
         try:
             self.authz.del_module(reposname, path);
-            self.authz.save(revision)
-        except Exception, (e,):
-            msg = unicode(e).encode('utf-8')
+            self.authz.save(revision, comment=log_message)
+        except Exception, e:
+            msg = get_unicode(e[0])
         
-        log.info(_(u"User %(user)s delete authz rules. (rev:%(rev)s,%(msg)s)") % \
-                 {'user':session.get('user'), 'rev': revision, 'msg': msg} )
+        log.info(log_message)
+        if msg: log.error(msg)
 
         return msg
 

@@ -31,7 +31,7 @@ class SecurityController(BaseController):
         # Mark user as logged in
         if auth_passed:
             session['user'] = username
-            log.info(_("User %s logged in") % session['user'])
+            log.info(_(u"User %s logged in") % session['user'])
             session.save()
 
             # Send user back to the page he originally wanted to get to
@@ -42,7 +42,7 @@ class SecurityController(BaseController):
         else:
             session.clear()
             session.save()
-            c.login_message = _("Login failed for user: %s") % username
+            c.login_message = _(u"Login failed for user: %s") % username
             return render('/login/login.mako')
 
     def logout(self):

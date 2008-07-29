@@ -277,6 +277,16 @@ revision="0.2.1";
             authz = self.load_authz()
             userobj = authz.get_userobj('&admin')
             self.assert_(unicode(userobj) == u'admin = 蒋鑫', unicode(userobj).encode('utf-8'))
+            self.assert_(authz.is_super_user('&admin')==True, authz.is_super_user('&admin'))
+            self.assert_(authz.is_super_user('蒋鑫')==True, authz.is_super_user('蒋鑫'))
+            
+            self.login('蒋鑫')
+            #params = {'aliasname':'admin', 'username':'蒋鑫',}
+            params = {'aliasname':'admin2', 'username':'jiangxin',}
+            res = self.app.get(url_for(controller='role', action='save_alias'), params)
+            assert res.status == 200
+            assert "" == res.body, res.body
+            
         finally:
             self.rollback()
             

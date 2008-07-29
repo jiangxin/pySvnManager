@@ -12,6 +12,8 @@ class RoleController(BaseController):
     def __init__(self):
         self.authz = SvnAuthz(cfg.authz_file)
         self.login_as = session.get('user')
+        # Used as checked in user to rcs file.
+        self.authz.login_as = self.login_as
         self.aliaslist  = map(lambda x:x.uname, self.authz.aliaslist)
         self.userlist = map(lambda x:x.uname, self.authz.userlist)
         self.grouplist = map(lambda x:x.uname, self.authz.grouplist)
@@ -108,14 +110,17 @@ class RoleController(BaseController):
 
         member_list.extend(map(lambda x: x.strip(), members.split(',')))
         
+        log_message = _(u"User %(user)s changed group: %(grp)s. (rev:%(rev)s)") % \
+                         {'user':session.get('user'), 'grp': rolename, 'rev': revision}
+
         try:
             self.authz.set_group(rolename, member_list, autodrop=autodrop)
-            self.authz.save(revision)
-        except Exception, (e,):
-            msg = unicode(e)
+            self.authz.save(revision, comment=log_message)
+        except Exception, e:
+            msg = get_unicode(e[0])
 
-        log.info(_(u"User %(user)s changed group: %(grp)s. (rev:%(rev)s,%(msg)s)") % \
-                 {'user':session.get('user'), 'grp': rolename, 'rev': revision, 'msg': msg} )
+        log.info(log_message)
+        if msg: log.error(msg)
         
         return msg
     
@@ -127,15 +132,19 @@ class RoleController(BaseController):
         rolename = d.get('role')
         revision  = d.get('revision', self.authz.version)
         msg = ''
+        
+        log_message = _(u"User %(user)s delete group: %(grp)s. (rev:%(rev)s)") % \
+                         {'user':session.get('user'), 'grp': rolename, 'rev': revision}
+
         if rolename:
             try:
                 self.authz.del_group(rolename)
-                self.authz.save(revision)
-            except Exception, (e,):
-                msg = unicode(e)
+                self.authz.save(revision, comment=log_message)
+            except Exception, e:
+                msg = get_unicode(e[0])
 
-        log.info(_(u"User %(user)s delete group: %(grp)s. (rev:%(rev)s,%(msg)s)") % \
-                 {'user':session.get('user'), 'grp': rolename, 'rev': revision, 'msg': msg} )
+        log.info(log_message)
+        if msg: log.error(msg)
 
         return msg
         
@@ -148,14 +157,18 @@ class RoleController(BaseController):
         username = d.get('username')
         revision  = d.get('revision', self.authz.version)
         msg = ""
+        
+        log_message = _(u"User %(user)s changed alias: %(alias)s. (rev:%(rev)s)") % \
+                     {'user':session.get('user'), 'alias': aliasname, 'rev': revision}
+
         try:
             self.authz.add_alias(aliasname, username)
-            self.authz.save(revision)
-        except Exception, (e,):
-            msg = unicode(e)
+            self.authz.save(revision, comment=log_message)
+        except Exception, e:
+            msg = get_unicode(e[0])
 
-        log.info(_(u"User %(user)s changed alias: %(alias)s. (rev:%(rev)s,%(msg)s)") % \
-                 {'user':session.get('user'), 'alias': aliasname, 'rev': revision, 'msg': msg} )
+        log.info(log_message)
+        if msg: log.error(msg)
         
         return msg
     
@@ -167,15 +180,19 @@ class RoleController(BaseController):
         aliasname = d.get('aliasname')
         revision  = d.get('revision', self.authz.version)
         msg = ''
+        
+        log_message = _(u"User %(user)s delete alias: %(alias)s. (rev:%(rev)s,%(msg)s)") % \
+                 {'user':session.get('user'), 'alias': aliasname, 'rev': revision, 'msg': msg}
+
         if aliasname:
             try:
                 self.authz.del_alias(aliasname)
-                self.authz.save(revision)
-            except Exception, (e,):
-                msg = unicode(e)
+                self.authz.save(revision, comment=log_message)
+            except Exception, e:
+                msg = get_unicode(e[0])
 
-        log.info(_(u"User %(user)s delete alias: %(alias)s. (rev:%(rev)s,%(msg)s)") % \
-                 {'user':session.get('user'), 'alias': aliasname, 'rev': revision, 'msg': msg} )
+        log.info(log_message)
+        if msg: log.error(msg)
 
         return msg
 
