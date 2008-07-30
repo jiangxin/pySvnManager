@@ -68,7 +68,7 @@ class LogsController(BaseController):
 </tr>''' % {'rev' : logs[i].get('revision',''), 
             'who' : logs[i].get('author',''), 
             'when': logs[i].get('date',''), 
-            'why' : logs[i].get('log',''), 
+            'why' : h.link_to(logs[i].get('log',''), h.url(action='view', id=logs[i].get('revision',''))), 
             }
         
         buff += '''
@@ -133,3 +133,21 @@ class LogsController(BaseController):
 
         buff += "<pre>%s</pre>" % self.rcslog.differ(left, right)
         return buff
+
+
+    def view(self, id):
+        assert id and isinstance(id, basestring)
+        c.contents = unicode(self.rcslog.cat(id), 'utf-8')
+        c.log = self.rcslog.get_logs(id, id)[0]
+        return render('/logs/view.mako')
+    
+    def rollback(self, id):
+        msg = _("Rollback to revision: %s" % id)
+        try:
+            assert id and isinstance(id, basestring)
+            self.rcslog.restore(id)
+            self.rcslog.backup(comment=msg, user=self.login_as)
+        except Exception, e:
+            return e
+        else:
+            return msg

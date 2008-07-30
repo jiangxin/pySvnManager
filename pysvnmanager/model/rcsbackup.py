@@ -304,4 +304,9 @@ class RcsLog(object):
     
     def differ(self, rev1="", rev2=""):
         return differ(self.__file, rev1, rev2)
-        
+    
+    def restore(self, revision):
+        return restore(self.__file, revision)
+
+    def backup(self, comment='', user=''):
+        return backup(self.__file, comment, user)

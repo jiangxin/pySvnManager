@@ -14,8 +14,8 @@ class TestCheckController(TestController):
         # Login as common user
         self.login('nobody')
         res = self.app.get(url_for(controller='check'))
-        assert res.status == 200
-        assert 'Permission denied.' in res.body, res.body
+        assert res.status == 302, res.status
+        assert res.header('location')== '/security/failed', res.header('location')
         
         # Login as repos admin
         self.login('admin1')
@@ -44,8 +44,8 @@ class TestCheckController(TestController):
         # authz test
         self.login('nobody')
         res = self.app.get(url_for(controller='check', action='access_map'))
-        assert res.status == 200, res.status
-        self.assert_('Permission denied.' in res.body, res.body)
+        assert res.status == 302, res.status
+        assert res.header('location')== '/security/failed', res.header('location')
         
         # Login as superuser
         self.login('root')
@@ -205,20 +205,20 @@ XX:
                   'abbr':'True',
                   }
         res = self.app.get(url_for(controller='check', action='access_map'), params)
-        assert res.status == 200
-        assert 'Permission denied.' in res.body, res.body
+        assert res.status == 200, res.status
+        assert res.body== 'Permission denied.', res.header('location')
 
     def test_authz_path(self):
         # authn test
         res = self.app.get(url_for(controller='check', action='get_auth_path'))
         assert res.status == 302
-        self.assertEqual(res.header('location'), '/security')
+        assert res.header('location')== '/security', res.header('location')
 
         # authz test
         self.login('nobody')
         res = self.app.get(url_for(controller='check', action='get_auth_path'))
-        assert res.status == 200, res.status
-        self.assert_('Permission denied.' in res.body, res.body)
+        assert res.status == 302, res.status
+        assert res.header('location')== '/security/failed', res.header('location')
 
         self.login('root')
         params = {}

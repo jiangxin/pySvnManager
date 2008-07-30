@@ -175,7 +175,7 @@ class TestRcsBackup(TestController):
         
         assert rcslog.total_page == 2, rcslog.total_page
         rcslog.log_per_page=0
-        assert rcslog.log_per_page==10, rcslog.log_per_page
+        assert rcslog.log_per_page>1, rcslog.log_per_page
         rcslog.log_per_page=5
         assert rcslog.log_per_page==5, rcslog.log_per_page
         assert rcslog.total_page == 3, rcslog.total_page
@@ -188,14 +188,14 @@ class TestRcsBackup(TestController):
 
         logs = rcslog.get_page_logs(2)
         assert [x['revision'] for x in logs] == \
-                ['1.4', '1.5', '1.6', '1.7', '1.8', '1.14'], \
+                ['1.5', '1.6', '1.7', '1.8', '1.9', '1.14'], \
                 [x['revision'] for x in logs]
 
         logs = rcslog.get_page_logs(3)
         logs2= rcslog.get_page_logs(30)
         assert logs == logs2
         assert [x['revision'] for x in logs] == \
-                ['1.1', '1.2', '1.3', '1.14'], \
+                ['1.1', '1.2', '1.3', '1.4', '1.5', '1.14'], \
                 [x['revision'] for x in logs]
 
         buff = rcslog.differ('1.2','1.5')

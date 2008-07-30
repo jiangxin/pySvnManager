@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pySvnManager 0.1.2\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2008-07-31 00:22+0800\n"
+"POT-Creation-Date: 2008-07-31 01:18+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -115,6 +115,11 @@ msgstr ""
 
 #: pysvnmanager/controllers/logs.py:130
 msgid "Compares between"
+msgstr ""
+
+#: pysvnmanager/controllers/logs.py:145
+#, python-format
+msgid "Rollback to revision: %s"
 msgstr ""
 
 #: pysvnmanager/controllers/role.py:103
@@ -461,11 +466,20 @@ msgstr ""
 
 #: pysvnmanager/templates/logs/index.mako:5
 #: pysvnmanager/templates/logs/index.mako:60
+#: pysvnmanager/templates/logs/view.mako:5
 msgid "Administration logs"
 msgstr ""
 
 #: pysvnmanager/templates/logs/index.mako:66
 msgid "Compare revisions"
+msgstr ""
+
+#: pysvnmanager/templates/logs/view.mako:16
+msgid "View history, revision"
+msgstr ""
+
+#: pysvnmanager/templates/logs/view.mako:23
+msgid "Rollback to this revision"
 msgstr ""
 
 #: pysvnmanager/templates/role/index.mako:5
