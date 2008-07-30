@@ -35,6 +35,7 @@ pysvnmanager/controllers/__init__.py
 pysvnmanager/controllers/authz.py
 pysvnmanager/controllers/check.py
 pysvnmanager/controllers/error.py
+pysvnmanager/controllers/logs.py
 pysvnmanager/controllers/role.py
 pysvnmanager/controllers/security.py
 pysvnmanager/controllers/template.py
@@ -49,6 +50,7 @@ pysvnmanager/lib/base.py
 pysvnmanager/lib/helpers.py
 pysvnmanager/model/__init__.py
 pysvnmanager/model/configobj.py
+pysvnmanager/model/rcsbackup.py
 pysvnmanager/model/svnauthz.py
 pysvnmanager/model/auth/__init__.py
 pysvnmanager/model/auth/http.py
@@ -60,11 +62,15 @@ pysvnmanager/templates/check/index.mako
 pysvnmanager/templates/login/loggedin.mako
 pysvnmanager/templates/login/login.mako
 pysvnmanager/templates/login/logout.mako
+pysvnmanager/templates/logs/index.mako
+pysvnmanager/templates/logs/view.mako
 pysvnmanager/templates/role/index.mako
 pysvnmanager/tests/__init__.py
 pysvnmanager/tests/test_models.py
+pysvnmanager/tests/test_rcs_backup.py
 pysvnmanager/tests/functional/__init__.py
 pysvnmanager/tests/functional/test_authz.py
 pysvnmanager/tests/functional/test_check.py
 pysvnmanager/tests/functional/test_login.py
+pysvnmanager/tests/functional/test_logs.py
 pysvnmanager/tests/functional/test_role.py
