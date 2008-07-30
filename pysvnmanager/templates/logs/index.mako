@@ -16,7 +16,8 @@ function paginate(num)
     	{asynchronous:true, evalScripts:true, method:'post', 
     		onComplete:
     			function(request)
-    				{hideNoticesPopup();},
+    				{hideNoticesPopup();
+    				new Effect.Highlight("logs",{duration:1});},
     		parameters:params});
 }
 

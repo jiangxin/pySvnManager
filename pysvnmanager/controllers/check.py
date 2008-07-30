@@ -16,16 +16,12 @@ class CheckController(BaseController):
         self.authz.login_as = self.login_as
         self.reposlist = self.authz.get_manageable_repos_list(self.login_as)
 
-    def __authz_failed(self):
+    def __before__(self, action):
+        super(CheckController, self).__before__(action)
         if not self.reposlist:
-            return True
-        else:
-            return False
-    
+            return redirect_to(h.url_for(controller='security', action='failed'))
+        
     def index(self):
-        if self.__authz_failed():
-            return render('/auth_failed.mako')
-
         c.reposlist = self.reposlist
         c.userlist = map(lambda x:x.uname, self.authz.grouplist)
         c.userlist.extend(map(lambda x:x.uname, self.authz.aliaslist))
@@ -34,9 +30,6 @@ class CheckController(BaseController):
         return render('/check/index.mako')
     
     def access_map(self):
-        if self.__authz_failed():
-            return render('/auth_failed.mako')
-
         msg = ""
         d = request.params
         
@@ -77,9 +70,6 @@ class CheckController(BaseController):
         return msg
         
     def get_auth_path(self, repos=None, type=None, path=None):
-        if self.__authz_failed():
-            return render('/auth_failed.mako')
-
         total = 0;
         msg = ''
         d = request.params

@@ -54,3 +54,6 @@ class SecurityController(BaseController):
             del session['user']
             session.save()
         redirect_to(h.url_for(controller="security"))
+
+    def failed(self):
+        return render('/auth_failed.mako')

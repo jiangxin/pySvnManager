@@ -18,16 +18,12 @@ class RoleController(BaseController):
         self.userlist = map(lambda x:x.uname, self.authz.userlist)
         self.grouplist = map(lambda x:x.uname, self.authz.grouplist)
 
-    def __auth_failed(self):
-        if self.authz.is_super_user(self.login_as):
-            return False
-        else:
-            return True
+    def __before__(self, action):
+        super(RoleController, self).__before__(action)
+        if not self.authz.is_super_user(self.login_as):
+            return redirect_to(h.url_for(controller='security', action='failed'))
 
     def index(self):
-        if self.__auth_failed():
-            return render('/auth_failed.mako')
-        
         c.revision = self.authz.version
         c.aliaslist  = self.aliaslist
         c.userlist = self.userlist
@@ -35,9 +31,6 @@ class RoleController(BaseController):
         return render('/role/index.mako')
     
     def get_role_info(self, role=None):
-        if self.__auth_failed():
-            return render('/auth_failed.mako')
-
         members_count = 0;
         msg = ''
         if not role:
@@ -91,9 +84,6 @@ class RoleController(BaseController):
         return msg
         
     def save_group(self):
-        if self.__auth_failed():
-            return render('/auth_failed.mako')
-
         d = request.params
         member_list = []
         msg = ""
@@ -125,9 +115,6 @@ class RoleController(BaseController):
         return msg
     
     def delete_group(self):
-        if self.__auth_failed():
-            return render('/auth_failed.mako')
-
         d = request.params
         rolename = d.get('role')
         revision  = d.get('revision', self.authz.version)
@@ -149,9 +136,6 @@ class RoleController(BaseController):
         return msg
         
     def save_alias(self):
-        if self.__auth_failed():
-            return render('/auth_failed.mako')
-
         d = request.params
         aliasname = d.get('aliasname')
         username = d.get('username')
@@ -173,9 +157,6 @@ class RoleController(BaseController):
         return msg
     
     def delete_alias(self):
-        if self.__auth_failed():
-            return render('/auth_failed.mako')
-
         d = request.params
         aliasname = d.get('aliasname')
         revision  = d.get('revision', self.authz.version)

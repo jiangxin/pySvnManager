@@ -16,16 +16,12 @@ class AuthzController(BaseController):
         self.authz.login_as = self.login_as
         self.reposlist = self.authz.get_manageable_repos_list(self.login_as)
         
-    def __auth_failed(self):
+    def __before__(self, action):
+        super(AuthzController, self).__before__(action)
         if not self.reposlist:
-            return True
-        else:
-            return False
+            return redirect_to(h.url_for(controller='security', action='failed'))
 
     def index(self):
-        if self.__auth_failed():
-            return render('/auth_failed.mako')
-
         c.revision = self.authz.version
         c.reposlist = self.reposlist
         
@@ -50,9 +46,6 @@ class AuthzController(BaseController):
         return render('/authz/index.mako')
 
     def init_repos_list(self):
-        if self.__auth_failed():
-            return render('/auth_failed.mako')
-
         total = 0;
         msg = ''
  
@@ -69,9 +62,6 @@ class AuthzController(BaseController):
         return msg
 
     def repos_changed(self):
-        if self.__auth_failed():
-            return render('/auth_failed.mako')
-
         total = 0;
         msg = ''
         d = request.params
@@ -94,9 +84,6 @@ class AuthzController(BaseController):
         return msg
 
     def path_changed(self):
-        if self.__auth_failed():
-            return render('/auth_failed.mako')
-
         total = 0;
         msg = ''
  
@@ -120,9 +107,6 @@ class AuthzController(BaseController):
         return msg
         
     def save_authz(self):
-        if self.__auth_failed():
-            return render('/auth_failed.mako')
-
         d = request.params
         
         member_list = []
@@ -187,9 +171,6 @@ class AuthzController(BaseController):
         return msg
 
     def delete_authz(self):
-        if self.__auth_failed():
-            return render('/auth_failed.mako')
-
         d = request.params
         
         member_list = []

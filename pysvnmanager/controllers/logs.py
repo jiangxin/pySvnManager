@@ -14,25 +14,18 @@ class LogsController(BaseController):
         self.login_as = session.get('user')
         self.rcslog = _rcs.RcsLog(cfg.authz_file)
         # Default logs per page is 10
-        #self.rcslog.log_per_page = 10
-
-    def __auth_failed(self):
-        if self.authz.is_super_user(self.login_as):
-            return False
-        else:
-            return True
+        self.rcslog.log_per_page = 1
+    
+    def __before__(self, action):
+        super(LogsController, self).__before__(action)
+        if not self.authz.is_super_user(self.login_as):
+            return redirect_to(h.url_for(controller='security', action='failed'))
     
     def index(self):
-        if self.__auth_failed():
-            return render('/auth_failed.mako')
-        
         c.display = self.__get_log_display(1)
         return render('/logs/index.mako')
 
     def paginate(self):
-        if self.__auth_failed():
-            return render('/auth_failed.mako')
-        
         d = request.params
         page = int(d.get('page', '1'))
         return self.__get_log_display(page)
@@ -44,8 +37,9 @@ class LogsController(BaseController):
             return ""
         paginate = self.__get_paginate(current)
         
-        buff  = '<span>%s</span>' % paginate
+        buff  = '<div>%s</div>' % paginate
         buff +='''
+<div>
 <table>
 <tr>
     <th>%(rev)s</th>
@@ -70,8 +64,8 @@ class LogsController(BaseController):
             'why' : logs[i].get('log',''), }
         
         buff += '''
-<span>%s</span>
-</table>''' % paginate
+</table></div>
+<div>%s</div>''' % paginate
 
         return buff
     
@@ -90,16 +84,24 @@ class LogsController(BaseController):
         
         sep = " "
         buff = _("Page: ")
-        for i in range(1, total_page+1):
+        
+        i=1
+        while True:
+            if i > total_page:
+                break
             if i == current:
                 buff += '%d%s' % (i, sep)
+                i+=1
             elif i == 1 or i == total_page or i == current-1 or i == current+1:
                 buff += '%s%s' % (link(i), sep)
+                i+=1
             elif i < current-1:
-                buff += '...'
+                buff += '...%s' % sep
                 i = current-1
             elif i > current+1:
-                buff += '...'
+                buff += '...%s' % sep
                 i = total_page
+            else:
+                i+=1
 
         return buff 
