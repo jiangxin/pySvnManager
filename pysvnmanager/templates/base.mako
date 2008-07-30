@@ -88,6 +88,7 @@ function hideNoticesPopup()
           <td>${h.link_to(_("Check permissions"), h.url(controller="check"))}</td>
           <td>${h.link_to(_("Role management"), h.url(controller="role"))}</td>
           <td>${h.link_to(_("ACL management"), h.url(controller="authz"))}</td>
+          <td>${h.link_to(_("Logs"), h.url(controller="logs"))}</td>
           <td>welcome ${session.get('user')}</td>
           <td>${h.link_to(_("Logout"), h.url(controller="logout"))}</td>
       </tr>

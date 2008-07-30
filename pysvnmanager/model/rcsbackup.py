@@ -138,7 +138,15 @@ class RcsLog(object):
         self.reload()
     
     def __get_page_count(self):
-        return int(math.ceil(self.__total/self.__log_per_page))
+        if self.__total == 0:
+            count = 0
+        elif self.__total == 1:
+            count = 1
+        else:
+            # show last record on every page.
+            count = int( math.ceil( (self.__total -1 ) / self.__log_per_page ) )
+
+        return count
     
     total_page = property(__get_page_count)
 
