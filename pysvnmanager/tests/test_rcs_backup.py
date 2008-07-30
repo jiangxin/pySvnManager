@@ -44,7 +44,7 @@ class TestRcsBackup(TestController):
         f.write('RCS working copy file\n')
         f.write('='*20 + '\n')
         f.write('Revision: %d\n' % rev)
-        f.write('Date: %s\n' % time.strftime('%F %T'))
+        f.write('Date: %s\n' % time.strftime('%F'))
         f.close()
 
     def get_revision(self):
@@ -198,12 +198,23 @@ class TestRcsBackup(TestController):
                 ['1.1', '1.2', '1.3', '1.14'], \
                 [x['revision'] for x in logs]
 
+        buff = rcslog.differ('1.2','1.5')
+        assert "-Revision: 2\n+Revision: 5" in buff, buff
+        buff = rcslog.differ('1.13')
+        assert "-Revision: 13\n+Revision: 14" in buff, buff
+        
+        buff = rcslog.cat()
+        assert "Revision: 14\n" in buff, buff
+
+        buff = rcslog.cat('1.8')
+        assert "Revision: 8\n" in buff, buff
         
     def testLogsNone(self):
         rcslog = rcs.RcsLog(self.wcfile)
         assert rcslog.rcsfile == "", rcslog.rcsfile
         assert rcslog.total == 0, rcslog.total
         assert rcslog.get_page_logs(1) == [], rcslog.get_page_logs(1)
+        assert rcslog.cat()==""
         
 if __name__ == '__main__': 
     import unittest

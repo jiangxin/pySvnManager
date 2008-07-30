@@ -61,15 +61,15 @@ def backup(wcfile, comment='', user=''):
     cmd = []
     if not is_rcs_exist(wcfile):
         # -l : lock mode, make wcfile writable
-        cmd.append('%(cmd)s -i -q -l -t-"%(msg)s" -w"%(user)s" %(file)s 2>&1' % \
+        cmd.append('%(cmd)s -i -q -l -t-"%(msg)s" -w"%(user)s" "%(file)s" 2>&1' % \
                 {'cmd':CMD_CI, "file":wcfile, "msg":comment, "user":user})
         # -U : set locking to no-strict.
-        cmd.append('%(cmd)s -U -q %(file)s' % {'cmd':CMD_RCS, "file":wcfile})
+        cmd.append('%(cmd)s -U -q "%(file)s"' % {'cmd':CMD_RCS, "file":wcfile})
     else:
         # Warning: w/o -l or -u option, wcfile will be removed after checkin.
         # -l makes wcfile writable;
         # -u : wcfile is not writable unless rcsfile is set to no-strict locking.
-        cmd.append('%(cmd)s -q -l -m"%(msg)s" -w"%(user)s" %(file)s 2>&1' % \
+        cmd.append('%(cmd)s -q -l -m"%(msg)s" -w"%(user)s" "%(file)s" 2>&1' % \
                 {'cmd':CMD_CI, "file":wcfile, "msg":comment, "user":user})
 
     for i in cmd:
@@ -91,11 +91,36 @@ def restore(wcfile, revision=""):
         # unlock wcfile is readonly, unless no-strict mode is set.
         opts = "-u%s" % revision
 
-    cmd = "%(cmd)s %(opts)s -q -f %(file)s 2>&1" % {'cmd':CMD_CO, "opts":opts, "file":wcfile }
+    cmd = '%(cmd)s %(opts)s -q -f "%(file)s" 2>&1' % {'cmd':CMD_CO, "opts":opts, "file":wcfile }
     buff = os.popen(cmd).read().strip()
     if buff:
         raise Exception, "Command: %s\nError Message: %s\n" % (cmd, buff)
-    
+
+
+def cat(wcfile, revision=""):
+    if not wcfile or not is_rcs_exist(wcfile):
+        return ""
+    opts = "-p"
+    if revision:
+        # -pRev : cat rather then checkout
+        opts = "-p%s" % revision
+
+    cmd = '%(cmd)s %(opts)s -q "%(file)s"' % {'cmd':CMD_CO, "opts":opts, "file":wcfile }
+    buff = os.popen(cmd).read().strip()
+    return buff
+
+def differ(filename, rev1="", rev2=""):
+    filename=get_utf8(filename)
+    opts=""
+    if rev1 and rev2:
+        opts="-r%s -r%s" % (rev1, rev2)
+    elif rev1 or rev2:
+        opts="-r%s%s" % (rev1, rev2)
+        
+    cmd = '%(cmd)s %(opts)s -u -q "%(file)s"' % {'cmd':CMD_RCSDIFF, 'opts':opts, 'file':filename}
+    log.debug('Command: '+cmd)
+    buff = os.popen(cmd).read()
+    return buff
 
 class RcsLog(object):
     
@@ -144,7 +169,7 @@ class RcsLog(object):
     log_per_page = property(__get_log_per_page, __set_log_per_page)
     
     def reload(self):
-        cmd = '%(cmd)s -L -h -N %(file)s' % {'cmd':CMD_RLOG, 'file':self.__file}
+        cmd = '%(cmd)s -L -h -N "%(file)s"' % {'cmd':CMD_RLOG, 'file':self.__file}
         buff = os.popen(cmd).read().strip()
         
         # RCS file: 1,v
@@ -212,7 +237,7 @@ class RcsLog(object):
         if rev3:
             opts="%s,%s" % (opts, rev3)
 
-        cmd = '%(cmd)s %(opts)s -L -N %(file)s' % {'cmd':CMD_RLOG, 'opts':opts, 'file':self.__file}
+        cmd = '%(cmd)s %(opts)s -L -N "%(file)s"' % {'cmd':CMD_RLOG, 'opts':opts, 'file':self.__file}
         log.debug('Command: '+cmd)
         buff = os.popen(cmd).read().strip().rstrip('=').rstrip()
         
@@ -264,3 +289,10 @@ class RcsLog(object):
                               'log':commit_log})
         
         return self.revs
+    
+    def cat(self, revision=""):
+        return cat(self.__file, revision)
+    
+    def differ(self, rev1="", rev2=""):
+        return differ(self.__file, rev1, rev2)
+        
