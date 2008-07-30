@@ -121,11 +121,90 @@ class TestRcsBackup(TestController):
         pass
 
     def testLogs(self):
-        self.writefile()
-        assert os.access(self.wcfile, os.R_OK)
-        print "testLogs"
-        pass
+        for i in range(1,11):
+            # new file, backup to r1.1
+            self.writefile(i)
+            rcs.backup(self.wcfile, comment="Test no. %d" % i, user="User1")
+        
+        rcslog = rcs.RcsLog(self.wcfile)
+        assert "rcstest.txt,v" in rcslog.rcsfile, rcslog.rcsfile
+        assert rcslog.head=='1.10', rcslog.head
+        assert rcslog.total==10, rcslog.total
 
+        for i in range(11,15):
+            # new file, backup to r1.1
+            self.writefile(i)
+            rcs.backup(self.wcfile, comment="第 %d 次提交测试。" % i, user="蒋鑫")
+
+        assert rcslog.head=='1.10', rcslog.head
+        rcslog.reload()
+        assert rcslog.head=='1.14', rcslog.head
+        assert rcslog.total==14, rcslog.total
+        
+        logs = rcslog.get_logs()
+        assert len(logs)==14, logs
+        assert logs[3]['revision'] == u'1.4', logs[3]['revision']
+        assert logs[3]['author'] == u'User1', logs[3]['author']
+        assert logs[3]['log'] == u'Test no. 4', logs[3]['log']
+        assert logs[13]['revision'] == u'1.14', logs[13]['revision']
+        assert logs[13]['author'] == u'蒋鑫', logs[13]['author'].encode('utf-8')
+        assert logs[13]['log'] == u'第 14 次提交测试。', logs[13]['log'].encode('utf-8')
+        
+        logs = rcslog.get_logs('1.9','1.12')
+        assert len(logs)==4, logs
+        assert logs[1]['revision'] == u'1.10', logs[1]['revision']
+        assert logs[1]['author'] == u'User1', logs[1]['author']
+        assert logs[1]['log'] == u'Test no. 10', logs[1]['log']
+        assert logs[2]['revision'] == u'1.11', logs[2]['revision']
+        assert logs[2]['author'] == u'蒋鑫', logs[2]['author'].encode('utf-8')
+        assert logs[2]['log'] == u'第 11 次提交测试。', logs[2]['log'].encode('utf-8')
+
+
+        logs = rcslog.get_logs('','1.12')
+        assert len(logs)==12, logs
+        assert logs[10]['revision'] == u'1.11', logs[10]['revision']
+
+        logs = rcslog.get_logs('1.12','')
+        assert len(logs)==3, len(logs)
+        assert logs[1]['revision'] == u'1.13', logs[1]['revision']
+
+        logs = rcslog.get_logs('1.7','1.11', '1.14')
+        assert len(logs)==6, len(logs)
+        assert logs[4]['revision'] == u'1.11', logs[1]['revision']
+        assert logs[5]['revision'] == u'1.14', logs[1]['revision']
+        
+        assert rcslog.total_page == 2, rcslog.total_page
+        rcslog.log_per_page=0
+        assert rcslog.log_per_page==10, rcslog.log_per_page
+        rcslog.log_per_page=5
+        assert rcslog.log_per_page==5, rcslog.log_per_page
+        assert rcslog.total_page == 3, rcslog.total_page
+        logs = rcslog.get_page_logs(1)
+        logs2= rcslog.get_page_logs(0)
+        assert logs == logs2
+        assert [x['revision'] for x in logs] == \
+                ['1.9', '1.10', '1.11', '1.12', '1.13', '1.14'], \
+                [x['revision'] for x in logs]
+
+        logs = rcslog.get_page_logs(2)
+        assert [x['revision'] for x in logs] == \
+                ['1.4', '1.5', '1.6', '1.7', '1.8', '1.14'], \
+                [x['revision'] for x in logs]
+
+        logs = rcslog.get_page_logs(3)
+        logs2= rcslog.get_page_logs(30)
+        assert logs == logs2
+        assert [x['revision'] for x in logs] == \
+                ['1.1', '1.2', '1.3', '1.14'], \
+                [x['revision'] for x in logs]
+
+        
+    def testLogsNone(self):
+        rcslog = rcs.RcsLog(self.wcfile)
+        assert rcslog.rcsfile == "", rcslog.rcsfile
+        assert rcslog.total == 0, rcslog.total
+        assert rcslog.get_page_logs(1) == [], rcslog.get_page_logs(1)
+        
 if __name__ == '__main__': 
     import unittest
     unittest.main()
