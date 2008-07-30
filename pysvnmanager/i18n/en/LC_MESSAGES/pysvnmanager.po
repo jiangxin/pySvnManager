@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: pysvnmanager 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2008-07-03 22:14+0800\n"
-"PO-Revision-Date: 2008-07-29 17:27+0800\n"
+"PO-Revision-Date: 2008-07-30 23:27+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -18,26 +18,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.2\n"
 
-#: pysvnmanager/controllers/authz.py:31
+#: pysvnmanager/controllers/authz.py:29
 #: pysvnmanager/templates/authz/index.mako:159
 #: pysvnmanager/templates/check/index.mako:10
 msgid "All users(with anon)"
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:32
+#: pysvnmanager/controllers/authz.py:30
 #: pysvnmanager/templates/authz/index.mako:161
 #: pysvnmanager/templates/check/index.mako:11
 msgid "Known users"
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:33
+#: pysvnmanager/controllers/authz.py:31
 #: pysvnmanager/templates/authz/index.mako:163
 #: pysvnmanager/templates/check/index.mako:12
 msgid "Anonymous"
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:38 pysvnmanager/controllers/role.py:57
-#: pysvnmanager/controllers/role.py:77
+#: pysvnmanager/controllers/authz.py:36 pysvnmanager/controllers/role.py:50
+#: pysvnmanager/controllers/role.py:70
 #: pysvnmanager/templates/authz/index.mako:155
 #: pysvnmanager/templates/check/index.mako:17
 #: pysvnmanager/templates/role/index.mako:18
@@ -47,8 +47,8 @@ msgstr ""
 msgid "Group:"
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:41 pysvnmanager/controllers/role.py:62
-#: pysvnmanager/controllers/role.py:79
+#: pysvnmanager/controllers/authz.py:39 pysvnmanager/controllers/role.py:55
+#: pysvnmanager/controllers/role.py:72
 #: pysvnmanager/templates/authz/index.mako:157
 #: pysvnmanager/templates/check/index.mako:19
 #: pysvnmanager/templates/role/index.mako:23
@@ -58,8 +58,8 @@ msgstr ""
 msgid "Alias:"
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:59 pysvnmanager/controllers/authz.py:82
-#: pysvnmanager/controllers/check.py:91 pysvnmanager/controllers/role.py:50
+#: pysvnmanager/controllers/authz.py:54 pysvnmanager/controllers/authz.py:74
+#: pysvnmanager/controllers/check.py:83 pysvnmanager/controllers/role.py:43
 #: pysvnmanager/templates/check/index.mako:9
 #: pysvnmanager/templates/check/index.mako:23
 #: pysvnmanager/templates/role/index.mako:12
@@ -67,51 +67,71 @@ msgstr ""
 msgid "Please choose..."
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:149
+#: pysvnmanager/controllers/authz.py:135
 #, python-format
 msgid "User %(user)s changed authz rules. (rev:%(rev)s)"
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:158
+#: pysvnmanager/controllers/authz.py:144
 #, python-format
 msgid "Repository %s not exist."
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:166
+#: pysvnmanager/controllers/authz.py:152
 #, python-format
 msgid "Module %s not exist."
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:172
+#: pysvnmanager/controllers/authz.py:158
 msgid "You can not delete yourself from admin list."
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:200
+#: pysvnmanager/controllers/authz.py:183
 #, python-format
 msgid "User %(user)s delete authz rules. (rev:%(rev)s)"
 msgstr ""
 
-#: pysvnmanager/controllers/check.py:68
+#: pysvnmanager/controllers/check.py:63
 #: pysvnmanager/templates/auth_failed.mako:3
 msgid "Permission denied."
 msgstr ""
 
-#: pysvnmanager/controllers/role.py:113
+#: pysvnmanager/controllers/logs.py:49
+msgid "Rev"
+msgstr ""
+
+#: pysvnmanager/controllers/logs.py:50
+msgid "Who"
+msgstr ""
+
+#: pysvnmanager/controllers/logs.py:51
+msgid "When"
+msgstr ""
+
+#: pysvnmanager/controllers/logs.py:52
+msgid "Why"
+msgstr ""
+
+#: pysvnmanager/controllers/logs.py:86
+msgid "Page: "
+msgstr ""
+
+#: pysvnmanager/controllers/role.py:103
 #, python-format
 msgid "User %(user)s changed group: %(grp)s. (rev:%(rev)s)"
 msgstr ""
 
-#: pysvnmanager/controllers/role.py:136
+#: pysvnmanager/controllers/role.py:123
 #, python-format
 msgid "User %(user)s delete group: %(grp)s. (rev:%(rev)s)"
 msgstr ""
 
-#: pysvnmanager/controllers/role.py:161
+#: pysvnmanager/controllers/role.py:145
 #, python-format
 msgid "User %(user)s changed alias: %(alias)s. (rev:%(rev)s)"
 msgstr ""
 
-#: pysvnmanager/controllers/role.py:184
+#: pysvnmanager/controllers/role.py:165
 #, python-format
 msgid "User %(user)s delete alias: %(alias)s. (rev:%(rev)s,%(msg)s)"
 msgstr ""
@@ -247,7 +267,11 @@ msgstr ""
 msgid "ACL management"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:92
+#: pysvnmanager/templates/base.mako:91
+msgid "Logs"
+msgstr ""
+
+#: pysvnmanager/templates/base.mako:93
 msgid "Logout"
 msgstr ""
 
@@ -435,6 +459,11 @@ msgstr ""
 msgid "Password:"
 msgstr ""
 
+#: pysvnmanager/templates/logs/index.mako:5
+#: pysvnmanager/templates/logs/index.mako:26
+msgid "Administration logs"
+msgstr ""
+
 #: pysvnmanager/templates/role/index.mako:5
 #: pysvnmanager/templates/role/index.mako:638
 msgid "Role Management"
@@ -515,19 +544,4 @@ msgstr ""
 #: pysvnmanager/templates/role/index.mako:706
 msgid "User name:"
 msgstr ""
-
-#~ msgid "User %(user)s changed authz rules. (rev:%(rev)s,%(msg)s)"
-#~ msgstr ""
-
-#~ msgid "User %(user)s delete authz rules. (rev:%(rev)s,%(msg)s)"
-#~ msgstr ""
-
-#~ msgid "User %(user)s changed group: %(grp)s. (rev:%(rev)s,%(msg)s)"
-#~ msgstr ""
-
-#~ msgid "User %(user)s delete group: %(grp)s. (rev:%(rev)s,%(msg)s)"
-#~ msgstr ""
-
-#~ msgid "User %(user)s changed alias: %(alias)s. (rev:%(rev)s,%(msg)s)"
-#~ msgstr ""
 
