@@ -46,10 +46,13 @@ class LogsController(BaseController):
     <th>%(who)s</th>
     <th>%(when)s</th>
     <th>%(why)s</th>
+    <th>%(comp)s</th>
 </tr>''' % {'rev': _("Rev"), 
             'who': _("Who"), 
             'when': _("When"), 
-            'why': _("Why"),}
+            'why': _("Why"),
+            'comp': _("Compare"),
+            }
         
         for i in range(len(logs)-1, -1, -1):
             buff += '''
@@ -58,10 +61,15 @@ class LogsController(BaseController):
     <td>%(who)s</td>
     <td>%(when)s</td>
     <td>%(why)s</td>
+    <td>
+        <input type="radio" name="left" value="%(rev)s">
+        <input type="radio" name="right" value="%(rev)s">
+    </td>
 </tr>''' % {'rev' : logs[i].get('revision',''), 
             'who' : logs[i].get('author',''), 
             'when': logs[i].get('date',''), 
-            'why' : logs[i].get('log',''), }
+            'why' : logs[i].get('log',''), 
+            }
         
         buff += '''
 </table></div>
@@ -105,3 +113,23 @@ class LogsController(BaseController):
                 i+=1
 
         return buff 
+    
+    def compare(self):
+        d = request.params
+        left  = d.get('left', '')
+        right = d.get('right', '')
+        if not left or not right:
+            return ""
+        if left == right:
+            return ""
+        
+        buff = '''<h2>%(title)s
+<input type="radio" name="left" value="%(left)s">%(left)s
+<input type="radio" name="right" value="%(right)s">%(right)s
+</h2>
+''' % {'title': _("Compares between"),
+       'left' : left,
+       'right': right}
+
+        buff += "<pre>%s</pre>" % self.rcslog.differ(left, right)
+        return buff

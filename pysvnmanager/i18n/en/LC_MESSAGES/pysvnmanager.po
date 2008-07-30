@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: pysvnmanager 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2008-07-03 22:14+0800\n"
-"PO-Revision-Date: 2008-07-30 23:27+0800\n"
+"PO-Revision-Date: 2008-07-31 00:22+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -96,24 +96,32 @@ msgstr ""
 msgid "Permission denied."
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:49
+#: pysvnmanager/controllers/logs.py:50
 msgid "Rev"
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:50
+#: pysvnmanager/controllers/logs.py:51
 msgid "Who"
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:51
+#: pysvnmanager/controllers/logs.py:52
 msgid "When"
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:52
+#: pysvnmanager/controllers/logs.py:53
 msgid "Why"
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:86
+#: pysvnmanager/controllers/logs.py:54
+msgid "Compare"
+msgstr ""
+
+#: pysvnmanager/controllers/logs.py:94
 msgid "Page: "
+msgstr ""
+
+#: pysvnmanager/controllers/logs.py:130
+msgid "Compares between"
 msgstr ""
 
 #: pysvnmanager/controllers/role.py:103
@@ -460,8 +468,12 @@ msgid "Password:"
 msgstr ""
 
 #: pysvnmanager/templates/logs/index.mako:5
-#: pysvnmanager/templates/logs/index.mako:26
+#: pysvnmanager/templates/logs/index.mako:60
 msgid "Administration logs"
+msgstr ""
+
+#: pysvnmanager/templates/logs/index.mako:66
+msgid "Compare revisions"
 msgstr ""
 
 #: pysvnmanager/templates/role/index.mako:5

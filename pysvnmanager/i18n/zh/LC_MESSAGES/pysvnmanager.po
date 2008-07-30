@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: pysvnmanager\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2008-07-03 22:14+0800\n"
-"PO-Revision-Date: 2008-07-30 23:29+0800\n"
+"PO-Revision-Date: 2008-07-31 00:24+0800\n"
 "Last-Translator: Jiang Xin <worldhello.net@gmail.com>\n"
 "Language-Team:  <zh@li.org>\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION\n"
@@ -99,25 +99,33 @@ msgstr "用户 %(user)s 删除了授权策略。(rev:%(rev)s)"
 msgid "Permission denied."
 msgstr "没有权限。"
 
-#: pysvnmanager/controllers/logs.py:49
+#: pysvnmanager/controllers/logs.py:50
 msgid "Rev"
 msgstr "版本"
 
-#: pysvnmanager/controllers/logs.py:50
+#: pysvnmanager/controllers/logs.py:51
 msgid "Who"
 msgstr "管理员"
 
-#: pysvnmanager/controllers/logs.py:51
+#: pysvnmanager/controllers/logs.py:52
 msgid "When"
 msgstr "时间"
 
-#: pysvnmanager/controllers/logs.py:52
+#: pysvnmanager/controllers/logs.py:53
 msgid "Why"
 msgstr "说明"
 
-#: pysvnmanager/controllers/logs.py:86
+#: pysvnmanager/controllers/logs.py:54
+msgid "Compare"
+msgstr "比较"
+
+#: pysvnmanager/controllers/logs.py:94
 msgid "Page: "
 msgstr "页面: "
+
+#: pysvnmanager/controllers/logs.py:130
+msgid "Compares between"
+msgstr "版本间比较"
 
 #: pysvnmanager/controllers/role.py:103
 #, python-format
@@ -483,10 +491,13 @@ msgid "Password:"
 msgstr "口令:"
 
 #: pysvnmanager/templates/logs/index.mako:5
-#: pysvnmanager/templates/logs/index.mako:26
-#| msgid "Administrators:"
+#: pysvnmanager/templates/logs/index.mako:60
 msgid "Administration logs"
 msgstr "修改记录"
+
+#: pysvnmanager/templates/logs/index.mako:66
+msgid "Compare revisions"
+msgstr "版本比较"
 
 #: pysvnmanager/templates/role/index.mako:5
 #: pysvnmanager/templates/role/index.mako:638
