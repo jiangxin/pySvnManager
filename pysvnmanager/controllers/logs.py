@@ -14,7 +14,7 @@ class LogsController(BaseController):
         self.login_as = session.get('user')
         self.rcslog = _rcs.RcsLog(cfg.authz_file)
         # Default logs per page is 10
-        self.rcslog.log_per_page = 1
+        self.rcslog.log_per_page = cfg.log_per_page
     
     def __before__(self, action):
         super(LogsController, self).__before__(action)

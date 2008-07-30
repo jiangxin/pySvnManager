@@ -16,6 +16,9 @@ class DefaultConfig:
     # You can change authz_file in <deploy>.ini file.
     authz_file = config.get('authz_file', "") % {'here': config.get('here')}
     
+    # Numbers of logs in each page.
+    log_per_page = 10
+    
     # pysvnmanager authentication method.
     # You can use htpasswd_login, or ldap_login, or both.
     # You can also implement your own auth module.

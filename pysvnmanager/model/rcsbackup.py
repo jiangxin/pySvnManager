@@ -144,7 +144,8 @@ class RcsLog(object):
             count = 1
         else:
             # show last record on every page.
-            count = int( math.ceil( (self.__total -1 ) / self.__log_per_page ) )
+            #count = int( math.ceil( (self.__total -1 ) / self.__log_per_page ) )
+            count = int( math.ceil( (self.__total -2 ) / (self.__log_per_page - 1) ) )
 
         return count
     
@@ -170,8 +171,8 @@ class RcsLog(object):
     
     def __set_log_per_page(self, count):
         count = int(count)
-        if count <=0:
-            count = 10
+        if count < 2:
+            count = 2
         self.__log_per_page = count
 
     log_per_page = property(__get_log_per_page, __set_log_per_page)
@@ -215,7 +216,7 @@ class RcsLog(object):
         heads = self.__head.rsplit('.',1)
         rev0=int(heads[1])
         
-        rev2 = rev0 - ((pagenum-1) * self.__log_per_page) -1
+        rev2 = rev0 - ((pagenum-1) * (self.__log_per_page-1)) -1
         if rev2<1: rev2=1
         rev1 = rev2 - self.__log_per_page + 1
         if rev1<1:
