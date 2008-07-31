@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: pysvnmanager 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2008-07-03 22:14+0800\n"
-"PO-Revision-Date: 2008-07-31 01:18+0800\n"
+"PO-Revision-Date: 2008-07-31 09:21+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -116,17 +116,22 @@ msgstr ""
 msgid "Compare"
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:94
+#: pysvnmanager/controllers/logs.py:97
 msgid "Page: "
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:130
+#: pysvnmanager/controllers/logs.py:133
 msgid "Compares between"
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:145
+#: pysvnmanager/controllers/logs.py:148
 #, python-format
-msgid "Rollback to revision: %s"
+msgid "Rollback successfully to revision: %s"
+msgstr ""
+
+#: pysvnmanager/controllers/logs.py:157
+#, python-format
+msgid "Rollback failed: %s"
 msgstr ""
 
 #: pysvnmanager/controllers/role.py:103
@@ -262,29 +267,29 @@ msgid ""
 "%(sep)s\n"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:84
+#: pysvnmanager/templates/base.mako:11
 msgid "Loading, please wait..."
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:88
+#: pysvnmanager/templates/base.mako:27
 msgid "Check permissions"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:89
+#: pysvnmanager/templates/base.mako:28
 msgid "Role management"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:90
+#: pysvnmanager/templates/base.mako:29
 #: pysvnmanager/templates/authz/index.mako:5
 #: pysvnmanager/templates/authz/index.mako:603
 msgid "ACL management"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:91
+#: pysvnmanager/templates/base.mako:30
 msgid "Logs"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:93
+#: pysvnmanager/templates/base.mako:32
 msgid "Logout"
 msgstr ""
 
@@ -474,7 +479,8 @@ msgstr ""
 
 #: pysvnmanager/templates/logs/index.mako:5
 #: pysvnmanager/templates/logs/index.mako:60
-#: pysvnmanager/templates/logs/view.mako:5
+#: pysvnmanager/templates/logs/rollback.mako:4
+#: pysvnmanager/templates/logs/view.mako:4
 msgid "Administration logs"
 msgstr ""
 
@@ -482,11 +488,24 @@ msgstr ""
 msgid "Compare revisions"
 msgstr ""
 
-#: pysvnmanager/templates/logs/view.mako:16
+#: pysvnmanager/templates/logs/rollback.mako:9
+msgid "Rollback"
+msgstr ""
+
+#: pysvnmanager/templates/logs/rollback.mako:14
+#: pysvnmanager/templates/logs/view.mako:18
+msgid "Close"
+msgstr ""
+
+#: pysvnmanager/templates/logs/view.mako:9
 msgid "View history, revision"
 msgstr ""
 
-#: pysvnmanager/templates/logs/view.mako:23
+#: pysvnmanager/templates/logs/view.mako:15
+msgid "Rollback to this revision, are you sure?"
+msgstr ""
+
+#: pysvnmanager/templates/logs/view.mako:16
 msgid "Rollback to this revision"
 msgstr ""
 

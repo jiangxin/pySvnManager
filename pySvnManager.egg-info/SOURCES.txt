@@ -63,6 +63,7 @@ pysvnmanager/templates/login/loggedin.mako
 pysvnmanager/templates/login/login.mako
 pysvnmanager/templates/login/logout.mako
 pysvnmanager/templates/logs/index.mako
+pysvnmanager/templates/logs/rollback.mako
 pysvnmanager/templates/logs/view.mako
 pysvnmanager/templates/role/index.mako
 pysvnmanager/tests/__init__.py

@@ -1,17 +1,10 @@
 ## -*- coding: utf-8 -*-
 <%inherit file="/base.mako" />
-
 <%def name="head_tags()">
     <title>${_("Administration logs")}</title>
 </%def>
-
-<SCRIPT LANGUAGE="JavaScript">
-function rollback()
-{
-  
-}
-
-</SCRIPT>
+<%def name="nav_bar()"></%def>
+<%def name="ajax_script()"></%def>
 
 <h2>${_("View history, revision")} ${c.log.get('revision')}</h2>
 
@@ -19,6 +12,8 @@ function rollback()
 ${c.contents}
 </textarea>
 
-<form name="main_form" action="${h.url_for(action='rollback')}">
-<input type="submit" name="submit" value='${_("Rollback to this revision")}'>
+<form name="main_form" action="${h.url_for(action='rollback')}" onsubmit="return confirm('${_("Rollback to this revision, are you sure?")}');">
+  <input type="submit" name="submit" value='${_("Rollback to this revision")}'>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <input type="button" name="close" value='${_("Close")}' onclick="window.close();">
 </form>

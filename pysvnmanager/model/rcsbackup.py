@@ -94,7 +94,7 @@ def restore(wcfile, revision=""):
     cmd = '%(cmd)s %(opts)s -q -f "%(file)s" 2>&1' % {'cmd':CMD_CO, "opts":opts, "file":wcfile }
     buff = os.popen(cmd).read().strip()
     if buff:
-        raise Exception, "Command: %s\nError Message: %s\n" % (cmd, buff)
+        raise Exception, "Command: %s\nError Message: %s\n" % (get_unicode(cmd), get_unicode(buff))
 
 
 def cat(wcfile, revision=""):
@@ -107,7 +107,7 @@ def cat(wcfile, revision=""):
 
     cmd = '%(cmd)s %(opts)s -q "%(file)s"' % {'cmd':CMD_CO, "opts":opts, "file":wcfile }
     buff = os.popen(cmd).read().strip()
-    return buff
+    return get_unicode(buff)
 
 def differ(filename, rev1="", rev2=""):
     filename=get_utf8(filename)
@@ -120,7 +120,7 @@ def differ(filename, rev1="", rev2=""):
     cmd = '%(cmd)s %(opts)s -u -q "%(file)s"' % {'cmd':CMD_RCSDIFF, 'opts':opts, 'file':filename}
     log.debug('Command: '+cmd)
     buff = os.popen(cmd).read()
-    return buff
+    return get_unicode(buff)
 
 class RcsLog(object):
     
@@ -140,7 +140,7 @@ class RcsLog(object):
     def __get_page_count(self):
         if self.__total == 0:
             count = 0
-        elif self.__total == 1:
+        elif self.__total <= self.__log_per_page:
             count = 1
         else:
             # show last record on every page.
@@ -178,9 +178,8 @@ class RcsLog(object):
     log_per_page = property(__get_log_per_page, __set_log_per_page)
     
     def reload(self):
-        cmd = '%(cmd)s -L -h -N "%(file)s"' % {'cmd':CMD_RLOG, 'file':self.__file}
+        cmd = '%(cmd)s -h -N "%(file)s"' % {'cmd':CMD_RLOG, 'file':self.__file}
         buff = os.popen(cmd).read().strip()
-        
         # RCS file: 1,v
         m = self.p['rcs'].search(buff)
         if m:
@@ -246,7 +245,7 @@ class RcsLog(object):
         if rev3:
             opts="%s,%s" % (opts, rev3)
 
-        cmd = '%(cmd)s %(opts)s -L -N "%(file)s"' % {'cmd':CMD_RLOG, 'opts':opts, 'file':self.__file}
+        cmd = '%(cmd)s %(opts)s -N "%(file)s"' % {'cmd':CMD_RLOG, 'opts':opts, 'file':self.__file}
         log.debug('Command: '+cmd)
         buff = os.popen(cmd).read().strip().rstrip('=').rstrip()
         

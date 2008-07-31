@@ -8,18 +8,17 @@
 # Jiang Xin <worldhello.net@gmail.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: pysvnmanager\n"
+"Project-Id-Version:  pysvnmanager\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2008-07-03 22:14+0800\n"
-"PO-Revision-Date: 2008-07-31 01:20+0800\n"
+"PO-Revision-Date: 2008-07-31 09:21+0800\n"
 "Last-Translator: Jiang Xin <worldhello.net@gmail.com>\n"
-"Language-Team:  <zh@li.org>\n"
+"Language-Team: <zh@li.org>\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.2\n"
-"X-Generator: KBabel 1.11.4\n"
 
 #: pysvnmanager/controllers/authz.py:29
 #: pysvnmanager/templates/authz/index.mako:159
@@ -119,18 +118,23 @@ msgstr "说明"
 msgid "Compare"
 msgstr "比较"
 
-#: pysvnmanager/controllers/logs.py:94
+#: pysvnmanager/controllers/logs.py:97
 msgid "Page: "
 msgstr "页面: "
 
-#: pysvnmanager/controllers/logs.py:130
+#: pysvnmanager/controllers/logs.py:133
 msgid "Compares between"
 msgstr "版本间比较"
 
-#: pysvnmanager/controllers/logs.py:145
+#: pysvnmanager/controllers/logs.py:148
 #, python-format
-msgid "Rollback to revision: %s"
-msgstr "回滚至版本: %s"
+msgid "Rollback successfully to revision: %s"
+msgstr "成功回滚至版本: %s"
+
+#: pysvnmanager/controllers/logs.py:157
+#, python-format
+msgid "Rollback failed: %s"
+msgstr "回滚失败: %s"
 
 #: pysvnmanager/controllers/role.py:103
 #, python-format
@@ -285,29 +289,29 @@ msgstr ""
 "%(deny)s\n"
 "%(sep)s\n"
 
-#: pysvnmanager/templates/base.mako:84
+#: pysvnmanager/templates/base.mako:11
 msgid "Loading, please wait..."
 msgstr "数据加载中，请稍后..."
 
-#: pysvnmanager/templates/base.mako:88
+#: pysvnmanager/templates/base.mako:27
 msgid "Check permissions"
 msgstr "权限检查"
 
-#: pysvnmanager/templates/base.mako:89
+#: pysvnmanager/templates/base.mako:28
 msgid "Role management"
 msgstr "角色管理"
 
-#: pysvnmanager/templates/base.mako:90
+#: pysvnmanager/templates/base.mako:29
 #: pysvnmanager/templates/authz/index.mako:5
 #: pysvnmanager/templates/authz/index.mako:603
 msgid "ACL management"
 msgstr "权限控制"
 
-#: pysvnmanager/templates/base.mako:91
+#: pysvnmanager/templates/base.mako:30
 msgid "Logs"
 msgstr "日志"
 
-#: pysvnmanager/templates/base.mako:93
+#: pysvnmanager/templates/base.mako:32
 msgid "Logout"
 msgstr "登出"
 
@@ -497,7 +501,8 @@ msgstr "口令:"
 
 #: pysvnmanager/templates/logs/index.mako:5
 #: pysvnmanager/templates/logs/index.mako:60
-#: pysvnmanager/templates/logs/view.mako:5
+#: pysvnmanager/templates/logs/rollback.mako:4
+#: pysvnmanager/templates/logs/view.mako:4
 msgid "Administration logs"
 msgstr "修改记录"
 
@@ -505,11 +510,24 @@ msgstr "修改记录"
 msgid "Compare revisions"
 msgstr "版本比较"
 
-#: pysvnmanager/templates/logs/view.mako:16
+#: pysvnmanager/templates/logs/rollback.mako:9
+msgid "Rollback"
+msgstr "数据回滚"
+
+#: pysvnmanager/templates/logs/rollback.mako:14
+#: pysvnmanager/templates/logs/view.mako:18
+msgid "Close"
+msgstr "关闭"
+
+#: pysvnmanager/templates/logs/view.mako:9
 msgid "View history, revision"
 msgstr "查看历史, 版本"
 
-#: pysvnmanager/templates/logs/view.mako:23
+#: pysvnmanager/templates/logs/view.mako:15
+msgid "Rollback to this revision, are you sure?"
+msgstr "你确认回滚文件至此版本么？"
+
+#: pysvnmanager/templates/logs/view.mako:16
 msgid "Rollback to this revision"
 msgstr "回滚至此版本"
 

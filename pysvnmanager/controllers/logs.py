@@ -68,7 +68,10 @@ class LogsController(BaseController):
 </tr>''' % {'rev' : logs[i].get('revision',''), 
             'who' : logs[i].get('author',''), 
             'when': logs[i].get('date',''), 
-            'why' : h.link_to(logs[i].get('log',''), h.url(action='view', id=logs[i].get('revision',''))), 
+            'why' : h.link_to(logs[i].get('log',''), \
+                              h.url(action='view', id=logs[i].get('revision','')), \
+                              popup=['view_logs']
+                              ), 
             }
         
         buff += '''
@@ -137,17 +140,23 @@ class LogsController(BaseController):
 
     def view(self, id):
         assert id and isinstance(id, basestring)
-        c.contents = unicode(self.rcslog.cat(id), 'utf-8')
+        c.contents = self.rcslog.cat(id)
         c.log = self.rcslog.get_logs(id, id)[0]
         return render('/logs/view.mako')
     
     def rollback(self, id):
-        msg = _("Rollback to revision: %s" % id)
+        log_message = _("Rollback successfully to revision: %s") % id
         try:
             assert id and isinstance(id, basestring)
             self.rcslog.restore(id)
-            self.rcslog.backup(comment=msg, user=self.login_as)
+            self.rcslog.backup(comment=log_message, user=self.login_as)
         except Exception, e:
-            return e
+            msg = "%s" % e
+            if isinstance(msg, str):
+                msg = unicode(msg, 'utf-8')
+            c.msg = _("Rollback failed: %s") % msg
         else:
-            return msg
+            c.msg = log_message
+
+        return render('/logs/rollback.mako')
+    

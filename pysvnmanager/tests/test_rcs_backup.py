@@ -121,12 +121,17 @@ class TestRcsBackup(TestController):
         pass
 
     def testLogs(self):
-        for i in range(1,11):
+        rcslog = rcs.RcsLog(self.wcfile)
+        rcslog.log_per_page = 10
+        for i in range(1,rcslog.log_per_page+1):
             # new file, backup to r1.1
             self.writefile(i)
             rcs.backup(self.wcfile, comment="Test no. %d" % i, user="User1")
+            rcslog.reload()
+            assert rcslog.total == i, rcslog.total
+            assert rcslog.total_page == 1, rcslog.total_page
         
-        rcslog = rcs.RcsLog(self.wcfile)
+        rcslog.reload()
         assert "rcstest.txt,v" in rcslog.rcsfile, rcslog.rcsfile
         assert rcslog.head=='1.10', rcslog.head
         assert rcslog.total==10, rcslog.total
