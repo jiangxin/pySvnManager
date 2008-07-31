@@ -1,6 +1,7 @@
 MANIFEST.in
 README.txt
 development.ini
+init.d
 setup.cfg
 setup.py
 test.ini
@@ -19,16 +20,11 @@ pySvnManager.egg-info/top_level.txt
 pysvnmanager/__init__.py
 pysvnmanager/websetup.py
 pysvnmanager/config/DefaultConfig.py
-pysvnmanager/config/DefaultConfig.pyc
 pysvnmanager/config/__init__.py
-pysvnmanager/config/__init__.pyc
 pysvnmanager/config/environment.py
-pysvnmanager/config/environment.pyc
 pysvnmanager/config/localconfig.py.in
 pysvnmanager/config/middleware.py
-pysvnmanager/config/middleware.pyc
 pysvnmanager/config/routing.py
-pysvnmanager/config/routing.pyc
 pysvnmanager/config/svn.access.in
 pysvnmanager/config/svn.passwd.in
 pysvnmanager/controllers/__init__.py
