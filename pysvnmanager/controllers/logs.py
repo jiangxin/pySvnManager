@@ -142,6 +142,10 @@ class LogsController(BaseController):
         assert id and isinstance(id, basestring)
         c.contents = self.rcslog.cat(id)
         c.log = self.rcslog.get_logs(id, id)[0]
+        if self.rcslog.head == id:
+            c.rollback_enabled = True
+        else:
+            c.rollback_enabled = False
         return render('/logs/view.mako')
     
     def rollback(self, id):
