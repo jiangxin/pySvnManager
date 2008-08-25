@@ -19,6 +19,9 @@ class DefaultConfig:
     # Numbers of logs in each page.
     log_per_page = 10
     
+    # svn repository root
+    repos_root = config.get('repos_root', "") % {'here': config.get('here')}
+    
     # pysvnmanager authentication method.
     # You can use htpasswd_login, or ldap_login, or both.
     # You can also implement your own auth module.
