@@ -89,6 +89,8 @@ class PluginBase(object):
     def show(self):
         return self.description
     
+    detail = property(show)
+    
     def show_form(self):
         return self.description
             

@@ -87,7 +87,7 @@ class TestReposPlugin(TestController):
         
         myhooks = hooks.Hooks(self.repos_root + '/repos1')
         self.assert_(myhooks.pluginnames==['CaseInsensitive', 'EolStyleCheck'], myhooks.pluginnames)
-        self.assert_(myhooks.unapplied_plugins==['CaseInsensitive', 'EolStyleCheck'], myhooks.unapplied_plugins)
+        self.assert_(myhooks.unapplied_plugins.keys()==['CaseInsensitive', 'EolStyleCheck'], myhooks.unapplied_plugins.keys())
         
         m = myhooks.plugins['CaseInsensitive']
         self.assert_(m.name=="check case insensitive", m.name)
@@ -98,18 +98,18 @@ class TestReposPlugin(TestController):
 
         m = myhooks.plugins['CaseInsensitive']
         self.assert_(m.is_set()==False)
-        self.assert_(myhooks.applied_plugins==[], myhooks.applied_plugins)
-        self.assert_(myhooks.unapplied_plugins==['CaseInsensitive', 'EolStyleCheck'], myhooks.unapplied_plugins)
+        self.assert_(myhooks.applied_plugins.keys()==[], myhooks.applied_plugins.keys())
+        self.assert_(myhooks.unapplied_plugins.keys()==['CaseInsensitive', 'EolStyleCheck'], myhooks.unapplied_plugins.keys())
 
         m.set_plugin()
         self.assert_(m.is_set()==True)
-        self.assert_(myhooks.applied_plugins==['CaseInsensitive'], myhooks.applied_plugins)
-        self.assert_(myhooks.unapplied_plugins==['EolStyleCheck'], myhooks.unapplied_plugins)
+        self.assert_(myhooks.applied_plugins.keys()==['CaseInsensitive'], myhooks.applied_plugins.keys())
+        self.assert_(myhooks.unapplied_plugins.keys()==['EolStyleCheck'], myhooks.unapplied_plugins.keys())
 
         m.delete_plugin()
         self.assert_(m.is_set()==False)
-        self.assert_(myhooks.applied_plugins==[], myhooks.applied_plugins)
-        self.assert_(myhooks.unapplied_plugins==['CaseInsensitive', 'EolStyleCheck'], myhooks.unapplied_plugins)
+        self.assert_(myhooks.applied_plugins.keys()==[], myhooks.applied_plugins.keys())
+        self.assert_(myhooks.unapplied_plugins.keys()==['CaseInsensitive', 'EolStyleCheck'], myhooks.unapplied_plugins.keys())
 
 
 if __name__ == '__main__': 

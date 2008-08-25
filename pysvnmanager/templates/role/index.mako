@@ -355,8 +355,6 @@ function role_changed()
 	else
 		show_init_form();
 
-	document.getElementById('result').innerHTML = '';	
-
 	if(name.charAt(0) == '@')
 	{
 		showNoticesPopup();
@@ -419,14 +417,12 @@ function save_group_complete(message, rolename)
 	{
 		message = '${_("Update group failed:")}' + message;
 		alert(message);
-		document.getElementById('result').innerHTML = message;
-		document.getElementById('result').style.visibility = 'visible'; 
+		set_message_box(message);
 	}
 	else
 	{
 		message = '${_("Update group successfully.")}';
-		document.getElementById('result').innerHTML = message;
-		alert(message);
+		set_message_box(message);
 		if (document.main_form.role_list.value == rolename)
 		{
 			role_changed();
@@ -469,15 +465,12 @@ function delete_group_complete(message, rolename)
 	if (message)
 	{
 		message = '${_("Delete group failed:")}' + message;
-		alert(message);
-		document.getElementById('result').innerHTML = message;
-		document.getElementById('result').style.visibility = 'visible'; 
+		set_message_box(message);
 	}
 	else
 	{
 		message = '${_("Delete group successfully.")}';
-		document.getElementById('result').innerHTML = message;
-		alert(message);
+		set_message_box(message);
 		reset_main_form();
 	}
 }
@@ -510,15 +503,12 @@ function save_alias_complete(message, aliasname)
 	if (message)
 	{
 		message = '${_("Update alias failed:")}' + message;
-		alert(message);
-		document.getElementById('result').innerHTML = message;
-		document.getElementById('result').style.visibility = 'visible'; 
+		set_message_box(message);
 	}
 	else
 	{
 		message = '${_("Update alias successfully.")}';
-		document.getElementById('result').innerHTML = message;
-		alert(message);
+		set_message_box(message);
 		if (document.main_form.role_list.value == aliasname)
 		{
 			role_changed();
@@ -560,15 +550,12 @@ function delete_alias_complete(message, aliasname)
 	if (message)
 	{
 		message = '${_("Delete alias failed:")}' + message;
-		alert(message);
-		document.getElementById('result').innerHTML = message;
-		document.getElementById('result').style.visibility = 'visible'; 
+		set_message_box(message);
 	}
 	else
 	{
 		message = '${_("Delete alias successfully.")}';
-		document.getElementById('result').innerHTML = message;
-		alert(message);
+		set_message_box(message);
 		reset_main_form();
 	}
 }
@@ -717,9 +704,6 @@ ${_("New alias name:")} <input type='text' name='alias_input' onChange="enable_s
 <!-- end: alias_edit_box -->
 
 </DIV>
-
-<div id='result' style="position:relative;" class=gainlayout>
-</div>
 
 <!-- begin: action_box -->
 <div id='action_box' style="position:relative;" class=gainlayout>

@@ -21,11 +21,6 @@ context.write(msg)
 
 all_users.sort();
 
-function clean_message()
-{
-	document.getElementById('result').innerHTML = '';
-}
-
 // Display repos list only.
 function show_init_form()
 {
@@ -49,8 +44,6 @@ function show_init_form()
 	
 	document.getElementById('action_box').style.visibility = 'hidden';
 	document.getElementById('action_box').style.position = 'absolute';
-	
-	document.getElementById('result').innerHTML = '';
 }
 
 // Display repos_list, admins_input, path_list.
@@ -508,15 +501,12 @@ function save_authz_complete(message, reposname)
 	if (message)
 	{
 		message = '${_("Update ACL failed:")}' + message;
-		alert(message);
-		document.getElementById('result').innerHTML = message;
-		document.getElementById('result').style.visibility = 'visible'; 
+		set_message_box(message);
 	}
 	else
 	{
 		message = '${_("Update ACL successfully.")}';
-		document.getElementById('result').innerHTML = message;
-		alert(message);
+		set_message_box(message);
 		if (document.main_form.repos_list.value == reposname)
 		{
 			repos_changed();
@@ -565,15 +555,12 @@ function delete_authz_complete(message, reposname, path)
 	if (message)
 	{
 		message = '${_("Can not delete module ")}' + reposname + ':' + path + ' : ' + message;
-		alert(message);
-		document.getElementById('result').innerHTML = message;
-		document.getElementById('result').style.visibility = 'visible'; 
+		set_message_box(message);
 	}
 	else
 	{
 		message = '${_("Successfully delete module:")}' + reposname + ':' + path;
-		document.getElementById('result').innerHTML = message;
-		alert(message);
+		set_message_box(message);
 		repos_changed();
 	}
 }
@@ -687,8 +674,6 @@ ${_("Module Path:")}
 <table width='100%'>
 <tr>
   <td align='center'>
-    <div id='result'></div>
-  	<br>
   	<input type="hidden" name="reposname">
     <input type="button" name="save_btn"   value='${_("Save")}' onClick="save_authz(this.form)">
     <input type="button" name="delete_btn" value='${_("Delete")}' onClick="delete_authz(this.form)">

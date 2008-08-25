@@ -48,12 +48,20 @@ class Hooks:
             self.plugins[m] = plugins.getHandler(m)(self.__repos_path)
     
     def __get_applied_plugins(self):
-        return [m for m in self.pluginnames if self.plugins[m].is_set()]
+        result={}
+        for k,v in self.plugins.iteritems():
+            if v.is_set():
+                result[k]=v
+        return result
     
     applied_plugins = property(__get_applied_plugins)
 
     def __get_unapplied_plugins(self):
-        return [m for m in self.pluginnames if not self.plugins[m].is_set()]
+        result={}
+        for k,v in self.plugins.iteritems():
+            if not v.is_set():
+                result[k]=v
+        return result
     
     unapplied_plugins = property(__get_unapplied_plugins)
     

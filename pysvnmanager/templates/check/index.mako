@@ -114,7 +114,7 @@ function ajax_update_path(code)
         h.form_remote_tag(
             html={'id':'main_form'}, 
             url=h.url(action='access_map'), 
-            update=dict(success="acl_msg", failure="acl_error"), 
+            update=dict(success="acl_msg", failure="message"), 
             method='post', before='showNoticesPopup()',
             complete='hideNoticesPopup();'+h.visual_effect("Highlight", "acl_msg", duration=1),
         )
@@ -182,5 +182,4 @@ ${h.end_form()}
 ## classic form: ${c.access_map_msg}
 
 <div id='acl_msg'></div>
-<div id='acl_error'></div>
 

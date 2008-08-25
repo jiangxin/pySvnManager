@@ -12,6 +12,11 @@
   </div>
 
 	${self.nav_bar()}
+
+  <div id="message_box" style="visibility:hidden;position:absolute" class=gainlayout>
+  <span id="message"></span>
+  <br><a class="clear-link" href="#" onClick="document.getElementById('message').innerHTML='';switch_message_box()">Clear message</a>
+  </div>
 	
     ${next.body()}
   </body>
@@ -27,6 +32,7 @@
           <td>${h.link_to(_("Check permissions"), h.url_for(controller="check", id=None))}</td>
           <td>${h.link_to(_("Role management"), h.url(controller="role", id=None))}</td>
           <td>${h.link_to(_("ACL management"), h.url(controller="authz", id=None))}</td>
+          <td>${h.link_to(_("Repos management"), h.url(controller="repos", id=None))}</td>
           <td>${h.link_to(_("Logs"), h.url(controller="logs", id=None))}</td>
           <td>welcome ${session.get('user')}</td>
           <td>${h.link_to(_("Logout"), h.url(controller="logout", id=None))}</td>
@@ -106,6 +112,28 @@ function hideNoticesPopup()
 
   document.getElementById('popup_notices').style.visibility = 'hidden';
   document.getElementById('popup_notices').style.display = 'none';
+}
+
+function set_message_box(message)
+{
+	document.getElementById('message').innerHTML=message;
+	switch_message_box();
+}
+
+function switch_message_box()
+{
+	c=document.getElementById('message').innerHTML;
+	s=document.getElementById('message_box').style;
+	if (c)
+	{
+		s.visibility='visible';
+		s.position = 'relative';
+	}
+	else
+	{
+		s.visibility='hidden';
+		s.position = 'absolute';
+	}
 }
 </script>
 </%def>
