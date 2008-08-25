@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""Subversion authz config file management.
+"""Subversion repos management.
 
-Basic classes used for Subversion authz management.
+Basic classes used for Subversion repository add/remove.
 """
 
 import re
@@ -13,8 +13,16 @@ import StringIO
 import logging
 log = logging.getLogger(__name__)
 
-# i18n works only as pysvnmanager (a pylons app) model.
 from pylons import config
+config_path = config["here"] + '/config'
+if config_path not in sys.path:
+    sys.path.insert(0, config_path)
+from localconfig import LocalConfig as cfg
+
+sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+from pysvnmanager import hooks
+
+# i18n works only as pysvnmanager (a pylons app) model.
 if config.get('package') and not config.has_key('unittest'):
     from pylons.i18n import _
 else:
@@ -59,8 +67,28 @@ class Repos:
         self.hooks_init(repos_name)
     
     def hooks_init(self, repos_name):
-        version = self.svnversion()
-        repos_path = "%(root)s/%(entry)s" % { "root": self.repos_root, "entry": repos_name}
+        import distutils.version as dv
+        version = '.'.join(self.svnversion())
+        matched = 'default'
+        for ver in sorted(hooks.init.svn_hooks_init_dict.keys(),
+                          cmp = lambda x,y: cmp(dv.LooseVersion(x), dv.LooseVersion(y)),
+                          reverse=True):
+            if dv.LooseVersion(version) >= dv.LooseVersion(ver):
+                matched = ver
+                break
+        
+        #log.debug('Hooks version matched: %s' % matched)
+        #log.debug('svn_hooks_init_base: %s' % hooks.init.svn_hooks_init_base)
+        
+        # copy hook-scripts from matched hooks templates directory.
+        src = hooks.init.svn_hooks_init_base + '/' + hooks.init.svn_hooks_init_dict[matched]
+        dest = "%(root)s/%(entry)s/hooks" % { "root": self.repos_root, "entry": repos_name}
+        
+        log.debug('Now copy hooks from \n\t%s to \n\t%s' % (src, dest))
+        import shutil
+        shutil.rmtree(dest)
+        shutil.copytree(src, dest, symlinks=True)
+        
     
     def svnversion(self):
         cmd = 'LC_ALL=C svn --version'
@@ -93,12 +121,13 @@ class Repos:
         return False
             
     def delete(self, repos_name):
-        if self.is_blank_svn_repos(repos_name):
-            repos_path = "%(root)s/%(entry)s" % { "root": self.repos_root, "entry": repos_name}
-            from svn import repos as _repos
-            _repos.delete(repos_path)
-        else:
-            raise Exception, _("Repos %s is not a blank repository.") % repos_name
+        repos_path = "%(root)s/%(entry)s" % { "root": self.repos_root, "entry": repos_name}
+        if os.path.exists(repos_path):
+            if self.is_blank_svn_repos(repos_name):
+                from svn import repos as _repos
+                _repos.delete(repos_path)
+            else:
+                raise Exception, _("Repos %s is not a blank repository.") % repos_name
         
 
 if __name__ == '__main__':
