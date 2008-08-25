@@ -43,7 +43,6 @@ function ajax_init_repos_list(code)
 	var id = new Array();
 	var name = new Array();
 	var total = 0;
-	var revision = '';
 	
 	repos_list = document.main_form.repos_list;
 	repos_list.options.length = 0;
@@ -54,7 +53,6 @@ function ajax_init_repos_list(code)
 		{
 			repos_list.options[i] = new Option(name[i], id[i]);
 		}
-		document.main_form.revision.value = revision;
 	}
 	catch(exception) {
     	alert(exception);
@@ -67,7 +65,6 @@ function repos_changed()
 {
 	var name = document.main_form.repos_list.value;
 	var params = {select:name};
-	var revision = '';
 
 	if (name=='...'||name=='')
 	{
@@ -192,15 +189,16 @@ function remove_hook_form_submit(form)
 <h2>${_("Repos management")}</h2>
 
 <form name="main_form" method="post">
-<input type="hidden" name="revision" value="${c.revision}">
 <DIV style="position:relative;" class=gainlayout>
 
 <DIV id="repos_list_box" class=gainlayout>
 ${_("Repository:")}
     <select name="repos_list" size="1" onChange='repos_changed()'>
     </select>
-<a href="#" onclick='#'>[+${_("Add repository")}]</a>
-<a href="#" onclick='#'>[-${_("Remove repository")}]</a>
+${h.link_to(_("Add repository"), h.url(action="create"))}
+${h.link_to(_("Remove repository"), h.url(action="remove"))}
+##<a href="#" onclick='#'>[+${_("Add repository")}]</a>
+##<a href="#" onclick='#'>[-${_("Remove repository")}]</a>
 </DIV>
 
 <DIV id="new_hook_list_box" class=gainlayout style="visibility:hidden;position:absolute">
@@ -217,7 +215,7 @@ ${_("Available hooks:")}
         h.form_remote_tag(
             html={'id':'apply_new_hook_form'}, 
             url=h.url(action='apply_new_hook'), 
-            update=dict(success="message", failure="message"), 
+            update="message", 
             method='post', before='apply_new_hook_form_submit(this); showNoticesPopup()',
             complete='hideNoticesPopup();switch_message_box();repos_changed()',
         )
@@ -240,7 +238,7 @@ ${_("Available hooks:")}
         h.form_remote_tag(
             html={'id':'remove_hook_form'}, 
             url=h.url(action='remove_hook'), 
-            update=dict(success="message", failure="message"), 
+            update="message",
             method='post', before='remove_hook_form_submit(this); showNoticesPopup()',
             complete='hideNoticesPopup();switch_message_box();repos_changed()',
         )

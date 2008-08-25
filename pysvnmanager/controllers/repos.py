@@ -6,7 +6,6 @@ from pysvnmanager.model.svnauthz import *
 from pysvnmanager.model import repos as _repos
 from pysvnmanager.model import hooks as _hooks
 
-
 log = logging.getLogger(__name__)
 
 class ReposController(BaseController):
@@ -32,6 +31,7 @@ class ReposController(BaseController):
         return render('/repos/hooks.mako')
 
     def init_repos_list(self):
+        filter = request.params.get('filter')
         total = 0;
         msg = ''
  
@@ -40,15 +40,16 @@ class ReposController(BaseController):
         msg += 'name[0]="%s";\n' % _("Please choose...")
         total += 1;
         for reposname in self.repos_list:
+            if filter=='blank' and not self.repos.is_blank_svn_repos(reposname):
+                continue
             msg += 'id[%d]="%s";' % (total, reposname)
             msg += 'name[%d]="%s";\n' % (total, reposname)
             total += 1;
         msg += 'total=%d;\n' % total
-        msg += 'revision="%s";\n' % self.authz.version
         return msg
 
     def get_plugin_list(self):
-        reposname = request.params.get('select')        
+        reposname = request.params.get('select')
         h = _hooks.Hooks(self.repos_root + reposname)
         total = 0;
         msg = ''
@@ -66,11 +67,11 @@ class ReposController(BaseController):
         return msg
     
     def get_remove_hook_form_content(self):
-        reposname = request.params.get('select')        
+        reposname = request.params.get('select')
         h = _hooks.Hooks(self.repos_root + reposname)
         msg = ''
         if len(h.applied_plugins) > 0:
-            msg += "Installed hooks:"
+            msg += _("Installed hooks:")
             msg += "<br>\n"
             num = 0
  
@@ -84,7 +85,7 @@ class ReposController(BaseController):
                 if detail and detail != desc:
                     msg += ' - %(detail)s' % { 'detail': detail, }
                 msg += '<br>\n'
-            msg += '<input type="submit" name="remove_hook" value="Remove selected hooks">\n'
+            msg += '<input type="submit" name="remove_hook" value="%s">\n' % _("Remove selected hooks")
 
         return msg
     
@@ -104,10 +105,10 @@ class ReposController(BaseController):
             plugin = h.plugins[pluginname]
             plugin.set_plugin(d)
         except Exception, e:
-            result = "Apply plugin '%(plugin)s on '%(repos)s' Failed. Error message:<br>\n%(msg)s" % {
+            result = _("Apply plugin '%(plugin)s on '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
                         "plugin": pluginname, "repos":reposname, "msg": e}
         else:
-            result = "Apply plugin '%(plugin)s on '%(repos)s' success." % {
+            result = _("Apply plugin '%(plugin)s on '%(repos)s' success.") % {
                         "plugin": pluginname, "repos":reposname}
         return result
     
@@ -122,15 +123,40 @@ class ReposController(BaseController):
                     plugin = h.plugins[pluginname]
                     plugin.delete_plugin()
         except Exception, e:
-            result = "Delete plugin '%(plugin)s on '%(repos)s' Failed. Error message:<br>\n%(msg)s" % {
+            result = _("Delete plugin '%(plugin)s on '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
                         "plugin": pluginname, "repos":reposname, "msg": e}
         else:
-            result = "Delete plugin '%(plugin)s on '%(repos)s' success." % {
+            result = _("Delete plugin '%(plugin)s on '%(repos)s' success.") % {
                         "plugin": pluginname, "repos":reposname}
         return result
-    
+
+    def create_submit(self):
+        try:
+            d = request.params
+            reposname = d.get("reposname")
+            self.repos.create(reposname)
+        except Exception, e:
+            result = _("Create repository '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
+                        "repos":reposname, "msg": e}
+        else:
+            result = _("Create repository '%(repos)s' success.") % {"repos":reposname}
+        return result
+        
     def create(self):
         return render('/repos/create.mako')
 
+
+    def remove_submit(self):
+        try:
+            d = request.params
+            reposname = d.get("repos_list")
+            self.repos.delete(reposname)
+        except Exception, e:
+            result = _("Delete repository '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
+                        "repos":reposname, "msg": e}
+        else:
+            result = _("Delete blank repository '%(repos)s' success.") % {"repos":reposname}
+        return result
+    
     def remove(self):
         return render('/repos/remove.mako')

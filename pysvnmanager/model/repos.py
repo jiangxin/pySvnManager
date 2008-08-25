@@ -59,6 +59,9 @@ class Repos:
     repos_list = property(__get_repos_list)
         
     def create(self, repos_name):
+        repos_name = repos_name.strip()
+        assert repos_name != ""
+
         repos_path = "%(root)s/%(entry)s" % { "root": self.repos_root, "entry": repos_name}
         if os.path.exists(repos_path):
             raise Exception, _("Repos %s already exists.") % repos_name
@@ -121,13 +124,16 @@ class Repos:
         return False
             
     def delete(self, repos_name):
+        repos_name = repos_name.strip()
+        assert repos_name != ""
         repos_path = "%(root)s/%(entry)s" % { "root": self.repos_root, "entry": repos_name}
         if os.path.exists(repos_path):
             if self.is_blank_svn_repos(repos_name):
                 from svn import repos as _repos
-                _repos.delete(repos_path)
-            else:
-                raise Exception, _("Repos %s is not a blank repository.") % repos_name
+                return _repos.delete(repos_path)
+        
+        raise Exception, _("Repos %s is not a blank repository.") % repos_name
+        
         
 
 if __name__ == '__main__':
