@@ -127,7 +127,7 @@ function ajax_repos_changed(code)
     	alert(exception);
 	}
 	
-	path_changed();
+	select_unset_hook_list();
 }
 
 function select_unset_hook_list()
@@ -197,12 +197,11 @@ ${_("Repository:")}
     </select>
 ${h.link_to(_("Add repository"), h.url(action="create"))}
 ${h.link_to(_("Remove repository"), h.url(action="remove"))}
-##<a href="#" onclick='#'>[+${_("Add repository")}]</a>
-##<a href="#" onclick='#'>[-${_("Remove repository")}]</a>
 </DIV>
 
 <DIV id="new_hook_list_box" class=gainlayout style="visibility:hidden;position:absolute">
-${_("Available hooks:")}
+<hr>
+${_("Uninstalled hooks:")}
     <select name="unset_plugin_list" size="1" onChange='select_unset_hook_list()'>
     </select>
 </form>

@@ -3,6 +3,7 @@
   <head>
     ${self.head_tags()}
     ${self.ajax_script()}
+    ${h.stylesheet_link_tag('/css/common', media='all')}
   </head>
   <body ${self.body_params()}>
 
@@ -13,9 +14,9 @@
 
 	${self.nav_bar()}
 
-  <div id="message_box" style="visibility:hidden;position:absolute" class=gainlayout>
-  <span id="message"></span>
-  <br><a class="clear-link" href="#" onClick="document.getElementById('message').innerHTML='';switch_message_box()">Clear message</a>
+  <div id="message_box" style="visibility:hidden;position:absolute; margin:1em;" class=gainlayout>
+  <div id="message"></div>
+  &nbsp;&nbsp;&nbsp;&nbsp;<a class="clear-link" href="#" onClick="document.getElementById('message').innerHTML='';switch_message_box()">${_("Clear message")}</a>
   </div>
 	
     ${next.body()}
@@ -33,7 +34,7 @@
           <td>${h.link_to(_("Role management"), h.url(controller="role", id=None))}</td>
           <td>${h.link_to(_("ACL management"), h.url(controller="authz", id=None))}</td>
           <td>${h.link_to(_("Repos management"), h.url(controller="repos", id=None))}</td>
-          <td>${h.link_to(_("Logs"), h.url(controller="logs", id=None))}</td>
+          <td>${h.link_to(_("Change log"), h.url(controller="logs", id=None))}</td>
           <td>welcome ${session.get('user')}</td>
           <td>${h.link_to(_("Logout"), h.url(controller="logout", id=None))}</td>
       </tr>
@@ -112,6 +113,21 @@ function hideNoticesPopup()
 
   document.getElementById('popup_notices').style.visibility = 'hidden';
   document.getElementById('popup_notices').style.display = 'none';
+}
+
+function warn_msg(message)
+{
+	set_message_box("<div class='warning'>"+message+"<div>");
+}
+
+function error_msg(message)
+{
+	set_message_box("<div class='error'>"+message+"<div>");
+}
+
+function info_msg(message)
+{
+	set_message_box("<div class='info'>"+message+"<div>");
 }
 
 function set_message_box(message)

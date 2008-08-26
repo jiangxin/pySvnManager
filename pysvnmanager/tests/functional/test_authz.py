@@ -20,14 +20,14 @@ class TestAuthzController(TestController):
         self.login('admin2')
         res = self.app.get(url_for(controller='authz'))
         assert res.status == 200
-        assert res.c.reposlist == [u'repos1', u'repos2'], res.c.reposlist
+        assert ','.join(sorted(res.c.reposlist)) == 'repos1,repos2', res.c.reposlist
         assert """<input type="button" name="save_btn"   value='Save'""" in res.body, res.body
 
         # Login as superuser
         self.login('root')
         res = self.app.get(url_for(controller='authz'))
         assert res.status == 200
-        assert res.c.reposlist == ['/', u'repos1', u'repos2', u'repos3', u'document']
+        assert ','.join(sorted(res.c.reposlist)) == u'/,document,repos1,repos2,repos3', res.c.reposlist
         assert """<input type="button" name="save_btn"   value='Save'""" in res.body, res.body
 
     def test_init_repos_list(self):
@@ -48,11 +48,13 @@ class TestAuthzController(TestController):
         assert res.status == 200
         assert """id[0]="...";name[0]="Please choose...";
 id[1]="/";name[1]="/";
-id[2]="repos1";name[2]="repos1";
-id[3]="repos2";name[3]="repos2";
-id[4]="repos3";name[4]="repos3";
-id[5]="document";name[5]="document";
-total=6;
+id[2]="repos3";name[2]="repos3";
+id[3]="document";name[3]="document (?)";
+id[4]="repos1";name[4]="repos1 (?)";
+id[5]="repos2";name[5]="repos2 (?)";
+id[6]="project1";name[6]="project1 (!)";
+id[7]="project2";name[7]="project2 (!)";
+total=8;
 revision="0.2.1";
 """ == res.body, res.body
     
@@ -296,7 +298,7 @@ revision="0.2.1";
             params = {'reposname':'reposX', 'path':'/trunk/src', 'admins':'蒋鑫', 'rules':'@管理员=rw\n&别名1=r\n*=\nuser2=r', 'mode1':'edit', 'mode2':'edit' }
             res = self.app.get(url_for(controller='authz', action='save_authz'), params)
             assert res.status == 200
-            assert "Repository reposX not exist." == res.body, res.body
+            assert "Module /trunk/src not exist." == res.body, res.body
         finally:
             self.rollback()
         

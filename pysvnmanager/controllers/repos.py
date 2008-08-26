@@ -50,7 +50,7 @@ class ReposController(BaseController):
 
     def get_plugin_list(self):
         reposname = request.params.get('select')
-        h = _hooks.Hooks(self.repos_root + reposname)
+        h = _hooks.Hooks(self.repos_root + '/' + reposname)
         total = 0;
         msg = ''
  
@@ -68,23 +68,31 @@ class ReposController(BaseController):
     
     def get_remove_hook_form_content(self):
         reposname = request.params.get('select')
-        h = _hooks.Hooks(self.repos_root + reposname)
+        h = _hooks.Hooks(self.repos_root + '/' + reposname)
         msg = ''
         if len(h.applied_plugins) > 0:
             msg += _("Installed hooks:")
             msg += "<br>\n"
             num = 0
- 
+            
+            msg += "<table class='hidden'>\n"
+            msg += "<tr><th align='left'></th>" + \
+                    "<th align='left'>" + _("Id") + "</th>" + \
+                    "<th align='left'>" + _("Plugin name") + "</th>" + \
+                    "<th align='left'>" + _("Type") + "</th>" + \
+                    "</tr>\n"
             for name in h.applied_plugins.keys():
+                msg += "<tr><td width='1' rolspan='2'>"
                 msg += '<input type="checkbox" name="pluginid_%(num)d" value="%(plugin)s">' % {
                     'num': num, 'plugin': name, }
-                desc = h.plugins[name].description
-                detail = h.plugins[name].detail
-                msg += '%(plugin)s - %(desc)s' % {
-                    'plugin': name, 'name': h.plugins[name].name, 'desc': desc, }
-                if detail and detail != desc:
-                    msg += ' - %(detail)s' % { 'detail': detail, }
-                msg += '<br>\n'
+                msg += "</td>\n"
+                msg += "<td>" + name + "</td>\n"
+                msg += "<td>" + h.plugins[name].name + "</td>\n"
+                msg += "<td>" + h.plugins[name].get_type() + "</td>\n"
+                msg += "</tr>\n"
+                msg += "<tr><td></td><td colspan='3'>" + h.plugins[name].detail + "</td></tr>\n"
+                num += 1
+            msg += "</table>\n"
             msg += '<input type="submit" name="remove_hook" value="%s">\n' % _("Remove selected hooks")
 
         return msg
@@ -92,42 +100,50 @@ class ReposController(BaseController):
     def get_hook_form(self):
         reposname  = request.params.get('repos')
         pluginname = request.params.get('plugin')
-        h = _hooks.Hooks(self.repos_root + reposname)
+        h = _hooks.Hooks(self.repos_root + '/' + reposname)
 
-        return h.plugins[pluginname].show_form()
+        return h.plugins[pluginname].install_config_form()
     
     def apply_new_hook(self):
         try:
             d = request.params
             reposname = d.get("_repos")
             pluginname = d.get("_plugin")
-            h = _hooks.Hooks(self.repos_root + reposname)
+            h = _hooks.Hooks(self.repos_root + '/' + reposname)
             plugin = h.plugins[pluginname]
-            plugin.set_plugin(d)
+            plugin.install(d)
         except Exception, e:
-            result = _("Apply plugin '%(plugin)s on '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
-                        "plugin": pluginname, "repos":reposname, "msg": e}
+            result = "<div class='error'>" + _("Apply plugin '%(plugin)s' on '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
+                        "plugin": pluginname, "repos":reposname, "msg": e.message} + "</div>"
         else:
-            result = _("Apply plugin '%(plugin)s on '%(repos)s' success.") % {
-                        "plugin": pluginname, "repos":reposname}
+            result = "<div class='info'>" + _("Apply plugin '%(plugin)s' on '%(repos)s' success.") % {
+                        "plugin": pluginname, "repos":reposname} + "</div>"
         return result
     
     def remove_hook(self):
-        try:
-            d = request.params
-            reposname = d.get("_repos")
-            h = _hooks.Hooks(self.repos_root + reposname)
-            for i in d.keys():
-                if "pluginid_" in i:
-                    pluginname = d[i]
-                    plugin = h.plugins[pluginname]
-                    plugin.delete_plugin()
-        except Exception, e:
-            result = _("Delete plugin '%(plugin)s on '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
-                        "plugin": pluginname, "repos":reposname, "msg": e}
+        plugin_list=[]
+        d = request.params
+        reposname = d.get("_repos")
+        for i in d.keys():
+            if "pluginid_" in i:
+                plugin_list.append(d[i])
+
+        if plugin_list:
+            log.debug("plugin_list:" + ','.join(plugin_list))
+            try:
+                hookobj = _hooks.Hooks(self.repos_root + '/' + reposname)
+                for pluginname in plugin_list:
+                    hookobj.plugins[pluginname].reload()
+                    hookobj.plugins[pluginname].uninstall()
+                    log.info("my delete plugin %s, %s" % (pluginname, hookobj.plugins[pluginname].name))
+            except Exception, e:
+                result = "<div class='error'>" + _("Delete plugin '%(plugin)s' on '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
+                        "plugin": ", ".join(plugin_list), "repos":reposname, "msg": e.message} + "</div>"
+            else:
+                result = "<div class='info'>" + _("Delete plugin '%(plugin)s' on '%(repos)s' success.") % {
+                        "plugin": ", ".join(plugin_list), "repos":reposname} + "</div>"
         else:
-            result = _("Delete plugin '%(plugin)s on '%(repos)s' success.") % {
-                        "plugin": pluginname, "repos":reposname}
+            result = "<div class='error'>" + _("No plugin has been deleted for '%(repos)s'.") % {"repos":reposname} + "</div>"
         return result
 
     def create_submit(self):
@@ -136,10 +152,10 @@ class ReposController(BaseController):
             reposname = d.get("reposname")
             self.repos.create(reposname)
         except Exception, e:
-            result = _("Create repository '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
-                        "repos":reposname, "msg": e}
+            result = "<div class='error'>" + _("Create repository '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
+                        "repos":reposname, "msg": e.message} + "</div>"
         else:
-            result = _("Create repository '%(repos)s' success.") % {"repos":reposname}
+            result = "<div class='info'>" + _("Create repository '%(repos)s' success.") % {"repos":reposname} + "</div>"
         return result
         
     def create(self):
@@ -152,10 +168,10 @@ class ReposController(BaseController):
             reposname = d.get("repos_list")
             self.repos.delete(reposname)
         except Exception, e:
-            result = _("Delete repository '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
-                        "repos":reposname, "msg": e}
+            result = "<div class='error'>" + _("Delete repository '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
+                        "repos":reposname, "msg": e.message} + "</div>"
         else:
-            result = _("Delete blank repository '%(repos)s' success.") % {"repos":reposname}
+            result = "<div class='info'>" + _("Delete blank repository '%(repos)s' success.") % {"repos":reposname} + "</div>"
         return result
     
     def remove(self):

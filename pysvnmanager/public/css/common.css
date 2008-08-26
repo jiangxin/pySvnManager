@@ -1,0 +1,187 @@
+/*  common.css - borrow from MoinMoin Default Styles
+
+Copyright (c) 2001, 2002, 2003 by Juergen Hermann
+*/
+
+/* content styles */
+
+html {
+	background-color: white;
+	color: black;
+	font-family: Arial, Lucida Grande, sans-serif;
+	font-size: 1em;
+}
+
+body {
+	margin: 0;
+}
+
+/* Links */
+
+a {color: #0044B3;}
+a:visited {color: #597BB3;}
+a.nonexistent, a.badinterwiki {color: gray;}
+
+li p {
+	margin: .25em 0;
+}
+
+li.gap {
+    margin-top: 0.5em;
+}
+
+dt {
+    margin-top: 0.5em;
+    font-weight: bold;
+}
+
+dd {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+dd p {
+    margin: 0.25em 0;
+}
+   
+a, img, img.drawing {
+	border: 0;
+}
+
+pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+	white-space: pre;
+	/* begin css 3 or browser specific rules - do not remove!
+	see: http://forums.techguy.org/archive/index.php/t-249849.html */
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    /* end css 3 or browser specific rules */
+}
+
+pre.comment {
+    background-color: #CCCCCC;
+    color: red;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+pre.comment:before {
+    content: url(../img/attention.png);
+}
+
+
+/* .comment css definition must be top of .red/.green/.blue or it won't work */
+.comment { color: #555555; background-color: #DDDDFF; }
+
+.red { background-color: #FFCCCC; }
+.green { background-color: #CCFFCC; }
+.blue { background-color: #CCCCFF; }
+.yellow { background-color: #FFF29F; }
+.orange { background-color: #FFD59B; }
+
+.solid { border: 2px solid #000000; padding: 2px; }
+.dashed { border: 2px dashed #000000; padding: 2px; }
+.dotted { border: 2px dotted #000000; padding: 2px; }
+
+table
+{
+	margin: 0.5em 0 0 0.5em;
+	border-collapse: collapse;
+}
+
+th, td
+{
+	padding: 0.25em 0.5em 0.25em 0.5em;
+	border: 1pt solid #ADB9CC;
+}
+
+td p {
+	margin: 0;
+	padding: 0;
+}
+
+table.hidden {
+	margin: 0.5em 0 0 0.5em;
+	border:  0px;
+	border-collapse: collapse;
+}
+
+table.hidden th {
+    font-weight: bold;
+	border: 0px;
+}
+
+table.hidden td {
+	border: 0px;
+}
+
+/* standard rule ---- */
+hr {
+    height: 1pt;
+    background-color: #9C9C9C;
+    border: 0;
+}
+
+/* eye catchers */
+.info {
+    float: right;
+    font-size: 0.7em;
+    color: gray;
+}
+
+.warning 
+{
+	color: red;
+}
+
+.error 
+{
+	color: red;
+}
+
+strong.highlight 
+{
+	background-color: #CCE0FF;
+	padding: 1pt;
+}
+
+#message_box {
+	background-color: #FFD700;
+	PADDING: 0.5em;
+}
+
+#message .hint {font-style: italic;}
+#message .info {
+    float: none;
+    font-size: 1em;
+    color: black;
+}
+#message .info:before {
+    content: url('../img/icon-info.png');
+    margin: 0 0.5em 0 0.25em;
+    vertical-align: middle;
+}
+#message .warning:before {
+    content: url('../img/alert.png');
+    margin: 0 0.5em 0 0.125em;
+    vertical-align: middle;
+}
+#message .error:before {
+    content: url('../img/icon-error.png'); 
+    margin: 0 0.5em 0 0.125em;
+    vertical-align: middle;
+}
+#message a.clear-link {
+    display: block;
+    margin: 0.75em 0 0 0;
+    font-size: small;
+}
+
+

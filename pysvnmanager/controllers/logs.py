@@ -155,7 +155,7 @@ class LogsController(BaseController):
             self.rcslog.restore(id)
             self.rcslog.backup(comment=log_message, user=self.login_as)
         except Exception, e:
-            msg = "%s" % e
+            msg = e.message
             if isinstance(msg, str):
                 msg = unicode(msg, 'utf-8')
             c.msg = _("Rollback failed: %s") % msg

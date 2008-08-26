@@ -50,7 +50,7 @@ class Hooks:
     def __get_applied_plugins(self):
         result={}
         for k,v in self.plugins.iteritems():
-            if v.is_set():
+            if v.enabled():
                 result[k]=v
         return result
     
@@ -59,7 +59,7 @@ class Hooks:
     def __get_unapplied_plugins(self):
         result={}
         for k,v in self.plugins.iteritems():
-            if not v.is_set():
+            if not v.enabled():
                 result[k]=v
         return result
     

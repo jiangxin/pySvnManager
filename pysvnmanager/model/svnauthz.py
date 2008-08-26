@@ -1536,7 +1536,7 @@ class SvnAuthz(object):
             for i in self.reposlist:
                 if self.is_admin(username, i):
                     repos_list.append(i.name)
-        return repos_list
+        return sorted(repos_list)
         
     def del_rule(self, reposname, path, rule):
         module = self.get_module(reposname, path)
@@ -1744,7 +1744,6 @@ class SvnAuthz(object):
             user = normalize_user(user)
         if not user:
             user = '*'
-
         if reposname:
             reposname = normalize_repos(reposname)
         if path:
@@ -1791,7 +1790,9 @@ class SvnAuthz(object):
         
         if isinstance(reposname, (list, tuple)):
             for i in reposname:
-                map = self.get_access_map(user, i, descend=False)
+                #map = self.get_access_map(user, i, descend=False)
+                map = self.get_access_map(user, i)
+                log.debug("repos:%s, map: %s" % (i, map))
                 if map:
                     map['user'] = unicode(user)
                     map['repos'] = i

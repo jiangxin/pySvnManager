@@ -54,6 +54,7 @@ class Repos:
             if self.is_svn_repos(i):
                 self.__repos_list.append(i)
 
+        self.__repos_list = sorted(self.__repos_list)
         return self.__repos_list
 
     repos_list = property(__get_repos_list)
@@ -108,6 +109,7 @@ class Repos:
             if os.path.exists("%s/db/revs/0" % repos_path) and \
                 os.path.exists("%s/hooks" % repos_path):
                 return True
+        log.info("'%(entry)s' is not svn repository below %(root)s" % { "root": self.repos_root, "entry": repos_name} )
         return False
     
     def is_blank_svn_repos(self, repos_name):

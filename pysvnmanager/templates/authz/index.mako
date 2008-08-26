@@ -501,12 +501,12 @@ function save_authz_complete(message, reposname)
 	if (message)
 	{
 		message = '${_("Update ACL failed:")}' + message;
-		set_message_box(message);
+		error_msg(message);
 	}
 	else
 	{
 		message = '${_("Update ACL successfully.")}';
-		set_message_box(message);
+		info_msg(message);
 		if (document.main_form.repos_list.value == reposname)
 		{
 			repos_changed();
@@ -555,12 +555,12 @@ function delete_authz_complete(message, reposname, path)
 	if (message)
 	{
 		message = '${_("Can not delete module ")}' + reposname + ':' + path + ' : ' + message;
-		set_message_box(message);
+		error_msg(message);
 	}
 	else
 	{
 		message = '${_("Successfully delete module:")}' + reposname + ':' + path;
-		set_message_box(message);
+		info_msg(message);
 		repos_changed();
 	}
 }
@@ -632,13 +632,13 @@ ${_("Module Path:")}
 </DIV>
 <!-- end: path_input box -->
 
-<table>
+<table class="hidden">
 <tr>
 <td>
 
 <!-- begin: authz box -->
 <DIV id='authz_box' style="position:relative;" class=gainlayout style="visibility:hidden;">
-<table width='100%'>
+<table width='100%' class="hidden">
 <tr>
   <th align='center'>
     ${_("ACL")}
@@ -671,7 +671,7 @@ ${_("Module Path:")}
 
 <!-- begin: action box -->
 <DIV id='action_box' class=gainlayout style="visibility:hidden;">
-<table width='100%'>
+<table width='100%' class="hidden">
 <tr>
   <td align='center'>
   	<input type="hidden" name="reposname">

@@ -31,8 +31,8 @@ class TestCheckController(TestController):
         self.login('root')
         res = self.app.get(url_for(controller='check'))
         assert res.status == 200
-        assert '''<input type="submit" name="submit" value='Check Permissions'>''' in res.body
-        assert res.c.reposlist == ['/', u'repos1', u'repos2', u'repos3', u'document']
+        assert '''<input type="submit" name="submit" value='Check Permissions'>''' in res.body, res.body
+        assert res.c.reposlist == [u'/', u'document', u'project1', u'project2', u'repos1', u'repos2', u'repos3'], res.c.reposlist
 
 
     def test_access_map(self):

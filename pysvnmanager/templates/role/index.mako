@@ -417,12 +417,12 @@ function save_group_complete(message, rolename)
 	{
 		message = '${_("Update group failed:")}' + message;
 		alert(message);
-		set_message_box(message);
+		error_msg(message);
 	}
 	else
 	{
 		message = '${_("Update group successfully.")}';
-		set_message_box(message);
+		info_msg(message);
 		if (document.main_form.role_list.value == rolename)
 		{
 			role_changed();
@@ -465,12 +465,12 @@ function delete_group_complete(message, rolename)
 	if (message)
 	{
 		message = '${_("Delete group failed:")}' + message;
-		set_message_box(message);
+		error_msg(message);
 	}
 	else
 	{
 		message = '${_("Delete group successfully.")}';
-		set_message_box(message);
+		info_msg(message);
 		reset_main_form();
 	}
 }
@@ -503,12 +503,12 @@ function save_alias_complete(message, aliasname)
 	if (message)
 	{
 		message = '${_("Update alias failed:")}' + message;
-		set_message_box(message);
+		error_msg(message);
 	}
 	else
 	{
 		message = '${_("Update alias successfully.")}';
-		set_message_box(message);
+		info_msg(message);
 		if (document.main_form.role_list.value == aliasname)
 		{
 			role_changed();
@@ -550,12 +550,12 @@ function delete_alias_complete(message, aliasname)
 	if (message)
 	{
 		message = '${_("Delete alias failed:")}' + message;
-		set_message_box(message);
+		error_msg(message);
 	}
 	else
 	{
 		message = '${_("Delete alias successfully.")}';
-		set_message_box(message);
+		info_msg(message);
 		reset_main_form();
 	}
 }

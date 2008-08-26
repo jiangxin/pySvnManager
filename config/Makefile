@@ -2,7 +2,7 @@
 SRCDIR=../pysvnmanager/config
 CONFFILE=localconfig.py svn.access svn.passwd svn.access.test svn.passwd.test
 
-all: $(CONFFILE)
+all: $(CONFFILE) ../svnroot.test
 	
 clean:
 	@-rm $(CONFFILE) >/dev/null 2>&1
@@ -15,5 +15,9 @@ clean:
 %.test: $(SRCDIR)/%.in
 	cp $< $@
 
+../svnroot.test: ../pysvnmanager/tests/data/svnroot.tar.bz2
+	@if [ ! -d $@ ]; then \
+		tar -C .. -jxvf $< ; \
+	fi
 
 .PHONY : all clean 

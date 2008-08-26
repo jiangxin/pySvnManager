@@ -121,7 +121,7 @@ function ajax_update_path(code)
     ) 
 %>
 
-<table>
+<table class="hidden">
 <tr>
     <th>${_("Account")}</th>
     <th>${_("Repository")}</th>

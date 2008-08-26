@@ -3,6 +3,7 @@ import logging
 
 from pysvnmanager.lib.base import *
 from pysvnmanager.model.svnauthz import *
+from pysvnmanager.model import repos as _repos
 
 log = logging.getLogger(__name__)
 
@@ -14,8 +15,20 @@ class AuthzController(BaseController):
         self.login_as = session.get('user')
         # Used as checked in user to rcs file.
         self.authz.login_as = self.login_as
-        self.reposlist = self.authz.get_manageable_repos_list(self.login_as)
+        self.reposlist = set(self.authz.get_manageable_repos_list(self.login_as))
         
+        # self.reposlist_new is what in ReposRoot directory.
+        self.reposlist_real = set(_repos.Repos(cfg.repos_root).repos_list)
+        self.reposlist_real.add('/')
+        
+        self.reposlist_set = self.reposlist & self.reposlist_real
+        self.reposlist_unexist = self.reposlist - self.reposlist_real
+        
+        if self.authz.is_super_user(self.login_as):
+            self.reposlist_unset = self.reposlist_real - self.reposlist
+        else:
+            self.reposlist_unset = set()
+            
     def __before__(self, action):
         super(AuthzController, self).__before__(action)
         if not self.reposlist:
@@ -23,6 +36,7 @@ class AuthzController(BaseController):
 
     def index(self):
         c.revision = self.authz.version
+        # used for functional test.
         c.reposlist = self.reposlist
         
         all_avail_users = []
@@ -53,9 +67,17 @@ class AuthzController(BaseController):
         msg += 'id[0]="%s";' % '...'
         msg += 'name[0]="%s";\n' % _("Please choose...")
         total += 1;
-        for reposname in self.reposlist:
+        for reposname in sorted(self.reposlist_set):
             msg += 'id[%d]="%s";' % (total, reposname)
             msg += 'name[%d]="%s";\n' % (total, reposname)
+            total += 1;
+        for reposname in sorted(self.reposlist_unexist):
+            msg += 'id[%d]="%s";' % (total, reposname)
+            msg += 'name[%d]="%s";\n' % (total, reposname+' (?)')
+            total += 1;
+        for reposname in sorted(self.reposlist_unset):
+            msg += 'id[%d]="%s";' % (total, reposname)
+            msg += 'name[%d]="%s";\n' % (total, reposname+' (!)')
             total += 1;
         msg += 'total=%d;\n' % total
         msg += 'revision="%s";\n' % self.authz.version
@@ -67,6 +89,9 @@ class AuthzController(BaseController):
         d = request.params
         select = d.get('select')
         repos = self.authz.get_repos(select)
+        if not repos:
+            log.warning("Repos '%s' not exists. Create authz config automatically." % select)
+            repos = self.authz.add_repos(select)
 
         if repos:
             # get javascript code for top_form's role_selector
@@ -140,6 +165,10 @@ class AuthzController(BaseController):
                 repos = self.authz.add_repos(reposname)
             else:
                 repos = self.authz.get_repos(reposname)
+                if not repos:
+                    log.warning("Repos '%s' not exists. Create authz config automatically." % reposname)
+                    repos = self.authz.add_repos(reposname)
+                
             if not repos:
                 raise Exception, _("Repository %s not exist.") % reposname
             
@@ -163,7 +192,7 @@ class AuthzController(BaseController):
                 self.authz.set_rules(reposname, path, rules);
             self.authz.save(revision, comment=log_message)
         except Exception, e:
-            msg = get_unicode(e[0])
+            msg = get_unicode(e.message)
 
         log.info(log_message)
         if msg: log.error(msg)
@@ -186,7 +215,7 @@ class AuthzController(BaseController):
             self.authz.del_module(reposname, path);
             self.authz.save(revision, comment=log_message)
         except Exception, e:
-            msg = get_unicode(e[0])
+            msg = get_unicode(e.message)
         
         log.info(log_message)
         if msg: log.error(msg)

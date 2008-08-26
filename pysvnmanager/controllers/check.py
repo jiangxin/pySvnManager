@@ -3,6 +3,7 @@ import logging
 
 from pysvnmanager.lib.base import *
 from pysvnmanager.model.svnauthz import *
+from pysvnmanager.model import repos as _repos
 
 log = logging.getLogger(__name__)
 
@@ -15,6 +16,11 @@ class CheckController(BaseController):
         # Used as checked in user to rcs file.
         self.authz.login_as = self.login_as
         self.reposlist = self.authz.get_manageable_repos_list(self.login_as)
+        if self.authz.is_super_user(self.login_as):
+            for i in _repos.Repos(cfg.repos_root).repos_list:
+                if i not in self.reposlist:
+                    self.reposlist.append(i)
+            self.reposlist = sorted(self.reposlist)
 
     def __before__(self, action):
         super(CheckController, self).__before__(action)
