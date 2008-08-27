@@ -4,28 +4,31 @@
 from pysvnmanager.hooks.plugins import *
 from pysvnmanager.hooks.plugins import _
 
-class EolStyleCheck(PluginBase):
+class MantisIntegration(PluginBase):
 
     # Plugin id
     id = __name__.rsplit('.',1)[-1]
     
     # Brief name for this plugin.
-    name = _("mime-type and eol-style check")
+    name = _("Mantis bugtracking integration")
     
     # Both description and detail are reStructuredText format. 
     # Reference about reStructuredText: http://docutils.sourceforge.net/docs/user/rst/quickref.html
 
     # Short description for this plugin.
-    description = _("New file must provide svn:eol-style if not binary file.")
+    description = _("Integration Subversion with Mantis bugtracking. "
+                    "If commit-log has proper format (contains bugid), "
+                    "it will change bug status and append commint-log "
+                    "and code differ as comment of bug status change.")
     
     # Long description for this plugin.
     detail = ""
     
     # Hooks-plugin type: T_START_COMMIT, ..., T_POST_UNLOCK
-    type = T_PRE_COMMIT
+    type = T_POST_COMMIT
     
     # Plugin config option/value in config ini file.
-    key = "check_eol_style"
+    key = "mantis_integration"
     value = "yes"
     
     def enabled(self):
@@ -78,4 +81,4 @@ def execute(repospath=""):
     @rtype: Plugin
     @return: Plugin object
     """
-    return EolStyleCheck(repospath)
+    return MantisIntegration(repospath)

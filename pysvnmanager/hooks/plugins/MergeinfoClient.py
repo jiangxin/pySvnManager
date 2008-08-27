@@ -4,19 +4,19 @@
 from pysvnmanager.hooks.plugins import *
 from pysvnmanager.hooks.plugins import _
 
-class EolStyleCheck(PluginBase):
+class MergeinfoClient(PluginBase):
 
     # Plugin id
     id = __name__.rsplit('.',1)[-1]
     
     # Brief name for this plugin.
-    name = _("mime-type and eol-style check")
+    name = _("Subversion client mergeinfo capability check")
     
     # Both description and detail are reStructuredText format. 
     # Reference about reStructuredText: http://docutils.sourceforge.net/docs/user/rst/quickref.html
 
     # Short description for this plugin.
-    description = _("New file must provide svn:eol-style if not binary file.")
+    description = _("Do not allow subversion client (<1.5) to checkin.")
     
     # Long description for this plugin.
     detail = ""
@@ -25,7 +25,7 @@ class EolStyleCheck(PluginBase):
     type = T_PRE_COMMIT
     
     # Plugin config option/value in config ini file.
-    key = "check_eol_style"
+    key = "client_capibility_check"
     value = "yes"
     
     def enabled(self):
@@ -78,4 +78,4 @@ def execute(repospath=""):
     @rtype: Plugin
     @return: Plugin object
     """
-    return EolStyleCheck(repospath)
+    return MergeinfoClient(repospath)

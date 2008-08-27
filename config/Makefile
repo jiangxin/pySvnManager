@@ -8,6 +8,7 @@ clean:
 	@-rm $(CONFFILE) >/dev/null 2>&1
 	@-rm localconfig.pyc >/dev/null 2>&1
 	@-rm -f *,v RCS/*test,v 2>&1
+	@-rm -rf ../svnroot.test
 
 %: $(SRCDIR)/%.in
 	cp $< $@

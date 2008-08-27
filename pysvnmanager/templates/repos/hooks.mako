@@ -15,14 +15,14 @@ function show_init_form()
 	document.getElementById('repos_list_box').style.visibility = 'visible';
 	document.getElementById('repos_list_box').style.position = 'relative';
 	
-	document.getElementById('new_hook_list_box').style.visibility = 'hidden';
-	document.getElementById('new_hook_list_box').style.position = 'absolute';
+	document.getElementById('uninstall_hook_box').style.visibility = 'hidden';
+	document.getElementById('uninstall_hook_box').style.position = 'absolute';
 
-	document.getElementById('new_hook_setting_box').style.visibility = 'hidden';
-	document.getElementById('new_hook_setting_box').style.position = 'absolute';
+	document.getElementById('hook_setting_box').style.visibility = 'hidden';
+	document.getElementById('hook_setting_box').style.position = 'absolute';
 			
-	document.getElementById('remove_hook_box').style.visibility = 'visible';
-	document.getElementById('remove_hook_box').style.position = 'relative';
+	document.getElementById('installed_hook_box').style.visibility = 'visible';
+	document.getElementById('installed_hook_box').style.position = 'relative';
 }
 
 
@@ -68,7 +68,7 @@ function repos_changed()
 
 	if (name=='...'||name=='')
 	{
-		document.getElementById('remove_hook_form_content').innerHTML = "";
+		document.getElementById('installed_hook_form_contents').innerHTML = "";
 		show_init_form();
 	}
 	else
@@ -84,8 +84,8 @@ function repos_changed()
 			});
 			
 		new Ajax.Updater(
-			'remove_hook_form_content',
-			'${h.url_for(controller="repos", action="get_remove_hook_form_content")}', 
+			'installed_hook_form_contents',
+			'${h.url_for(controller="repos", action="get_installed_hook_form")}', 
 			{asynchronous:true, evalScripts:true, method:'post',
 				onComplete:
 					function(request)
@@ -108,15 +108,15 @@ function ajax_repos_changed(code)
 		eval(code);
 		if (total==1)
 		{
-			document.getElementById('new_hook_list_box').style.visibility = 'hidden';
-			document.getElementById('new_hook_list_box').style.position = 'absolute';
-			document.getElementById('new_hook_setting_box').style.visibility = 'hidden';
-			document.getElementById('new_hook_setting_box').style.position = 'absolute';
+			document.getElementById('uninstall_hook_box').style.visibility = 'hidden';
+			document.getElementById('uninstall_hook_box').style.position = 'absolute';
+			document.getElementById('hook_setting_box').style.visibility = 'hidden';
+			document.getElementById('hook_setting_box').style.position = 'absolute';
 		}
 		else
 		{
-			document.getElementById('new_hook_list_box').style.visibility = 'visible';
-			document.getElementById('new_hook_list_box').style.position = 'relative';
+			document.getElementById('uninstall_hook_box').style.visibility = 'visible';
+			document.getElementById('uninstall_hook_box').style.position = 'relative';
 			for (var i=0; i < total; i++)
 			{
 				unset_plugin_list.options[i] = new Option(name[i], id[i]);
@@ -132,47 +132,40 @@ function ajax_repos_changed(code)
 
 function select_unset_hook_list()
 {
-	var reposname  = document.main_form.repos_list.value;
 	var pluginname = document.main_form.unset_plugin_list.value;
-	var params = {repos:reposname, plugin:pluginname};
 
 	if (pluginname=='...'||pluginname=='')
 	{
-		document.getElementById('apply_new_hook_form_content').innerHTML = "";
-		document.getElementById('new_hook_setting_box').style.visibility = 'hidden';
-		document.getElementById('new_hook_setting_box').style.position = 'absolute';
+		document.getElementById('hook_setting_form_contents').innerHTML = "";
+		document.getElementById('hook_setting_box').style.visibility = 'hidden';
+		document.getElementById('hook_setting_box').style.position = 'absolute';
 	}
 	else
 	{
-		document.getElementById('new_hook_setting_box').style.visibility = 'visible';
-		document.getElementById('new_hook_setting_box').style.position = 'relative';
-		showNoticesPopup();
-		new Ajax.Updater(
-			{success:'apply_new_hook_form_content',failure:'apply_new_hook_form_content'},
-			'${h.url_for(controller="repos", action="get_hook_form")}', 
-			{asynchronous:true, evalScripts:true, method:'post',
-				onComplete:
-					function(request)
-						{hideNoticesPopup();},
-				parameters:params
-			});
+		show_hook_config_form(pluginname);
 	}
 }
 
-function apply_new_hook_form_submit(form)
+function show_hook_config_form(hookid)
 {
 	var reposname  = document.main_form.repos_list.value;
-	var pluginname = document.main_form.unset_plugin_list.value;
-	if (pluginname=='...'||pluginname==''||reposname=="..."||reposname=="")
-	{
-		alert("Bad repository or plugin name");
-		return false;
-	}
-	form._repos.value = reposname;
-	form._plugin.value = pluginname;
+	var params = {repos:reposname, plugin:hookid};
+	
+	document.getElementById('hook_setting_box').style.visibility = 'visible';
+	document.getElementById('hook_setting_box').style.position = 'relative';
+	showNoticesPopup();
+	new Ajax.Updater(
+		{success:'hook_setting_form_contents',failure:'message'},
+		'${h.url_for(controller="repos", action="get_hook_setting_form")}', 
+		{asynchronous:true, evalScripts:true, method:'post',
+			onComplete:
+				function(request)
+					{hideNoticesPopup();},
+			parameters:params
+		});
 }
 
-function remove_hook_form_submit(form)
+function installed_hook_form_submit(form)
 {
 	var reposname  = document.main_form.repos_list.value;
 	if (reposname=="..."||reposname=="")
@@ -199,52 +192,59 @@ ${h.link_to(_("Add repository"), h.url(action="create"))}
 ${h.link_to(_("Remove repository"), h.url(action="remove"))}
 </DIV>
 
-<DIV id="new_hook_list_box" class=gainlayout style="visibility:hidden;position:absolute">
+<DIV id="uninstall_hook_box" class=gainlayout style="visibility:hidden;position:absolute">
 <hr>
 ${_("Uninstalled hooks:")}
     <select name="unset_plugin_list" size="1" onChange='select_unset_hook_list()'>
     </select>
 </form>
 </DIV>
-<DIV id="new_hook_setting_box" class=gainlayout style="visibility:hidden;position:absolute">
-## <form name="apply_new_hook_form" method="post" action="${h.url_for(action='apply_new_hook')}"
-##    	 onSubmit="apply_new_hook_form_submit(this)">
+<DIV id="hook_setting_box" class=gainlayout style="visibility:hidden;position:absolute">
+## <form name="hook_setting_form" method="post" action="${h.url_for(action='setup_hook')}">
+<br>
 <%
     context.write( 
         h.form_remote_tag(
-            html={'id':'apply_new_hook_form'}, 
-            url=h.url(action='apply_new_hook'), 
+            html={'id':'hook_setting_form'}, 
+            url=h.url(action='setup_hook'), 
             update="message", 
-            method='post', before='apply_new_hook_form_submit(this); showNoticesPopup()',
+            method='post', before='showNoticesPopup()',
             complete='hideNoticesPopup();switch_message_box();repos_changed()',
         )
     )
  %>
-    <input type=hidden name="_repos" value="">
-    <input type=hidden name="_plugin" value="">
-    <div id="apply_new_hook_form_content"></div>
-    <input type="submit" name="apply" value="${_("Enable this hook")}">
+    <table class='hidden' width='90%'>
+      <tr>
+        <td>
+          <div id="hook_setting_form_contents"></div>
+        </td></tr>
+      <tr>
+        <td align='center'>
+          <input type="submit" name="apply" value="${_("Install this plugin")}">
+        </td>
+      </tr>
+    </table>
 </form>
 </DIV>
 
 <hr size='1'>
 
-<DIV id="remove_hook_box" class=gainlayout style="visibility:visible;position:relative">
-## <form name="remove_hook_form" method="post" action="${h.url_for(action='remove_hook')}"
-##    	 onSubmit="remove_hook_form_submit(this)">
+<DIV id="installed_hook_box" class=gainlayout style="visibility:visible;position:relative">
+## <form name="installed_hook_form" method="post" action="${h.url_for(action='remove_hook')}"
+##    	 onSubmit="installed_hook_form_submit(this)">
 <%
     context.write( 
         h.form_remote_tag(
-            html={'id':'remove_hook_form'}, 
-            url=h.url(action='remove_hook'), 
+            html={'id':'installed_hook_form'}, 
+            url=h.url(action='uninstall_hook'), 
             update="message",
-            method='post', before='remove_hook_form_submit(this); showNoticesPopup()',
+            method='post', before='installed_hook_form_submit(this); showNoticesPopup()',
             complete='hideNoticesPopup();switch_message_box();repos_changed()',
         )
     )
  %>
-    <input type=hidden name="_repos" value="">
-    <div id="remove_hook_form_content"></div>
+ 	<input type='hidden' name='_repos'>
+    <div id="installed_hook_form_contents"></div>
 </DIV>
 
 </DIV>

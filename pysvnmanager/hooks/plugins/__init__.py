@@ -5,6 +5,8 @@ import os
 import time
 import logging
 
+from pysvnmanager.model.rest import reSTify
+
 # i18n works only as pysvnmanager (a pylons app) model.
 from pylons import config
 if config.get('package') and not config.has_key('unittest'):
@@ -64,11 +66,20 @@ T_POST_UNLOCK           = 9
 class PluginBase(object):
     """ Base class for hook plugins
     """
+    # Plugin id (must be override!)
+    id = __name__.rsplit('.',1)[-1]
+
+    # Both description and detail are reStructuredText format. 
+    # Reference about reStructuredText: http://docutils.sourceforge.net/docs/user/rst/quickref.html
+    
     # Brief name for this plugin.
     name = ""
     
-    # Longer description for this plugin.
+    # Short description for this plugin.
     description = ""
+
+    # Long description for this plugin.
+    detail = ""
 
     # Hooks-plugin type: T_START_COMMIT, ..., T_POST_UNLOCK
     type = 0
@@ -116,6 +127,14 @@ class PluginBase(object):
         # not out-of-date if config file not exist, or timestamp not changed.
         return False
     
+    def __cmp__(self, obj):
+        assert isinstance(obj, PluginBase)
+        if self.type == obj.type:
+            return cmp(self.id, obj.id)
+        else:
+            return cmp(self.type, obj.type)
+        
+        
     def reload(self, force=True):
         """
         Reload the default config ini file, if out-of-date.
@@ -152,26 +171,48 @@ class PluginBase(object):
             result = default
         return result
 
-    def has_config(self):
+    def has_config(self, key="", value=""):
         """
         Test if self.key = self.value is in the default config ini file.
         """
-        if not hasattr(self, "key") or not hasattr(self, "value"):
-            raise Exception, _("Plugin not fully implemented.")
+        if key == "":
+            if not hasattr(self, "key"):
+                raise Exception, _("Plugin not fully implemented.")
+            else:
+                key = self.key
+
+        if value == "":
+            if hasattr(self, "value"):
+                value = self.value
         
         if hasattr(self, "section"):
             section = self.section
         else:
             section = 'main'
         
-        return self.get_config(self.key, section=section) == self.value
+        setting = self.get_config(key, section=section)
+        if value:
+            return setting == value
+        elif setting != "":
+            return True
+        else:
+            return False
         
-    def set_config(self):
+    def set_config(self, key="", value=""):
         """
         add self.key = self.value to default config ini file.
         """
-        if not hasattr(self, "key") or not hasattr(self, "value"):
-            raise Exception, _("Plugin not fully implemented.")
+        if key == "":
+            if not hasattr(self, "key"):
+                raise Exception, _("Plugin not fully implemented.")
+            else:
+                key = self.key
+
+        if value == "":
+            if not hasattr(self, "value"):
+                raise Exception, _("Plugin not fully implemented.")
+            else:
+                value = self.value
         
         if hasattr(self, "section"):
             section = self.section
@@ -180,14 +221,17 @@ class PluginBase(object):
             
         if not self.cp.has_section(section):
             self.cp.add_section(section)
-        self.cp.set(section, self.key, self.value)
+        self.cp.set(section, key, value)
 
-    def unset_config(self):
+    def unset_config(self, key=""):
         """
         Remove self.key from default config ini file.
         """
-        if not hasattr(self, "key") or not hasattr(self, "value"):
-            raise Exception, _("Plugin not fully implemented.")
+        if key == "":
+            if not hasattr(self, "key"):
+                raise Exception, _("Plugin not fully implemented.")
+            else:
+                key = self.key
         
         if hasattr(self, "section"):
             section = self.section
@@ -195,21 +239,22 @@ class PluginBase(object):
             section = 'main'
         
         if self.cp.has_section(section):
-            self.cp.remove_option(section, self.key)
+            self.cp.remove_option(section, key)
             # test if section is blank after remove option.
             if not self.cp.options(section):
                 self.cp.remove_section(section)
     
-    def get_detail(self):
+    def install_info(self):
         """
-        Show detail informantion if plugin is already installed.
+        Show configurations if plugin is already installed.
+        
+        return reStructuredText.
+        reST reference: http://docutils.sourceforge.net/docs/user/rst/quickref.html
         """
-        if self.enabled():
-            return self.description
-        else:
-            return ""
+        return self.description
     
-    detail = property(get_detail)
+    def show_install_info(self):
+        return reSTify(self.install_info())
     
     def get_type(self):
         type = "UNDEFINED"
@@ -239,13 +284,44 @@ class PluginBase(object):
         If this plugin needs parameters, provides form fields here.
         Any html and javascript are welcome.
         
-        Default: just output description.
+        If plugin does not need further configuration, simply return null str.
         """
-        result = "<ul><li>" + _("Plugin name") + ": " + self.name + "\n" + \
-                 "<li>" + _("Type") + ": " + self.get_type() + "\n" + \
-                 "<li>" + _("Description") + ": " + self.description + "\n"
-        return result
+        return ""
+        
+    def show_install_config_form(self):
+        """
+        This method will be called to build setup configuration form.
+        If this plugin needs parameters, provides form fields here.
+        Any html and javascript are welcome.
+        
+        return output reSTified html.
+        """
+        header = """
+**%(id)s**
 
+- %(t_name)s: %(name)s
+- %(t_name)s: %(type)s
+
+**%(t_desc)s**
+
+%(desc)s
+
+%(detail)s
+""" % {
+                't_name': _('Name'),
+                't_type': _('Type'),
+                't_desc': _('Description'),
+                'id':self.id.rsplit('.',1)[-1],
+                'name': self.name,
+                'type': self.get_type(),
+                'desc': self.description,
+                'detail': self.detail,
+                }
+
+        header = reSTify(header)
+        form = self.install_config_form() or ""
+        return header + form
+        
     def enabled(self):
         """
         Return True, if this plugin has been setup.

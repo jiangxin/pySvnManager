@@ -66,7 +66,7 @@ class ReposController(BaseController):
         
         return msg
     
-    def get_remove_hook_form_content(self):
+    def get_installed_hook_form(self):
         reposname = request.params.get('select')
         h = _hooks.Hooks(self.repos_root + '/' + reposname)
         msg = ''
@@ -86,25 +86,28 @@ class ReposController(BaseController):
                 msg += '<input type="checkbox" name="pluginid_%(num)d" value="%(plugin)s">' % {
                     'num': num, 'plugin': name, }
                 msg += "</td>\n"
-                msg += "<td>" + name + "</td>\n"
+                msg += "<td><a href='#' onclick=\"show_hook_config_form('%s'); return false;\">" % name + name + "</a></td>\n"
                 msg += "<td>" + h.plugins[name].name + "</td>\n"
                 msg += "<td>" + h.plugins[name].get_type() + "</td>\n"
                 msg += "</tr>\n"
-                msg += "<tr><td></td><td colspan='3'>" + h.plugins[name].detail + "</td></tr>\n"
+                msg += "<tr><td></td><td colspan='3'>" + h.plugins[name].show_install_info() + "</td></tr>\n"
                 num += 1
             msg += "</table>\n"
-            msg += '<input type="submit" name="remove_hook" value="%s">\n' % _("Remove selected hooks")
+            msg += '<input type="submit" name="uninstall_hook" value="%s">\n' % _("Remove selected hooks")
 
         return msg
     
-    def get_hook_form(self):
+    def get_hook_setting_form(self):
         reposname  = request.params.get('repos')
         pluginname = request.params.get('plugin')
         h = _hooks.Hooks(self.repos_root + '/' + reposname)
+        result  = "<input type='hidden' name='_repos' value='%s'>" % reposname
+        result += "<input type='hidden' name='_plugin' value='%s'>" % pluginname
+        result +=  h.plugins[pluginname].show_install_config_form()
 
-        return h.plugins[pluginname].install_config_form()
+        return result
     
-    def apply_new_hook(self):
+    def setup_hook(self):
         try:
             d = request.params
             reposname = d.get("_repos")
@@ -120,7 +123,7 @@ class ReposController(BaseController):
                         "plugin": pluginname, "repos":reposname} + "</div>"
         return result
     
-    def remove_hook(self):
+    def uninstall_hook(self):
         plugin_list=[]
         d = request.params
         reposname = d.get("_repos")

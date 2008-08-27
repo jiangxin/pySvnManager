@@ -27,7 +27,7 @@ class TestReposController(TestController):
         self.login('root')
         res = self.app.get(url_for(controller='repos'))
         assert res.status == 200
-        assert """<div id="remove_hook_form_content"></div>""" in res.body, res.body[:100]
+        assert """<div id="installed_hook_form_contents"></div>""" in res.body, res.body[:100]
 
     def test_init_repos_list(self):
         # Login as superuser
@@ -52,22 +52,22 @@ total=4;
         assert "EolStyleCheck" in res.body, res.body
         assert "Please choose..." in res.body, res.body
     
-    def test_get_remove_hook_form_content(self):
+    def test_get_installed_hook_form(self):
         self.login('root')
         params = {
                   'select':'project1', 
                   }
-        res = self.app.get(url_for(controller='repos', action="get_remove_hook_form_content"), params)
+        res = self.app.get(url_for(controller='repos', action="get_installed_hook_form"), params)
         assert res.status == 200
         assert "" == res.body, res.body
 
-    def test_get_hook_form(self):
+    def test_get_hook_setting_form(self):
         self.login('root')
         params = {
                   'repos':'project1', 
                   'plugin':'CaseInsensitive',
                   }
-        res = self.app.get(url_for(controller='repos', action="get_hook_form"), params)
+        res = self.app.get(url_for(controller='repos', action="get_hook_setting_form"), params)
         assert res.status == 200
         assert "A pre-commit hook to detect case-insensitive filename clashes." in res.body, res.body
     
@@ -77,7 +77,7 @@ total=4;
                   '_repos':'project1',
                   '_plugin':'CaseInsensitiveXXX',
                   }
-        res = self.app.get(url_for(controller='repos', action="apply_new_hook"), params)
+        res = self.app.get(url_for(controller='repos', action="setup_hook"), params)
         assert res.status == 200
         assert "Apply plugin 'CaseInsensitiveXXX' on 'project1' Failed" in res.body, res.body
 
@@ -96,7 +96,7 @@ total=4;
                   '_repos':'project1',
                   '_plugin':'CaseInsensitive',
                   }
-        res = self.app.get(url_for(controller='repos', action="apply_new_hook"), params)
+        res = self.app.get(url_for(controller='repos', action="setup_hook"), params)
         assert res.status == 200
         assert "<div class='info'>Apply plugin 'CaseInsensitive' on 'project1' success.</div>" == res.body, res.body
 
@@ -115,7 +115,7 @@ total=4;
                   '_repos':'project1',
                   '_plugin':'EolStyleCheck',
                   }
-        res = self.app.get(url_for(controller='repos', action="apply_new_hook"), params)
+        res = self.app.get(url_for(controller='repos', action="setup_hook"), params)
         assert res.status == 200
         assert """<div class='info'>Apply plugin 'EolStyleCheck' on 'project1' success.</div>""" == res.body, res.body
 
@@ -135,7 +135,7 @@ total=4;
                   'pluginid_0':'CaseInsensitive',
                   'pluginid_1':'EolStyleCheck',
                   }
-        res = self.app.get(url_for(controller='repos', action="remove_hook"), params)
+        res = self.app.get(url_for(controller='repos', action="uninstall_hook"), params)
         assert res.status == 200
         assert """<div class='info'>Delete plugin 'CaseInsensitive, EolStyleCheck' on 'project1' success.</div>""" == res.body, res.body
 

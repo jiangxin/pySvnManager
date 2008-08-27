@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: pysvnmanager 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2008-07-03 22:14+0800\n"
-"PO-Revision-Date: 2008-08-27 00:06+0800\n"
+"PO-Revision-Date: 2008-08-27 21:52+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -144,12 +144,11 @@ msgid "Id"
 msgstr ""
 
 #: pysvnmanager/controllers/repos.py:81
-#: pysvnmanager/hooks/plugins/__init__.py:244
 msgid "Plugin name"
 msgstr ""
 
 #: pysvnmanager/controllers/repos.py:82
-#: pysvnmanager/hooks/plugins/__init__.py:245
+#: pysvnmanager/hooks/plugins/__init__.py:312
 msgid "Type"
 msgstr ""
 
@@ -157,55 +156,55 @@ msgstr ""
 msgid "Remove selected hooks"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:116
+#: pysvnmanager/controllers/repos.py:119
 #, python-format
 msgid ""
 "Apply plugin '%(plugin)s' on '%(repos)s' Failed. Error message:<br>\n"
 "%(msg)s"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:119
+#: pysvnmanager/controllers/repos.py:122
 #, python-format
 msgid "Apply plugin '%(plugin)s' on '%(repos)s' success."
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:140
+#: pysvnmanager/controllers/repos.py:143
 #, python-format
 msgid ""
 "Delete plugin '%(plugin)s' on '%(repos)s' Failed. Error message:<br>\n"
 "%(msg)s"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:143
+#: pysvnmanager/controllers/repos.py:146
 #, python-format
 msgid "Delete plugin '%(plugin)s' on '%(repos)s' success."
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:146
+#: pysvnmanager/controllers/repos.py:149
 #, python-format
 msgid "No plugin has been deleted for '%(repos)s'."
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:155
+#: pysvnmanager/controllers/repos.py:158
 #, python-format
 msgid ""
 "Create repository '%(repos)s' Failed. Error message:<br>\n"
 "%(msg)s"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:158
+#: pysvnmanager/controllers/repos.py:161
 #, python-format
 msgid "Create repository '%(repos)s' success."
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:171
+#: pysvnmanager/controllers/repos.py:174
 #, python-format
 msgid ""
 "Delete repository '%(repos)s' Failed. Error message:<br>\n"
 "%(msg)s"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:174
+#: pysvnmanager/controllers/repos.py:177
 #, python-format
 msgid "Delete blank repository '%(repos)s' success."
 msgstr ""
@@ -245,42 +244,146 @@ msgstr ""
 msgid "User %s logged out"
 msgstr ""
 
-#: pysvnmanager/hooks/plugins/CaseInsensitive.py:10
-msgid "check case insensitive"
+#: pysvnmanager/hooks/plugins/BugtrackMantis.py:13
+msgid "Mantis bugtracking integration"
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/BugtrackMantis.py:19
+msgid ""
+"Integration Subversion with Mantis bugtracking. If commit-log has proper "
+"format (contains bugid), it will change bug status and append commint-log"
+" and code differ as comment of bug status change."
 msgstr ""
 
 #: pysvnmanager/hooks/plugins/CaseInsensitive.py:13
+msgid "check case insensitive"
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/CaseInsensitive.py:19
 msgid "A pre-commit hook to detect case-insensitive filename clashes."
 msgstr ""
 
-#: pysvnmanager/hooks/plugins/EolStyleCheck.py:10
-msgid "mime-type and eol-style check"
+#: pysvnmanager/hooks/plugins/CommitLogCheck.py:13
+msgid "Check commit log message"
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/CommitLogCheck.py:19
+msgid "User must provide commit-log message when checkin."
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/EmailNotify.py:13
+msgid "Send email notify for commit event"
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/EmailNotify.py:19
+msgid ""
+"Send a notification email describing either a commit or a revprop-change "
+"action on a Subversion repository."
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/EmailNotify.py:23
+msgid ""
+"\n"
+"You must provide proper options to commit-email.pl using the\n"
+"configuration form for this plugin.\n"
+"\n"
+"You can simply just provide the email_addr as the options.\n"
+"\n"
+"  [options] email_addr [email_addr ...]\n"
+"\n"
+"But to be more versitile, you can setup a path-based email \n"
+"notifier.\n"
+"\n"
+"  [-m regex1] [options] [email_addr ...]\n"
+"  [-m regex2] [options] [email_addr ...] \n"
+"  ...\n"
+"\n"
+"Options:\n"
+"\n"
+"-m regex              Regular expression to match committed path\n"
+"--from email_address  Email address for 'From:' (overrides -h)\n"
+"-r email_address      Email address for 'Reply-To:\n"
+"-s subject_prefix     Subject line prefix\n"
+"--diff n              Do not include diff in message (default: y)\n"
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/EmailNotify.py:75
+msgid "- Email notify enabled."
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/EmailNotify.py:77
+msgid "- Email notify disabled."
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/EmailNotify.py:79
+msgid "- Parameters: ``"
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/EmailNotify.py:97
+msgid "Fill this form"
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/EmailNotify.py:99
+msgid "Enable email notify."
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/EmailNotify.py:101
+msgid "Enable"
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/EmailNotify.py:103
+msgid "Disable"
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/EmailNotify.py:104
+msgid "Input email notify configurations: "
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/EmailNotify.py:131
+msgid "Wrong configuration."
 msgstr ""
 
 #: pysvnmanager/hooks/plugins/EolStyleCheck.py:13
+msgid "mime-type and eol-style check"
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/EolStyleCheck.py:19
 msgid "New file must provide svn:eol-style if not binary file."
 msgstr ""
 
-#: pysvnmanager/hooks/plugins/__init__.py:84
+#: pysvnmanager/hooks/plugins/MergeinfoClient.py:13
+msgid "Subversion client mergeinfo capability check"
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/MergeinfoClient.py:19
+msgid "Do not allow subversion client (<1.5) to checkin."
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/__init__.py:95
 #, python-format
 msgid "repos '%s' not exist!"
 msgstr ""
 
-#: pysvnmanager/hooks/plugins/__init__.py:133
+#: pysvnmanager/hooks/plugins/__init__.py:152
 #, python-format
 msgid "Conflict: plugin '%s' is modified by others."
 msgstr ""
 
-#: pysvnmanager/hooks/plugins/__init__.py:160
-#: pysvnmanager/hooks/plugins/__init__.py:174
-#: pysvnmanager/hooks/plugins/__init__.py:190
-#: pysvnmanager/hooks/plugins/__init__.py:254
-#: pysvnmanager/hooks/plugins/__init__.py:261
-#: pysvnmanager/hooks/plugins/__init__.py:270
+#: pysvnmanager/hooks/plugins/__init__.py:180
+#: pysvnmanager/hooks/plugins/__init__.py:207
+#: pysvnmanager/hooks/plugins/__init__.py:213
+#: pysvnmanager/hooks/plugins/__init__.py:232
+#: pysvnmanager/hooks/plugins/__init__.py:330
+#: pysvnmanager/hooks/plugins/__init__.py:337
+#: pysvnmanager/hooks/plugins/__init__.py:346
 msgid "Plugin not fully implemented."
 msgstr ""
 
-#: pysvnmanager/hooks/plugins/__init__.py:246
+#: pysvnmanager/hooks/plugins/__init__.py:311
+msgid "Name"
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/__init__.py:313
 msgid "Description"
 msgstr ""
 
@@ -421,7 +524,7 @@ msgstr ""
 
 #: pysvnmanager/templates/base.mako:36
 #: pysvnmanager/templates/repos/hooks.mako:5
-#: pysvnmanager/templates/repos/hooks.mako:189
+#: pysvnmanager/templates/repos/hooks.mako:182
 msgid "Repos management"
 msgstr ""
 
@@ -502,7 +605,7 @@ msgid "Successfully delete module:"
 msgstr ""
 
 #: pysvnmanager/templates/authz/index.mako:597
-#: pysvnmanager/templates/repos/hooks.mako:195
+#: pysvnmanager/templates/repos/hooks.mako:188
 msgid "Repository:"
 msgstr ""
 
@@ -661,23 +764,23 @@ msgstr ""
 msgid "Repository name:"
 msgstr ""
 
-#: pysvnmanager/templates/repos/hooks.mako:198
+#: pysvnmanager/templates/repos/hooks.mako:191
 msgid "Add repository"
 msgstr ""
 
-#: pysvnmanager/templates/repos/hooks.mako:199
+#: pysvnmanager/templates/repos/hooks.mako:192
 #: pysvnmanager/templates/repos/remove.mako:5
 #: pysvnmanager/templates/repos/remove.mako:49
 #: pysvnmanager/templates/repos/remove.mako:67
 msgid "Remove repository"
 msgstr ""
 
-#: pysvnmanager/templates/repos/hooks.mako:204
+#: pysvnmanager/templates/repos/hooks.mako:197
 msgid "Uninstalled hooks:"
 msgstr ""
 
-#: pysvnmanager/templates/repos/hooks.mako:226
-msgid "Enable this hook"
+#: pysvnmanager/templates/repos/hooks.mako:223
+msgid "Install this plugin"
 msgstr ""
 
 #: pysvnmanager/templates/role/index.mako:5
@@ -760,4 +863,18 @@ msgstr ""
 #: pysvnmanager/templates/role/index.mako:693
 msgid "User name:"
 msgstr ""
+
+#~ msgid ""
+#~ "\n"
+#~ "**%(id)s**\n"
+#~ "\n"
+#~ "- %(t_name)s: %(name)s\n"
+#~ "- %(t_name)s: %(type)s\n"
+#~ "\n"
+#~ "**%(t_desc)s**\n"
+#~ "\n"
+#~ "%(desc)s\n"
+#~ "\n"
+#~ "%(detail)s\n"
+#~ msgstr ""
 
