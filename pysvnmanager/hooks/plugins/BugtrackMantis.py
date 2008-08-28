@@ -6,9 +6,6 @@ from pysvnmanager.hooks.plugins import _
 
 class MantisIntegration(PluginBase):
 
-    # Plugin id
-    id = __name__.rsplit('.',1)[-1]
-    
     # Brief name for this plugin.
     name = _("Mantis bugtracking integration")
     
@@ -30,6 +27,8 @@ class MantisIntegration(PluginBase):
     # Plugin config option/value in config ini file.
     key = "mantis_integration"
     value = "yes"
+    
+    section = 'post_commit'
     
     def enabled(self):
         """

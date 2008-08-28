@@ -6,9 +6,6 @@ from pysvnmanager.hooks.plugins import _
 
 class EolStyleCheck(PluginBase):
 
-    # Plugin id
-    id = __name__.rsplit('.',1)[-1]
-    
     # Brief name for this plugin.
     name = _("mime-type and eol-style check")
     
@@ -25,8 +22,10 @@ class EolStyleCheck(PluginBase):
     type = T_PRE_COMMIT
     
     # Plugin config option/value in config ini file.
-    key = "check_eol_style"
+    key = "eol_style_check"
     value = "yes"
+    
+    section = 'pre_commit'
     
     def enabled(self):
         """

@@ -4,13 +4,10 @@
 from pysvnmanager.hooks.plugins import *
 from pysvnmanager.hooks.plugins import _
 
-class CaseInsensitive(PluginBase):
+class DetectCaseInsensitiveClash(PluginBase):
 
-    # Plugin id
-    id = __name__.rsplit('.',1)[-1]
-    
     # Brief name for this plugin.
-    name = _("check case insensitive")
+    name = _("Detect case-insensitive filename clashes")
     
     # Both description and detail are reStructuredText format. 
     # Reference about reStructuredText: http://docutils.sourceforge.net/docs/user/rst/quickref.html
@@ -19,14 +16,23 @@ class CaseInsensitive(PluginBase):
     description = _("A pre-commit hook to detect case-insensitive filename clashes.")
     
     # Long description for this plugin.
-    detail = ""
+    detail = _("""Subversion services may host on a filename case-sensitive OS,
+while client **may not** (Windows is case-insensitive). This may cause 'clash'.
+
+- Detects new paths that 'clash' with existing, or other new, paths.
+- Ignores existings paths that already 'clash'
+- Exits with an error code, and a diagnostic on stderr, if 'clashes'
+  are detected.
+""")
     
     # Hooks-plugin type: T_START_COMMIT, ..., T_POST_UNLOCK
     type = T_PRE_COMMIT
     
     # Plugin config option/value in config ini file.
-    key = "case_insensitive"
+    key = "detect_case_insensitive_clash"
     value = "yes"
+    
+    section = 'pre_commit'
     
     def enabled(self):
         """
@@ -78,4 +84,4 @@ def execute(repospath=""):
     @rtype: Plugin
     @return: Plugin object
     """
-    return CaseInsensitive(repospath)
+    return DetectCaseInsensitiveClash(repospath)

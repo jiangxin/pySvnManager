@@ -66,8 +66,8 @@ T_POST_UNLOCK           = 9
 class PluginBase(object):
     """ Base class for hook plugins
     """
-    # Plugin id (must be override!)
-    id = __name__.rsplit('.',1)[-1]
+    # Plugin id (will be set automatically after instance initialized)
+    id = None # __name__.rsplit('.',1)[-1]
 
     # Both description and detail are reStructuredText format. 
     # Reference about reStructuredText: http://docutils.sourceforge.net/docs/user/rst/quickref.html
@@ -159,10 +159,12 @@ class PluginBase(object):
         # Update revision as file timestamp.
         self.revision = os.path.getmtime(self.__configfile)
 
-    def get_config(self, key, default="", section='main'):
+    def get_config(self, key, default="", section=''):
         """
         Get config from the default config file.
         """
+        if not section:
+            section = self.section
         if not self.cp.has_section(section):
             self.cp.add_section(section)
         if self.cp.has_option(section, key):
@@ -300,7 +302,7 @@ class PluginBase(object):
 **%(id)s**
 
 - %(t_name)s: %(name)s
-- %(t_name)s: %(type)s
+- %(t_type)s: %(type)s
 
 **%(t_desc)s**
 

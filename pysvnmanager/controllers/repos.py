@@ -58,9 +58,9 @@ class ReposController(BaseController):
         msg += 'id[0]="%s";' % '...'
         msg += 'name[0]="%s";\n' % _("Please choose...")
         total += 1;
-        for name in h.unapplied_plugins.keys():
+        for name in h.unapplied_plugins:
             msg += 'id[%d]="%s";' % (total, name)
-            msg += 'name[%d]="%s";\n' % (total, h.plugins[name].name)
+            msg += 'name[%d]="%s";\n' % (total, name + ': ' + h.plugins[name].name)
             total += 1;
         msg += 'total=%d;\n' % total
         
@@ -81,7 +81,7 @@ class ReposController(BaseController):
                     "<th align='left'>" + _("Plugin name") + "</th>" + \
                     "<th align='left'>" + _("Type") + "</th>" + \
                     "</tr>\n"
-            for name in h.applied_plugins.keys():
+            for name in h.applied_plugins:
                 msg += "<tr><td width='1' rolspan='2'>"
                 msg += '<input type="checkbox" name="pluginid_%(num)d" value="%(plugin)s">' % {
                     'num': num, 'plugin': name, }
@@ -117,7 +117,7 @@ class ReposController(BaseController):
             plugin.install(d)
         except Exception, e:
             result = "<div class='error'>" + _("Apply plugin '%(plugin)s' on '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
-                        "plugin": pluginname, "repos":reposname, "msg": e.message} + "</div>"
+                        "plugin": pluginname, "repos":reposname, "msg": e} + "</div>"
         else:
             result = "<div class='info'>" + _("Apply plugin '%(plugin)s' on '%(repos)s' success.") % {
                         "plugin": pluginname, "repos":reposname} + "</div>"

@@ -75,7 +75,7 @@ class TestReposPlugin(TestController):
     def testPluginImport(self):
         self.assertRaises(Exception,  plugins.getHandler("CaseInsensitive"), "")
         module_ci = plugins.getHandler("CaseInsensitive")(self.repos_root + '/project1')
-        self.assert_(module_ci.name=="check case insensitive", module_ci.name)
+        self.assert_(module_ci.name=="Detect case-insensitive filename clashes", module_ci.name)
         self.assert_(module_ci.description!="", module_ci.description)
       
     def testPluginSetting(self):
@@ -94,11 +94,11 @@ class TestReposPlugin(TestController):
         self.assert_('CaseInsensitive' in myhooks.pluginnames, myhooks.pluginnames)
         self.assert_('EolStyleCheck' in myhooks.pluginnames, myhooks.pluginnames)
         
-        self.assert_('CaseInsensitive' in myhooks.unapplied_plugins.keys(), myhooks.unapplied_plugins.keys())
-        self.assert_('EolStyleCheck' in myhooks.unapplied_plugins.keys(), myhooks.unapplied_plugins.keys())
+        self.assert_('CaseInsensitive' in myhooks.unapplied_plugins, myhooks.unapplied_plugins)
+        self.assert_('EolStyleCheck' in myhooks.unapplied_plugins, myhooks.unapplied_plugins)
         
         m = myhooks.plugins['CaseInsensitive']
-        self.assert_(m.name=="check case insensitive", m.name)
+        self.assert_(m.name=="Detect case-insensitive filename clashes", m.name)
         self.assert_(m.description!="", m.description)
     
     def testHooksSetting(self):
@@ -106,24 +106,24 @@ class TestReposPlugin(TestController):
 
         m = myhooks.plugins['CaseInsensitive']
         self.assert_(m.enabled()==False)
-        self.assert_('CaseInsensitive' not in myhooks.applied_plugins.keys(), myhooks.applied_plugins.keys())
-        self.assert_('EolStyleCheck' not in myhooks.applied_plugins.keys(), myhooks.applied_plugins.keys())
-        self.assert_('CaseInsensitive' in myhooks.unapplied_plugins.keys(), myhooks.unapplied_plugins.keys())
-        self.assert_('EolStyleCheck' in myhooks.unapplied_plugins.keys(), myhooks.unapplied_plugins.keys())
+        self.assert_('CaseInsensitive' not in myhooks.applied_plugins, myhooks.applied_plugins)
+        self.assert_('EolStyleCheck' not in myhooks.applied_plugins, myhooks.applied_plugins)
+        self.assert_('CaseInsensitive' in myhooks.unapplied_plugins, myhooks.unapplied_plugins)
+        self.assert_('EolStyleCheck' in myhooks.unapplied_plugins, myhooks.unapplied_plugins)
 
         m.install()
         self.assert_(m.enabled()==True)
-        self.assert_('CaseInsensitive' in myhooks.applied_plugins.keys(), myhooks.applied_plugins.keys())
-        self.assert_('EolStyleCheck' not in myhooks.applied_plugins.keys(), myhooks.applied_plugins.keys())
-        self.assert_('CaseInsensitive' not in myhooks.unapplied_plugins.keys(), myhooks.unapplied_plugins.keys())
-        self.assert_('EolStyleCheck' in myhooks.unapplied_plugins.keys(), myhooks.unapplied_plugins.keys())
+        self.assert_('CaseInsensitive' in myhooks.applied_plugins, myhooks.applied_plugins)
+        self.assert_('EolStyleCheck' not in myhooks.applied_plugins, myhooks.applied_plugins)
+        self.assert_('CaseInsensitive' not in myhooks.unapplied_plugins, myhooks.unapplied_plugins)
+        self.assert_('EolStyleCheck' in myhooks.unapplied_plugins, myhooks.unapplied_plugins)
 
         m.uninstall()
         self.assert_(m.enabled()==False)
-        self.assert_('CaseInsensitive' not in myhooks.applied_plugins.keys(), myhooks.applied_plugins.keys())
-        self.assert_('EolStyleCheck' not in myhooks.applied_plugins.keys(), myhooks.applied_plugins.keys())
-        self.assert_('CaseInsensitive' in myhooks.unapplied_plugins.keys(), myhooks.unapplied_plugins.keys())
-        self.assert_('EolStyleCheck' in myhooks.unapplied_plugins.keys(), myhooks.unapplied_plugins.keys())
+        self.assert_('CaseInsensitive' not in myhooks.applied_plugins, myhooks.applied_plugins)
+        self.assert_('EolStyleCheck' not in myhooks.applied_plugins, myhooks.applied_plugins)
+        self.assert_('CaseInsensitive' in myhooks.unapplied_plugins, myhooks.unapplied_plugins)
+        self.assert_('EolStyleCheck' in myhooks.unapplied_plugins, myhooks.unapplied_plugins)
 
 
 if __name__ == '__main__': 

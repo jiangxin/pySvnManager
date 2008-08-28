@@ -3,12 +3,10 @@
 
 from pysvnmanager.hooks.plugins import *
 from pysvnmanager.hooks.plugins import _
+import webhelpers
 
 class CommitLogCheck(PluginBase):
 
-    # Plugin id
-    id = __name__.rsplit('.',1)[-1]
-    
     # Brief name for this plugin.
     name = _("Check commit log message")
     
@@ -25,15 +23,19 @@ class CommitLogCheck(PluginBase):
     type = T_PRE_COMMIT
     
     # Plugin config option/value in config ini file.
-    key = "commit_log_check"
-    value = "yes"
+    key_switch   = "commit_log_check_enable"
+    key_size     = "commit_log_check_size"
+    key_permit   = "commit_log_check_permit"
+    key_prohibit = "commit_log_check_prohibit"
+    
+    section = 'pre_commit'
     
     def enabled(self):
         """
         Return True, if this plugin has been installed.
         Simply call 'has_config()'.
         """
-        return self.has_config()
+        return self.has_config(self.key_switch) and self.has_config(self.key_size)
     
     def install_info(self):
         """
@@ -42,7 +44,27 @@ class CommitLogCheck(PluginBase):
         return reStructuredText.
         reST reference: http://docutils.sourceforge.net/docs/user/rst/quickref.html
         """
-        return self.description
+        result = self.description
+        if self.enabled():
+            result += "\n\n"
+            result += "**" + _("Current configuration") + "**\n\n"
+            if self.get_config(self.key_switch) == "yes":
+                result += "- " + _("Commit log check is enabled.")
+            else:
+                result += "- " + _("Commit log check is disabled.")
+            result += "\n"
+            result += "- " + _("Minimal size of commit log: ") + self.get_config(self.key_size)
+            result += "\n"
+            permit   = self.get_config(self.key_permit)
+            prohibit = self.get_config(self.key_prohibit)
+            if permit:
+                result += "- " + _("Pattern which commit log must match against: ") + permit
+                result += "\n"
+            if prohibit:
+                result += "- " + _("Pattern which commit log must **NOT** match against: ") + prohibit
+                result += "\n"
+            
+        return result
     
     def install_config_form(self):
         """
@@ -50,14 +72,56 @@ class CommitLogCheck(PluginBase):
         If this plugin needs parameters, provides form fields here.
         Any html and javascript are welcome.
         """
-        return ""
+        if self.get_config(self.key_switch)=="no":
+            enable_checked  = ""
+            disable_checked = "checked"
+        else:
+            enable_checked  = "checked"
+            disable_checked = ""
+
+        result = ""
+        result += "<p><strong>%s</strong></p>" % _("Fill this form")
+        result += "<blockquote>"
+        result += "<table class=hidden>"
+        result += "\n<tr><td>"
+        result += _("Enable commit log check: ")
+        result += "\n</td><td>"
+        result += "<input type='radio' name='switch' value='yes' " + \
+                enable_checked  + ">" + _("Enable") + "&nbsp;"
+        result += "<input type='radio' name='switch' value='no' " + \
+                disable_checked + ">" + _("Disable")
+        result += "\n</td></tr>"
+        result += "\n<tr><td>"
+        result += _("Minimal size of commit log: ")
+        result += "\n</td><td>"
+        result += "<input type='text' name='size' size='5' value=\"%s\">" % \
+                webhelpers.util.html_escape(self.get_config(self.key_size))
+        result += "\n</td></tr>"
+        result += "\n<tr><td>"
+        result += _("Pattern which commit log must match against: ")
+        result += "\n</td><td>"
+        result += "<input type='text' name='permit' size='64' value=\"%s\">" % \
+                webhelpers.util.html_escape(self.get_config(self.key_permit))
+        result += "\n</td></tr>"
+        result += "\n<tr><td>"
+        result += _("Pattern which commit log must <b>NOT</b> match against: ")
+        result += "\n</td><td>"
+        result += "<input type='text' name='prohibit' size='64' value=\"%s\">" % \
+                webhelpers.util.html_escape(self.get_config(self.key_prohibit))
+        result += "\n</td></tr>"
+        result += "\n</table>"
+        result += "</blockquote>"
+        return result
         
     def uninstall(self):
         """
         Uninstall hooks-plugin from repository.
         Simply call 'unset_config()' and 'save()'.
         """
-        self.unset_config()
+        self.unset_config(self.key_switch)
+        self.unset_config(self.key_size)
+        self.unset_config(self.key_permit)
+        self.unset_config(self.key_prohibit)
         self.save()
     
     def install(self, params=None):
@@ -67,7 +131,21 @@ class CommitLogCheck(PluginBase):
         
         Form fields in setup_config() will pass as params.
         """
-        self.set_config()
+        switch = params.get('switch', 'yes')
+        if switch != 'yes':
+            switch = 'no'
+        size = params.get('size')
+        log.debug("size: %s" % size)
+        if int(size)<1:
+            raise Exception, _("Commit log size must > 0.")
+        permit   = params.get('permit')
+        prohibit = params.get('prohibit')
+        self.set_config(self.key_switch, switch)
+        self.set_config(self.key_size, size)
+        if permit:
+            self.set_config(self.key_permit, permit)
+        if prohibit:
+            self.set_config(self.key_prohibit, prohibit)
         self.save()
         
 def execute(repospath=""):

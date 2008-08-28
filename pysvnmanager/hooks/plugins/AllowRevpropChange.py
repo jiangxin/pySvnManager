@@ -4,29 +4,31 @@
 from pysvnmanager.hooks.plugins import *
 from pysvnmanager.hooks.plugins import _
 
-class MergeinfoClient(PluginBase):
+class AllowRevpropChange(PluginBase):
 
-    # Plugin id
-    id = __name__.rsplit('.',1)[-1]
-    
     # Brief name for this plugin.
-    name = _("Subversion client mergeinfo capability check")
+    name = _("Allow revprop change")
     
     # Both description and detail are reStructuredText format. 
     # Reference about reStructuredText: http://docutils.sourceforge.net/docs/user/rst/quickref.html
 
     # Short description for this plugin.
-    description = _("Do not allow subversion client (<1.5) to checkin.")
+    description = _("Allow user change commit-log or other rev-properties.")
     
     # Long description for this plugin.
-    detail = ""
+    detail = _("Commit-log is the only rev-prop we allow to change. "
+               "Because the changes of rev-prop can not be reverted back, "
+               "administrator must setup email notification to record this "
+               "irreversible action.")
     
     # Hooks-plugin type: T_START_COMMIT, ..., T_POST_UNLOCK
-    type = T_PRE_COMMIT
+    type = T_PRE_REVPROP_CHANGE
     
     # Plugin config option/value in config ini file.
-    key = "client_capibility_check"
+    key = "revprop_change_enable"
     value = "yes"
+    
+    section = 'pre_revprop_change'
     
     def enabled(self):
         """
@@ -78,4 +80,4 @@ def execute(repospath=""):
     @rtype: Plugin
     @return: Plugin object
     """
-    return MergeinfoClient(repospath)
+    return AllowRevpropChange(repospath)

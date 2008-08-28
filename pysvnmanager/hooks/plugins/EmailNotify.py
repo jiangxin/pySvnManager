@@ -3,12 +3,10 @@
 
 from pysvnmanager.hooks.plugins import *
 from pysvnmanager.hooks.plugins import _
+import webhelpers
 
 class EmailNotify(PluginBase):
 
-    # Plugin id
-    id = __name__.rsplit('.',1)[-1]
-    
     # Brief name for this plugin.
     name = _("Send email notify for commit event")
     
@@ -53,6 +51,8 @@ Options:
     key_switch = "email_notify_enable"
     key_config = "email_notify_config"
     
+    section = 'email'
+    
     def enabled(self):
         """
         Return True, if this plugin has been installed.
@@ -70,14 +70,14 @@ Options:
         result = self.description
         if self.enabled():
             result += "\n\n"
-            result += "**Current configuration**\n\n"
+            result += "**" + _("Current configuration") + "**\n\n"
             if self.get_config(self.key_switch) == "yes":
-                result += _("- Email notify enabled.")
+                result += "- " + _("Email notify enabled.")
             else:
-                result += _("- Email notify disabled.")
+                result += "- " + _("Email notify disabled.")
             result += "\n"
-            result += _("- Parameters: ``") + self.get_config(self.key_config) + '``'
-                
+            result += "- " + _("Parameters: ") + "``" + self.get_config(self.key_config) + "``\n"
+
         return result
     
     def install_config_form(self):
@@ -86,24 +86,32 @@ Options:
         If this plugin needs parameters, provides form fields here.
         Any html and javascript are welcome.
         """
-        if self.get_config(self.key_switch)=="yes":
-            enable_checked  = "checked"
-            disable_checked = ""
-        else:
+        if self.get_config(self.key_switch)=="no":
             enable_checked  = ""
             disable_checked = "checked"
+        else:
+            enable_checked  = "checked"
+            disable_checked = ""
 
         result = ""
         result += "<p><strong>%s</strong></p>" % _("Fill this form")
         result += "<blockquote>"
+        result += "<table class=hidden>"
+        result += "\n<tr><td>"
         result += _("Enable email notify.")
+        result += "\n</td><td>"
         result += "<input type='radio' name='switch' value='yes' " + \
                 enable_checked  + ">" + _("Enable") + "&nbsp;"
         result += "<input type='radio' name='switch' value='no' " + \
                 disable_checked + ">" + _("Disable") + "<br>"
-        result += _("Input email notify configurations: ") + \
-                "<input type='text' name='config' size='64' value='%s'>" % \
-                self.get_config(self.key_config)
+        result += "\n</td></tr>"
+        result += "\n<tr><td>"
+        result += _("Input email notify configurations: ")
+        result += "\n</td><td>"
+        result += "<input type='text' name='config' size='64' value=\"%s\">" % \
+                webhelpers.util.html_escape(self.get_config(self.key_config))
+        result += "\n</td></tr>"
+        result += "\n</table>"
         result += "</blockquote>"
         return result
         

@@ -43,25 +43,18 @@ class Hooks:
         assert self.repos.is_svn_repos(self.__repos_name)
         
         self.plugins = {}
-        self.pluginnames = plugins.modules
-        for m in self.pluginnames:
+        for m in plugins.modules:
             self.plugins[m] = plugins.getHandler(m)(self.__repos_path)
+            self.plugins[m].id = m
+        self.pluginnames = [ m.id for m in sorted(self.plugins.values()) ]
     
     def __get_applied_plugins(self):
-        result={}
-        for k,v in self.plugins.iteritems():
-            if v.enabled():
-                result[k]=v
-        return result
+        return [ m for m in self.pluginnames if self.plugins[m].enabled()]
     
     applied_plugins = property(__get_applied_plugins)
 
     def __get_unapplied_plugins(self):
-        result={}
-        for k,v in self.plugins.iteritems():
-            if not v.enabled():
-                result[k]=v
-        return result
+        return [ m for m in self.pluginnames if not self.plugins[m].enabled()]
     
     unapplied_plugins = property(__get_unapplied_plugins)
     

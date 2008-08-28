@@ -67,6 +67,8 @@ class Repos:
         if os.path.exists(repos_path):
             raise Exception, _("Repos %s already exists.") % repos_name
         from svn import repos as _repos
+        if isinstance(repos_path, unicode):
+            repos_path = repos_path.encode('utf-8')
         _repos.create(repos_path, "", "", None, { "fs-type": "fsfs" })
         self.hooks_init(repos_name)
     
