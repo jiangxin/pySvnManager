@@ -36,6 +36,14 @@ def get_utf8(msg, escape=False):
         msg = repr(msg)[1:-1]
     return msg
 
+def except_to_unicode(e):
+    msg = ', '.join(e.args)
+    return get_unicode(msg)
+
+def except_to_utf8(e):
+    msg = ', '.join(e.args)
+    return get_utf8(msg)
+
 class BaseController(WSGIController):
     requires_auth = []
 

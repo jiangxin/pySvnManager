@@ -192,7 +192,7 @@ class AuthzController(BaseController):
                 self.authz.set_rules(reposname, path, rules);
             self.authz.save(revision, comment=log_message)
         except Exception, e:
-            msg = get_unicode(e.message)
+            msg = except_to_unicode(e)
 
         log.info(log_message)
         if msg: log.error(msg)
@@ -215,7 +215,7 @@ class AuthzController(BaseController):
             self.authz.del_module(reposname, path);
             self.authz.save(revision, comment=log_message)
         except Exception, e:
-            msg = get_unicode(e.message)
+            msg = except_to_unicode(e)
         
         log.info(log_message)
         if msg: log.error(msg)

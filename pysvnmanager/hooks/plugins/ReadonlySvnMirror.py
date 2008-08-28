@@ -112,7 +112,7 @@ class ReadonlySvnMirror(PluginBase):
             switch = 'no'
         admin = params.get('admin')
         if not admin:
-            raise Exception, _("Wrong configuration.")
+            raise Exception(_("Wrong configuration."))
         self.set_config(self.key_switch, switch)
         self.set_config(self.key_admin, admin)
         self.save()
