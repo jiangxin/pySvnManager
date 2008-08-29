@@ -1,6 +1,22 @@
 This file is for you to describe the pysvnmanager application. Typically
 you would include information such as the information below:
 
+Prerequisite
+============
+
+You need the following packages. Only part of them (docutils)
+will be installed automatically during easy_install.
+
+- rcs:
+    We use ci/co for backup/restore SVN authz files.
+
+- python docutils:
+    We docutils to transform reST text to html.
+
+- python-ldap:
+    If pySvnManager is auth agains ldap, you need it.
+
+
 Installation and Setup
 ======================
 
@@ -17,6 +33,8 @@ Tweak the config file as appropriate and then setup the application::
     paster setup-app config.ini
 
 Then you are ready to go.
+
+    paster serve --reload config.ini
 
 Installation from Source code
 =============================
