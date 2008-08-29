@@ -7,6 +7,9 @@ Prerequisite
 You need the following packages. Only part of them (docutils)
 will be installed automatically during easy_install.
 
+- pylons:
+    A must have package.
+
 - rcs:
     We use ci/co for backup/restore SVN authz files.
 
@@ -16,6 +19,8 @@ will be installed automatically during easy_install.
 - python-ldap:
     If pySvnManager is auth agains ldap, you need it.
 
+- easy_install:
+    Optional. Useful tools to manage python egg packages.
 
 Installation and Setup
 ======================
