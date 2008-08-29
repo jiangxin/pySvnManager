@@ -88,13 +88,24 @@ class Repos:
         
         # copy hook-scripts from matched hooks templates directory.
         src = hooks.init.svn_hooks_init_base + '/' + hooks.init.svn_hooks_init_dict[matched]
+        src = os.path.abspath(src)
         dest = "%(root)s/%(entry)s/hooks" % { "root": self.repos_root, "entry": repos_name}
+        dest = os.path.abspath(dest)
         
-        log.debug('Now copy hooks from \n\t%s to \n\t%s' % (src, dest))
         import shutil
-        shutil.rmtree(dest)
-        shutil.copytree(src, dest, symlinks=True)
-        
+        if os.path.exists(dest):
+            assert os.path.basename(dest) == 'hooks'
+            shutil.rmtree(dest)
+        elif not os.path.exists(os.path.basename(dest)):
+            raise Exception("Destination repository '%s' not exist!" % os.path.basename(dest))
+        for root, dirs, files in os.walk(src):
+            targetdir = root.replace(src, dest, 1)
+            os.mkdir(targetdir)
+            for name in files:
+                shutil.copy(os.path.join(root, name), os.path.join(targetdir, name))
+                os.chmod(os.path.join(targetdir, name), 0755)
+            if '.svn' in dirs:
+                dirs.remove('.svn')  # don't visit SVN directories
     
     def svnversion(self):
         cmd = 'LC_ALL=C svn --version'
