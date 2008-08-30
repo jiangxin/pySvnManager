@@ -9,25 +9,25 @@
 
 <%
 
-role_list_opts = [[_("Please choose..."), '...'],]
+role_list_opts = [('...', _("Please choose...")),]
 
 for i in c.grouplist:
     if i == '*' or i =='$authenticated' or i == '$anonymous':
         continue
     elif i[0] == '@':
-        role_list_opts.append([_("Group:")+i[1:], i])
+        role_list_opts.append((i, _("Group:")+i[1:]))
     else:
-        role_list_opts.append([i, i])
+        role_list_opts.append((i, i))
 for i in c.aliaslist:
     if i[0] == '&':
-        role_list_opts.append([_("Alias:")+i[1:], i])
+        role_list_opts.append((i, _("Alias:")+i[1:]))
     else:
-        role_list_opts.append([i, i])
+        role_list_opts.append((i, i))
 
-alias_as_list_opts = [[_("Please choose..."), '...'],]
+alias_as_list_opts = [('...', _("Please choose...")),]
 
 for i in c.userlist:
-    alias_as_list_opts.append([i, i])
+    alias_as_list_opts.append((i, i))
 
 all_avail_users = []
 for i in c.grouplist:
@@ -630,9 +630,7 @@ function disable_delete_btn()
 
 <div id='role_list_box' style="position:relative;" class=gainlayout>
 ${_("Select a role name:")}
-    <select name="role_list" size="1" onChange='role_changed()'>
-        ${h.options_for_select(role_list_opts)}
-    </select>
+    ${h.select("role_list", "", role_list_opts, onChange='role_changed()')}
 <a href="#" onclick='new_group()'>[+${_("New Group")}]</a>
 <a href="#" onclick='new_alias()'>[+${_("New Alias")}]</a>
 </div>
@@ -693,9 +691,8 @@ ${_("New alias name:")} <input type='text' name='alias_input' onChange="enable_s
     ${_("User name:")}
   </td>
   <td>
-    <select name="alias_as_list" size="1" onChange="enable_save_btn();disable_delete_btn()">
-        ${h.options_for_select(alias_as_list_opts)}
-    </select><br>
+    ${h.select("alias_as_list", "", alias_as_list_opts, onChange="enable_save_btn();disable_delete_btn()")}
+    <br>
     <input type="text" name="alias_as_input" size="10" maxlength="50" onChange="enable_save_btn();disable_delete_btn()">
   </td>
 </tr>

@@ -1,6 +1,7 @@
 MANIFEST.in
 README.txt
 development.ini
+ez_setup.py
 init.d
 setup.cfg
 setup.py
@@ -135,6 +136,15 @@ pysvnmanager/public/img/alert.png
 pysvnmanager/public/img/attention.png
 pysvnmanager/public/img/icon-error.png
 pysvnmanager/public/img/icon-info.png
+pysvnmanager/public/javascripts/builder.js
+pysvnmanager/public/javascripts/controls.js
+pysvnmanager/public/javascripts/dragdrop.js
+pysvnmanager/public/javascripts/effects.js
+pysvnmanager/public/javascripts/prototype.js
+pysvnmanager/public/javascripts/scriptaculous.js
+pysvnmanager/public/javascripts/slider.js
+pysvnmanager/public/javascripts/sound.js
+pysvnmanager/public/javascripts/unittest.js
 pysvnmanager/templates/auth_failed.mako
 pysvnmanager/templates/base.mako
 pysvnmanager/templates/authz/index.mako

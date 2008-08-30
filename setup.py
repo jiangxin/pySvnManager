@@ -25,13 +25,21 @@ except ImportError:
 
 setup(
     name='pySvnManager',
-    version="0.2.1",
+    version="0.3.0",
     description='SVN authz web management tools.',
     author='Jiang Xin',
     author_email='jiangxin@ossxp.com',
     url='https://sourceforge.net/projects/pysvnmanager',
-    #install_requires=["Pylons>=0.9.6.2", "docutils", "python-ldap"],
-    install_requires=["Pylons>=0.9.6.2", "docutils"],
+    install_requires=[
+            "Pylons>=0.9.7rc1",
+            "docutils",
+            "Babel",
+            #"Mako>=0.2.2",
+            #"WebHelpers>=0.6.1",
+            #"Routes>=1.9.2",
+            #"python-ldap",
+    ],
+    setup_requires=["PasteScript==dev,>=1.6.3dev-r7326"],
     packages=find_packages(exclude=['ez_setup']),
     include_package_data=True,
     test_suite='nose.collector',
@@ -40,6 +48,8 @@ setup(
             ('**.py', 'python', None),
             ('templates/**.mako', 'mako', None),
             ('public/**', 'ignore', None)]},
+    zip_safe = False,
+    paster_plugins=['PasteScript', 'Pylons'],
     entry_points="""
     [paste.app_factory]
     main = pysvnmanager.config.middleware:make_app
@@ -47,5 +57,4 @@ setup(
     [paste.app_install]
     main = pylons.util:PylonsInstaller
     """,
-    zip_safe = False,
 )

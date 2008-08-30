@@ -1278,8 +1278,11 @@ class SvnAuthz(object):
             if stat.st_size == 0:
                 raise Exception, "Size of file (%s) is zero!" % filename
             
-            from svn import repos as _repos
-            _repos.authz_read(filename, 1)
+            try:
+                from svn import repos as _repos
+                _repos.authz_read(filename, 1)
+            except ImportError:
+                pass
     
     def __str__(self):
         buff = u""

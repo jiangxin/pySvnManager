@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 
+from mako.lookup import TemplateLookup
 from pylons import config
 
 import pysvnmanager.lib.app_globals as app_globals
@@ -20,21 +21,20 @@ def load_environment(global_conf, app_conf):
                  templates=[os.path.join(root, 'templates')])
 
     # Initialize config with the basic options
-    config.init_app(global_conf, app_conf, package='pysvnmanager',
-                    template_engine='mako', paths=paths)
+    config.init_app(global_conf, app_conf, package='pysvnmanager', paths=paths)
 
     config['routes.map'] = make_map()
-    config['pylons.g'] = app_globals.Globals()
+    config['pylons.app_globals'] = app_globals.Globals()
     config['pylons.h'] = pysvnmanager.lib.helpers
 
-    # Customize templating options via this variable
-    tmpl_options = config['buffet.template_options']
-    
-    # 设置缺省编码为 utf8
-    tmpl_options['mako.input_encoding'] = 'UTF-8'
-    tmpl_options['mako.output_encoding'] = 'UTF-8'
-    #tmpl_options['mako.default_filters'] = ['decode.utf8']
-
-
+    # Create the Mako TemplateLookup, with the default auto-escaping
+    config['pylons.app_globals'].mako_lookup = TemplateLookup(
+        directories=paths['templates'],
+        module_directory=os.path.join(app_conf['cache_dir'], 'templates'),
+        input_encoding='utf-8', output_encoding='utf-8',
+        imports=['from webhelpers.html import escape'],
+        )
+        #default_filters=['escape'])
+        
     # CONFIGURATION OPTIONS HERE (note: all config options will override
     # any Pylons config options)

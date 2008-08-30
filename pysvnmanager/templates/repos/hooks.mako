@@ -188,8 +188,8 @@ function installed_hook_form_submit(form)
 ${_("Repository:")}
     <select name="repos_list" size="1" onChange='repos_changed()'>
     </select>
-${h.link_to(_("Add repository"), h.url(action="create"))}
-${h.link_to(_("Remove repository"), h.url(action="remove"))}
+${h.link_to(_("Add repository"), h.url_for(action="create"))}
+${h.link_to(_("Remove repository"), h.url_for(action="remove"))}
 </DIV>
 
 <DIV id="uninstall_hook_box" class=gainlayout style="visibility:hidden;position:absolute">
@@ -206,7 +206,7 @@ ${_("Uninstalled hooks:")}
     context.write( 
         h.form_remote_tag(
             html={'id':'hook_setting_form'}, 
-            url=h.url(action='setup_hook'), 
+            url=h.url_for(action='setup_hook'), 
             update="message", 
             method='post', before='showNoticesPopup()',
             complete='hideNoticesPopup();switch_message_box();repos_changed()',
@@ -236,7 +236,7 @@ ${_("Uninstalled hooks:")}
     context.write( 
         h.form_remote_tag(
             html={'id':'installed_hook_form'}, 
-            url=h.url(action='uninstall_hook'), 
+            url=h.url_for(action='uninstall_hook'), 
             update="message",
             method='post', before='installed_hook_form_submit(this); showNoticesPopup()',
             complete='hideNoticesPopup();switch_message_box();repos_changed()',

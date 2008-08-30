@@ -53,7 +53,7 @@ function ajax_init_repos_list(code)
     context.write( 
         h.form_remote_tag(
             html={'id':'main_form'}, 
-            url=h.url(action='remove_submit'), 
+            url=h.url_for(action='remove_submit'), 
             update="message",
             method='post', before='showNoticesPopup()',
             complete='hideNoticesPopup();switch_message_box();init_repos_list();',

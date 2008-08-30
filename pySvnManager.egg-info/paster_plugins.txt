@@ -1,3 +1,2 @@
-Pylons
-WebHelpers
 PasteScript
+Pylons

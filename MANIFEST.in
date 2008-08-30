@@ -1,4 +1,6 @@
 recursive-include pysvnmanager/public *
 recursive-include pysvnmanager/templates *
-recursive-include pysvnmanager/config *
+recursive-include pysvnmanager/config *.py *.in
 recursive-include pysvnmanager/i18n *
+recursive-include pysvnmanager/hooks *.py
+recursive-include pysvnmanager/hooks/init/hook* *

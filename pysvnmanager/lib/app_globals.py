@@ -16,7 +16,6 @@
 # GNU General Public License for more details.
 
 """The application's Globals object"""
-from pylons import config
 
 class Globals(object):
     """Globals acts as a container for objects available throughout the

@@ -17,15 +17,15 @@
 
 """The base Controller API
 
-Provides the BaseController class for subclassing, and other objects
-utilized by Controllers.
+Provides the BaseController class for subclassing.
 """
-from pylons import c, cache, config, g, request, response, session
 from pylons.controllers import WSGIController
+from pylons.templating import render_mako as render
+
+from pylons import c, cache, config, g, request, response, session
 from pylons.controllers.util import abort, etag_cache, redirect_to
 from pylons.decorators import jsonify, validate
 from pylons.i18n import _, ungettext, N_
-from pylons.templating import render
 from pylons.i18n import set_lang, add_fallback
 import pysvnmanager.lib.helpers as h
 import pysvnmanager.model as model
@@ -91,6 +91,7 @@ class BaseController(WSGIController):
         # WSGIController.__call__ dispatches to the Controller method
         # the request is routed to. This routing information is
         # available in environ['pylons.routes_dict']
+
         return WSGIController.__call__(self, environ, start_response)
 
 # Include the '_' function in the public names

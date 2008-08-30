@@ -29,9 +29,8 @@ from pysvnmanager.config.environment import load_environment
 
 log = logging.getLogger(__name__)
 
-def setup_config(command, filename, section, vars):
+def setup_app(command, conf, vars):
     """Place any commands to setup pysvnmanager here"""
-    conf = appconfig('config:' + filename)
     load_environment(conf.global_conf, conf.local_conf)
 
     here = config['here']

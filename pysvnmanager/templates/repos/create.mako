@@ -12,7 +12,7 @@
     context.write( 
         h.form_remote_tag(
             html={'id':'main_form'}, 
-            url=h.url(action='create_submit'), 
+            url=h.url_for(action='create_submit'), 
             update="message",
             method='post', before='showNoticesPopup()',
             complete='hideNoticesPopup();switch_message_box();',

@@ -50,12 +50,18 @@ class TestRepos(TestController):
     
     def testReposCreate(self):
         self.assertRaises(Exception, self.repos.create, 'repos3')
-        self.repos.delete('repos3')
-        self.repos.create('repos3')
-        self.assert_(sorted(self.repos.repos_list) == [u'project1', u'project2', u'repos3'], self.repos.repos_list)
+        try:
+            self.repos.delete('repos3')
+            self.repos.create('repos3')
+            self.assert_(sorted(self.repos.repos_list) == [u'project1', u'project2', u'repos3'], self.repos.repos_list)
+        except ImportError:
+            pass
 
     def testReposDelete(self):
-        self.assertRaises(Exception, self.repos.delete, 'project1')
+        try:
+            self.repos.delete('project1')
+        except Exception, e:
+            self.assert_(str(e) == 'Repos project1 is not a blank repository.', str(e))
     
     def testReposRoot(self):
         repos.Repos('/tmp')

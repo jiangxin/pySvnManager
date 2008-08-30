@@ -87,8 +87,8 @@ class LogsController(BaseController):
             'who' : logs[i].get('author',''), 
             'when': logs[i].get('date',''), 
             'why' : h.link_to(logs[i].get('log',''), \
-                              h.url(action='view', id=logs[i].get('revision','')), \
-                              popup=['view_logs']
+                              h.url_for(action='view', id=logs[i].get('revision','')), \
+                              onclick="window.open(this.href,'view_logs','location=0,toolbar=0,width=780,height=580');return false;"
                               ), 
             }
         

@@ -25,19 +25,19 @@ class TestReposController(TestController):
         # Test redirect to login pange
         res = self.app.get(url_for(controller='repos'))
         assert res.status == 302
-        self.assertEqual(res.header('location'), '/security')
+        self.assertEqual(res.header('location'), 'http://localhost/login')
 
         # Login as common user
         self.login('nobody')
         res = self.app.get(url_for(controller='repos'))
         assert res.status == 302, res.status
-        assert res.header('location')== '/security/failed', res.header('location')
+        assert res.header('location')=='http://localhost/security/failed', res.header('location')
         
         # Permission denied for repos admin(not root admin)
         self.login('admin2')
         res = self.app.get(url_for(controller='repos'))
         assert res.status == 302, res.status
-        assert res.header('location')== '/security/failed', res.header('location')
+        assert res.header('location')=='http://localhost/security/failed', res.header('location')
 
         # Login as superuser
         self.login('root')

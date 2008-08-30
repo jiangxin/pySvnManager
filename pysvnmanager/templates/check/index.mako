@@ -6,27 +6,27 @@
 </%def>
 
 <%
-userlist = [[_("Please choose..."), '...'], 
-            [_("All users(with anon)"), '*'], 
-            [_("Known users"), '$authenticated'], 
-            [_("Anonymous"), '$anonymous'],]
+userlist = [('...', _("Please choose...")), 
+            ('*', _("All users(with anon)")), 
+            ('$authenticated', _("Known users")), 
+            ('$anonymous', _("Anonymous")),]
 for i in c.userlist:
     if i == '*' or i =='$authenticated' or i == '$anonymous':
         continue
     if i[0] == '@':
-        userlist.append([_("Group:")+i[1:], i])
+        userlist.append((i, _("Group:")+i[1:]))
     elif i[0] == '&':
-        userlist.append([_("Alias:")+i[1:], i])
+        userlist.append((i, _("Alias:")+i[1:]))
     else:
         userlist.append([i, i])
 
-reposlist = [[_("Please choose..."), '...'], [_("All repos"), '*']]
+reposlist = [('...', _("Please choose...")), ('*', _("All repos"))]
 if '/' in c.reposlist:
-	reposlist.append([_("Default"), '/'])
+	reposlist.append(('/', _("Default")))
 for i in c.reposlist:
     if i == '/':
         continue
-    reposlist.append([i, i])
+    reposlist.append((i, i))
 
 pathlist = [[_("All modules"), '*'],]
 for i in c.pathlist:
@@ -106,14 +106,14 @@ function ajax_update_path(code)
 <h2>${_("Check Permissions")}</h2>
 
 ## Classic Form
-##     ${h.form(h.url(action='permission'), method='post')}
+##     ${h.form(h.url_for(action='permission'), method='post')}
 
 ## AJAX Form
 <%
     context.write( 
         h.form_remote_tag(
             html={'id':'main_form'}, 
-            url=h.url(action='access_map'), 
+            url=h.url_for(action='access_map'), 
             update=dict(success="acl_msg", failure="message"), 
             method='post', before='showNoticesPopup()',
             complete='hideNoticesPopup();'+h.visual_effect("Highlight", "acl_msg", duration=1),
@@ -132,9 +132,8 @@ function ajax_update_path(code)
     <td>
         <input type="radio" name="userinput" value="select" Checked>
             ${_("Select username")}
-            <select name="userselector" size="1" onFocus="select_username(this.form)">
-                ${h.options_for_select(userlist, c.selected_username)}
-            </select><br/>
+            ${h.select("userselector", c.selected_username, userlist, onFocus="select_username(this.form)")}
+            <br/>
         <input type="radio" name="userinput" value="manual">
             ${_("Manual input")}
             <input type="text" name="username" size=15 maxlength=80 value="${c.typed_username}" 
@@ -144,10 +143,8 @@ function ajax_update_path(code)
     <td>
         <input type="radio" name="reposinput" value="select" Checked onClick="update_path(this.form)">
             ${_("Select repository")}
-            <select name="reposselector" size="0" onFocus="select_repos(this.form)" 
-                onChange="update_path(this.form)">
-                ${h.options_for_select(reposlist, c.selected_repos)}
-            </select><br/>
+            ${h.select("reposselector", c.selected_repos, reposlist, onFocus="select_repos(this.form)", onChange="update_path(this.form)")}
+            <br/>
         <input type="radio" name="reposinput" value="manual"> 
             ${_("Manual input")}
             <input type="text" name="reposname" value="${c.typed_repos}" 

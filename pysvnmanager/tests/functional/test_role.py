@@ -25,19 +25,19 @@ class TestRoleController(TestController):
         # Test redirect to login pange
         res = self.app.get(url_for(controller='role'))
         assert res.status == 302
-        self.assertEqual(res.header('location'), '/security')
+        self.assertEqual(res.header('location'), 'http://localhost/login')
 
         # Login as common user
         self.login('nobody')
         res = self.app.get(url_for(controller='role'))
         assert res.status == 302, res.status
-        assert res.header('location')== '/security/failed', res.header('location')
+        assert res.header('location')=='http://localhost/security/failed', res.header('location')
         
         # Permission denied for repos admin(not root admin)
         self.login('admin2')
         res = self.app.get(url_for(controller='role'))
         assert res.status == 302, res.status
-        assert res.header('location')== '/security/failed', res.header('location')
+        assert res.header('location')=='http://localhost/security/failed', res.header('location')
 
         # Login as superuser
         self.login('root')
@@ -49,13 +49,13 @@ class TestRoleController(TestController):
         # authn test
         res = self.app.get(url_for(controller='role', action='get_role_info'))
         assert res.status == 302
-        self.assertEqual(res.header('location'), '/security')
+        self.assertEqual(res.header('location'), 'http://localhost/login')
 
         # authz test
         self.login('nobody')
         res = self.app.get(url_for(controller='role', action='get_role_info'))
         assert res.status == 302, res.status
-        assert res.header('location')== '/security/failed', res.header('location')
+        assert res.header('location')=='http://localhost/security/failed', res.header('location')
         
         # Login as superuser
         self.login('root')
@@ -124,13 +124,13 @@ revision="0.2.1";
         # authn test
         res = self.app.get(url_for(controller='role', action='save_group'))
         assert res.status == 302
-        self.assertEqual(res.header('location'), '/security')
+        self.assertEqual(res.header('location'), 'http://localhost/login')
 
         # authz test
         self.login('nobody')
         res = self.app.get(url_for(controller='role', action='save_group'))
         assert res.status == 302, res.status
-        assert res.header('location')== '/security/failed', res.header('location')
+        assert res.header('location')=='http://localhost/security/failed', res.header('location')
 
         # Change group members, autodrop=no
         try:
@@ -208,13 +208,13 @@ revision="0.2.1";
         # authn test
         res = self.app.get(url_for(controller='role', action='delete_group'))
         assert res.status == 302
-        self.assertEqual(res.header('location'), '/security')
+        self.assertEqual(res.header('location'), 'http://localhost/login')
 
         # authz test
         self.login('nobody')
         res = self.app.get(url_for(controller='role', action='delete_group'))
         assert res.status == 302, res.status
-        assert res.header('location')== '/security/failed', res.header('location')
+        assert res.header('location')=='http://localhost/security/failed', res.header('location')
 
         # Delete group failed, ref by other group.
         try:
@@ -270,13 +270,13 @@ revision="0.2.1";
         # authn test
         res = self.app.get(url_for(controller='role', action='save_alias'))
         assert res.status == 302
-        self.assertEqual(res.header('location'), '/security')
+        self.assertEqual(res.header('location'), 'http://localhost/login')
 
         # authz test
         self.login('nobody')
         res = self.app.get(url_for(controller='role', action='save_alias'))
         assert res.status == 302, res.status
-        assert res.header('location')== '/security/failed', res.header('location')
+        assert res.header('location')=='http://localhost/security/failed', res.header('location')
 
         # Change alias successfully
         try:
@@ -347,13 +347,13 @@ revision="0.2.1";
         # authn test
         res = self.app.get(url_for(controller='role', action='delete_alias'))
         assert res.status == 302
-        self.assertEqual(res.header('location'), '/security')
+        self.assertEqual(res.header('location'), 'http://localhost/login')
 
         # authz test
         self.login('nobody')
         res = self.app.get(url_for(controller='role', action='delete_alias'))
         assert res.status == 302, res.status
-        assert res.header('location')== '/security/failed', res.header('location')
+        assert res.header('location')=='http://localhost/security/failed', res.header('location')
 
         # Delete alias successfully
         try:

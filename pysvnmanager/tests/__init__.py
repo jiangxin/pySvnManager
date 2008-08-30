@@ -17,26 +17,28 @@
 
 """Pylons application test package
 
-When the test runner finds and executes tests within this directory,
-this file will be loaded to setup the test environment.
+This package assumes the Pylons environment is already loaded, such as
+when this script is imported from the `nosetests --with-pylons=test.ini`
+command.
 
-It registers the root directory of the project in sys.path and
-pkg_resources, in case the project hasn't been installed with
-setuptools. It also initializes the application via websetup (paster
-setup-app) with the project's test.ini configuration file.
+This module initializes the application via ``websetup`` (`paster
+setup-app`) and provides the base testing objects.
 """
 import os
 import sys
 from shutil import copyfile
+from pylons import config
+
 from unittest import TestCase
 
-import pkg_resources
-import paste.fixture
-import paste.script.appinstall
 from paste.deploy import loadapp
+from paste.fixture import TestApp
+from paste.script.appinstall import SetupCommand
+from pylons import config
 from routes import url_for
 
-from pylons import config
+import pylons.test
+import pkg_resources
 
 __all__ = ['url_for', 'TestController']
 
@@ -49,15 +51,19 @@ pkg_resources.require('Paste')
 pkg_resources.require('PasteScript')
 
 test_file = os.path.join(conf_dir, 'test.ini')
-cmd = paste.script.appinstall.SetupCommand('setup-app')
-cmd.run([test_file])
+
+# Invoke websetup with the current config file
+SetupCommand('setup-app').run([config['__file__']])
 
 class TestController(TestCase):
 
     def __init__(self, *args, **kwargs):
         self.authz_file = os.path.dirname(__file__) + '/../../config/svn.access.test'
-        wsgiapp = loadapp('config:test.ini', relative_to=conf_dir)
-        self.app = paste.fixture.TestApp(wsgiapp)
+        if pylons.test.pylonsapp:
+            wsgiapp = pylons.test.pylonsapp
+        else:
+            wsgiapp = loadapp('config:%s' % config['__file__'])
+        self.app = TestApp(wsgiapp)
         TestCase.__init__(self, *args, **kwargs)
 
     def rollback(self):
