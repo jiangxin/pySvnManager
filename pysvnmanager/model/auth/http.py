@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from crypt import crypt
+try:
+    from crypt import crypt
+except ImportError:
+    # Native crypt is not supported by Windows, use fcrypt instead.
+    from fcrypt import crypt
 
 def htpasswd_login(username, password, config):
     authn_file = getattr(config, 'authn_file', '')

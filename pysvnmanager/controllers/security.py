@@ -20,8 +20,6 @@ import logging
 
 from pysvnmanager.lib.base import *
 
-from crypt import crypt
-
 log = logging.getLogger(__name__)
 
 class SecurityController(BaseController):
