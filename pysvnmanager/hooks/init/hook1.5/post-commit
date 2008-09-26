@@ -82,7 +82,16 @@ if [ "$mantis_integration" = "yes" ]; then
       commitlog=`$SVNLOOK  log  -r "$REV" "$REPOS" | $SED -e 's/\$/\\\\n/g'`
       commitauthor=`$SVNLOOK  author  -r "$REV" "$REPOS" | $SED -e 's/\$/\\\\n/g'`
       commitdiff=`$SVNLOOK diff -r "$REV" "$REPOS" | head -25 | $SED -e 's/\$/\\\\n/g'`
-      echo -e "Author: $commitauthor\nCommit Log:\n$commitlog\n\n****** Source code change ******\nRepository: $REPOS, Revision: $REV.\n\n$commitdiff" | $PHP -q $MANTISBT/core/checkin.php
+      $PHP -q $MANTISBT/core/checkin.php $commitauthor << EOF
+Author: $commitauthor
+Commit Log:
+$commitlog
+
+****** Source code change ******
+Repository: $REPOS, Revision: $REV.
+
+$commitdiff
+EOF
     fi
 fi
 
