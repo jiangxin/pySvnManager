@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version:  pysvnmanager\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2008-07-03 22:14+0800\n"
-"PO-Revision-Date: 2008-08-30 13:12+0800\n"
+"PO-Revision-Date: 2008-09-27 00:48+0800\n"
 "Last-Translator: Jiang Xin <worldhello.net@gmail.com>\n"
 "Language-Team: <zh@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -239,17 +239,17 @@ msgstr "用户 %(user)s 修改别名: %(alias)s。(rev:%(rev)s)"
 msgid "User %(user)s delete alias: %(alias)s. (rev:%(rev)s,%(msg)s)"
 msgstr "用户 %(user)s 删除别名: %(alias)s。(rev:%(rev)s,%(msg)s)"
 
-#: pysvnmanager/controllers/security.py:52
+#: pysvnmanager/controllers/security.py:50
 #, python-format
 msgid "User %s logged in"
 msgstr "用户 %s 登录"
 
-#: pysvnmanager/controllers/security.py:63
+#: pysvnmanager/controllers/security.py:61
 #, python-format
 msgid "Login failed for user: %s"
 msgstr "以 %s 身份登录失败"
 
-#: pysvnmanager/controllers/security.py:71
+#: pysvnmanager/controllers/security.py:69
 #, python-format
 msgid "User %s logged out"
 msgstr "用户 %s 登出"
@@ -589,43 +589,43 @@ msgstr "用户组 %s 被组 %s 引用。"
 msgid "Update failed! You are working on a out-of-date revision."
 msgstr "更新失败！您的更改是基于一个过期的版本，请先刷新再更改。"
 
-#: pysvnmanager/model/svnauthz.py:1502 pysvnmanager/model/svnauthz.py:1509
-#: pysvnmanager/model/svnauthz.py:1513
+#: pysvnmanager/model/svnauthz.py:1505 pysvnmanager/model/svnauthz.py:1512
+#: pysvnmanager/model/svnauthz.py:1516
 #, python-format
 msgid "Unknown rule format: %s"
 msgstr "未知策略格式: %s"
 
-#: pysvnmanager/model/svnauthz.py:1527
+#: pysvnmanager/model/svnauthz.py:1530
 #, python-format
 msgid "No module exist for %s:%s"
 msgstr "模块不存在: %s:%s"
 
-#: pysvnmanager/model/svnauthz.py:1637
+#: pysvnmanager/model/svnauthz.py:1640
 #, python-format
 msgid "Alias %s is referenced by group %s."
 msgstr "别名 %s 为用户组 %s 引用。"
 
-#: pysvnmanager/model/svnauthz.py:1649
+#: pysvnmanager/model/svnauthz.py:1652
 #, python-format
 msgid "%s is referenced by [%s]."
 msgstr "%s 在 [%s] 中被引用。"
 
-#: pysvnmanager/model/svnauthz.py:1785
+#: pysvnmanager/model/svnauthz.py:1788
 #, python-format
 msgid "User %(username)s has Full (RW) rights for module %(repos)s:%(path)s"
 msgstr "用户 %(username)s 对模组 %(repos)s:%(path)s 具有完全权限 (RW)"
 
-#: pysvnmanager/model/svnauthz.py:1787
+#: pysvnmanager/model/svnauthz.py:1790
 #, python-format
 msgid "User %(username)s has ReadOnly (RO) rights for module %(repos)s:%(path)s"
 msgstr "用户 %(username)s 对模组 %(repos)s:%(path)s 具有只读权限 (RO)"
 
-#: pysvnmanager/model/svnauthz.py:1789
+#: pysvnmanager/model/svnauthz.py:1792
 #, python-format
 msgid "User %(username)s can *NOT* access to module %(repos)s:%(path)s"
 msgstr "用户 %(username)s 对模组 %(repos)s:%(path)s *没有* 访问权限 (XX)"
 
-#: pysvnmanager/model/svnauthz.py:1829
+#: pysvnmanager/model/svnauthz.py:1832
 #, python-format
 msgid ""
 "\n"
@@ -644,7 +644,7 @@ msgstr ""
 "禁用: %(deny)s\n"
 "\n"
 
-#: pysvnmanager/model/svnauthz.py:1848
+#: pysvnmanager/model/svnauthz.py:1851
 #, python-format
 msgid ""
 "\n"
@@ -706,6 +706,10 @@ msgstr "版本库管理"
 #: pysvnmanager/templates/base.mako:37
 msgid "Change log"
 msgstr "修改日志"
+
+#: pysvnmanager/templates/base.mako:38
+msgid "Welcome"
+msgstr "欢迎,"
 
 #: pysvnmanager/templates/base.mako:39
 msgid "Logout"

@@ -35,7 +35,7 @@
           <td>${h.link_to(_("ACL management"), h.url_for(controller="authz", id=None))}</td>
           <td>${h.link_to(_("Repos management"), h.url_for(controller="repos", id=None))}</td>
           <td>${h.link_to(_("Change log"), h.url_for(controller="logs", id=None))}</td>
-          <td>welcome ${session.get('user')}</td>
+          <td>${_("Welcome")} ${session.get('user')}</td>
           <td>${h.link_to(_("Logout"), h.url_for(controller="logout", id=None))}</td>
       </tr>
   </table>

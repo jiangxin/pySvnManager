@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: pysvnmanager 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2008-07-03 22:14+0800\n"
-"PO-Revision-Date: 2008-08-30 13:12+0800\n"
+"PO-Revision-Date: 2008-09-27 00:48+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -229,17 +229,17 @@ msgstr ""
 msgid "User %(user)s delete alias: %(alias)s. (rev:%(rev)s,%(msg)s)"
 msgstr ""
 
-#: pysvnmanager/controllers/security.py:52
+#: pysvnmanager/controllers/security.py:50
 #, python-format
 msgid "User %s logged in"
 msgstr ""
 
-#: pysvnmanager/controllers/security.py:63
+#: pysvnmanager/controllers/security.py:61
 #, python-format
 msgid "Login failed for user: %s"
 msgstr ""
 
-#: pysvnmanager/controllers/security.py:71
+#: pysvnmanager/controllers/security.py:69
 #, python-format
 msgid "User %s logged out"
 msgstr ""
@@ -551,43 +551,43 @@ msgstr ""
 msgid "Update failed! You are working on a out-of-date revision."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1502 pysvnmanager/model/svnauthz.py:1509
-#: pysvnmanager/model/svnauthz.py:1513
+#: pysvnmanager/model/svnauthz.py:1505 pysvnmanager/model/svnauthz.py:1512
+#: pysvnmanager/model/svnauthz.py:1516
 #, python-format
 msgid "Unknown rule format: %s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1527
+#: pysvnmanager/model/svnauthz.py:1530
 #, python-format
 msgid "No module exist for %s:%s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1637
+#: pysvnmanager/model/svnauthz.py:1640
 #, python-format
 msgid "Alias %s is referenced by group %s."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1649
+#: pysvnmanager/model/svnauthz.py:1652
 #, python-format
 msgid "%s is referenced by [%s]."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1785
+#: pysvnmanager/model/svnauthz.py:1788
 #, python-format
 msgid "User %(username)s has Full (RW) rights for module %(repos)s:%(path)s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1787
+#: pysvnmanager/model/svnauthz.py:1790
 #, python-format
 msgid "User %(username)s has ReadOnly (RO) rights for module %(repos)s:%(path)s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1789
+#: pysvnmanager/model/svnauthz.py:1792
 #, python-format
 msgid "User %(username)s can *NOT* access to module %(repos)s:%(path)s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1829
+#: pysvnmanager/model/svnauthz.py:1832
 #, python-format
 msgid ""
 "\n"
@@ -599,7 +599,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1848
+#: pysvnmanager/model/svnauthz.py:1851
 #, python-format
 msgid ""
 "\n"
@@ -647,6 +647,10 @@ msgstr ""
 
 #: pysvnmanager/templates/base.mako:37
 msgid "Change log"
+msgstr ""
+
+#: pysvnmanager/templates/base.mako:38
+msgid "Welcome"
 msgstr ""
 
 #: pysvnmanager/templates/base.mako:39

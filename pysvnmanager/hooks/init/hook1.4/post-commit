@@ -73,15 +73,14 @@ fi
 ############################################################
 if [ "$mantis_integration" = "yes" ]; then
     SVNLOOK=/opt/svn/bin/svnlook
-    SED=/bin/sed
     MANTISBT=/opt/mantis/web
     PHP=/opt/php5/bin/php5
 
     if [ -f "$MANTISBT/core/checkin.php" ]; then
       export LC_ALL=zh_CN.utf8
-      commitlog=`$SVNLOOK  log  -r "$REV" "$REPOS" | $SED -e 's/\$/\\\\n/g'`
-      commitauthor=`$SVNLOOK  author  -r "$REV" "$REPOS" | $SED -e 's/\$/\\\\n/g'`
-      commitdiff=`$SVNLOOK diff -r "$REV" "$REPOS" | head -25 | $SED -e 's/\$/\\\\n/g'`
+      commitlog=`$SVNLOOK  log  -r "$REV" "$REPOS"`
+      commitauthor=`$SVNLOOK  author  -r "$REV" "$REPOS"`
+      commitdiff=`$SVNLOOK diff -r "$REV" "$REPOS" | head -25`
       $PHP -q $MANTISBT/core/checkin.php $commitauthor << EOF
 Author: $commitauthor
 Commit Log:
