@@ -52,6 +52,7 @@ source $REPOS/hooks/parse_ini.sh
 CONFIG=$REPOS/conf/hooks.ini
 readconf post_commit
 readconf email 
+readconf trac
 
 ## Sync with downstream mirror sites using svnsync
 #SVNSYNCCMD=$REPOS/hooks/svnsync.commit
@@ -67,10 +68,21 @@ if [ "$email_notify_enable" = "yes" ]; then
 fi
 
 ############################################################
-#
-# Mantisbt integration ( http://www.worldhello.net )
-#
+# Trac post commit hook
+TRAC_POST_COMMIT_HOOK=/usr/share/doc/trac/contrib/trac-post-commit-hook
+if [ "$trac_post_commit_enabled" = "yes" ]; then
+    if [ ! -z "$trac_env" ]; then
+        if [ -z "$trac_repos_name" ]; then
+            traccmd="$TRAC_POST_COMMIT_HOOK -p $trac_env -r $REV"
+        else
+            traccmd="$TRAC_POST_COMMIT_HOOK -p $trac_env -r $REV -R $trac_repos_name"
+        fi
+        eval $traccmd
+    fi 
+fi
+
 ############################################################
+# Mantisbt integration
 if [ "$mantis_integration" = "yes" ]; then
     SVNLOOK=/opt/svn/bin/svnlook
     MANTISBT=/opt/mantis/web
