@@ -55,6 +55,7 @@ class ReposController(BaseController):
             return redirect_to(h.url_for(controller='security', action='failed'))
         
     def index(self):
+        c.is_super_user = self.is_super_user
         return render('/repos/hooks.mako')
 
     def validate_repos(self, reposname):
@@ -205,6 +206,8 @@ class ReposController(BaseController):
         return result
         
     def create(self):
+        if not self.is_super_user:
+            return redirect_to(h.url_for(controller='security', action='failed'))
         return render('/repos/create.mako')
 
 
@@ -222,4 +225,6 @@ class ReposController(BaseController):
         return result
     
     def remove(self):
+        if not self.is_super_user:
+            return redirect_to(h.url_for(controller='security', action='failed'))
         return render('/repos/remove.mako')

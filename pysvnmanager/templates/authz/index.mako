@@ -597,7 +597,9 @@ function disable_delete_btn()
 ${_("Repository:")}
     <select name="repos_list" size="1" onChange='repos_changed()'>
     </select>
-<a href="#" onclick='new_repos()'>[+${_("New repository")}]</a>
+% if c.is_super_user:
+    <a href="#" onclick='new_repos()'>[+${_("New repository")}]</a>
+% endif
 </DIV>
 
 <DIV id="repos_input_box" class=gainlayout style="visibility:hidden;">

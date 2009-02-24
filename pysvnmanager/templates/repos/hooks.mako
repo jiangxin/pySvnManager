@@ -188,8 +188,10 @@ function installed_hook_form_submit(form)
 ${_("Repository:")}
     <select name="repos_list" size="1" onChange='repos_changed()'>
     </select>
-${h.link_to(_("Add repository"), h.url_for(action="create"))}
-${h.link_to(_("Remove repository"), h.url_for(action="remove"))}
+% if c.is_super_user:
+    ${h.link_to(_("Add repository"), h.url_for(action="create"))}
+    ${h.link_to(_("Remove repository"), h.url_for(action="remove"))}
+% endif
 </DIV>
 
 <DIV id="uninstall_hook_box" class=gainlayout style="visibility:hidden;position:absolute">

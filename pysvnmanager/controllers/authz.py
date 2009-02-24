@@ -54,6 +54,7 @@ class AuthzController(BaseController):
 
     def index(self):
         c.revision = self.authz.version
+        c.is_super_user = self.is_super_user
         # used for functional test.
         c.reposlist = self.own_reposlist
         
@@ -180,10 +181,14 @@ class AuthzController(BaseController):
 
         try:
             if isAddRepos:
+                if not self.is_super_user:
+                    raise Exception("Access denied.")
                 repos = self.authz.add_repos(reposname)
             else:
                 repos = self.authz.get_repos(reposname)
                 if not repos:
+                    if not self.is_super_user:
+                        raise Exception("Access denied.")
                     log.warning("Repos '%s' not exists. Create authz config automatically." % reposname)
                     repos = self.authz.add_repos(reposname)
                 
