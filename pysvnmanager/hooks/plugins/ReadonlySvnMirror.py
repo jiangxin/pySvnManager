@@ -50,7 +50,7 @@ class ReadonlySvnMirror(PluginBase):
         Return True, if this plugin has been installed.
         Simply call 'has_config()'.
         """
-        return self.has_config(self.key_switch) and self.has_config(self.key_admin)
+        return self.has_config(self.key_switch)
     
     def install_info(self):
         """
@@ -68,8 +68,10 @@ class ReadonlySvnMirror(PluginBase):
             else:
                 result += "- " + _("Readonly mirror disabled.")
             result += "\n"
-            result += "- " + _("Admin user: ") + "``" + self.get_config(self.key_admin) + "``"
-                
+            admin = self.get_config(self.key_admin)
+            if admin:
+                result += "- " + _("Admin user: ") + "``" + self.get_config(self.key_admin) + "``"
+
         return result
     
     def install_config_form(self):
@@ -128,7 +130,7 @@ class ReadonlySvnMirror(PluginBase):
             switch = 'no'
         admin = params.get('admin')
         if not admin:
-            raise Exception(_("Wrong configuration."))
+            switch = 'no'
         self.set_config(self.key_switch, switch)
         self.set_config(self.key_admin, admin)
         self.save()

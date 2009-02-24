@@ -199,9 +199,8 @@ class PluginBase(object):
             else:
                 key = self.key
 
-        if value == "":
-            if hasattr(self, "value"):
-                value = self.value
+        if value == "" and hasattr(self, "value"):
+            value = self.value
         
         if hasattr(self, "section"):
             section = self.section
@@ -226,11 +225,8 @@ class PluginBase(object):
             else:
                 key = self.key
 
-        if value == "":
-            if not hasattr(self, "value"):
-                raise Exception, _("Plugin not fully implemented.")
-            else:
-                value = self.value
+        if value == "" and hasattr(self, "value"):
+            value = self.value
         
         if hasattr(self, "section"):
             section = self.section

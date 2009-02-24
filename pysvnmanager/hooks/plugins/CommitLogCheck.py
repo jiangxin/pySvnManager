@@ -158,10 +158,8 @@ class CommitLogCheck(PluginBase):
         prohibit = params.get('prohibit')
         self.set_config(self.key_switch, switch)
         self.set_config(self.key_size, size)
-        if permit:
-            self.set_config(self.key_permit, permit)
-        if prohibit:
-            self.set_config(self.key_prohibit, prohibit)
+        self.set_config(self.key_permit, permit)
+        self.set_config(self.key_prohibit, prohibit)
         self.save()
         
 def execute(repospath=""):
