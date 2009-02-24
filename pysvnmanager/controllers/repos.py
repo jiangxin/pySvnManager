@@ -59,8 +59,7 @@ class ReposController(BaseController):
         return render('/repos/hooks.mako')
 
     def validate_repos(self, reposname):
-        if reposname not in self.own_reposlist and not self.is_super_user:
-            raise Exception("Access denied.")
+        assert reposname in self.own_reposlist or self.is_super_user
 
     def init_repos_list(self):
         filter = request.params.get('filter')

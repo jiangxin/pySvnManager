@@ -34,10 +34,12 @@ class RoleController(BaseController):
         self.aliaslist  = map(lambda x:x.uname, self.authz.aliaslist)
         self.userlist = map(lambda x:x.uname, self.authz.userlist)
         self.grouplist = map(lambda x:x.uname, self.authz.grouplist)
+        self.is_super_user = self.authz.is_super_user(self.login_as)
+        self.own_reposlist = self.authz.get_manageable_repos_list(self.login_as)
 
     def __before__(self, action):
         super(RoleController, self).__before__(action)
-        if not self.authz.is_super_user(self.login_as):
+        if not self.own_reposlist and not self.is_super_user:
             return redirect_to(h.url_for(controller='security', action='failed'))
 
     def index(self):
@@ -45,6 +47,7 @@ class RoleController(BaseController):
         c.aliaslist  = self.aliaslist
         c.userlist = self.userlist
         c.grouplist = self.grouplist
+        c.is_super_user = self.is_super_user
         return render('/role/index.mako')
     
     def get_role_info(self, role=None):
@@ -101,6 +104,7 @@ class RoleController(BaseController):
         return msg
         
     def save_group(self):
+        assert self.is_super_user
         d = request.params
         member_list = []
         msg = ""
@@ -132,6 +136,7 @@ class RoleController(BaseController):
         return msg
     
     def delete_group(self):
+        assert self.is_super_user
         d = request.params
         rolename = d.get('role')
         revision  = d.get('revision', self.authz.version)
@@ -153,6 +158,7 @@ class RoleController(BaseController):
         return msg
         
     def save_alias(self):
+        assert self.is_super_user
         d = request.params
         aliasname = d.get('aliasname')
         username = d.get('username')
@@ -174,6 +180,7 @@ class RoleController(BaseController):
         return msg
     
     def delete_alias(self):
+        assert self.is_super_user
         d = request.params
         aliasname = d.get('aliasname')
         revision  = d.get('revision', self.authz.version)

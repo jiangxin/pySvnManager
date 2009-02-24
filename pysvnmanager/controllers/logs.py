@@ -33,10 +33,12 @@ class LogsController(BaseController):
         self.rcslog = _rcs.RcsLog(cfg.authz_file)
         # Default logs per page is 10
         self.rcslog.log_per_page = cfg.log_per_page
+        self.is_super_user = self.authz.is_super_user(self.login_as)
+        self.own_reposlist = set(self.authz.get_manageable_repos_list(self.login_as))
     
     def __before__(self, action):
         super(LogsController, self).__before__(action)
-        if not self.authz.is_super_user(self.login_as):
+        if not self.own_reposlist and not self.is_super_user:
             return redirect_to(h.url_for(controller='security', action='failed'))
     
     def index(self):
@@ -160,13 +162,14 @@ class LogsController(BaseController):
         assert id and isinstance(id, basestring)
         c.contents = self.rcslog.cat(id)
         c.log = self.rcslog.get_logs(id, id)[0]
-        if self.rcslog.head == id:
+        if self.rcslog.head != id and self.is_super_user:
             c.rollback_enabled = True
         else:
             c.rollback_enabled = False
         return render('/logs/view.mako')
     
     def rollback(self, id):
+        assert self.is_super_user
         log_message = _("Rollback successfully to revision: %s") % id
         try:
             assert id and isinstance(id, basestring)

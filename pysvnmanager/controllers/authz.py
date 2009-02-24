@@ -181,14 +181,12 @@ class AuthzController(BaseController):
 
         try:
             if isAddRepos:
-                if not self.is_super_user:
-                    raise Exception("Access denied.")
+                assert self.is_super_user
                 repos = self.authz.add_repos(reposname)
             else:
                 repos = self.authz.get_repos(reposname)
                 if not repos:
-                    if not self.is_super_user:
-                        raise Exception("Access denied.")
+                    assert self.is_super_user
                     log.warning("Repos '%s' not exists. Create authz config automatically." % reposname)
                     repos = self.authz.add_repos(reposname)
                 

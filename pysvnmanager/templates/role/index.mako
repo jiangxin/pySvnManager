@@ -601,7 +601,11 @@ function do_delete(form)
 
 function enable_save_btn()
 {
+% if c.is_super_user:
 	document.main_form.save_btn.disabled = false;
+% else:
+    ;
+% endif 
 }
 
 function disable_save_btn()
@@ -611,7 +615,11 @@ function disable_save_btn()
 
 function enable_delete_btn()
 {
+% if c.is_super_user:
 	document.main_form.delete_btn.disabled = false;
+% else:
+    ;
+% endif 
 }
 
 function disable_delete_btn()
@@ -631,8 +639,10 @@ function disable_delete_btn()
 <div id='role_list_box' style="position:relative;" class=gainlayout>
 ${_("Select a role name:")}
     ${h.select("role_list", "", role_list_opts, onChange='role_changed()')}
-<a href="#" onclick='new_group()'>[+${_("New Group")}]</a>
-<a href="#" onclick='new_alias()'>[+${_("New Alias")}]</a>
+% if c.is_super_user:
+    <a href="#" onclick='new_group()'>[+${_("New Group")}]</a>
+    <a href="#" onclick='new_alias()'>[+${_("New Alias")}]</a>
+% endif
 </div>
 
 <div id='group_input_box' style="position:relative;" class=gainlayout>
@@ -705,9 +715,9 @@ ${_("New alias name:")} <input type='text' name='alias_input' onChange="enable_s
 <!-- begin: action_box -->
 <div id='action_box' style="position:relative;" class=gainlayout>
   	<input type="hidden" name="rolename">
-    <input type="button" name="save_btn"   value='${_("Save")}' onClick="do_save(this.form)">
-    <input type="button" name="delete_btn" value='${_("Delete")}' onClick="do_delete(this.form)">
-    <input type="button" name="cancel_btn" value='${_("Cancel")}' onClick="role_changed()">
+    <input type="button" name="save_btn"   value='${_("Save")}'  onClick="do_save(this.form)" ${c.is_super_user or "DISABLED"}>
+    <input type="button" name="delete_btn" value='${_("Delete")}' onClick="do_delete(this.form)" ${c.is_super_user or "DISABLED"}>
+    <input type="button" name="cancel_btn" value='${_("Cancel")}' onClick="role_changed()" ${c.is_super_user or "DISABLED"}>
 </div>
 <!-- end: action_box -->
 
