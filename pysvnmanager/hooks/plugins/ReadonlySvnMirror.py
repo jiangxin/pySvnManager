@@ -90,22 +90,20 @@ class ReadonlySvnMirror(PluginBase):
         result = ""
         result += "<p><strong>%s</strong></p>" % _("Fill this form")
         result += "<blockquote>"
-        result += "<table class=hidden>"
-        result += "\n<tr><td>"
+        result += "<dl>"
+        result += "\n<dt>"
         result += _("Enable readonly mirror: ")
-        result += "\n</td><td>"
+        result += "\n<dd>"
         result += "<input type='radio' name='switch' value='yes' " + \
                 enable_checked  + ">" + _("Enable") + "&nbsp;"
         result += "<input type='radio' name='switch' value='no' " + \
                 disable_checked + ">" + _("Disable") + "<br>"
-        result += "\n</td></tr>"
-        result += "\n<tr><td>"
+        result += "\n<dt>"
         result += _("Svnsync administrator: ")
-        result += "\n</td><td>"
-        result += "<input type='text' name='admin' size='64' value='%s'>" % \
+        result += "\n<dd>"
+        result += "<input type='text' name='admin' size='18' value='%s'>" % \
                 self.get_config(self.key_admin)
-        result += "\n</td></tr>"
-        result += "\n</table>"
+        result += "\n</dl>"
         result += "</blockquote>"
         return result
         

@@ -98,34 +98,32 @@ class CommitLogCheck(PluginBase):
         result = ""
         result += "<p><strong>%s</strong></p>" % _("Fill this form")
         result += "<blockquote>"
-        result += "<table class=hidden>"
-        result += "\n<tr><td>"
+        result += "\n<dl>"
+        result += "\n<dt>"
         result += _("Enable commit log check: ")
-        result += "\n</td><td>"
+        result += "\n<dd>"
         result += "<input type='radio' name='switch' value='yes' " + \
                 enable_checked  + ">" + _("Enable") + "&nbsp;"
         result += "<input type='radio' name='switch' value='no' " + \
                 disable_checked + ">" + _("Disable")
-        result += "\n</td></tr>"
-        result += "\n<tr><td>"
+        result += "\n<dt>"
         result += _("Minimal size of commit log: ")
-        result += "\n</td><td>"
+        result += "\n<dd>"
         result += "<input type='text' name='size' size='5' value=\"%s\">" % \
                 webhelpers.util.html_escape(self.get_config(self.key_size))
-        result += "\n</td></tr>"
-        result += "\n<tr><td>"
+        result += "\n<dt>"
         result += _("Pattern which commit log must match against: ")
-        result += "\n</td><td>"
-        result += "<input type='text' name='permit' size='64' value=\"%s\">" % \
-                webhelpers.util.html_escape(self.get_config(self.key_permit))
-        result += "\n</td></tr>"
-        result += "\n<tr><td>"
+        result += "\n<dd>"
+        result += "<textarea name='permit' rows='3' cols='40'>"
+        result += webhelpers.util.html_escape(self.get_config(self.key_permit))
+        result += "</textarea>"
+        result += "\n<dt>"
         result += _("Pattern which commit log must <b>NOT</b> match against: ")
-        result += "\n</td><td>"
-        result += "<input type='text' name='prohibit' size='64' value=\"%s\">" % \
-                webhelpers.util.html_escape(self.get_config(self.key_prohibit))
-        result += "\n</td></tr>"
-        result += "\n</table>"
+        result += "\n<dd>"
+        result += "<textarea name='prohibit' rows='3' cols='40'>"
+        result += webhelpers.util.html_escape(self.get_config(self.key_prohibit))
+        result += "</textarea>"
+        result += "\n</dl>"
         result += "</blockquote>"
         return result
         

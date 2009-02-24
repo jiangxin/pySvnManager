@@ -112,22 +112,21 @@ Options:
         result = ""
         result += "<p><strong>%s</strong></p>" % _("Fill this form")
         result += "<blockquote>"
-        result += "<table class=hidden>"
-        result += "\n<tr><td>"
+        result += "<dl>"
+        result += "\n<dt>"
         result += _("Enable email notify.")
-        result += "\n</td><td>"
+        result += "\n<dd>"
         result += "<input type='radio' name='switch' value='yes' " + \
                 enable_checked  + ">" + _("Enable") + "&nbsp;"
         result += "<input type='radio' name='switch' value='no' " + \
                 disable_checked + ">" + _("Disable") + "<br>"
-        result += "\n</td></tr>"
-        result += "\n<tr><td>"
+        result += "\n<dt>"
         result += _("Input email notify configurations: ")
-        result += "\n</td><td>"
-        result += "<input type='text' name='config' size='64' value=\"%s\">" % \
-                webhelpers.util.html_escape(self.get_config(self.key_config))
-        result += "\n</td></tr>"
-        result += "\n</table>"
+        result += "\n<dd>"
+        result += "<textarea name='config' rows='5' cols='40'>"
+        result += webhelpers.util.html_escape(self.get_config(self.key_config))
+        result += "</textarea>"
+        result += "\n</dl>"
         result += "</blockquote>"
         return result
         
