@@ -33,19 +33,33 @@ class ReposController(BaseController):
         self.login_as = session.get('user')
         # Used as checked in user to rcs file.
         self.authz.login_as = self.login_as
-        
-        self.repos_root = cfg.repos_root
-        self.repos = _repos.Repos(self.repos_root)
-        self.repos_list = self.repos.repos_list
 
+        self.own_reposlist = set(self.authz.get_manageable_repos_list(self.login_as))
+
+        # self.all_reposlist is all available repositories in the ReposRoot directory.
+        self.repos = _repos.Repos(cfg.repos_root)
+        self.all_reposlist = set(self.repos.repos_list)
+
+        self.reposlist_set = self.own_reposlist & self.all_reposlist
+        self.reposlist_unexist = self.own_reposlist - self.all_reposlist
+
+        self.is_super_user = self.authz.is_super_user(self.login_as)
+        if self.is_super_user:
+            self.reposlist_unset = self.all_reposlist - self.own_reposlist
+        else:
+            self.reposlist_unset = set()
 
     def __before__(self, action):
         super(ReposController, self).__before__(action)
-        if not self.authz.is_super_user(self.login_as):
+        if not self.own_reposlist and not self.is_super_user:
             return redirect_to(h.url_for(controller='security', action='failed'))
         
     def index(self):
         return render('/repos/hooks.mako')
+
+    def validate_repos(self, reposname):
+        if reposname not in self.own_reposlist and not self.is_super_user:
+            raise Exception("Access denied.")
 
     def init_repos_list(self):
         filter = request.params.get('filter')
@@ -56,18 +70,25 @@ class ReposController(BaseController):
         msg += 'id[0]="%s";' % '...'
         msg += 'name[0]="%s";\n' % _("Please choose...")
         total += 1;
-        for reposname in self.repos_list:
+        for reposname in sorted(self.reposlist_set):
             if filter=='blank' and not self.repos.is_blank_svn_repos(reposname):
                 continue
             msg += 'id[%d]="%s";' % (total, reposname)
             msg += 'name[%d]="%s";\n' % (total, reposname)
+            total += 1;
+        for reposname in sorted(self.reposlist_unset):
+            if filter=='blank' and not self.repos.is_blank_svn_repos(reposname):
+                continue
+            msg += 'id[%d]="%s";' % (total, reposname)
+            msg += 'name[%d]="%s";\n' % (total, reposname+' (!)')
             total += 1;
         msg += 'total=%d;\n' % total
         return msg
 
     def get_plugin_list(self):
         reposname = request.params.get('select')
-        h = _hooks.Hooks(self.repos_root + '/' + reposname)
+        self.validate_repos(reposname)
+        h = _hooks.Hooks(cfg.repos_root + '/' + reposname)
         total = 0;
         msg = ''
  
@@ -85,7 +106,8 @@ class ReposController(BaseController):
     
     def get_installed_hook_form(self):
         reposname = request.params.get('select')
-        h = _hooks.Hooks(self.repos_root + '/' + reposname)
+        self.validate_repos(reposname)
+        h = _hooks.Hooks(cfg.repos_root + '/' + reposname)
         msg = ''
         if len(h.applied_plugins) > 0:
             msg += _("Installed hooks:")
@@ -116,8 +138,9 @@ class ReposController(BaseController):
     
     def get_hook_setting_form(self):
         reposname  = request.params.get('repos')
+        self.validate_repos(reposname)
         pluginname = request.params.get('plugin')
-        h = _hooks.Hooks(self.repos_root + '/' + reposname)
+        h = _hooks.Hooks(cfg.repos_root + '/' + reposname)
         result  = "<input type='hidden' name='_repos' value='%s'>" % reposname
         result += "<input type='hidden' name='_plugin' value='%s'>" % pluginname
         result +=  h.plugins[pluginname].show_install_config_form()
@@ -128,8 +151,9 @@ class ReposController(BaseController):
         try:
             d = request.params
             reposname = d.get("_repos")
+            self.validate_repos(reposname)
             pluginname = d.get("_plugin")
-            h = _hooks.Hooks(self.repos_root + '/' + reposname)
+            h = _hooks.Hooks(cfg.repos_root + '/' + reposname)
             plugin = h.plugins[pluginname]
             plugin.install(d)
         except Exception, e:
@@ -144,6 +168,7 @@ class ReposController(BaseController):
         plugin_list=[]
         d = request.params
         reposname = d.get("_repos")
+        self.validate_repos(reposname)
         for i in d.keys():
             if "pluginid_" in i:
                 plugin_list.append(d[i])
@@ -151,7 +176,7 @@ class ReposController(BaseController):
         if plugin_list:
             log.debug("plugin_list:" + ','.join(plugin_list))
             try:
-                hookobj = _hooks.Hooks(self.repos_root + '/' + reposname)
+                hookobj = _hooks.Hooks(cfg.repos_root + '/' + reposname)
                 for pluginname in plugin_list:
                     hookobj.plugins[pluginname].reload()
                     hookobj.plugins[pluginname].uninstall()
@@ -170,6 +195,7 @@ class ReposController(BaseController):
         try:
             d = request.params
             reposname = d.get("reposname")
+            self.validate_repos(reposname)
             self.repos.create(reposname)
         except Exception, e:
             result = "<div class='error'>" + _("Create repository '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
@@ -186,6 +212,7 @@ class ReposController(BaseController):
         try:
             d = request.params
             reposname = d.get("repos_list")
+            self.validate_repos(reposname)
             self.repos.delete(reposname)
         except Exception, e:
             result = "<div class='error'>" + _("Delete repository '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
