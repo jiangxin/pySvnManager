@@ -89,6 +89,27 @@ class Repos:
         self.hooks_init(repos_name)
     
     def hooks_init(self, repos_name):
+        sys_hook_paths = ['/etc/subversion/hooks', '/opt/svn/hooks', ]
+        for p in sys_hook_paths:
+            if os.path.exists(os.path.join(p, "parse_ini.sh")):
+                return self.hooks_init_symlink(p, repos_name)
+        return self.hooks_init_copy(repos_name)
+
+    def hooks_init_symlink(self, hooks_dir, repos_name):
+        if not os.path.exists(os.path.join(hooks_dir, "parse_ini.sh")):
+            raise Exception("\"%s\" is not a valid hooks location." % hooks_dir)
+        dest = "%(root)s/%(entry)s/hooks" % { "root": self.repos_root, "entry": repos_name}
+        dest = os.path.abspath(dest)
+        
+        import shutil
+        if os.path.exists(dest):
+            assert os.path.basename(dest) == 'hooks'
+            shutil.rmtree(dest)
+        elif not os.path.exists(os.path.dirname(dest)):
+            raise Exception("Destination repository '%s' not exist!" % os.path.dirname(dest))
+        os.symlink(hooks_dir, dest)
+
+    def hooks_init_copy(self, repos_name):
         import distutils.version as dv
         version = '.'.join(self.svnversion())
         matched = 'default'
@@ -112,8 +133,8 @@ class Repos:
         if os.path.exists(dest):
             assert os.path.basename(dest) == 'hooks'
             shutil.rmtree(dest)
-        elif not os.path.exists(os.path.basename(dest)):
-            raise Exception("Destination repository '%s' not exist!" % os.path.basename(dest))
+        elif not os.path.exists(os.path.dirname(dest)):
+            raise Exception("Destination repository '%s' not exist!" % os.path.dirname(dest))
         for root, dirs, files in os.walk(src):
             targetdir = root.replace(src, dest, 1)
             os.mkdir(targetdir)
