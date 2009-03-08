@@ -1,0 +1,115 @@
+# Trac-post-commit-hook hacks.
+# Hacked by Jiang Xin <worldhello.net@gmail.com>
+# Copyright http://www.ossxp.com, 2008,2009.
+diff -r 50e1b0b4b10d contrib/trac-post-commit-hook
+--- a/contrib/trac-post-commit-hook	Fri Feb 27 11:38:26 2009 +0800
++++ b/contrib/trac-post-commit-hook	Fri Feb 27 15:14:55 2009 +0800
+@@ -1,4 +1,5 @@
+ #!/usr/bin/env python
++# -*- coding: utf-8 -*-
+ 
+ # trac-post-commit-hook
+ # ----------------------------------------------------------------------------
+@@ -51,6 +52,10 @@
+ #   command ticket:1 & ticket:2 
+ #   command ticket:1 and ticket:2
+ #
++# Alos support:
++#   command #1,3-5,7 and #9
++#   command ticket:1,3-5,7 and ticket:9
++#
+ # In addition, the ':' character can be omitted and issue or bug can be used
+ # instead of ticket.
+ #
+@@ -117,10 +122,10 @@
+ from trac.util.datefmt import utc
+ from trac.versioncontrol.api import NoSuchChangeset
+ 
+-ticket_prefix = '(?:#|(?:ticket|issue|bug)[: ]?)'
+-ticket_reference = ticket_prefix + '[0-9]+'
+-ticket_command =  (r'(?P<action>[A-Za-z]*).?'
+-                   '(?P<ticket>%s(?:(?:[, &]*|[ ]?and[ ]?)%s)*)' %
++ticket_prefix = '(?:#|ticket:|bug:)'
++ticket_reference = ticket_prefix + '[0-9]+(?:-[0-9]+)?(?:,[0-9]+(?:-[0-9]+)?)*'
++ticket_command =  (ur'(?P<action>[^\s,;.:，；。：]*)[\s:：]*'
++                   ur'(?P<ticket>%s(?:(?:[,，、 &]*|[ ]?and[ ]?)%s)*)' %
+                    (ticket_reference, ticket_reference))
+ 
+ if options.envelope:
+@@ -128,7 +133,7 @@
+                                     options.envelope[1])
+     
+ command_re = re.compile(ticket_command)
+-ticket_re = re.compile(ticket_prefix + '([0-9]+)')
++ticket_re = re.compile('([0-9]+(?:-[0-9]+)?)')
+ 
+ class CommitHook:
+     _supported_cmds = {'close':      '_cmdClose',
+@@ -137,6 +142,13 @@
+                        'fix':        '_cmdClose',
+                        'fixed':      '_cmdClose',
+                        'fixes':      '_cmdClose',
++                       u'修复':      '_cmdClose',
++                       u'修正':      '_cmdClose',
++                       u'改正':      '_cmdClose',
++                       u'关闭':      '_cmdClose',
++                       u'参考':      '_cmdRefs',
++                       u'参见':      '_cmdRefs',
++                       u'见':        '_cmdRefs',
+                        'addresses':  '_cmdRefs',
+                        're':         '_cmdRefs',
+                        'references': '_cmdRefs',
+@@ -169,6 +181,8 @@
+         else:
+             self.now = chgset.date
+ 
++        if isinstance(self.msg, str):
++            self.msg = unicode(self.msg, 'utf-8')
+         cmd_groups = command_re.findall(self.msg)
+ 
+         tickets = {}
+@@ -182,23 +196,28 @@
+         for tkt_id, cmds in tickets.iteritems():
+             try:
+                 db = self.env.get_db_cnx()
+-                
+-                ticket = Ticket(self.env, int(tkt_id), db)
+-                for cmd in cmds:
+-                    cmd(ticket)
+ 
+-                # determine sequence number... 
+-                cnum = 0
+-                tm = TicketModule(self.env)
+-                for change in tm.grouped_changelog_entries(ticket, db):
+-                    if change['permanent']:
+-                        cnum += 1
+-                
+-                ticket.save_changes(self.author, self.msg, self.now, db, cnum+1)
+-                db.commit()
+-                
+-                tn = TicketNotifyEmail(self.env)
+-                tn.notify(ticket, newticket=0, modtime=self.now)
++                if '-' in tkt_id:
++                    tkt_id_from, tkt_id_to = map(int, tkt_id.split('-'))
++                else:
++                    tkt_id_from = tkt_id_to = int(tkt_id)
++                for tkt_id in range(tkt_id_from, tkt_id_to + 1):
++                    ticket = Ticket(self.env, int(tkt_id), db)
++                    for cmd in cmds:
++                        cmd(ticket)
++
++                    # determine sequence number... 
++                    cnum = 0
++                    tm = TicketModule(self.env)
++                    for change in tm.grouped_changelog_entries(ticket, db):
++                        if change['permanent']:
++                            cnum += 1
++
++                    ticket.save_changes(self.author, self.msg, self.now, db, cnum+1)
++                    db.commit()
++
++                    tn = TicketNotifyEmail(self.env)
++                    tn.notify(ticket, newticket=0, modtime=self.now)
+             except Exception, e:
+                 # import traceback
+                 # traceback.print_exc(file=sys.stderr)

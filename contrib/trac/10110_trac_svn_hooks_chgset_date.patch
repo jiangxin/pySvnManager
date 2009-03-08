@@ -1,0 +1,44 @@
+# Trac-post-commit-hook hacks.
+# Hacked by Jiang Xin <worldhello.net@gmail.com>
+# Copyright http://www.ossxp.com, 2008,2009.
+diff -r 45aa98e92658 contrib/trac-post-commit-hook
+--- a/contrib/trac-post-commit-hook	Sun Mar 08 12:37:05 2009 +0800
++++ b/contrib/trac-post-commit-hook	Sun Mar 08 15:14:35 2009 +0800
+@@ -91,6 +91,8 @@
+                   help='Repository revision number.')
+ parser.add_option('-R', '--repository', dest='repos',
+                   help='Repository name (or default if not set).')
++parser.add_option('-t', '--time', dest='time', metavar="METHOD", default='commit',
++                  help='hook or commit(default): Use datetime when this hook runs, or commit time.')
+ parser.add_option('-u', '--user', dest='user',
+                   help='The user who is responsible for this action '+depr)
+ parser.add_option('-m', '--msg', dest='msg',
+@@ -100,6 +102,7 @@
+ parser.add_option('-s', '--siteurl', dest='url',
+                   help=depr+' the base_url from trac.ini will always be used.')
+ 
++
+ (options, args) = parser.parse_args(sys.argv[1:])
+ 
+ if not 'PYTHON_EGG_CACHE' in os.environ:
+@@ -141,7 +144,7 @@
+                        'see':        '_cmdRefs'}
+ 
+     def __init__(self, project=options.project, author=options.user,
+-                 rev=options.rev, url=options.url, reponame=options.repos):
++                 rev=options.rev, url=options.url, reponame=options.repos, timestyle=options.time):
+         self.env = open_environment(project)
+         self.reponame = reponame
+         if reponame:
+@@ -161,7 +164,10 @@
+         self.author = chgset.author
+         self.rev = rev
+         self.msg = "(In [%s]) %s" % (revstring, chgset.message)
+-        self.now = datetime.now(utc)
++        if timestyle and timestyle.lower() == 'hook' or chgset.date is None:
++            self.now = datetime.now(utc)
++        else:
++            self.now = chgset.date
+ 
+         cmd_groups = command_re.findall(self.msg)
+ 

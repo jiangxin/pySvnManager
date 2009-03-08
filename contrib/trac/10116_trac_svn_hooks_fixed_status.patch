@@ -1,0 +1,37 @@
+# Trac-post-commit-hook hacks.
+# Hacked by Jiang Xin <worldhello.net@gmail.com>
+# Copyright http://www.ossxp.com, 2008,2009.
+diff -r f23ea079e08f contrib/trac-post-commit-hook
+--- a/contrib/trac-post-commit-hook	Sun Mar 08 15:14:39 2009 +0800
++++ b/contrib/trac-post-commit-hook	Sun Mar 08 15:16:56 2009 +0800
+@@ -98,6 +98,8 @@
+                   help='Repository name (or default if not set).')
+ parser.add_option('-t', '--time', dest='time', metavar="METHOD", default='commit',
+                   help='hook or commit(default): Use datetime when this hook runs, or commit time.')
++parser.add_option('-S', '--status', dest='status', default='closed',
++                  help='Fixed ticket\'s status. Default to closed.')
+ parser.add_option('-u', '--user', dest='user',
+                   help='The user who is responsible for this action '+depr)
+ parser.add_option('-m', '--msg', dest='msg',
+@@ -156,9 +158,11 @@
+                        'see':        '_cmdRefs'}
+ 
+     def __init__(self, project=options.project, author=options.user,
+-                 rev=options.rev, url=options.url, reponame=options.repos, timestyle=options.time):
++                 rev=options.rev, url=options.url, reponame=options.repos,
++                 timestyle=options.time, status=options.status):
+         self.env = open_environment(project)
+         self.reponame = reponame
++        self.fixed_status = status
+         if reponame:
+             repos = self.env.get_repository(reponame)
+             revstring = rev + '/' + reponame
+@@ -226,7 +230,7 @@
+             
+ 
+     def _cmdClose(self, ticket):
+-        ticket['status'] = 'closed'
++        ticket['status'] = self.fixed_status or 'closed'
+         ticket['resolution'] = 'fixed'
+ 
+     def _cmdRefs(self, ticket):
