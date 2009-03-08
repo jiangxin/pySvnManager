@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pySvnManager 0.3.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2009-02-24 18:06+0800\n"
+"POT-Creation-Date: 2009-03-08 16:14+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -307,7 +307,7 @@ msgstr ""
 #: pysvnmanager/hooks/plugins/CommitLogCheck.py:66
 #: pysvnmanager/hooks/plugins/EmailNotify.py:89
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:65
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:65
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:66
 msgid "Current configuration"
 msgstr ""
 
@@ -336,7 +336,7 @@ msgstr ""
 #: pysvnmanager/hooks/plugins/CommitLogCheck.py:99
 #: pysvnmanager/hooks/plugins/EmailNotify.py:113
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:91
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:91
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:93
 msgid "Fill this form"
 msgstr ""
 
@@ -347,14 +347,14 @@ msgstr ""
 #: pysvnmanager/hooks/plugins/CommitLogCheck.py:106
 #: pysvnmanager/hooks/plugins/EmailNotify.py:120
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:98
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:98
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:100
 msgid "Enable"
 msgstr ""
 
 #: pysvnmanager/hooks/plugins/CommitLogCheck.py:108
 #: pysvnmanager/hooks/plugins/EmailNotify.py:122
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:100
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:100
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:102
 msgid "Disable"
 msgstr ""
 
@@ -480,29 +480,37 @@ msgid ""
 "tickets if subversion commit log contains ticket id."
 msgstr ""
 
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:67
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:68
 msgid "Trac post commit hook is enabled."
 msgstr ""
 
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:69
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:70
 msgid "Trac post commit hook is disabled."
 msgstr ""
 
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:71
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:102
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:72
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:104
 msgid "Trac environment location: "
 msgstr ""
 
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:73
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:74
 msgid "Repository name in trac: "
 msgstr ""
 
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:95
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:75
+msgid "Fixed ticket's status: "
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:97
 msgid "Enable trac post commit hook: "
 msgstr ""
 
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:107
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:109
 msgid "Repository name in trac (default is blank): "
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:114
+msgid "Fixed ticket status (default is closed): "
 msgstr ""
 
 #: pysvnmanager/hooks/plugins/__init__.py:111
@@ -542,7 +550,7 @@ msgstr ""
 msgid "Repos %s already exists."
 msgstr ""
 
-#: pysvnmanager/model/repos.py:166
+#: pysvnmanager/model/repos.py:187
 #, python-format
 msgid "Repos %s is not a blank repository."
 msgstr ""

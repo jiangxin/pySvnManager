@@ -1,3 +1,4 @@
+# translation of new.po to
 # translation of pysvnmanager.po to
 # Chinese (China) translations for pysvnmanager.
 # Copyright (C) 2008 ORGANIZATION
@@ -8,10 +9,10 @@
 # Jiang Xin <worldhello.net@gmail.com>, 2008, 2009.
 msgid ""
 msgstr ""
-"Project-Id-Version: pysvnmanager\n"
+"Project-Id-Version: new\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2009-02-24 18:06+0800\n"
-"PO-Revision-Date: 2009-02-24 18:14+0800\n"
+"POT-Creation-Date: 2009-03-08 16:14+0800\n"
+"PO-Revision-Date: 2009-03-08 16:17+0800\n"
 "Last-Translator: Jiang Xin <worldhello.net@gmail.com>\n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -340,7 +341,7 @@ msgstr "用户在代码提交时，必须提供提交说明。"
 #: pysvnmanager/hooks/plugins/CommitLogCheck.py:66
 #: pysvnmanager/hooks/plugins/EmailNotify.py:89
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:65
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:65
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:66
 msgid "Current configuration"
 msgstr "当前设置"
 
@@ -369,7 +370,7 @@ msgstr "提交说明 **不能** 出现类似内容："
 #: pysvnmanager/hooks/plugins/CommitLogCheck.py:99
 #: pysvnmanager/hooks/plugins/EmailNotify.py:113
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:91
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:91
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:93
 msgid "Fill this form"
 msgstr "填写表单"
 
@@ -380,14 +381,14 @@ msgstr "启用提交说明检查："
 #: pysvnmanager/hooks/plugins/CommitLogCheck.py:106
 #: pysvnmanager/hooks/plugins/EmailNotify.py:120
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:98
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:98
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:100
 msgid "Enable"
 msgstr "启用"
 
 #: pysvnmanager/hooks/plugins/CommitLogCheck.py:108
 #: pysvnmanager/hooks/plugins/EmailNotify.py:122
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:100
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:100
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:102
 msgid "Disable"
 msgstr "关闭"
 
@@ -535,32 +536,42 @@ msgstr "Trac 与 SVN 整合。"
 msgid ""
 "Integrate subversion with trac: Commit log of subversion appends to trac "
 "tickets if subversion commit log contains ticket id."
-msgstr "整合 SVN 与 trac： 如果 subversion 的提交说明包含 ticket id，则更新对应 trac 实例的 ticket 状态，将提交说明附加到 ticket 后。"
+msgstr ""
+"整合 SVN 与 trac： 如果 subversion 的提交说明包含 ticket id，则更新对应 trac "
+"实例的 ticket 状态，将提交说明附加到 ticket 后。"
 
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:67
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:68
 msgid "Trac post commit hook is enabled."
 msgstr "Trac 整合插件已经启用。"
 
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:69
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:70
 msgid "Trac post commit hook is disabled."
 msgstr "Trac 整合插件已经禁用。"
 
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:71
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:102
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:72
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:104
 msgid "Trac environment location: "
 msgstr "Trac 环境路径:"
 
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:73
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:74
 msgid "Repository name in trac: "
 msgstr "此版本库 trac 中的名称: "
 
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:95
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:75
+msgid "Fixed ticket's status: "
+msgstr "标记为修复的ticket状态: "
+
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:97
 msgid "Enable trac post commit hook: "
 msgstr "启用 trac 整合插件："
 
-#: pysvnmanager/hooks/plugins/TracPostCommit.py:107
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:109
 msgid "Repository name in trac (default is blank): "
 msgstr "此版本库 trac 中的名称（缺省为空）: "
+
+#: pysvnmanager/hooks/plugins/TracPostCommit.py:114
+msgid "Fixed ticket status (default is closed): "
+msgstr "标记为修复的 ticket 状态 (缺省为 closed):"
 
 #: pysvnmanager/hooks/plugins/__init__.py:111
 #, python-format
@@ -599,7 +610,7 @@ msgstr "版本库根不存在：%s"
 msgid "Repos %s already exists."
 msgstr "版本库 %s 已经存在。"
 
-#: pysvnmanager/model/repos.py:166
+#: pysvnmanager/model/repos.py:187
 #, python-format
 msgid "Repos %s is not a blank repository."
 msgstr "版本库 %s 不是一个空的版本库。"

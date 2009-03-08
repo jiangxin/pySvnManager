@@ -42,6 +42,7 @@ class TracPostCommit(PluginBase):
     key_switch     = "trac_post_commit_enabled"
     key_trac_env   = "trac_env"
     key_trac_repos_name = "trac_repos_name"
+    key_trac_fixed_status = "trac_fixed_status"
     
     section = 'trac'
     
@@ -71,6 +72,8 @@ class TracPostCommit(PluginBase):
             result += "- " + _("Trac environment location: ") + self.get_config(self.key_trac_env)
             result += "\n"
             result += "- " + _("Repository name in trac: ") + self.get_config(self.key_trac_repos_name) or '*default*'
+            result += "\n"
+            result += "- " + _("Fixed ticket's status: ") + self.get_config(self.key_trac_fixed_status) or '*default*'
             
         return result
     
@@ -108,6 +111,11 @@ class TracPostCommit(PluginBase):
         result += "\n<dd>"
         result += "<input type='text' name='trac_repos_name' size='20' value=\"%s\">" % \
                 webhelpers.util.html_escape(self.get_config(self.key_trac_repos_name))
+        result += "\n<dt>"
+        result += _("Fixed ticket status (default is closed): ")
+        result += "\n<dd>"
+        result += "<input type='text' name='trac_fixed_status' size='10' value=\"%s\">" % \
+                webhelpers.util.html_escape(self.get_config(self.key_trac_fixed_status))
         result += "\n</dl>"
         result += "</blockquote>"
         return result
@@ -120,6 +128,7 @@ class TracPostCommit(PluginBase):
         self.unset_config(self.key_switch)
         self.unset_config(self.key_trac_env)
         self.unset_config(self.key_trac_repos_name)
+        self.unset_config(self.key_trac_fixed_status)
         self.save()
     
     def install(self, params=None):
@@ -134,6 +143,7 @@ class TracPostCommit(PluginBase):
             switch = 'no'
         trac_env = params.get('trac_env')
         trac_repos_name = params.get('trac_repos_name')
+        trac_fixed_status = params.get('trac_fixed_status')
         log.debug("trac post commit setting: %s, %s" % (trac_env, trac_repos_name))
         if not trac_env:
             raise Exception('Trac environment not defined!')
@@ -142,6 +152,7 @@ class TracPostCommit(PluginBase):
         self.set_config(self.key_switch, switch)
         self.set_config(self.key_trac_env, trac_env)
         self.set_config(self.key_trac_repos_name, trac_repos_name)
+        self.set_config(self.key_trac_fixed_status, trac_fixed_status)
         self.save()
         
 def execute(repospath=""):
