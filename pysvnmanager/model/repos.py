@@ -104,10 +104,10 @@ class Repos:
         import shutil
         if os.path.exists(dest):
             assert os.path.basename(dest) == 'hooks'
-            if os.path.isdir(dest):
-                shutil.rmtree(dest)
-            else:
+            if os.path.islink(dest):
                 os.unlink(dest)
+            else:
+                shutil.rmtree(dest)
         elif not os.path.exists(os.path.dirname(dest)):
             raise Exception("Destination repository '%s' not exist!" % os.path.dirname(dest))
         os.symlink(hooks_dir, dest)
@@ -135,10 +135,10 @@ class Repos:
         import shutil
         if os.path.exists(dest):
             assert os.path.basename(dest) == 'hooks'
-            if os.path.isdir(dest):
-                shutil.rmtree(dest)
-            else:
+            if os.path.islink(dest):
                 os.unlink(dest)
+            else:
+                shutil.rmtree(dest)
         elif not os.path.exists(os.path.dirname(dest)):
             raise Exception("Destination repository '%s' not exist!" % os.path.dirname(dest))
         for root, dirs, files in os.walk(src):
