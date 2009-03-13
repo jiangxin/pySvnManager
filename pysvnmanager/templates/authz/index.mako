@@ -467,23 +467,25 @@ function save_authz(form)
 		rules += form.authz_list.options[i].value + '\n';
 	}
 
-	if (form.authz_list.length>0 && path =='')
-	{
-		alert('${_("Please input module path.")}');
-		return false;
-	}
-	
+
 	if (reposname == '')
 	{
 		alert('${_("Please input repository name.")}');
 		return false;
 	}
+
 	if (mode1 == 'new' && path == '' && admins == '')
 	{
 		alert('${_("Save failed.")}');
 		return false;
 	}
-			
+
+	if (mode2 == 'new' && path =='')
+	{
+		alert('${_("Please input module path.")}');
+		return false;
+	}
+
 	var params = {reposname:reposname, admins:admins, path:path, rules:rules, mode1:mode1, mode2:mode2, revision:revision};
 	showNoticesPopup();
 	new Ajax.Request(
