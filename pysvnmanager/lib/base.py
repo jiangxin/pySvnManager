@@ -39,28 +39,6 @@ from localconfig import LocalConfig as cfg
 #import logging
 #log = logging.getLogger(__name__)
 
-def get_unicode(msg, escape=False):
-    if isinstance(msg, basestring) and not isinstance(msg, unicode):
-        msg = unicode(msg, 'utf-8')
-    if escape and isinstance(msg, basestring):
-        msg = msg.encode('raw_unicode_escape')
-    return msg
-
-def get_utf8(msg, escape=False):
-    if isinstance(msg, unicode):
-        msg = msg.encode('utf-8')
-    if escape and isinstance(msg, basestring):
-        msg = repr(msg)[1:-1]
-    return msg
-
-def except_to_unicode(e):
-    msg = ', '.join(e.args)
-    return get_unicode(msg)
-
-def except_to_utf8(e):
-    msg = ', '.join(e.args)
-    return get_utf8(msg)
-
 class BaseController(WSGIController):
     requires_auth = []
 

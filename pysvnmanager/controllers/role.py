@@ -19,6 +19,7 @@
 import logging
 
 from pysvnmanager.lib.base import *
+from pysvnmanager.lib.text import to_unicode
 from pysvnmanager.model.svnauthz import *
 
 log = logging.getLogger(__name__)
@@ -128,7 +129,7 @@ class RoleController(BaseController):
             self.authz.set_group(rolename, member_list, autodrop=autodrop)
             self.authz.save(revision, comment=log_message)
         except Exception, e:
-            msg = except_to_unicode(e)
+            msg = to_unicode(e)
 
         log.info(log_message)
         if msg: log.error(msg)
@@ -150,7 +151,7 @@ class RoleController(BaseController):
                 self.authz.del_group(rolename)
                 self.authz.save(revision, comment=log_message)
             except Exception, e:
-                msg = except_to_unicode(e)
+                msg = to_unicode(e)
 
         log.info(log_message)
         if msg: log.error(msg)
@@ -172,7 +173,7 @@ class RoleController(BaseController):
             self.authz.add_alias(aliasname, username)
             self.authz.save(revision, comment=log_message)
         except Exception, e:
-            msg = except_to_unicode(e)
+            msg = to_unicode(e)
 
         log.info(log_message)
         if msg: log.error(msg)
@@ -194,7 +195,7 @@ class RoleController(BaseController):
                 self.authz.del_alias(aliasname)
                 self.authz.save(revision, comment=log_message)
             except Exception, e:
-                msg = except_to_unicode(e)
+                msg = to_unicode(e)
 
         log.info(log_message)
         if msg: log.error(msg)

@@ -27,6 +27,9 @@ import math
 import logging
 log = logging.getLogger(__name__)
 
+sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+from pysvnmanager.lib.text import to_unicode, to_utf8
+
 #reload(sys) # in Python2.5, method sys.setdefaultencoding 
             #will be delete after initialize. we need reload it.
 #sys.setdefaultencoding('utf-8')
@@ -37,7 +40,6 @@ CMD_RCS="RCSINIT= rcs"
 CMD_RLOG="RCSINIT= rlog"
 CMD_RCSDIFF="RCSINIT= rcsdiff"
 
-
 def is_rcs_exist(wcfile):
     wcpath = os.path.dirname(os.path.abspath(wcfile))
     if os.path.isdir(wcpath+'/RCS'):
@@ -45,20 +47,6 @@ def is_rcs_exist(wcfile):
     else:
         rcsfile = wcfile+',v'
     return os.path.exists(rcsfile)
-
-def get_unicode(msg, escape=False):
-    if isinstance(msg, basestring) and not isinstance(msg, unicode):
-        msg = unicode(msg, 'utf-8')
-    if escape and isinstance(msg, basestring):
-        msg = msg.encode('raw_unicode_escape')
-    return msg
-
-def get_utf8(msg, escape=False):
-    if isinstance(msg, unicode):
-        msg = msg.encode('utf-8')
-    if escape and isinstance(msg, basestring):
-        msg = repr(msg)[1:-1]
-    return msg
 
 def backup(wcfile, comment='', user=''):
     if not wcfile:
@@ -70,9 +58,9 @@ def backup(wcfile, comment='', user=''):
     if not comment:
         comment = "no message."
     
-    wcfile = get_utf8(wcfile)
-    comment = get_utf8(comment)
-    user = get_utf8(user, escape=True)
+    wcfile = to_utf8(wcfile)
+    comment = to_utf8(comment)
+    user = to_utf8(user, escape=True)
     
     cmd = []
     if not is_rcs_exist(wcfile):
@@ -110,7 +98,7 @@ def restore(wcfile, revision=""):
     cmd = '%(cmd)s %(opts)s -q -f "%(file)s" 2>&1' % {'cmd':CMD_CO, "opts":opts, "file":wcfile }
     buff = os.popen(cmd).read().strip()
     if buff:
-        raise Exception, "Command: %s\nError Message: %s\n" % (get_unicode(cmd), get_unicode(buff))
+        raise Exception, "Command: %s\nError Message: %s\n" % (to_unicode(cmd), to_unicode(buff))
 
 
 def cat(wcfile, revision=""):
@@ -123,10 +111,10 @@ def cat(wcfile, revision=""):
 
     cmd = '%(cmd)s %(opts)s -q "%(file)s"' % {'cmd':CMD_CO, "opts":opts, "file":wcfile }
     buff = os.popen(cmd).read().strip()
-    return get_unicode(buff)
+    return to_unicode(buff)
 
 def differ(filename, rev1="", rev2=""):
-    filename=get_utf8(filename)
+    filename=to_utf8(filename)
     opts=""
     if rev1 and rev2:
         opts="-r%s -r%s" % (rev1, rev2)
@@ -136,7 +124,7 @@ def differ(filename, rev1="", rev2=""):
     cmd = '%(cmd)s %(opts)s -u -q "%(file)s"' % {'cmd':CMD_RCSDIFF, 'opts':opts, 'file':filename}
     log.debug('Command: '+cmd)
     buff = os.popen(cmd).read()
-    return get_unicode(buff)
+    return to_unicode(buff)
 
 class RcsLog(object):
     
@@ -290,7 +278,7 @@ class RcsLog(object):
             m = self.p['date'].search(lines[1])
             commit_time = ""
             if m:
-                commit_time = get_unicode(m.group(1))
+                commit_time = to_unicode(m.group(1))
             else:
                 log.error("not find date in line: %s" % lines[1])
                 continue
@@ -299,13 +287,13 @@ class RcsLog(object):
             m = self.p['author'].search(lines[1])
             commit_author = ""
             if m:
-                commit_author = get_unicode(eval("'%s'" % m.group(1)))
+                commit_author = to_unicode(eval("'%s'" % m.group(1)))
             else:
                 log.error("not find author in line: %s" % lines[1])
                 continue
             
             # logs...
-            commit_log = get_unicode('\n'.join(lines[2:]))
+            commit_log = to_unicode('\n'.join(lines[2:]))
             
             self.revs.append({'revision':commit_revision,
                               'date':commit_time,

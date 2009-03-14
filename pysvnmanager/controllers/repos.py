@@ -19,6 +19,7 @@
 import logging
 
 from pysvnmanager.lib.base import *
+from pysvnmanager.lib.text import to_unicode
 from pysvnmanager.model.svnauthz import *
 from pysvnmanager.model import repos as _repos
 from pysvnmanager.model import hooks as _hooks
@@ -158,7 +159,7 @@ class ReposController(BaseController):
             plugin.install(d)
         except Exception, e:
             result = "<div class='error'>" + _("Apply plugin '%(plugin)s' on '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
-                        "plugin": pluginname, "repos":reposname, "msg": except_to_unicode(e) } + "</div>"
+                        "plugin": pluginname, "repos":reposname, "msg": to_unicode(e) } + "</div>"
         else:
             result = "<div class='info'>" + _("Apply plugin '%(plugin)s' on '%(repos)s' success.") % {
                         "plugin": pluginname, "repos":reposname} + "</div>"
@@ -183,7 +184,7 @@ class ReposController(BaseController):
                     log.info("my delete plugin %s, %s" % (pluginname, hookobj.plugins[pluginname].name))
             except Exception, e:
                 result = "<div class='error'>" + _("Delete plugin '%(plugin)s' on '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
-                        "plugin": ", ".join(plugin_list), "repos":reposname, "msg": except_to_unicode(e) } + "</div>"
+                        "plugin": ", ".join(plugin_list), "repos":reposname, "msg": to_unicode(e) } + "</div>"
             else:
                 result = "<div class='info'>" + _("Delete plugin '%(plugin)s' on '%(repos)s' success.") % {
                         "plugin": ", ".join(plugin_list), "repos":reposname} + "</div>"
@@ -199,7 +200,7 @@ class ReposController(BaseController):
             self.repos.create(reposname)
         except Exception, e:
             result = "<div class='error'>" + _("Create repository '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
-                        "repos":reposname, "msg": except_to_unicode(e) } + "</div>"
+                        "repos":reposname, "msg": to_unicode(e) } + "</div>"
         else:
             result = "<div class='info'>" + _("Create repository '%(repos)s' success.") % {"repos":reposname} + "</div>"
         return result
@@ -218,7 +219,7 @@ class ReposController(BaseController):
             self.repos.delete(reposname)
         except Exception, e:
             result = "<div class='error'>" + _("Delete repository '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
-                        "repos":reposname, "msg": except_to_unicode(e) } + "</div>"
+                        "repos":reposname, "msg": to_unicode(e) } + "</div>"
         else:
             result = "<div class='info'>" + _("Delete blank repository '%(repos)s' success.") % {"repos":reposname} + "</div>"
         return result

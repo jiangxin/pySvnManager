@@ -19,6 +19,7 @@
 import logging
 
 from pysvnmanager.lib.base import *
+from pysvnmanager.lib.text import to_unicode
 from pysvnmanager.model import rcsbackup as _rcs
 from pysvnmanager.model.svnauthz import *
 
@@ -176,9 +177,7 @@ class LogsController(BaseController):
             self.rcslog.restore(id)
             self.rcslog.backup(comment=log_message, user=self.login_as)
         except Exception, e:
-            msg = e.message
-            if isinstance(msg, str):
-                msg = unicode(msg, 'utf-8')
+            msg = to_unicode(e)
             c.msg = _("Rollback failed: %s") % msg
         else:
             c.msg = log_message

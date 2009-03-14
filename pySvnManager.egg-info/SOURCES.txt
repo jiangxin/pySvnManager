@@ -9,6 +9,9 @@ test.ini
 config/Makefile
 config/README
 contrib/mantis/021_checkin_user_as_bug_submit_user.patch
+contrib/trac/10110_trac_svn_hooks_chgset_date.patch
+contrib/trac/10115_trac_svn_hooks_ticket_range.patch
+contrib/trac/10116_trac_svn_hooks_fixed_status.patch
 docs/index.txt
 pySvnManager.egg-info/PKG-INFO
 pySvnManager.egg-info/SOURCES.txt
@@ -123,6 +126,7 @@ pysvnmanager/lib/__init__.py
 pysvnmanager/lib/app_globals.py
 pysvnmanager/lib/base.py
 pysvnmanager/lib/helpers.py
+pysvnmanager/lib/text.py
 pysvnmanager/model/__init__.py
 pysvnmanager/model/configobj.py
 pysvnmanager/model/hooks.py
