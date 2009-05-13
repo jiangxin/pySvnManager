@@ -1,0 +1,745 @@
+diff -r ff0dca61812e subversion/libsvn_subr/config.c
+--- a/subversion/libsvn_subr/config.c	Fri Mar 13 11:54:26 2009 +0800
++++ b/subversion/libsvn_subr/config.c	Wed May 13 11:14:39 2009 +0800
+@@ -16,6 +16,17 @@
+  * ====================================================================
+  */
+ 
++/*
++ * Wildcard characters can be used as section name in authz file,
++ * which makes authz config file easy to config.
++ *
++ * Example for wildcard characters in section name:
++ *   [reposname:/branches/?**?/src]
++ *   (Note: Character '*' and '?' are both wildcard. In this case '?'
++ *          is used to protect comments not be broken.)
++ * 
++ * by Jiang Xin <worldhello.net AT gmail.com>, http://www.ossxp.com
++ */
+ 
+ 
+ #define APR_WANT_STRFUNC
+@@ -28,6 +39,8 @@
+ #include "svn_pools.h"
+ #include "config_impl.h"
+ 
++#include "my_fnmatch.h"
++
+ #include "svn_private_config.h"
+ 
+ 
+@@ -80,6 +93,7 @@
+   svn_error_t *err;
+ 
+   cfg->sections = apr_hash_make(pool);
++  cfg->xsections = apr_hash_make(pool);
+   cfg->pool = pool;
+   cfg->x_pool = svn_pool_create(pool);
+   cfg->x_values = FALSE;
+@@ -287,6 +301,31 @@
+             return;
+         }
+     }
++  for (sec_ndx = apr_hash_first(pool, cfg->xsections);
++       sec_ndx != NULL;
++       sec_ndx = apr_hash_next(sec_ndx))
++    {
++      void *sec_ptr;
++      cfg_section_t *sec;
++      apr_hash_index_t *opt_ndx;
++
++      apr_hash_this(sec_ndx, NULL, NULL, &sec_ptr);
++      sec = sec_ptr;
++
++      for (opt_ndx = apr_hash_first(pool, sec->options);
++           opt_ndx != NULL;
++           opt_ndx = apr_hash_next(opt_ndx))
++        {
++          void *opt_ptr;
++          cfg_option_t *opt;
++
++          apr_hash_this(opt_ndx, NULL, NULL, &opt_ptr);
++          opt = opt_ptr;
++
++          if (callback(baton, sec, opt))
++            return;
++        }
++    }
+ }
+ 
+ 
+@@ -369,8 +408,95 @@
+   svn_stringbuf_set(cfg->tmp_key, section);
+   make_hash_key(cfg->tmp_key->data);
+ 
+-  sec_ptr = apr_hash_get(cfg->sections, cfg->tmp_key->data,
++  if (section != NULL && (strchr(section, '*') || strchr(section, '?')))
++    {
++      sec_ptr = apr_hash_get(cfg->xsections, cfg->tmp_key->data,
++                             cfg->tmp_key->len);
++    }
++  else
++    {
++      sec_ptr = apr_hash_get(cfg->sections, cfg->tmp_key->data,
++                             cfg->tmp_key->len);
++    }
++  if (sectionp != NULL)
++    *sectionp = sec_ptr;
++
++  if (sec_ptr != NULL && option != NULL)
++    {
++      cfg_section_t *sec = sec_ptr;
++      cfg_option_t *opt;
++
++      /* Canonicalize the option key */
++      svn_stringbuf_set(cfg->tmp_key, option);
++      make_hash_key(cfg->tmp_key->data);
++
++      opt = apr_hash_get(sec->options, cfg->tmp_key->data,
+                          cfg->tmp_key->len);
++      /* NOTE: ConfigParser's sections are case sensitive. */
++      if (opt == NULL
++          && apr_strnatcasecmp(section, SVN_CONFIG__DEFAULT_SECTION) != 0)
++        /* Options which aren't found in the requested section are
++           also sought after in the default section. */
++        opt = find_option(cfg, SVN_CONFIG__DEFAULT_SECTION, option, &sec);
++      return opt;
++    }
++
++  return NULL;
++}
++
++
++/* if pattern in section name, search section in cfg->xsections using
++   fnmatch method. */
++static cfg_option_t *
++find_option2(svn_config_t *cfg, const char *section, const char *option,
++            cfg_section_t **sectionp)
++{
++  apr_pool_t *pool;
++  void *sec_ptr;
++
++  /* Canonicalize the hash key */
++  svn_stringbuf_set(cfg->tmp_key, section);
++  make_hash_key(cfg->tmp_key->data);
++
++  if (section != NULL && (strchr(section, '*') || strchr(section, '?')))
++    {
++      sec_ptr = apr_hash_get(cfg->xsections, cfg->tmp_key->data,
++                             cfg->tmp_key->len);
++    }
++  else
++    {
++      sec_ptr = apr_hash_get(cfg->sections, cfg->tmp_key->data,
++                             cfg->tmp_key->len);
++    }
++
++  if (sec_ptr == NULL)
++    {
++      pool = svn_pool_create(cfg->x_pool);
++
++      /* OSSXP: search sec_ptr using fnmatch method. */
++      apr_hash_index_t *sec_ndx;
++      for (sec_ndx = apr_hash_first(pool, cfg->xsections);
++           sec_ndx != NULL;
++           sec_ndx = apr_hash_next(sec_ndx))
++        {
++          cfg_section_t *sec;
++          apr_hash_index_t *opt_ndx;
++
++          apr_hash_this(sec_ndx, NULL, NULL, &sec_ptr);
++          sec = sec_ptr;
++          if (my_fnmatch(sec->name, section, APR_FNM_PATHNAME | APR_FNM_CASE_BLIND)==0)
++            {
++              break;
++            }
++          else
++            {
++              sec_ptr = NULL;
++            }
++        }
++
++      svn_pool_destroy(pool);
++    }
++
+   if (sectionp != NULL)
+     *sectionp = sec_ptr;
+ 
+@@ -600,7 +726,15 @@
+       sec->name = apr_pstrdup(cfg->pool, section);
+       sec->hash_key = make_hash_key(apr_pstrdup(cfg->pool, section));
+       sec->options = apr_hash_make(cfg->pool);
+-      apr_hash_set(cfg->sections, sec->hash_key, APR_HASH_KEY_STRING, sec);
++      /* OSSXP: if section name with pattern, set cfg->xsections instead of cfg->sections. */
++      if (section != NULL && (strchr(section, '*') || strchr(section, '?')))
++        {
++          apr_hash_set(cfg->xsections, sec->hash_key, APR_HASH_KEY_STRING, sec);
++        }
++      else
++        {
++          apr_hash_set(cfg->sections, sec->hash_key, APR_HASH_KEY_STRING, sec);
++        }
+     }
+ 
+   apr_hash_set(sec->options, opt->hash_key, APR_HASH_KEY_STRING, opt);
+@@ -666,6 +800,7 @@
+   apr_hash_index_t *sec_ndx;
+   int count = 0;
+   apr_pool_t *subpool = svn_pool_create(cfg->x_pool);
++  int loop_continue = 1;
+ 
+   for (sec_ndx = apr_hash_first(subpool, cfg->sections);
+        sec_ndx != NULL;
+@@ -678,7 +813,27 @@
+       sec = sec_ptr;
+       ++count;
+       if (!callback(sec->name, baton))
+-        break;
++        {
++          loop_continue = 0;
++          break;
++        }
++    }
++
++  if (loop_continue)
++    {
++      for (sec_ndx = apr_hash_first(subpool, cfg->xsections);
++           sec_ndx != NULL;
++           sec_ndx = apr_hash_next(sec_ndx))
++        {
++          void *sec_ptr;
++          cfg_section_t *sec;
++
++          apr_hash_this(sec_ndx, NULL, NULL, &sec_ptr);
++          sec = sec_ptr;
++          ++count;
++          if (!callback(sec->name, baton))
++            break;
++        }
+     }
+ 
+   svn_pool_destroy(subpool);
+@@ -694,6 +849,7 @@
+   apr_hash_index_t *sec_ndx;
+   apr_pool_t *iteration_pool;
+   int count = 0;
++  int loop_continue = 1;
+ 
+   iteration_pool = svn_pool_create(pool);
+   for (sec_ndx = apr_hash_first(pool, cfg->sections);
+@@ -708,8 +864,30 @@
+       ++count;
+       svn_pool_clear(iteration_pool);
+       if (!callback(sec->name, baton, iteration_pool))
++      {
++        loop_continue = 0;
+         break;
++      }
+     }
++
++  if (loop_continue)
++    {
++      for (sec_ndx = apr_hash_first(pool, cfg->xsections);
++           sec_ndx != NULL;
++           sec_ndx = apr_hash_next(sec_ndx))
++        {
++          void *sec_ptr;
++          cfg_section_t *sec;
++
++          apr_hash_this(sec_ndx, NULL, NULL, &sec_ptr);
++          sec = sec_ptr;
++          ++count;
++          svn_pool_clear(iteration_pool);
++          if (!callback(sec->name, baton, iteration_pool))
++            break;
++        }
++    }
++
+   svn_pool_destroy(iteration_pool);
+ 
+   return count;
+@@ -726,7 +904,7 @@
+   int count;
+   apr_pool_t *subpool;
+ 
+-  find_option(cfg, section, NULL, &sec);
++  find_option2(cfg, section, NULL, &sec);
+   if (sec == NULL)
+     return 0;
+ 
+@@ -764,7 +942,7 @@
+   apr_pool_t *iteration_pool;
+   int count;
+ 
+-  find_option(cfg, section, NULL, &sec);
++  find_option2(cfg, section, NULL, &sec);
+   if (sec == NULL)
+     return 0;
+ 
+@@ -891,5 +1069,6 @@
+ svn_boolean_t
+ svn_config_has_section(svn_config_t *cfg, const char *section)
+ {
+-  return apr_hash_get(cfg->sections, section, APR_HASH_KEY_STRING) != NULL;
++  return apr_hash_get(cfg->sections, section, APR_HASH_KEY_STRING) != NULL ||
++         apr_hash_get(cfg->xsections, section, APR_HASH_KEY_STRING) != NULL;
+ }
+diff -r ff0dca61812e subversion/libsvn_subr/config_impl.h
+--- a/subversion/libsvn_subr/config_impl.h	Fri Mar 13 11:54:26 2009 +0800
++++ b/subversion/libsvn_subr/config_impl.h	Wed May 13 11:14:39 2009 +0800
+@@ -41,6 +41,9 @@
+   /* Table of cfg_section_t's. */
+   apr_hash_t *sections;
+ 
++  /* OSSXP: Table of cfg_section_t's with pattern in section name. */
++  apr_hash_t *xsections;
++
+   /* Pool for hash tables, table entries and unexpanded values */
+   apr_pool_t *pool;
+ 
+diff -r ff0dca61812e subversion/libsvn_subr/my_fnmatch.c
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/subversion/libsvn_subr/my_fnmatch.c	Wed May 13 11:14:39 2009 +0800
+@@ -0,0 +1,280 @@
++/*
++ * Copyright (c) 1989, 1993, 1994
++ *      The Regents of the University of California.  All rights reserved.
++ *
++ * This code is derived from software contributed to Berkeley by
++ * Guido van Rossum.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 3. All advertising materials mentioning features or use of this software
++ *    must display the following acknowledgement:
++ *      This product includes software developed by the University of
++ *      California, Berkeley and its contributors.
++ * 4. Neither the name of the University nor the names of its contributors
++ *    may be used to endorse or promote products derived from this software
++ *    without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++
++/*
++ * Enhanced fnmatch: 
++ *   Multiple stars like '**' matches any characters including '/'.
++ *   New flag: APR_FNM_LEADING_DIR
++ *
++ * Copyright 2009, Jiang Xin.
++ *   <worldhello.net AT gmail.com>
++ *   <jiangxin AT ossxp.com>
++ */
++
++#if defined(LIBC_SCCS) && !defined(lint)
++static char sccsid[] = "@(#)fnmatch.c	8.2 (Berkeley) 4/16/94";
++#endif /* LIBC_SCCS and not lint */
++
++/*
++ * Function fnmatch() as specified in POSIX 1003.2-1992, section B.6.
++ * Compares a filename or pathname to a pattern.
++ */
++
++#include <string.h>
++#if APR_HAVE_CTYPE_H
++# include <ctype.h>
++#endif
++#include <stdio.h>
++
++#include <apr_lib.h>
++
++#include "my_fnmatch.h"
++
++#define	EOS	'\0'
++
++static const char *rangematch(const char *, int, int);
++
++APR_DECLARE(apr_status_t) my_fnmatch(const char *pattern, const char *string, int flags)
++{
++    const char *stringstart;
++    char c, test;
++    int multistars;
++    char *p;
++
++    for (stringstart = string;;) {
++        switch (c = *pattern++) {
++        case EOS:
++            /* APR_FNM_LEADING_DIR: pattern can only match begining of string */
++            if ((flags & APR_FNM_LEADING_DIR) && string != stringstart &&
++                (*string == '/' || *(string-1) == '/')) {
++                return APR_SUCCESS;
++            }
++            return ( ( *string == EOS || flags & APR_FNM_PATHNAME && *string == '/' && *(string+1) == EOS ) ? APR_SUCCESS : APR_FNM_NOMATCH);
++        case '?':
++            if (*string == EOS) {
++                return (APR_FNM_NOMATCH);
++            }
++            if (*string == '/' && (flags & APR_FNM_PATHNAME)) {
++                return (APR_FNM_NOMATCH);
++            }
++            if (*string == '.' && (flags & APR_FNM_PERIOD) &&
++                (string == stringstart ||
++                 ((flags & APR_FNM_PATHNAME) && *(string - 1) == '/'))) {
++                return (APR_FNM_NOMATCH);
++            }
++            ++string;
++            break;
++        case '*':
++            c = *pattern;
++            /* Collapse multiple stars. */
++            multistars = 0;
++            while (c == '*') {
++                /* Multiple stars override APR_FNM_PATHNAME */
++                multistars = 1;
++                c = *++pattern;
++            }
++
++            if (*string == '.' && (flags & APR_FNM_PERIOD) &&
++                (string == stringstart ||
++                 ((flags & APR_FNM_PATHNAME) && *(string - 1) == '/'))) {
++                return (APR_FNM_NOMATCH);
++            }
++
++            /* Optimize for pattern with * at end or before /. */
++            if (c == EOS) {
++                /* Multiple stars override APR_FNM_PATHNAME */
++                /* APR_FNM_LEADING_DIR: pattern can only match begining of string */
++                if (flags & APR_FNM_PATHNAME && !multistars && 
++                    !(flags & APR_FNM_LEADING_DIR) ) {
++                    /**
++                     * Otherwize (see the following comments), check if
++                     * the remaining of string is last part of a directory.
++                     */
++                    p = strchr(string, '/');
++                    return ((p == NULL || *(p+1) == EOS) ? APR_SUCCESS : APR_FNM_NOMATCH);
++                }
++                else {
++                    /**
++                     * 1. if not set APR_FNM_PATHNAME, always returns SUCCESS.
++                     * 2. multistars have the same effect with no APR_FNM_PATHNAME
++                     *    flag set. (alwary returns SUCCESS)
++                     * 3. if set APR_FNM_LEADING_DIR, always returns SUCCESS
++                     */
++                    return (APR_SUCCESS);
++                }
++            }
++            else if (c == '/') {
++                if (flags & APR_FNM_CONTAINER_DIR &&
++                    (!(flags & APR_FNM_PATHNAME) || multistars))
++                {
++                    /**
++                     * Pattern always contains string if multiple stars or
++                     * flag APR_FNM_PATHNAME is not set. 
++                     */
++                    return (APR_SUCCESS);
++                }
++
++                if  (flags & APR_FNM_PATHNAME) {
++                    p = strchr(string, '/');
++                    if (p == NULL)
++                    {
++                        string+=strlen(string);
++                        break;
++                    }
++                    else
++                    {
++                        string = p;
++                    }
++                    /**
++                     * Multiple stars override APR_FNM_PATHNAME,
++                     * and run the following recursive search.
++                     */
++                    if (!multistars) {
++                        break;
++                    }
++                }
++            }
++
++            /* General case, use recursion. */
++            while ((test = *string) != EOS) {
++                if (!my_fnmatch(pattern, string, flags & ~APR_FNM_PERIOD)) {
++                    return (APR_SUCCESS);
++                }
++                /* Multiple stars override APR_FNM_PATHNAME */
++                if (test == '/' && flags & APR_FNM_PATHNAME && !multistars) {
++                    break;
++                }
++                ++string;
++            }
++            return (APR_FNM_NOMATCH);
++        case '[':
++            if (*string == EOS) {
++                return (APR_FNM_NOMATCH);
++            }
++            if (*string == '/' && flags & APR_FNM_PATHNAME) {
++                return (APR_FNM_NOMATCH);
++            }
++            if (*string == '.' && (flags & APR_FNM_PERIOD) &&
++                (string == stringstart ||
++                 ((flags & APR_FNM_PATHNAME) && *(string - 1) == '/'))) {
++                return (APR_FNM_NOMATCH);
++            }
++            if ((pattern = rangematch(pattern, *string, flags)) == NULL) {
++                return (APR_FNM_NOMATCH);
++            }
++            ++string;
++            break;
++        case '\\':
++            if (!(flags & APR_FNM_NOESCAPE)) {
++                if ((c = *pattern++) == EOS) {
++                    c = '\\';
++                    --pattern;
++                }
++            }
++            /* FALLTHROUGH */
++        default:
++            if (*string == EOS && flags & APR_FNM_CONTAINER_DIR) {
++                if (c == '/' || string == stringstart || *(string-1) == '/')
++                    return (APR_SUCCESS);
++            }
++            if (*string == EOS && flags & APR_FNM_PATHNAME) {
++                if (c == '/' && *(pattern) == EOS)
++                    return (APR_SUCCESS);
++                else
++                    return (APR_FNM_NOMATCH);
++            }
++            if (flags & APR_FNM_CASE_BLIND) {
++                if (apr_tolower(c) != apr_tolower(*string)) {
++                    return (APR_FNM_NOMATCH);
++                }
++            }
++            else if (c != *string) {
++                return (APR_FNM_NOMATCH);
++            }
++            string++;
++            break;
++        }
++    /* NOTREACHED */
++    }
++}
++
++static const char *rangematch(const char *pattern, int test, int flags)
++{
++    int negate, ok;
++    char c, c2;
++
++    /*
++     * A bracket expression starting with an unquoted circumflex
++     * character produces unspecified results (IEEE 1003.2-1992,
++     * 3.13.2).  This implementation treats it like '!', for
++     * consistency with the regular expression syntax.
++     * J.T. Conklin (conklin@ngai.kaleida.com)
++     */
++    if ((negate = (*pattern == '!' || *pattern == '^'))) {
++        ++pattern;
++    }
++
++    for (ok = 0; (c = *pattern++) != ']';) {
++        if (c == '\\' && !(flags & APR_FNM_NOESCAPE)) {
++            c = *pattern++;
++        }
++        if (c == EOS) {
++            return (NULL);
++        }
++        if (*pattern == '-' && (c2 = *(pattern + 1)) != EOS && c2 != ']') {
++            pattern += 2;
++            if (c2 == '\\' && !(flags & APR_FNM_NOESCAPE)) {
++                c2 = *pattern++;
++            }
++            if (c2 == EOS) {
++                return (NULL);
++            }
++            if ((c <= test && test <= c2)
++                || ((flags & APR_FNM_CASE_BLIND)
++                    && ((apr_tolower(c) <= apr_tolower(test))
++                        && (apr_tolower(test) <= apr_tolower(c2))))) {
++                ok = 1;
++            }
++        }
++        else if ((c == test)
++                 || ((flags & APR_FNM_CASE_BLIND)
++                     && (apr_tolower(c) == apr_tolower(test)))) {
++            ok = 1;
++        }
++    }
++    return (ok == negate ? NULL : pattern);
++}
++
+diff -r ff0dca61812e subversion/libsvn_subr/my_fnmatch.h
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/subversion/libsvn_subr/my_fnmatch.h	Wed May 13 11:14:39 2009 +0800
+@@ -0,0 +1,109 @@
++/*
++ * Copyright (c) 1992, 1993
++ *	The Regents of the University of California.  All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 3. All advertising materials mentioning features or use of this software
++ *    must display the following acknowledgement:
++ *	This product includes software developed by the University of
++ *	California, Berkeley and its contributors.
++ * 4. Neither the name of the University nor the names of its contributors
++ *    may be used to endorse or promote products derived from this software
++ *    without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ *	@(#)fnmatch.h	8.1 (Berkeley) 6/2/93
++ */
++
++/*
++ * Enhanced fnmatch: 
++ *   Multiple stars like '**' matches any characters including '/'.
++ *   New flag: APR_FNM_LEADING_DIR, APR_FNM_CONTAINER_DIR
++ *
++ * Copyright 2009, Jiang Xin.
++ *   <worldhello.net AT gmail.com>
++ *   <jiangxin AT ossxp.com>
++ */
++
++/* This file has been modified by the Apache Software Foundation. */
++/* This file has been modified by Jiang Xin <worldhello.net AT gmail.com> . */
++#ifndef	_MY_APR_FNMATCH_H_
++#define	_MY_APR_FNMATCH_H_
++
++/**
++ * @file my_fnmatch.h
++ * @brief Enhanced APR FNMatch Functions
++ */
++
++#include <apr.h>
++#include <apr_errno.h>
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++/**
++ * @defgroup apr_fnmatch Filename Matching Functions
++ * @ingroup APR 
++ * @{
++ */
++
++#define APR_FNM_NOMATCH         1     /**< Match failed. */
++ 
++#define APR_FNM_NOESCAPE        0x01  /**< Disable backslash escaping. */
++#define APR_FNM_PATHNAME        0x02  /**< Slash must be matched by slash. */
++#define APR_FNM_PERIOD          0x04  /**< Period must be matched by period. */
++#define APR_FNM_CASE_BLIND      0x08  /**< Compare characters case-insensitively.
++                                       * @remark This flag is an Apache addition 
++                                       */
++#define APR_FNM_LEADING_DIR     0x10  /**< Pattern matches an initial segment of string.
++                                       * @remark This flag is added by JiangXin AT OSSXP.COM.
++                                       */
++#define APR_FNM_CONTAINER_DIR   0x20  /**< Pattern contains string. ie, is subdir of string.
++                                       * @remark This flag is added by JiangXin AT OSSXP.COM.
++                                       */
++
++/**
++ * Try to match the string to the given pattern, return APR_SUCCESS if
++ *    match, else return APR_FNM_NOMATCH.
++ * @param pattern The pattern to match to
++ * @param strings The string we are trying to match
++ * @param flags flags to use in the match.  Bitwise OR of:
++ * <PRE>
++ *              APR_FNM_NOESCAPE       Disable backslash escaping
++ *              APR_FNM_PATHNAME       Slash must be matched by slash
++ *              APR_FNM_PERIOD         Period must be matched by period
++ *              APR_FNM_CASE_BLIND     Compare characters case-insensitively
++ *              APR_FNM_LEADING_DIR    Pattern matches an initial segment of string
++ *              APR_FNM_CONTAINER_DIR  Pattern contains string. ie, is subdir of string.
++ * </PRE>
++ */
++
++APR_DECLARE(apr_status_t) my_fnmatch(const char *pattern, 
++                                     const char *strings, int flags);
++
++/** @} */
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif /* !_APR_FNMATCH_H_ */
+diff -r ff0dca61812e subversion/libsvn_subr/path.c
+--- a/subversion/libsvn_subr/path.c	Fri Mar 13 11:54:26 2009 +0800
++++ b/subversion/libsvn_subr/path.c	Wed May 13 11:14:39 2009 +0800
+@@ -16,6 +16,18 @@
+  * ====================================================================
+  */
+ 
++/*
++ * Wildcard characters can be used as section name in authz file,
++ * which makes authz config file easy to config.
++ *
++ * Example for wildcard characters in section name:
++ *   [reposname:/branches/?**?/src]
++ *   (Note: Character '*' and '?' are both wildcard. In this case '?'
++ *          is used to protect comments not be broken.)
++ * 
++ * by Jiang Xin <worldhello.net AT gmail.com>, http://www.ossxp.com
++ */
++
+ 
+ 
+ #include <string.h>
+@@ -31,6 +43,8 @@
+ #include "svn_io.h"                     /* for svn_io_stat() */
+ #include "svn_ctype.h"
+ 
++#include "my_fnmatch.h"
++
+ 
+ /* The canonical empty path.  Can this be changed?  Well, change the empty
+    test below and the path library will work, not so sure about the fs/wc
+@@ -690,6 +704,17 @@
+     return path1[path1_len - 1] == '/'
+       || (path2[path1_len] == '/' || path2[path1_len] == '\0');
+ 
++  if (strchr(path1, '*') || strchr(path1, '?'))
++  {
++    if (my_fnmatch(path1, path2, APR_FNM_PATHNAME | APR_FNM_CASE_BLIND | APR_FNM_LEADING_DIR)==0)
++      return TRUE;
++  }
++  else if (strchr(path2, '*') || strchr(path2, '?'))
++  {
++    if (my_fnmatch(path2, path1, APR_FNM_PATHNAME | APR_FNM_CASE_BLIND | APR_FNM_CONTAINER_DIR)==0)
++      return TRUE;
++  }
++
+   return FALSE;
+ }
+ 
