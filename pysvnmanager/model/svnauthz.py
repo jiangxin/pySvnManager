@@ -1008,7 +1008,7 @@ class Repos(object):
         path = normalize_path(path)
 
         for i in self.module_list:
-            if i.path == path:
+            if i.path.lower() == path.lower():
                 return i
         i = Module(repos=self.name , path=path)
         self.module_list.append(i)
@@ -1031,7 +1031,7 @@ class Repos(object):
         path = normalize_path(path)
 
         for i in self.module_list:
-            if i.path == path:
+            if i.path.lower() == path.lower():
                 return i
         # OSSXP hacked subversion supports wildcard characters as module path.
         for i in self.module_list:
@@ -1080,7 +1080,7 @@ class ReposList(object):
         assert isinstance(name, basestring)
 
         for repos in self.repos_list:
-            if repos.name == name:
+            if repos.name.lower() == name.lower():
                 return repos
 
         if autocreate:
@@ -1107,7 +1107,7 @@ class ReposList(object):
             raise Exception, "Repos '%s' not exist" % name
 
         repos = self.repos_list[idx]
-        assert(repos.name == name)
+        assert(repos.name.lower() == name.lower())
 
         if recursive:
             if name == '/':
