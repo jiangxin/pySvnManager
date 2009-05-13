@@ -27,6 +27,7 @@ import rcsbackup as rcs
 import re
 import sys
 import os
+import my_fnmatch
 import StringIO
 import logging
 log = logging.getLogger(__name__)
@@ -1032,6 +1033,11 @@ class Repos(object):
         for i in self.module_list:
             if i.path == path:
                 return i
+        # OSSXP hacked subversion supports wildcard characters as module path.
+        for i in self.module_list:
+            if '*' in i.path or '?' in i.path:
+                if my_fnmatch.fnmatch(path, i.path):
+                    return i
         return None
 
     def is_blank(self):
