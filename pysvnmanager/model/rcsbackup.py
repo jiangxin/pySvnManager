@@ -65,7 +65,7 @@ def backup(wcfile, comment='', user=''):
     cmd = []
     if not is_rcs_exist(wcfile):
         # -l : lock mode, make wcfile writable
-        cmd.append('%(cmd)s -i -q -u -t-"%(msg)s" -w"%(user)s" "%(file)s" 2>&1' % \
+        cmd.append('%(cmd)s -i -q -l -t-"%(msg)s" -w"%(user)s" "%(file)s" 2>&1' % \
                 {'cmd':CMD_CI, "file":wcfile, "msg":comment, "user":user})
         # -U : set locking to no-strict.
         cmd.append('%(cmd)s -U -u -M -q "%(file)s"' % {'cmd':CMD_RCS, "file":wcfile})
