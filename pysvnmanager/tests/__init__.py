@@ -59,7 +59,7 @@ class TestController(TestCase):
 
     def __init__(self, *args, **kwargs):
         self.authz_file = os.path.dirname(__file__) + '/../../config/svn.access.test'
-        if pylons.test.pylonsapp:
+        if hasattr(pylons.test, "pylonsapp"):
             wsgiapp = pylons.test.pylonsapp
         else:
             wsgiapp = loadapp('config:%s' % config['__file__'])

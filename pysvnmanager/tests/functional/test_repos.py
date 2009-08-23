@@ -25,19 +25,24 @@ class TestReposController(TestController):
         # Test redirect to login pange
         res = self.app.get(url_for(controller='repos'))
         assert res.status == 302
-        self.assertEqual(res.header('location'), 'http://localhost/login')
+        self.assertEqual(res.header('location'), '/login')
 
         # Login as common user
         self.login('nobody')
         res = self.app.get(url_for(controller='repos'))
         assert res.status == 302, res.status
-        assert res.header('location')=='http://localhost/security/failed', res.header('location')
+        assert res.header('location')=='/security/failed', res.header('location')
         
-        # Permission denied for repos admin(not root admin)
+        # repos admin can access repos controller(not root admin), but only with authed repos
         self.login('admin2')
         res = self.app.get(url_for(controller='repos'))
-        assert res.status == 302, res.status
-        assert res.header('location')=='http://localhost/security/failed', res.header('location')
+        assert res.status == 200, res.status
+
+        # ??? Repos admin can or can not manage hooks for his/her repos ???
+        self.login('admin2')
+        res = self.app.get(url_for(controller='repos', action='init_repos_list'))
+        assert """id[0]="...";name[0]="Please choose...";
+total=1;""" in res.body, res.body
 
         # Login as superuser
         self.login('root')
@@ -51,11 +56,10 @@ class TestReposController(TestController):
         res = self.app.get(url_for(controller='repos', action="init_repos_list"))
         assert res.status == 200
         assert """id[0]="...";name[0]="Please choose...";
-id[1]="project1";name[1]="project1";
-id[2]="project2";name[2]="project2";
-id[3]="repos3";name[3]="repos3";
-total=4;
-""" in res.body, res.body[:100]
+id[1]="repos3";name[1]="repos3";
+id[2]="project1";name[2]="project1 (!)";
+id[3]="project2";name[3]="project2 (!)";
+total=4;""" in res.body, res.body[:200]
     
     def test_get_plugin_list(self):
         self.login('root')
