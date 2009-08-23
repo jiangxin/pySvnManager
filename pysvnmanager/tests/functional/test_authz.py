@@ -24,13 +24,13 @@ class TestAuthzController(TestController):
         # Test redirect to login pange
         res = self.app.get(url_for(controller='authz'))
         assert res.status == 302
-        self.assertEqual(res.header('location'), '/login')
+        assert res.header('location').endswith('/login'), res.header('location')
 
         # Login as common user
         self.login('nobody')
         res = self.app.get(url_for(controller='authz'))
         assert res.status == 302
-        self.assertEqual(res.header('location'), '/security/failed', res.header('location'))
+        assert res.header('location').endswith('/security/failed'), res.header('location')
         
         # Login as repos admin
         self.login('admin2')
@@ -50,13 +50,13 @@ class TestAuthzController(TestController):
         # authn test
         res = self.app.get(url_for(controller='authz', action='init_repos_list'))
         assert res.status == 302
-        self.assertEqual(res.header('location'), '/login')
+        assert res.header('location').endswith('/login'), res.header('location')
 
         # authz test
         self.login('nobody')
         res = self.app.get(url_for(controller='authz', action='init_repos_list'))
         assert res.status == 302, res.status
-        assert res.header('location')=='/security/failed', res.header('location')
+        assert res.header('location').endswith('/security/failed'), res.header('location')
 
         # Login as superuser
         self.login('root')
@@ -78,13 +78,13 @@ revision="0.2.1";
         # authn test
         res = self.app.get(url_for(controller='authz', action='repos_changed'))
         assert res.status == 302
-        self.assertEqual(res.header('location'), '/login')
+        assert res.header('location').endswith('/login'), res.header('location')
 
         # authz test
         self.login('nobody')
         res = self.app.get(url_for(controller='authz', action='repos_changed'))
         assert res.status == 302, res.status
-        assert res.header('location')=='/security/failed', res.header('location')
+        assert res.header('location').endswith('/security/failed'), res.header('location')
 
         # Login as superuser
         self.login('root')
@@ -119,13 +119,13 @@ revision="0.2.1";
         # authn test
         res = self.app.get(url_for(controller='authz', action='path_changed'))
         assert res.status == 302
-        self.assertEqual(res.header('location'), '/login')
+        assert res.header('location').endswith('/login'), res.header('location')
 
         # authz test
         self.login('nobody')
         res = self.app.get(url_for(controller='authz', action='path_changed'))
         assert res.status == 302, res.status
-        assert res.header('location')=='/security/failed', res.header('location')
+        assert res.header('location').endswith('/security/failed'), res.header('location')
 
         self.login('root')
         params = {'reposname':'/', 'path':u'/tags//'}
@@ -165,13 +165,13 @@ revision="0.2.1";
         try:
             res = self.app.get(url_for(controller='authz', action='save_authz'))
             assert res.status == 302
-            self.assertEqual(res.header('location'), '/login')
+            assert res.header('location').endswith('/login'), res.header('location')
 
             # authz test
             self.login('nobody')
             res = self.app.get(url_for(controller='authz', action='save_authz'))
             assert res.status == 302, res.status
-            assert res.header('location')=='/security/failed', res.header('location')
+            assert res.header('location').endswith('/security/failed'), res.header('location')
             
             # Login as superuser
             self.login('root')
@@ -333,13 +333,13 @@ revision="0.2.1";
         # authn test
         res = self.app.get(url_for(controller='authz', action='delete_authz'))
         assert res.status == 302
-        assert res.header('location')== '/login', res.header('location')
+        assert res.header('location').endswith('/login'), res.header('location')
 
         # authz test
         self.login('nobody')
         res = self.app.get(url_for(controller='authz', action='delete_authz'))
         assert res.status == 302, res.status
-        assert res.header('location')=='/security/failed', res.header('location')
+        assert res.header('location').endswith('/security/failed'), res.header('location')
 
         authz = self.load_authz()
         module1 = authz.get_module('document', u'/trunk/行政部')

@@ -25,13 +25,13 @@ class TestReposController(TestController):
         # Test redirect to login pange
         res = self.app.get(url_for(controller='repos'))
         assert res.status == 302
-        self.assertEqual(res.header('location'), '/login')
+        assert res.header('location').endswith('/login'), res.header('location')
 
         # Login as common user
         self.login('nobody')
         res = self.app.get(url_for(controller='repos'))
         assert res.status == 302, res.status
-        assert res.header('location')=='/security/failed', res.header('location')
+        assert res.header('location').endswith('/security/failed'), res.header('location')
         
         # repos admin can access repos controller(not root admin), but only with authed repos
         self.login('admin2')

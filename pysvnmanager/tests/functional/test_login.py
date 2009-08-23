@@ -30,7 +30,7 @@ class TestLoginController(TestController):
         params['password'] = password
         res = self.app.get(url_for(controller='security', action='submit'), params)
         self.assert_(res.status == 302)
-        self.assert_(res.all_headers('location') == ['/'], res.all_headers('location'))
+        self.assert_(res.all_headers('location') == ['/'] or res.all_headers('location') == ['http://localhost/'], res.all_headers('location'))
         self.assert_(res.session['user'] == 'root', res.session)
         
         # keep session test
@@ -53,5 +53,5 @@ class TestLoginController(TestController):
         # logout
         res = self.app.get(url_for(controller='security', action='logout'))
         self.assert_(res.status == 302)
-        self.assert_(res.all_headers('location') == ['/login'], res.all_headers('location'))
+        self.assert_(res.all_headers('location') == ['/login'] or res.all_headers('location') == ['http://localhost/login'], res.all_headers('location'))
         self.assert_(res.session.get('user') == None, res.session.get('user'))

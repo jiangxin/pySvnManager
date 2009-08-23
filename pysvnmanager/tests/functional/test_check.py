@@ -25,13 +25,13 @@ class TestCheckController(TestController):
         # Test redirect to login pange
         res = self.app.get(url_for(controller='check'))
         assert res.status == 302
-        self.assertEqual(res.header('location'), '/login')
+        assert res.header('location').endswith('/login'), res.header('location')
 
         # Login as common user
         self.login('nobody')
         res = self.app.get(url_for(controller='check'))
         assert res.status == 302, res.status
-        assert res.header('location')=='/security/failed', res.header('location')
+        assert res.header('location').endswith('/security/failed'), res.header('location')
         
         # Login as repos admin
         self.login('admin1')
@@ -55,13 +55,13 @@ class TestCheckController(TestController):
         # authn test
         res = self.app.get(url_for(controller='check', action='access_map'))
         assert res.status == 302
-        self.assertEqual(res.header('location'), '/login')
+        assert res.header('location').endswith('/login'), res.header('location')
 
         # authz test
         self.login('nobody')
         res = self.app.get(url_for(controller='check', action='access_map'))
         assert res.status == 302, res.status
-        assert res.header('location')=='/security/failed', res.header('location')
+        assert res.header('location').endswith('/security/failed'), res.header('location')
         
         # Login as superuser
         self.login('root')
@@ -228,13 +228,13 @@ XX:
         # authn test
         res = self.app.get(url_for(controller='check', action='get_auth_path'))
         assert res.status == 302
-        assert res.header('location')== '/login', res.header('location')
+        assert res.header('location').endswith('/login'), res.header('location')
 
         # authz test
         self.login('nobody')
         res = self.app.get(url_for(controller='check', action='get_auth_path'))
         assert res.status == 302, res.status
-        assert res.header('location')=='/security/failed', res.header('location')
+        assert res.header('location').endswith('/security/failed'), res.header('location')
 
         self.login('root')
         params = {}
