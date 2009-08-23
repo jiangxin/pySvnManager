@@ -78,9 +78,9 @@ def main(argv=None):
         elif opt in ("-s", "--size"):
             opt_size = int(arg)
         elif opt in ("-p", "--permit"):
+            if arg and not isinstance(arg, unicode):
+                arg = unicode(arg, 'utf-8')
             if arg:
-                if not isinstance(arg, unicode):
-                    arg = unicode(arg, 'utf-8')
                 opt_permit_pattern.append(arg)
         elif opt in ("-P", "--prohibit"):
             if arg:
@@ -88,9 +88,10 @@ def main(argv=None):
                     arg = unicode(arg, 'utf-8')
                 opt_prohibit_pattern.append(arg)
         elif opt in ("-m", "--message"):
-            if not isinstance(arg, unicode):
-                arg = unicode(arg, 'utf-8')
-            log_msg = arg
+            if arg:
+                if not isinstance(arg, unicode):
+                    arg = unicode(arg, 'utf-8')
+                log_msg = arg
         else:
             return usage(1)
 
@@ -103,7 +104,7 @@ def main(argv=None):
     if not log_msg:
         log_cmd = '%s log -t "%s" "%s"' % (SVNLOOK, txn, repos)
         log_msg = os.popen(log_cmd, 'r').read().rstrip('\n')
-   
+
     # Check the length of commit log
     check_strlen(log_msg, opt_size)
     
@@ -141,8 +142,8 @@ def check_strlen(log_msg, size):
             idx = idx + 1
     
     if log_length < size:
-        sys.stderr.write ("提交说明至少应包含 %d 个字符, "
-            "或者太简单了。\n" % size)
+        error_msg = u"提交说明至少应包含 %d 个字符, 或者太简单了。\n" % size
+        sys.stderr.write (error_msg.encode('utf-8'))
         sys.exit(1)
 
 
@@ -153,29 +154,30 @@ def check_pattern(log_msg, permit=None, prohibit=None):
 
     if permit:
         matched = False
-    else:
-        matched = True
+        for pat in permit:
+            if not pat: # blank pattern
+                matched = True
+                break
+            elif re.compile(pat, re.I).search(log_msg):
+                matched = True
+                break
+        if not matched:
+            error_msg = u"无法在提交说明中匹配表达式: \n%s。\n" % ',\n'.join(permit)
+            sys.stderr.write (error_msg.encode('utf-8'))
+            sys.exit(1)
 
-    for pat in permit:
-        if pat and re.compile(pat, re.I).search(log_msg):
-            matched = True
-            break
-
-    if not matched:
-        error_msg = u"无法在提交说明中匹配表达式: \n%s。\n" % ',\n'.join(permit)
-        sys.stderr.write (error_msg.encode('utf-8'))
-        sys.exit(1)
-
-    for pat in prohibit:
-        if pat and re.compile(pat, re.I).search(log_msg):
-            matched = False
-            break
-
-    if not matched:
-        error_msg = u"不允许在log中出现类似表达式: \n%s。\n" % pat
-        sys.stderr.write (error_msg.encode('utf-8'))
-        sys.exit(1)
-
+    if prohibit:
+        matched = False
+        for pat in prohibit:
+            if pat and re.compile(pat, re.I).search(log_msg):
+                matched = True
+                break
+        if matched:
+            error_msg = u"不允许在log中出现类似表达式: \n%s。\n" % pat
+            sys.stderr.write (error_msg.encode('utf-8'))
+            sys.exit(1)
 
 if __name__ == '__main__':
     main()
+
+# vim: ft=python ts=4 sw=4 et
