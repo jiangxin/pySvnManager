@@ -52,7 +52,7 @@ def main(repos, txn):
         eol_style = ''
         check_mime = True
         
-	for line in os.popen(cmd, 'r').readlines():
+        for line in os.popen(cmd, 'r').readlines():
             if pmime.match(line):
                 mime_type = pmime.match(line).group(1)
             elif pspecial.match(line):
@@ -60,7 +60,7 @@ def main(repos, txn):
             if peol.match(line):
                 eol_style = peol.match(line).group(1)
         
-	if check_mime:
+        if check_mime:
             if mime_type == "" and eol_style == '':
                 errmsg.append( "%s : 属性 svn:mime-type 或者 svn:eol-style 没有设置" % path.decode('utf-8','replace').encode('utf-8','replace') )
             elif ptext.match(mime_type) and eol_style == '':
