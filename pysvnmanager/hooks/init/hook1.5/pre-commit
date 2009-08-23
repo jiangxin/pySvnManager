@@ -72,7 +72,7 @@ fi
 
 if [ "$eol_style_check" = "yes" ]; then
     # New file must set svn:mime-type and svn:eol-style
-    $TOOLS_DIR/check-mime-type.py "$REPOS" "$TXN" || exit 1
+    $TOOLS_DIR/check-mime-type.py "$REPOS" "$TXN" $eol_style_check_force || exit 1
 fi
 
 if [ "$detect_case_insensitive_clash" = "yes" ]; then

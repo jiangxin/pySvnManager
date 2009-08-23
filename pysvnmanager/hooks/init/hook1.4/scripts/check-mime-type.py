@@ -26,8 +26,13 @@ os.environ['LANG'] = os.environ['LC_ALL'] = 'zh_CN.UTF8'
 
 MIN_LENGTH = 5
 
-def main(repos, txn):
+def main(repos, txn, force=""):
     """main entry point"""
+    
+    if force == "no":
+        force = False 
+    else:
+        force = True
 
     files_added = []
     cmd = '%s changed -t "%s" "%s"' % (SVNLOOK, txn, repos)
@@ -61,15 +66,30 @@ def main(repos, txn):
                 eol_style = peol.match(line).group(1)
         
         if check_mime:
-            if mime_type == "" and eol_style == '':
-                errmsg.append( "%s : 属性 svn:mime-type 或者 svn:eol-style 没有设置" % path.decode('utf-8','replace').encode('utf-8','replace') )
-            elif ptext.match(mime_type) and eol_style == '':
-                errmsg.append( "%s : svn:mime-type=%s 但是 svn:eol-style 没有设置" % (path.decode('utf-8','replace').encode('utf-8','replace'), mime_type) )
+            if mime_type == "" or ptext.match(mime_type):
+                if eol_style == '':
+                    ## check if crlf in file contents
+                    if not force:
+                        if crlf_in_file(txn, repos, path):
+                            errmsg.append( "CRLF (DOS style EOL) in file: %s" % path.decode('utf-8','replace').encode('utf-8','replace') )
+                        else:
+                            continue
+                    if mime_type == "":
+                        errmsg.append( "%s : 属性 svn:mime-type 或者 svn:eol-style 没有设置" % path.decode('utf-8','replace').encode('utf-8','replace') )
+                    else:
+                        errmsg.append( "%s : svn:mime-type=%s 但是 svn:eol-style 没有设置" % (path.decode('utf-8','replace').encode('utf-8','replace'), mime_type) )
 
     if len( errmsg ) > 0:
         die( errmsg )
 
-
+def crlf_in_file(txn, repos, path):
+    cmd = '%s cat -t "%s" "%s" "%s"' % (SVNLOOK, txn, repos, path)
+    buff = os.popen(cmd, 'r').read(1024)
+    if '\r' in buff:
+        return True
+    else:
+        return False
+ 
 def die(msg):
     """
     Write verbose mesage, and exit
@@ -105,4 +125,4 @@ if __name__ == '__main__':
     if len(sys.argv) < 3:
         sys.stderr.write("Usage: %s REPOS TXN\n" % (sys.argv[0]))
     else:
-        main(sys.argv[1], sys.argv[2])
+        main(sys.argv[1], sys.argv[2], sys.argv[3:] and sys.argv[3] or '')
