@@ -50,12 +50,11 @@ Check source code from sourceforge.net::
 
 Make a config file as follows::
 
-    cd pysvnmanager/config
+    cd config
     make
 
 Compile l18n messages::
     
-    cd pysvnmanager
     python setup.py compile_catalog
 
 Start web service::

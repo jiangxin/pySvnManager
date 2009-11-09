@@ -1,0 +1,14 @@
+*.pyc
+build/
+dist/
+data/
+pySvnManager.egg-info/PKG-INFO
+pySvnManager.egg-info/not-zip-safe
+pysvnmanager/i18n/en/LC_MESSAGES/pysvnmanager.mo
+pysvnmanager/i18n/zh/LC_MESSAGES/pysvnmanager.mo
+config/localconfig.py
+config/svn.access
+config/svn.access.test
+config/svn.passwd
+config/svn.passwd.test
+svnroot.test/
