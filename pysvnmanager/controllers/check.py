@@ -30,19 +30,19 @@ class CheckController(BaseController):
     def __init__(self):
         try:
             self.authz = SvnAuthz(cfg.authz_file)
+            self.login_as = session.get('user')
+            # Used as checked in user to rcs file.
+            self.authz.login_as = self.login_as
+            self.reposlist = self.authz.get_manageable_repos_list(self.login_as)
+            if self.authz.is_super_user(self.login_as):
+                for i in _repos.Repos(cfg.repos_root).repos_list:
+                    if i not in self.reposlist:
+                        self.reposlist.append(i)
+                self.reposlist = sorted(self.reposlist)
         except Exception, e:
             import traceback
             g.catch_e = [unicode(e), traceback.format_exc(5) ]
             return
-        self.login_as = session.get('user')
-        # Used as checked in user to rcs file.
-        self.authz.login_as = self.login_as
-        self.reposlist = self.authz.get_manageable_repos_list(self.login_as)
-        if self.authz.is_super_user(self.login_as):
-            for i in _repos.Repos(cfg.repos_root).repos_list:
-                if i not in self.reposlist:
-                    self.reposlist.append(i)
-            self.reposlist = sorted(self.reposlist)
 
     def __before__(self, action):
         super(CheckController, self).__before__(action)

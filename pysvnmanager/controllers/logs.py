@@ -31,16 +31,16 @@ class LogsController(BaseController):
     def __init__(self):
         try:
             self.authz = SvnAuthz(cfg.authz_file)
+            self.login_as = session.get('user')
+            self.rcslog = _rcs.RcsLog(cfg.authz_file)
+            # Default logs per page is 10
+            self.rcslog.log_per_page = cfg.log_per_page
+            self.is_super_user = self.authz.is_super_user(self.login_as)
+            self.own_reposlist = set(self.authz.get_manageable_repos_list(self.login_as))
         except Exception, e:
             import traceback
             g.catch_e = [unicode(e), traceback.format_exc(5) ]
             return
-        self.login_as = session.get('user')
-        self.rcslog = _rcs.RcsLog(cfg.authz_file)
-        # Default logs per page is 10
-        self.rcslog.log_per_page = cfg.log_per_page
-        self.is_super_user = self.authz.is_super_user(self.login_as)
-        self.own_reposlist = set(self.authz.get_manageable_repos_list(self.login_as))
     
     def __before__(self, action):
         super(LogsController, self).__before__(action)

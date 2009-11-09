@@ -31,27 +31,27 @@ class AuthzController(BaseController):
     def __init__(self):
         try:
             self.authz = SvnAuthz(cfg.authz_file)
+            self.login_as = session.get('user')
+            # Used as checked in user to rcs file.
+            self.authz.login_as = self.login_as
+            self.own_reposlist = set(self.authz.get_manageable_repos_list(self.login_as))
+            
+            # self.reposlist_new is what in ReposRoot directory.
+            self.all_reposlist = set(_repos.Repos(cfg.repos_root).repos_list)
+            self.all_reposlist.add('/')
+            
+            self.reposlist_set = self.own_reposlist & self.all_reposlist
+            self.reposlist_unexist = self.own_reposlist - self.all_reposlist
+            
+            self.is_super_user = self.authz.is_super_user(self.login_as)
+            if self.is_super_user:
+                self.reposlist_unset = self.all_reposlist - self.own_reposlist
+            else:
+                self.reposlist_unset = set()
         except Exception, e:
             import traceback
             g.catch_e = [unicode(e), traceback.format_exc(5) ]
             return
-        self.login_as = session.get('user')
-        # Used as checked in user to rcs file.
-        self.authz.login_as = self.login_as
-        self.own_reposlist = set(self.authz.get_manageable_repos_list(self.login_as))
-        
-        # self.reposlist_new is what in ReposRoot directory.
-        self.all_reposlist = set(_repos.Repos(cfg.repos_root).repos_list)
-        self.all_reposlist.add('/')
-        
-        self.reposlist_set = self.own_reposlist & self.all_reposlist
-        self.reposlist_unexist = self.own_reposlist - self.all_reposlist
-        
-        self.is_super_user = self.authz.is_super_user(self.login_as)
-        if self.is_super_user:
-            self.reposlist_unset = self.all_reposlist - self.own_reposlist
-        else:
-            self.reposlist_unset = set()
             
     def __before__(self, action):
         super(AuthzController, self).__before__(action)

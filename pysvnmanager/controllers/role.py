@@ -30,18 +30,18 @@ class RoleController(BaseController):
     def __init__(self):
         try:
             self.authz = SvnAuthz(cfg.authz_file)
+            self.login_as = session.get('user')
+            # Used as checked in user to rcs file.
+            self.authz.login_as = self.login_as
+            self.aliaslist  = map(lambda x:x.uname, self.authz.aliaslist)
+            self.userlist = map(lambda x:x.uname, self.authz.userlist)
+            self.grouplist = map(lambda x:x.uname, self.authz.grouplist)
+            self.is_super_user = self.authz.is_super_user(self.login_as)
+            self.own_reposlist = self.authz.get_manageable_repos_list(self.login_as)
         except Exception, e:
             import traceback
             g.catch_e = [unicode(e), traceback.format_exc(5) ]
             return
-        self.login_as = session.get('user')
-        # Used as checked in user to rcs file.
-        self.authz.login_as = self.login_as
-        self.aliaslist  = map(lambda x:x.uname, self.authz.aliaslist)
-        self.userlist = map(lambda x:x.uname, self.authz.userlist)
-        self.grouplist = map(lambda x:x.uname, self.authz.grouplist)
-        self.is_super_user = self.authz.is_super_user(self.login_as)
-        self.own_reposlist = self.authz.get_manageable_repos_list(self.login_as)
 
     def __before__(self, action):
         super(RoleController, self).__before__(action)
