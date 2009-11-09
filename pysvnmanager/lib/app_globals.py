@@ -27,4 +27,5 @@ class Globals(object):
         initialization and is available during requests via the 'g'
         variable
         """
+        self.catch_e = None
         pass

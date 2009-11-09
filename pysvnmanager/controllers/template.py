@@ -20,6 +20,14 @@ from pysvnmanager.lib.base import *
 
 class TemplateController(BaseController):
 
+    def __init__(self):
+        ## To prevent redirect loop
+        if g.catch_e:
+            self.catch_e = g.catch_e[:]
+            g.catch_e = None
+        else:
+            self.catch_e = None
+
     def view(self, url):
         """By default, the final controller tried to fulfill the request
         when no other routes match. It may be used to display a template
@@ -43,3 +51,11 @@ class TemplateController(BaseController):
         Found)
         """
         abort(404)
+
+    def show_e(self):
+        if self.catch_e:
+            c.catch_e = self.catch_e
+        else:
+            c.catch_e = ['', '']
+        return render('/catch_e.mako')
+

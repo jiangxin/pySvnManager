@@ -53,6 +53,10 @@ class BaseController(WSGIController):
             elif lang in ['en']:
                 add_fallback(lang)
 
+        ## Show exception and traceback info
+        if g.catch_e:
+            return redirect_to(h.url_for(controller='template', action='show_e'))
+
         if isinstance(self.requires_auth, bool) and not self.requires_auth:
             pass
         elif isinstance(self.requires_auth, (list, tuple)) and \

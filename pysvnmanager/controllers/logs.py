@@ -29,7 +29,12 @@ class LogsController(BaseController):
     requires_auth = True
     
     def __init__(self):
-        self.authz = SvnAuthz(cfg.authz_file)
+        try:
+            self.authz = SvnAuthz(cfg.authz_file)
+        except Exception, e:
+            import traceback
+            g.catch_e = [unicode(e), traceback.format_exc(5) ]
+            return
         self.login_as = session.get('user')
         self.rcslog = _rcs.RcsLog(cfg.authz_file)
         # Default logs per page is 10
