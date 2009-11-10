@@ -30,10 +30,6 @@ class CheckController(BaseController):
     def __init__(self):
         try:
             self.authz = SvnAuthz(cfg.authz_file)
-            diff = self.authz.differ()
-            if diff:
-                c.global_message = _('Some one maybe you, has modified the svn authz file by hands. Please save once to fix possible config error.') + "<blockquote>" + "<br>".join(diff.splitlines()) + "</blockquote>"
-
             self.login_as = session.get('user')
             # Used as checked in user to rcs file.
             self.authz.login_as = self.login_as
@@ -52,6 +48,9 @@ class CheckController(BaseController):
         super(CheckController, self).__before__(action)
         if not self.reposlist:
             return redirect_to(h.url_for(controller='security', action='failed'))
+        diff = self.authz.differ()
+        if diff:
+            c.global_message = _('Some one maybe you, has modified the svn authz file by hands. Please save once to fix possible config error.') + "<blockquote>" + "<br>".join(diff.splitlines()) + "</blockquote>"
         
     def index(self):
         c.reposlist = self.reposlist

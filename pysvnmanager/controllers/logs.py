@@ -31,10 +31,6 @@ class LogsController(BaseController):
     def __init__(self):
         try:
             self.authz = SvnAuthz(cfg.authz_file)
-            diff = self.authz.differ()
-            if diff:
-                c.global_message = _('Some one maybe you, has modified the svn authz file by hands. Please save once to fix possible config error.') + "<blockquote>" + "<br>".join(diff.splitlines()) + "</blockquote>"
-
             self.login_as = session.get('user')
             self.rcslog = _rcs.RcsLog(cfg.authz_file)
             # Default logs per page is 10
@@ -50,6 +46,9 @@ class LogsController(BaseController):
         super(LogsController, self).__before__(action)
         if not self.own_reposlist and not self.is_super_user:
             return redirect_to(h.url_for(controller='security', action='failed'))
+        diff = self.authz.differ()
+        if diff:
+            c.global_message = _('Some one maybe you, has modified the svn authz file by hands. Please save once to fix possible config error.') + "<blockquote>" + "<br>".join(diff.splitlines()) + "</blockquote>"
     
     def index(self):
         c.display = self.__get_log_display(1)
