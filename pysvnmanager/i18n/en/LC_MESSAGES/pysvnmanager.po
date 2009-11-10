@@ -9,35 +9,43 @@ msgstr ""
 "Project-Id-Version: pysvnmanager 0.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2009-08-23 12:30+0800\n"
-"PO-Revision-Date: 2008-09-27 00:48+0800\n"
+"PO-Revision-Date: 2009-11-10 14:23+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.4\n"
 
-#: pysvnmanager/controllers/authz.py:63
+#: pysvnmanager/controllers/authz.py:36 pysvnmanager/controllers/check.py:35
+#: pysvnmanager/controllers/logs.py:36 pysvnmanager/controllers/repos.py:37
+#: pysvnmanager/controllers/role.py:35
+msgid ""
+"Some one maybe you, has modified the svn authz file by hands. Please save"
+" once to fix possible config error."
+msgstr ""
+
+#: pysvnmanager/controllers/authz.py:71
 #: pysvnmanager/templates/authz/index.mako:152
 #: pysvnmanager/templates/check/index.mako:10
 msgid "All users(with anon)"
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:64
+#: pysvnmanager/controllers/authz.py:72
 #: pysvnmanager/templates/authz/index.mako:154
 #: pysvnmanager/templates/check/index.mako:11
 msgid "Known users"
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:65
+#: pysvnmanager/controllers/authz.py:73
 #: pysvnmanager/templates/authz/index.mako:156
 #: pysvnmanager/templates/check/index.mako:12
 msgid "Anonymous"
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:70 pysvnmanager/controllers/role.py:71
-#: pysvnmanager/controllers/role.py:91
+#: pysvnmanager/controllers/authz.py:78 pysvnmanager/controllers/role.py:80
+#: pysvnmanager/controllers/role.py:100
 #: pysvnmanager/templates/authz/index.mako:148
 #: pysvnmanager/templates/check/index.mako:17
 #: pysvnmanager/templates/role/index.mako:18
@@ -47,8 +55,8 @@ msgstr ""
 msgid "Group:"
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:73 pysvnmanager/controllers/role.py:76
-#: pysvnmanager/controllers/role.py:93
+#: pysvnmanager/controllers/authz.py:81 pysvnmanager/controllers/role.py:85
+#: pysvnmanager/controllers/role.py:102
 #: pysvnmanager/templates/authz/index.mako:150
 #: pysvnmanager/templates/check/index.mako:19
 #: pysvnmanager/templates/role/index.mako:23
@@ -58,9 +66,9 @@ msgstr ""
 msgid "Alias:"
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:88 pysvnmanager/controllers/authz.py:119
-#: pysvnmanager/controllers/check.py:106 pysvnmanager/controllers/repos.py:72
-#: pysvnmanager/controllers/repos.py:98 pysvnmanager/controllers/role.py:64
+#: pysvnmanager/controllers/authz.py:96 pysvnmanager/controllers/authz.py:127
+#: pysvnmanager/controllers/check.py:115 pysvnmanager/controllers/repos.py:81
+#: pysvnmanager/controllers/repos.py:107 pysvnmanager/controllers/role.py:73
 #: pysvnmanager/templates/check/index.mako:9
 #: pysvnmanager/templates/check/index.mako:23
 #: pysvnmanager/templates/role/index.mako:12
@@ -68,163 +76,163 @@ msgstr ""
 msgid "Please choose..."
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:180
+#: pysvnmanager/controllers/authz.py:188
 #, python-format
 msgid "User %(user)s changed authz rules. (rev:%(rev)s)"
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:195
+#: pysvnmanager/controllers/authz.py:203
 #, python-format
 msgid "Repository %s not exist."
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:203
+#: pysvnmanager/controllers/authz.py:211
 #, python-format
 msgid "Module %s not exist."
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:209
+#: pysvnmanager/controllers/authz.py:217
 msgid "You can not delete yourself from admin list."
 msgstr ""
 
-#: pysvnmanager/controllers/authz.py:234
+#: pysvnmanager/controllers/authz.py:242
 #, python-format
 msgid "User %(user)s delete authz rules. (rev:%(rev)s)"
 msgstr ""
 
-#: pysvnmanager/controllers/check.py:86
+#: pysvnmanager/controllers/check.py:95
 #: pysvnmanager/templates/auth_failed.mako:3
 msgid "Permission denied."
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:71
+#: pysvnmanager/controllers/logs.py:80
 msgid "Rev"
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:72
+#: pysvnmanager/controllers/logs.py:81
 msgid "Who"
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:73
+#: pysvnmanager/controllers/logs.py:82
 msgid "When"
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:74
+#: pysvnmanager/controllers/logs.py:83
 msgid "Why"
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:75
+#: pysvnmanager/controllers/logs.py:84
 msgid "Compare"
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:118
+#: pysvnmanager/controllers/logs.py:127
 msgid "Page: "
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:154
+#: pysvnmanager/controllers/logs.py:163
 msgid "Compares between"
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:174
+#: pysvnmanager/controllers/logs.py:183
 #, python-format
 msgid "Rollback successfully to revision: %s"
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:181
+#: pysvnmanager/controllers/logs.py:190
 #, python-format
 msgid "Rollback failed: %s"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:114
+#: pysvnmanager/controllers/repos.py:123
 msgid "Installed hooks:"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:120
+#: pysvnmanager/controllers/repos.py:129
 msgid "Id"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:121
+#: pysvnmanager/controllers/repos.py:130
 msgid "Plugin name"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:122
+#: pysvnmanager/controllers/repos.py:131
 #: pysvnmanager/hooks/plugins/__init__.py:326
 msgid "Type"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:136
+#: pysvnmanager/controllers/repos.py:145
 msgid "Remove selected hooks"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:161
+#: pysvnmanager/controllers/repos.py:170
 #, python-format
 msgid ""
 "Apply plugin '%(plugin)s' on '%(repos)s' Failed. Error message:<br>\n"
 "%(msg)s"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:164
+#: pysvnmanager/controllers/repos.py:173
 #, python-format
 msgid "Apply plugin '%(plugin)s' on '%(repos)s' success."
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:186
+#: pysvnmanager/controllers/repos.py:195
 #, python-format
 msgid ""
 "Delete plugin '%(plugin)s' on '%(repos)s' Failed. Error message:<br>\n"
 "%(msg)s"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:189
+#: pysvnmanager/controllers/repos.py:198
 #, python-format
 msgid "Delete plugin '%(plugin)s' on '%(repos)s' success."
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:192
+#: pysvnmanager/controllers/repos.py:201
 #, python-format
 msgid "No plugin has been deleted for '%(repos)s'."
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:202
+#: pysvnmanager/controllers/repos.py:211
 #, python-format
 msgid ""
 "Create repository '%(repos)s' Failed. Error message:<br>\n"
 "%(msg)s"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:205
+#: pysvnmanager/controllers/repos.py:214
 #, python-format
 msgid "Create repository '%(repos)s' success."
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:221
+#: pysvnmanager/controllers/repos.py:230
 #, python-format
 msgid ""
 "Delete repository '%(repos)s' Failed. Error message:<br>\n"
 "%(msg)s"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:224
+#: pysvnmanager/controllers/repos.py:233
 #, python-format
 msgid "Delete blank repository '%(repos)s' success."
 msgstr ""
 
-#: pysvnmanager/controllers/role.py:125
+#: pysvnmanager/controllers/role.py:134
 #, python-format
 msgid "User %(user)s changed group: %(grp)s. (rev:%(rev)s)"
 msgstr ""
 
-#: pysvnmanager/controllers/role.py:146
+#: pysvnmanager/controllers/role.py:155
 #, python-format
 msgid "User %(user)s delete group: %(grp)s. (rev:%(rev)s)"
 msgstr ""
 
-#: pysvnmanager/controllers/role.py:169
+#: pysvnmanager/controllers/role.py:178
 #, python-format
 msgid "User %(user)s changed alias: %(alias)s. (rev:%(rev)s)"
 msgstr ""
 
-#: pysvnmanager/controllers/role.py:190
+#: pysvnmanager/controllers/role.py:199
 #, python-format
 msgid "User %(user)s delete alias: %(alias)s. (rev:%(rev)s,%(msg)s)"
 msgstr ""
@@ -254,8 +262,8 @@ msgstr ""
 
 #: pysvnmanager/hooks/plugins/AllowRevpropChange.py:35
 msgid ""
-"Commit-log is the only rev-prop we allow to change. Because the changes of "
-"rev-prop can not be reverted back, administrator must setup email "
+"Commit-log is the only rev-prop we allow to change. Because the changes "
+"of rev-prop can not be reverted back, administrator must setup email "
 "notification to record this irreversible action."
 msgstr ""
 
@@ -266,8 +274,8 @@ msgstr ""
 #: pysvnmanager/hooks/plugins/BugtrackMantis.py:32
 msgid ""
 "Integration Subversion with Mantis bugtracking. If commit-log has proper "
-"format (contains bugid), it will change bug status and append commint-log "
-"and code differ as comment of bug status change."
+"format (contains bugid), it will change bug status and append commint-log"
+" and code differ as comment of bug status change."
 msgstr ""
 
 #: pysvnmanager/hooks/plugins/CapCheckMergeInfo.py:26
@@ -275,8 +283,7 @@ msgid "Subversion client version check (>1.5.0)"
 msgstr ""
 
 #: pysvnmanager/hooks/plugins/CapCheckMergeInfo.py:32
-msgid ""
-"Check subversion client version. if version below 1.5.0, checkin denied."
+msgid "Check subversion client version. if version below 1.5.0, checkin denied."
 msgstr ""
 
 #: pysvnmanager/hooks/plugins/CapCheckMergeInfo.py:35
@@ -469,8 +476,8 @@ msgstr ""
 
 #: pysvnmanager/hooks/plugins/EolStyleCheck.py:99
 msgid ""
-"Permit checkin without svn:eol-style properity if is in Unix file format (no "
-"crlf in text file)."
+"Permit checkin without svn:eol-style properity if is in Unix file format "
+"(no crlf in text file)."
 msgstr ""
 
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:26
@@ -479,14 +486,15 @@ msgstr ""
 
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:32
 msgid ""
-"This subversion repository is a svnsync readonly mirror. Nobody can checkin, "
-"except the svnsync admin user."
+"This subversion repository is a svnsync readonly mirror. Nobody can "
+"checkin, except the svnsync admin user."
 msgstr ""
 
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:36
 msgid ""
-"Commit to the remote svn server, this repository is a readonly svn mirror.It "
-"is the svnsync admin's duty to synchronize svnsync server and mirror."
+"Commit to the remote svn server, this repository is a readonly svn "
+"mirror.It is the svnsync admin's duty to synchronize svnsync server and "
+"mirror."
 msgstr ""
 
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:67
@@ -626,44 +634,43 @@ msgstr ""
 msgid "Update failed! You are working on a out-of-date revision."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1511 pysvnmanager/model/svnauthz.py:1518
-#: pysvnmanager/model/svnauthz.py:1522
+#: pysvnmanager/model/svnauthz.py:1531 pysvnmanager/model/svnauthz.py:1538
+#: pysvnmanager/model/svnauthz.py:1542
 #, python-format
 msgid "Unknown rule format: %s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1536
+#: pysvnmanager/model/svnauthz.py:1556
 #, python-format
 msgid "No module exist for %s:%s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1646
+#: pysvnmanager/model/svnauthz.py:1666
 #, python-format
 msgid "Alias %s is referenced by group %s."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1658
+#: pysvnmanager/model/svnauthz.py:1678
 #, python-format
 msgid "%s is referenced by [%s]."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1794
+#: pysvnmanager/model/svnauthz.py:1814
 #, python-format
 msgid "User %(username)s has Full (RW) rights for module %(repos)s:%(path)s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1796
+#: pysvnmanager/model/svnauthz.py:1816
 #, python-format
-msgid ""
-"User %(username)s has ReadOnly (RO) rights for module %(repos)s:%(path)s"
+msgid "User %(username)s has ReadOnly (RO) rights for module %(repos)s:%(path)s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1798
+#: pysvnmanager/model/svnauthz.py:1818
 #, python-format
 msgid "User %(username)s can *NOT* access to module %(repos)s:%(path)s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1838
+#: pysvnmanager/model/svnauthz.py:1858
 #, python-format
 msgid ""
 "\n"
@@ -675,7 +682,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1857
+#: pysvnmanager/model/svnauthz.py:1877
 #, python-format
 msgid ""
 "\n"
@@ -693,44 +700,52 @@ msgid ""
 "%(sep)s\n"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:12
+#: pysvnmanager/templates/base.mako:29
 msgid "Loading, please wait..."
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:19
+#: pysvnmanager/templates/base.mako:36
 msgid "Clear message"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:33
+#: pysvnmanager/templates/base.mako:50
 msgid "Check permissions"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:34
+#: pysvnmanager/templates/base.mako:51
 msgid "Role management"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:35
+#: pysvnmanager/templates/base.mako:52
 #: pysvnmanager/templates/authz/index.mako:5
-#: pysvnmanager/templates/authz/index.mako:592
+#: pysvnmanager/templates/authz/index.mako:593
 msgid "ACL management"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:36
+#: pysvnmanager/templates/base.mako:53
 #: pysvnmanager/templates/repos/hooks.mako:5
-#: pysvnmanager/templates/repos/hooks.mako:182
+#: pysvnmanager/templates/repos/hooks.mako:183
 msgid "Repos management"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:37
+#: pysvnmanager/templates/base.mako:54
 msgid "Change log"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:38
+#: pysvnmanager/templates/base.mako:55
 msgid "Welcome"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:39
+#: pysvnmanager/templates/base.mako:56
 msgid "Logout"
+msgstr ""
+
+#: pysvnmanager/templates/catch_e.mako:3
+msgid "Exception:"
+msgstr ""
+
+#: pysvnmanager/templates/catch_e.mako:14
+msgid "Error Traceback"
 msgstr ""
 
 #: pysvnmanager/templates/authz/index.mako:158
@@ -742,118 +757,118 @@ msgid "Readonly"
 msgstr ""
 
 #: pysvnmanager/templates/authz/index.mako:171
-#: pysvnmanager/templates/authz/index.mako:668
+#: pysvnmanager/templates/authz/index.mako:669
 msgid "Full"
 msgstr ""
 
 #: pysvnmanager/templates/authz/index.mako:175
-#: pysvnmanager/templates/authz/index.mako:669
+#: pysvnmanager/templates/authz/index.mako:670
 msgid "Denied"
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:373
+#: pysvnmanager/templates/authz/index.mako:374
 msgid "No rights selected! Please check proper rights for selected users."
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:384
+#: pysvnmanager/templates/authz/index.mako:385
 msgid "Unknown rights: "
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:473
+#: pysvnmanager/templates/authz/index.mako:474
 msgid "Please input repository name."
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:479
+#: pysvnmanager/templates/authz/index.mako:480
 msgid "Save failed."
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:485
+#: pysvnmanager/templates/authz/index.mako:486
 msgid "Please input module path."
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:505
+#: pysvnmanager/templates/authz/index.mako:506
 msgid "Update ACL failed:"
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:510
+#: pysvnmanager/templates/authz/index.mako:511
 msgid "Update ACL successfully."
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:531
+#: pysvnmanager/templates/authz/index.mako:532
 msgid "No path selected."
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:536
+#: pysvnmanager/templates/authz/index.mako:537
 msgid "Are you sure to delete module:"
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:538
-#: pysvnmanager/templates/role/index.mako:446
-#: pysvnmanager/templates/role/index.mako:531
+#: pysvnmanager/templates/authz/index.mako:539
+#: pysvnmanager/templates/role/index.mako:447
+#: pysvnmanager/templates/role/index.mako:532
 msgid "Click Ok to proceed, or click cancel"
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:559
+#: pysvnmanager/templates/authz/index.mako:560
 msgid "Can not delete module "
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:564
+#: pysvnmanager/templates/authz/index.mako:565
 msgid "Successfully delete module:"
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:599
-#: pysvnmanager/templates/repos/hooks.mako:188
+#: pysvnmanager/templates/authz/index.mako:600
+#: pysvnmanager/templates/repos/hooks.mako:189
 msgid "Repository:"
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:603
+#: pysvnmanager/templates/authz/index.mako:604
 msgid "New repository"
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:608
+#: pysvnmanager/templates/authz/index.mako:609
 msgid "Repository Name:"
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:613
+#: pysvnmanager/templates/authz/index.mako:614
 msgid "Administrators:"
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:625
+#: pysvnmanager/templates/authz/index.mako:626
 msgid "Module:"
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:628
+#: pysvnmanager/templates/authz/index.mako:629
 msgid "New module"
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:634
+#: pysvnmanager/templates/authz/index.mako:635
 msgid "Module Path:"
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:648
+#: pysvnmanager/templates/authz/index.mako:649
 msgid "ACL"
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:653
+#: pysvnmanager/templates/authz/index.mako:654
 msgid "Users"
 msgstr ""
 
-#: pysvnmanager/templates/authz/index.mako:667
+#: pysvnmanager/templates/authz/index.mako:668
 msgid "ReadOnly"
-msgstr ""
-
-#: pysvnmanager/templates/authz/index.mako:682
-#: pysvnmanager/templates/role/index.mako:718
-msgid "Save"
 msgstr ""
 
 #: pysvnmanager/templates/authz/index.mako:683
 #: pysvnmanager/templates/role/index.mako:719
-msgid "Delete"
+msgid "Save"
 msgstr ""
 
 #: pysvnmanager/templates/authz/index.mako:684
 #: pysvnmanager/templates/role/index.mako:720
+msgid "Delete"
+msgstr ""
+
+#: pysvnmanager/templates/authz/index.mako:685
+#: pysvnmanager/templates/role/index.mako:721
 msgid "Cancel"
 msgstr ""
 
@@ -957,106 +972,107 @@ msgid "Create repository"
 msgstr ""
 
 #: pysvnmanager/templates/repos/create.mako:22
-#: pysvnmanager/templates/repos/remove.mako:63
+#: pysvnmanager/templates/repos/remove.mako:64
 msgid "Repository name:"
 msgstr ""
 
-#: pysvnmanager/templates/repos/hooks.mako:192
+#: pysvnmanager/templates/repos/hooks.mako:193
 msgid "Add repository"
 msgstr ""
 
-#: pysvnmanager/templates/repos/hooks.mako:193
+#: pysvnmanager/templates/repos/hooks.mako:194
 #: pysvnmanager/templates/repos/remove.mako:5
-#: pysvnmanager/templates/repos/remove.mako:49
-#: pysvnmanager/templates/repos/remove.mako:67
+#: pysvnmanager/templates/repos/remove.mako:50
+#: pysvnmanager/templates/repos/remove.mako:68
 msgid "Remove repository"
 msgstr ""
 
-#: pysvnmanager/templates/repos/hooks.mako:199
+#: pysvnmanager/templates/repos/hooks.mako:200
 msgid "Uninstalled hooks:"
 msgstr ""
 
-#: pysvnmanager/templates/repos/hooks.mako:225
+#: pysvnmanager/templates/repos/hooks.mako:226
 msgid "Install this plugin"
 msgstr ""
 
 #: pysvnmanager/templates/role/index.mako:5
-#: pysvnmanager/templates/role/index.mako:633
+#: pysvnmanager/templates/role/index.mako:634
 msgid "Role Management"
 msgstr ""
 
-#: pysvnmanager/templates/role/index.mako:418
+#: pysvnmanager/templates/role/index.mako:419
 msgid "Update group failed:"
 msgstr ""
 
-#: pysvnmanager/templates/role/index.mako:424
+#: pysvnmanager/templates/role/index.mako:425
 msgid "Update group successfully."
 msgstr ""
 
-#: pysvnmanager/templates/role/index.mako:444
+#: pysvnmanager/templates/role/index.mako:445
 msgid "Are you sure to delete group:"
 msgstr ""
 
-#: pysvnmanager/templates/role/index.mako:467
+#: pysvnmanager/templates/role/index.mako:468
 msgid "Delete group failed:"
 msgstr ""
 
-#: pysvnmanager/templates/role/index.mako:472
+#: pysvnmanager/templates/role/index.mako:473
 msgid "Delete group successfully."
 msgstr ""
 
-#: pysvnmanager/templates/role/index.mako:505
+#: pysvnmanager/templates/role/index.mako:506
 msgid "Update alias failed:"
 msgstr ""
 
-#: pysvnmanager/templates/role/index.mako:510
+#: pysvnmanager/templates/role/index.mako:511
 msgid "Update alias successfully."
 msgstr ""
 
-#: pysvnmanager/templates/role/index.mako:529
+#: pysvnmanager/templates/role/index.mako:530
 msgid "Are you sure to delete alias:"
 msgstr ""
 
-#: pysvnmanager/templates/role/index.mako:552
+#: pysvnmanager/templates/role/index.mako:553
 msgid "Delete alias failed:"
 msgstr ""
 
-#: pysvnmanager/templates/role/index.mako:557
+#: pysvnmanager/templates/role/index.mako:558
 msgid "Delete alias successfully."
 msgstr ""
 
-#: pysvnmanager/templates/role/index.mako:640
+#: pysvnmanager/templates/role/index.mako:641
 msgid "Select a role name:"
 msgstr ""
 
-#: pysvnmanager/templates/role/index.mako:643
+#: pysvnmanager/templates/role/index.mako:644
 msgid "New Group"
 msgstr ""
 
-#: pysvnmanager/templates/role/index.mako:644
+#: pysvnmanager/templates/role/index.mako:645
 msgid "New Alias"
 msgstr ""
 
-#: pysvnmanager/templates/role/index.mako:649
+#: pysvnmanager/templates/role/index.mako:650
 msgid "New group name:"
 msgstr ""
 
-#: pysvnmanager/templates/role/index.mako:653
+#: pysvnmanager/templates/role/index.mako:654
 msgid "New alias name:"
 msgstr ""
 
-#: pysvnmanager/templates/role/index.mako:665
+#: pysvnmanager/templates/role/index.mako:666
 msgid "Members list"
 msgstr ""
 
-#: pysvnmanager/templates/role/index.mako:670
+#: pysvnmanager/templates/role/index.mako:671
 msgid "Other users"
 msgstr ""
 
-#: pysvnmanager/templates/role/index.mako:689
+#: pysvnmanager/templates/role/index.mako:690
 msgid "Ignore recursive"
 msgstr ""
 
-#: pysvnmanager/templates/role/index.mako:701
+#: pysvnmanager/templates/role/index.mako:702
 msgid "User name:"
 msgstr ""
+
