@@ -14,6 +14,8 @@ def htpasswd_login(username, password, config):
     if authn_file:
         pwdfile = open(authn_file)
         for line in pwdfile:
+            if line.strip().startswith('#') and ':' not in line:
+                continue
             user, pwdhash = line.strip().split(':',1)
             if username == unicode(user,'utf-8'):
                 if pwdhash == crypt(password, pwdhash[:2]):
