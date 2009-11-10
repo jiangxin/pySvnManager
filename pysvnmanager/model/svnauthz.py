@@ -1302,6 +1302,26 @@ class SvnAuthz(object):
         buff += unicode(self.__reposlist)
         return buff
 
+    def differ(self):
+        if isinstance(self.__file, basestring):
+            contents_old = unicode(open(self.__file, 'r').read().strip(), "utf-8", "ignore")
+        elif isinstance(self.__file, (file, StringIO.StringIO)):
+            self.__file.seek(0)
+            contents_old = unicode(self.__file.read().strip(), "utf-8", "ignore")
+            self.__file.seek(0)
+        else:
+            return u''
+        contents_new = unicode(self).strip()
+        if  contents_new != contents_old:
+            import difflib
+            difflines = []
+            for line in difflib.unified_diff(contents_old.splitlines(), contents_new.splitlines(), 'old authz', 'new authz', lineterm=''):
+                difflines.append(line)
+                if len(difflines)>10:
+                    break
+            return u'\n'.join(difflines)
+        return u''
+ 
     def parse_groups(self, groups):
         for (name, members) in groups.items():
             group = self.__grouplist.get_or_set(name)

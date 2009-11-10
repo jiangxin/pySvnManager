@@ -348,6 +348,7 @@ function role_changed()
 	var name = document.main_form.role_list.value;
 	var params = {role:name};
 
+	showGlobalMessage();
 	if (name.charAt(0) == '@')
 		show_group_form();
 	else if (name.charAt(0) == '&')

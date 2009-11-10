@@ -4,6 +4,23 @@
     ${self.head_tags()}
     ${self.ajax_script()}
     ${h.stylesheet_link_tag('/css/common', media='all')}
+
+    <SCRIPT LANGUAGE="JavaScript">
+<%
+msg = ''
+if hasattr(c, "global_message"):
+    msg += "var global_message = \"%s\";\n" % c.global_message
+else:
+    msg += "var global_message = \"\";\n"
+context.write(msg)
+%>
+    function showGlobalMessage()
+    {
+      if (global_message) {
+          info_msg(global_message);
+      }
+    }
+    </SCRIPT>
   </head>
   <body ${self.body_params()}>
 
@@ -154,4 +171,4 @@ function switch_message_box()
 </script>
 </%def>
 
-<%def name="body_params()"></%def>
+<%def name="body_params()"> onload="showGlobalMessage()" </%def>

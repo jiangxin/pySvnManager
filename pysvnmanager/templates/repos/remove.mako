@@ -11,6 +11,7 @@
 
 function init_repos_list()
 {
+	showGlobalMessage();
 	showNoticesPopup();
 	var params = {filter:'blank'};
 	new Ajax.Request(

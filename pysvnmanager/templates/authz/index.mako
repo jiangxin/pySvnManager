@@ -187,6 +187,7 @@ function init_repos_list()
 				function(request)
 					{hideNoticesPopup();ajax_init_repos_list(request.responseText);}
 		});
+    showGlobalMessage();
 }
 
 function ajax_init_repos_list(code)

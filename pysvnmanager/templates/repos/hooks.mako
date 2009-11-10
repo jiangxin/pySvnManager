@@ -28,6 +28,7 @@ function show_init_form()
 
 function init_repos_list()
 {
+	showGlobalMessage();
 	showNoticesPopup();
 	new Ajax.Request(
 		'${h.url_for(controller="repos", action="init_repos_list")}', 

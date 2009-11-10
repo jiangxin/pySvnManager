@@ -31,6 +31,10 @@ class AuthzController(BaseController):
     def __init__(self):
         try:
             self.authz = SvnAuthz(cfg.authz_file)
+            diff = self.authz.differ()
+            if diff:
+                c.global_message = _('Some one maybe you, has modified the svn authz file by hands. Please save once to fix possible config error.') + "<blockquote>" + "<br>".join(diff.splitlines()) + "</blockquote>"
+
             self.login_as = session.get('user')
             # Used as checked in user to rcs file.
             self.authz.login_as = self.login_as
@@ -63,7 +67,6 @@ class AuthzController(BaseController):
         c.is_super_user = self.is_super_user
         # used for functional test.
         c.reposlist = self.own_reposlist
-        
         all_avail_users = []
         all_avail_users.append([_("All users(with anon)"), '*'])
         all_avail_users.append([_("Known users"), '$authenticated'])
