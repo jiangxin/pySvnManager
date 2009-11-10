@@ -47,11 +47,14 @@ class BaseController(WSGIController):
         if 'lang' in session:
             set_lang(session['lang'])
         #log.debug(request.languages)
-        for lang in request.languages:
-            if lang.lower() in ['zh-cn', 'zh']:
-                add_fallback('zh')
-            elif lang in ['en']:
-                add_fallback(lang)
+        try:
+            for lang in request.languages:
+                if lang.lower() in ['zh-cn', 'zh']:
+                    add_fallback('zh')
+                elif lang in ['en']:
+                    add_fallback(lang)
+        except:
+            pass
 
         ## Show exception and traceback info
         if g.catch_e:
