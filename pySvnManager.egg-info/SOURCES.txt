@@ -155,6 +155,7 @@ pysvnmanager/public/javascripts/sound.js
 pysvnmanager/public/javascripts/unittest.js
 pysvnmanager/templates/auth_failed.mako
 pysvnmanager/templates/base.mako
+pysvnmanager/templates/catch_e.mako
 pysvnmanager/templates/authz/index.mako
 pysvnmanager/templates/check/index.mako
 pysvnmanager/templates/login/loggedin.mako
