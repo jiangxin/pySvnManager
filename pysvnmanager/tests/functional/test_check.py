@@ -25,43 +25,43 @@ class TestCheckController(TestController):
         # Test redirect to login pange
         res = self.app.get(url(controller='check', action='index'))
         assert res.status == "302 Found", res.status
-        assert res.header('location').endswith('/login'), res.header('location')
+        assert res.location.endswith('/login'), res.location
 
         # Login as common user
         self.login('nobody')
         res = self.app.get(url(controller='check', action='index'))
         assert res.status == "302 Found", res.status
-        assert res.header('location').endswith('/security/failed'), res.header('location')
+        assert res.location.endswith('/security/failed'), res.location
         
         # Login as repos admin
         self.login('admin1')
         res = self.app.get(url(controller='check', action='index'))
-        assert res.c.reposlist == [u'repos1'], res.c.reposlist
+        assert res.tmpl_context.reposlist == [u'repos1'], res.tmpl_context.reposlist
 
         # Login as repos admin
         self.login('admin2')
         res = self.app.get(url(controller='check', action='index'))
-        assert res.c.reposlist == [u'repos1', u'repos2'], res.c.reposlist
+        assert res.tmpl_context.reposlist == [u'repos1', u'repos2'], res.tmpl_context.reposlist
 
         # Login as superuser
         self.login('root')
         res = self.app.get(url(controller='check', action='index'))
-        assert res.status == 200, res.status
+        assert res.status == "200 OK", res.status
         assert '''<input type="submit" name="submit" value='Check Permissions'>''' in res.body, res.body
-        assert res.c.reposlist == [u'/', u'document', u'project1', u'project2', u'repos1', u'repos2', u'repos3'], res.c.reposlist
+        assert res.tmpl_context.reposlist == [u'/', u'document', u'project1', u'project2', u'repos1', u'repos2', u'repos3'], res.tmpl_context.reposlist
 
 
     def test_access_map(self):
         # authn test
         res = self.app.get(url(controller='check', action='access_map'))
         assert res.status == "302 Found", res.status
-        assert res.header('location').endswith('/login'), res.header('location')
+        assert res.location.endswith('/login'), res.location
 
         # authz test
         self.login('nobody')
         res = self.app.get(url(controller='check', action='access_map'))
         assert res.status == "302 Found", res.status
-        assert res.header('location').endswith('/security/failed'), res.header('location')
+        assert res.location.endswith('/security/failed'), res.location
         
         # Login as superuser
         self.login('root')
@@ -75,7 +75,7 @@ class TestCheckController(TestController):
                   'abbr':'True',
                   }
         res = self.app.get(url(controller='check', action='access_map'), params)
-        assert res.status == 200, res.status
+        assert res.status == "200 OK", res.status
         assert '''<div id='acl_path_msg'>[repos1:/trunk/src/test] user1 =</div>''' in res.body, res.body
 
         params = {
@@ -190,7 +190,7 @@ Access map on 'reposX' for user 'user1'
                   'abbr':'True',
                   }
         res = self.app.get(url(controller='check', action='access_map'), params)
-        assert res.status == 200, res.status
+        assert res.status == "200 OK", res.status
         assert '''<div id='acl_path_msg'>[repos1:/trunk/src/test] user1 =<br>
 [repos2:/trunk/src/test] user1 = r</div><pre>
 user1 => [repos1]
@@ -221,26 +221,26 @@ XX:
                   'abbr':'True',
                   }
         res = self.app.get(url(controller='check', action='access_map'), params)
-        assert res.status == 200, res.status
-        assert res.body== 'Permission denied.', res.header('location')
+        assert res.status == "200 OK", res.status
+        assert res.body== 'Permission denied.', res.location
 
     def test_authz_path(self):
         # authn test
         res = self.app.get(url(controller='check', action='get_auth_path'))
         assert res.status == "302 Found", res.status
-        assert res.header('location').endswith('/login'), res.header('location')
+        assert res.location.endswith('/login'), res.location
 
         # authz test
         self.login('nobody')
         res = self.app.get(url(controller='check', action='get_auth_path'))
         assert res.status == "302 Found", res.status
-        assert res.header('location').endswith('/security/failed'), res.header('location')
+        assert res.location.endswith('/security/failed'), res.location
 
         self.login('root')
         params = {}
         params['repos'] = '/'
         res = self.app.get(url(controller='check', action='get_auth_path'), params)
-        assert res.status == 200, res.status
+        assert res.status == "200 OK", res.status
         assert '''id[0]="...";name[0]="Please choose...";
 id[1]="/trunk/src";name[1]="/trunk/src";
 id[2]="/trunk";name[2]="/trunk";
@@ -252,12 +252,12 @@ total=6;
 
         params['repos'] = 'noexist'
         res = self.app.get(url(controller='check', action='get_auth_path'), params)
-        assert res.status == 200, res.status
+        assert res.status == "200 OK", res.status
         assert '' == res.body, res.body
 
         params['repos'] = 'repos1'
         res = self.app.get(url(controller='check', action='get_auth_path'), params)
-        assert res.status == 200, res.status
+        assert res.status == "200 OK", res.status
         assert '''id[0]="...";name[0]="Please choose...";
 id[1]="/trunk/src";name[1]="/trunk/src";
 id[2]="/trunk";name[2]="/trunk";
@@ -267,7 +267,7 @@ total=4;
 
         params['repos'] = 'document'
         res = self.app.get(url(controller='check', action='get_auth_path'), params)
-        assert res.status == 200, res.status
+        assert res.status == "200 OK", res.status
         assert u'''id[0]="...";name[0]="Please choose...";
 id[1]="/branches";name[1]="/branches";
 id[2]="/tags";name[2]="/tags";

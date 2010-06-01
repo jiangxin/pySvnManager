@@ -17,11 +17,13 @@
 # GNU General Public License for more details.
 
 from pysvnmanager.tests import *
-from pylons import config
+import pylons.test
 
 class TestLoginController(TestController):
 
     def test_login_logout(self):
+        wsgiapp = pylons.test.pylonsapp
+        config = wsgiapp.config
         params={}
         # login successful
         params['username'] = 'root'
@@ -30,7 +32,7 @@ class TestLoginController(TestController):
         params['password'] = password
         res = self.app.get(url(controller='security', action='submit'), params)
         self.assert_(res.status == "302 Found", res.status)
-        self.assert_(res.all_headers('location') == ['/'] or res.all_headers('location') == ['http://localhost/'], res.all_headers('location'))
+        self.assert_(res.location == '/' or res.location == 'http://localhost/', res.location)
         self.assert_(res.session['user'] == 'root', res.session)
         
         # keep session test
@@ -42,7 +44,7 @@ class TestLoginController(TestController):
         params['username'] = 'root'
         params['password'] = 'wrong_passwd'
         res = self.app.get(url(controller='security', action='submit'), params)
-        self.assert_(res.status == 200, res.status)
+        self.assert_(res.status == "200 OK", res.status)
         self.assert_('Login failed for user: root' in res.body, res.body)
         self.assert_(res.session.get('user') == None, res.session.get('user'))
         
@@ -53,5 +55,5 @@ class TestLoginController(TestController):
         # logout
         res = self.app.get(url(controller='security', action='logout'))
         self.assert_(res.status == "302 Found", res.status)
-        self.assert_(res.all_headers('location') == ['/login'] or res.all_headers('location') == ['http://localhost/login'], res.all_headers('location'))
+        self.assert_(res.location == '/login' or res.location == 'http://localhost/login', res.location)
         self.assert_(res.session.get('user') == None, res.session.get('user'))

@@ -10,6 +10,12 @@ class DefaultConfig:
 
     # authn_file: a .htpasswd style password file, used for pysvnmanager authentication.
     # You can change authn_file in <deploy>.ini file.
+
+    # Unittest based on WebTest not initialized pylons.config
+    if config.get('__file__') is None:
+        import pylons.test
+        wsgiapp = pylons.test.pylonsapp
+        config = wsgiapp.config
     authn_file = config.get('authn_file', "") % {'here': config.get('here')}
 
     # authz_file: svn authz config file with administrative extension. (ossxp.com)

@@ -66,13 +66,22 @@ class TestController(TestCase):
         return svnauthz.SvnAuthz(self.authz_file)
         
     def login(self, username, password=""):
-        res = self.app.get(url(controller='security', action='index'))
-        form = res.forms[0]
-        form['username'] = username
+       
         if not password:
             wsgiapp = pylons.test.pylonsapp
             config = wsgiapp.config
             d = eval(config.get('test_users', {}))
             password = d.get(username,'')
-        form['password'] = password
-        form.submit()
+
+        r = self.app.post(url(controller='security', action='submit'), params={'username': username, 'password': password})
+
+        #res = self.app.get(url(controller='security', action='index'))
+        #form = res.forms[0]
+        #form['username'] = username
+        #if not password:
+        #    wsgiapp = pylons.test.pylonsapp
+        #    config = wsgiapp.config
+        #    d = eval(config.get('test_users', {}))
+        #    password = d.get(username,'')
+        #form['password'] = password
+        #form.submit()
