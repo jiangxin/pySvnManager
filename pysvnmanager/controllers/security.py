@@ -19,6 +19,7 @@
 import logging
 
 from pysvnmanager.lib.base import *
+from pylons.i18n import _, ungettext, N_
 
 log = logging.getLogger(__name__)
 
@@ -52,9 +53,9 @@ class SecurityController(BaseController):
 
             # Send user back to the page he originally wanted to get to
             if session.get('path_before_login'):
-                redirect_to(session['path_before_login'])
+                redirect(session['path_before_login'])
             else: # if previous target is unknown just send the user to a welcome page
-                redirect_to(h.url_for(controller='check'))
+                redirect(url(controller='check',action='index'))
         else:
             session.clear()
             session.save()
@@ -69,7 +70,7 @@ class SecurityController(BaseController):
             log.info(_("User %s logged out") % session['user'])
             del session['user']
             session.save()
-        redirect_to(h.url_for(controller="security"))
+        redirect(url("login"))
 
     def failed(self):
         return render('/auth_failed.mako')

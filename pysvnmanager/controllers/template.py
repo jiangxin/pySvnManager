@@ -17,6 +17,7 @@
 # GNU General Public License for more details.
 
 from pysvnmanager.lib.base import *
+from pylons.i18n import _, ungettext, N_
 
 class TemplateController(BaseController):
 

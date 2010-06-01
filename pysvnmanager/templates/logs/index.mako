@@ -12,7 +12,7 @@ function paginate(num)
     var params = {page:num};
     new Ajax.Updater(
     	{success:'logs',failure:'logs'}, 
-    	'${h.url_for(action="paginate")}',
+    	'${h.url(controller="logs", action="paginate")}',
     	{asynchronous:true, evalScripts:true, method:'post', 
     		onComplete:
     			function(request)
@@ -46,7 +46,7 @@ function compare(form)
     var params = {left:left, right:right};
 	new Ajax.Updater(
     	{success:'compare',failure:'compare'}, 
-    	'${h.url_for(action="compare")}',
+    	'${h.url(controller="logs", action="compare")}',
     	{asynchronous:true, evalScripts:true, method:'post', 
     		onComplete:
     			function(request)
@@ -61,7 +61,9 @@ function compare(form)
 
 <form name="main_form" onSubmit="compare(); return false;">
 <div id="logs">
-${c.display}
+<%
+  context.write(c.display);
+%>
 </div>
 <input type="submit" name="submit" value='${_("Compare revisions")}'>
 

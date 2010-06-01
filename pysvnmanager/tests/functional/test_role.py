@@ -23,19 +23,19 @@ class TestRoleController(TestController):
 
     def test_index(self):
         # Test redirect to login pange
-        res = self.app.get(url_for(controller='role'))
-        assert res.status == 302
+        res = self.app.get(url(controller='role', action='index'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/login'), res.header('location')
 
         # Login as common user
         self.login('nobody')
-        res = self.app.get(url_for(controller='role'))
-        assert res.status == 302, res.status
+        res = self.app.get(url(controller='role', action='index'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/security/failed'), res.header('location')
         
         # Repos admin(not root admin) can access role controller, but with disabled button.
         self.login('admin2')
-        res = self.app.get(url_for(controller='role'))
+        res = self.app.get(url(controller='role', action='index'))
         assert res.status == 200, res.status
         assert """
     <input type="button" name="save_btn"   value='Save'  onClick="do_save(this.form)" DISABLED>
@@ -44,27 +44,27 @@ class TestRoleController(TestController):
 
         # Login as superuser
         self.login('root')
-        res = self.app.get(url_for(controller='role'))
-        assert res.status == 200
+        res = self.app.get(url(controller='role', action='index'))
+        assert res.status == 200, res.status
         assert """<input type="button" name="save_btn"   value='Save'""" in res.body, res.body
 
     def test_get_role_info(self):
         # authn test
-        res = self.app.get(url_for(controller='role', action='get_role_info'))
-        assert res.status == 302
+        res = self.app.get(url(controller='role', action='get_role_info'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/login'), res.header('location')
 
         # authz test
         self.login('nobody')
-        res = self.app.get(url_for(controller='role', action='get_role_info'))
-        assert res.status == 302, res.status
+        res = self.app.get(url(controller='role', action='get_role_info'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/security/failed'), res.header('location')
         
         # Login as superuser
         self.login('root')
         params = {'role':'',}
-        res = self.app.get(url_for(controller='role', action='get_role_info'), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='role', action='get_role_info'), params)
+        assert res.status == 200, res.status
         assert """id[0]="...";name[0]="Please choose...";
 id[1]="@admin";name[1]="Group:admin";
 id[2]="@all";name[2]="Group:all";
@@ -84,8 +84,8 @@ revision="0.2.1";
 """ == res.body, res.body
 
         params = {'role':'@admin',}
-        res = self.app.get(url_for(controller='role', action='get_role_info'), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='role', action='get_role_info'), params)
+        assert res.status == 200, res.status
         assert """id[0]="&admin";name[0]="Alias:admin";
 id[1]="admin1";name[1]="admin1";
 id[2]="admin2";name[2]="admin2";
@@ -95,8 +95,8 @@ revision="0.2.1";
 """ == res.body, res.body
 
         params = {'role':'@group1',}
-        res = self.app.get(url_for(controller='role', action='get_role_info'), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='role', action='get_role_info'), params)
+        assert res.status == 200, res.status
         assert """id[0]="@group2";name[0]="Group:group2";
 id[1]="@group3";name[1]="Group:group3";
 id[2]="user1";name[2]="user1";
@@ -107,8 +107,8 @@ revision="0.2.1";
 """ == res.body, res.body
 
         params = {'role':'@group3',}
-        res = self.app.get(url_for(controller='role', action='get_role_info'), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='role', action='get_role_info'), params)
+        assert res.status == 200, res.status
         assert """id[0]="user3";name[0]="user3";
 id[1]="user31";name[1]="user31";
 id[2]="user32";name[2]="user32";
@@ -117,22 +117,22 @@ revision="0.2.1";
 """ == res.body, res.body
 
         params = {'role':'&admin',}
-        res = self.app.get(url_for(controller='role', action='get_role_info'), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='role', action='get_role_info'), params)
+        assert res.status == 200, res.status
         assert """aliasname = "&admin";username = "jiangxin";
 revision="0.2.1";
 """ == res.body, res.body
 
     def test_save_group(self):
         # authn test
-        res = self.app.get(url_for(controller='role', action='save_group'))
-        assert res.status == 302
+        res = self.app.get(url(controller='role', action='save_group'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/login'), res.header('location')
 
         # authz test
         self.login('nobody')
-        res = self.app.get(url_for(controller='role', action='save_group'))
-        assert res.status == 302, res.status
+        res = self.app.get(url(controller='role', action='save_group'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/security/failed'), res.header('location')
 
 
@@ -144,8 +144,8 @@ revision="0.2.1";
 
             self.login('root')
             params = {'rolename':'group3', 'members':'蒋鑫, user3,@group1', 'autodrop':'no', }
-            res = self.app.get(url_for(controller='role', action='save_group'), params)
-            assert res.status == 200
+            res = self.app.get(url(controller='role', action='save_group'), params)
+            assert res.status == 200, res.status
             assert "Recursive group membership for @group1" in res.body, res.body
         
             authz = self.load_authz()
@@ -162,8 +162,8 @@ revision="0.2.1";
 
             self.login('root')
             params = {'rolename':'group3', 'members':'蒋鑫, user3,@group1', 'autodrop':'yes', }
-            res = self.app.get(url_for(controller='role', action='save_group'), params)
-            assert res.status == 200
+            res = self.app.get(url(controller='role', action='save_group'), params)
+            assert res.status == 200, res.status
             assert "" == res.body, res.body
         
             authz = self.load_authz()
@@ -180,8 +180,8 @@ revision="0.2.1";
 
             self.login('root')
             params = {'rolename':'管理员组', 'members':'蒋鑫, user3,@group1' }
-            res = self.app.get(url_for(controller='role', action='save_group'), params)
-            assert res.status == 200
+            res = self.app.get(url(controller='role', action='save_group'), params)
+            assert res.status == 200, res.status
             assert "" == res.body, res.body
         
             authz = self.load_authz()
@@ -198,8 +198,8 @@ revision="0.2.1";
 
             self.login('root')
             params = {'rolename':'管理员组', 'members':'蒋鑫, user3,@group1', 'revision':'' }
-            res = self.app.get(url_for(controller='role', action='save_group'), params)
-            assert res.status == 200
+            res = self.app.get(url(controller='role', action='save_group'), params)
+            assert res.status == 200, res.status
             assert "Update failed! You are working on a out-of-date revision." in res.body, res.body
         
             authz = self.load_authz()
@@ -210,14 +210,14 @@ revision="0.2.1";
             
     def test_delete_group(self):
         # authn test
-        res = self.app.get(url_for(controller='role', action='delete_group'))
-        assert res.status == 302
+        res = self.app.get(url(controller='role', action='delete_group'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/login'), res.header('location')
 
         # authz test
         self.login('nobody')
-        res = self.app.get(url_for(controller='role', action='delete_group'))
-        assert res.status == 302, res.status
+        res = self.app.get(url(controller='role', action='delete_group'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/security/failed'), res.header('location')
 
         # Delete group failed, ref by other group.
@@ -228,8 +228,8 @@ revision="0.2.1";
 
             self.login('root')
             params = {'role':'group3',}
-            res = self.app.get(url_for(controller='role', action='delete_group'), params)
-            assert res.status == 200
+            res = self.app.get(url(controller='role', action='delete_group'), params)
+            assert res.status == 200, res.status
             assert "Group group3 is referenced by group @group1." in res.body, res.body
         finally:
             self.rollback()
@@ -242,8 +242,8 @@ revision="0.2.1";
 
             self.login('root')
             params = {'role':'@dev',}
-            res = self.app.get(url_for(controller='role', action='delete_group'), params)
-            assert res.status == 200
+            res = self.app.get(url(controller='role', action='delete_group'), params)
+            assert res.status == 200, res.status
             assert "@dev is referenced by [/:/trunk]." in res.body, res.body
         
             authz = self.load_authz()
@@ -260,8 +260,8 @@ revision="0.2.1";
 
             self.login('root')
             params = {'role':'all',}
-            res = self.app.get(url_for(controller='role', action='delete_group'), params)
-            assert res.status == 200
+            res = self.app.get(url(controller='role', action='delete_group'), params)
+            assert res.status == 200, res.status
             assert "" == res.body, res.body
         
             authz = self.load_authz()
@@ -272,14 +272,14 @@ revision="0.2.1";
 
     def test_save_alias(self):
         # authn test
-        res = self.app.get(url_for(controller='role', action='save_alias'))
-        assert res.status == 302
+        res = self.app.get(url(controller='role', action='save_alias'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/login'), res.header('location')
 
         # authz test
         self.login('nobody')
-        res = self.app.get(url_for(controller='role', action='save_alias'))
-        assert res.status == 302, res.status
+        res = self.app.get(url(controller='role', action='save_alias'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/security/failed'), res.header('location')
 
         # Change alias successfully
@@ -290,8 +290,8 @@ revision="0.2.1";
 
             self.login('root')
             params = {'aliasname':'admin', 'username':'蒋鑫',}
-            res = self.app.get(url_for(controller='role', action='save_alias'), params)
-            assert res.status == 200
+            res = self.app.get(url(controller='role', action='save_alias'), params)
+            assert res.status == 200, res.status
             assert "" == res.body, res.body
         
             authz = self.load_authz()
@@ -303,8 +303,8 @@ revision="0.2.1";
             self.login('蒋鑫')
             #params = {'aliasname':'admin', 'username':'蒋鑫',}
             params = {'aliasname':'admin2', 'username':'jiangxin',}
-            res = self.app.get(url_for(controller='role', action='save_alias'), params)
-            assert res.status == 200
+            res = self.app.get(url(controller='role', action='save_alias'), params)
+            assert res.status == 200, res.status
             assert "" == res.body, res.body
             
         finally:
@@ -318,8 +318,8 @@ revision="0.2.1";
 
             self.login('root')
             params = {'aliasname':'管理员', 'username':'蒋鑫',}
-            res = self.app.get(url_for(controller='role', action='save_alias'), params)
-            assert res.status == 200
+            res = self.app.get(url(controller='role', action='save_alias'), params)
+            assert res.status == 200, res.status
             assert "" == res.body, res.body
         
             authz = self.load_authz()
@@ -336,8 +336,8 @@ revision="0.2.1";
 
             self.login('root')
             params = {'aliasname':'admin', 'username':'蒋鑫', 'revision':'123'}
-            res = self.app.get(url_for(controller='role', action='save_alias'), params)
-            assert res.status == 200
+            res = self.app.get(url(controller='role', action='save_alias'), params)
+            assert res.status == 200, res.status
             assert "Update failed! You are working on a out-of-date revision." in res.body, res.body
         
             authz = self.load_authz()
@@ -349,14 +349,14 @@ revision="0.2.1";
             
     def test_delete_alias(self):
         # authn test
-        res = self.app.get(url_for(controller='role', action='delete_alias'))
-        assert res.status == 302
+        res = self.app.get(url(controller='role', action='delete_alias'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/login'), res.header('location')
 
         # authz test
         self.login('nobody')
-        res = self.app.get(url_for(controller='role', action='delete_alias'))
-        assert res.status == 302, res.status
+        res = self.app.get(url(controller='role', action='delete_alias'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/security/failed'), res.header('location')
 
         # Delete alias successfully
@@ -367,8 +367,8 @@ revision="0.2.1";
 
             self.login('root')
             params = {'aliasname':'tm'}
-            res = self.app.get(url_for(controller='role', action='delete_alias'), params)
-            assert res.status == 200
+            res = self.app.get(url(controller='role', action='delete_alias'), params)
+            assert res.status == 200, res.status
             assert "" == res.body, res.body
         
             authz = self.load_authz()
@@ -385,8 +385,8 @@ revision="0.2.1";
 
             self.login('root')
             params = {'aliasname':'tm', 'revision':''}
-            res = self.app.get(url_for(controller='role', action='delete_alias'), params)
-            assert res.status == 200
+            res = self.app.get(url(controller='role', action='delete_alias'), params)
+            assert res.status == 200, res.status
             assert "Update failed! You are working on a out-of-date revision." in res.body, res.body
         
             authz = self.load_authz()
@@ -404,8 +404,8 @@ revision="0.2.1";
 
             self.login('root')
             params = {'aliasname':'pm', 'revision':''}
-            res = self.app.get(url_for(controller='role', action='delete_alias'), params)
-            assert res.status == 200
+            res = self.app.get(url(controller='role', action='delete_alias'), params)
+            assert res.status == 200, res.status
             assert "&pm is referenced by [/:/trunk]." in res.body, res.body
         
             authz = self.load_authz()

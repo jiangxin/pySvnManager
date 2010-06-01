@@ -23,9 +23,7 @@ available to Controllers. This module is available to templates as 'h'.
 # Import helpers as desired, or define your own, ie:
 #from webhelpers.html.tags import checkbox, password
 
-from routes import url_for, redirect_to
 from webhelpers.html import escape, HTML, literal, url_escape
 from webhelpers.html.tags import *
-from webhelpers.rails.prototype import link_to_remote, form_remote_tag
-from webhelpers.rails.scriptaculous import visual_effect
-from webhelpers.rails.asset_tag import javascript_include_tag, stylesheet_link_tag
+from pylons import url
+from pylons.controllers.util import redirect

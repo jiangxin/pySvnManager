@@ -18,13 +18,15 @@ def make_map(config):
     map.connect('/error/{action}/{id}', controller='error')
 
     # CUSTOM ROUTES HERE
-    map.connect('/', controller='check', action='index')
-    map.connect('/login', controller='security', action='index')
-    map.connect('/logout', controller='security', action='logout')
+    map.connect('home', '/', controller='check', action='index')
+    map.connect('login', '/login', controller='security', action='index')
+    map.connect('logout', '/logout', controller='security', action='logout')
 
-    map.connect('/{controller}')
-
+    map.connect('/{controller}', action="index")
     map.connect('/{controller}/{action}')
     map.connect('/{controller}/{action}/{id}')
+
+    # To restore the old behavior, in config/routing.py, set the mapper to explicit:
+    map.explicit = True
 
     return map

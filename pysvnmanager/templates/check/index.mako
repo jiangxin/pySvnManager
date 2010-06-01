@@ -69,7 +69,7 @@ function update_path(form)
     var params = {repos:repos};
     showNoticesPopup();
     new Ajax.Request(
-		'${h.url_for(controller="check", action="get_auth_path")}', 
+		'${h.url(controller="check", action="get_auth_path")}', 
 		{asynchronous:true, evalScripts:true, method:'post',
 			onComplete:
 				function(request)
@@ -106,20 +106,19 @@ function ajax_update_path(code)
 <h2>${_("Check Permissions")}</h2>
 
 ## Classic Form
-##     ${h.form(h.url_for(action='permission'), method='post')}
+##     ${h.form(h.url(controller="check", action='permission'), method='post')}
 
 ## AJAX Form
-<%
-    context.write( 
-        h.form_remote_tag(
-            html={'id':'main_form'}, 
-            url=h.url_for(action='access_map'), 
-            update=dict(success="acl_msg", failure="message"), 
-            method='post', before='showNoticesPopup()',
-            complete='hideNoticesPopup();'+h.visual_effect("Highlight", "acl_msg", duration=1),
-        )
-    ) 
-%>
+
+<form action="${h.url(controller='check', action='access_map')}"
+  id="main_form" method="POST"
+  onsubmit="showNoticesPopup(); 
+            new Ajax.Updater({success:'acl_msg',failure:'message'},
+                             '${h.url(controller='check', action='access_map')}',
+                             {asynchronous:true, evalScripts:true, method:'post',
+                              onComplete:function(request){hideNoticesPopup();new Effect.Highlight('acl_msg',{duration:1});},
+                              parameters:Form.serialize(this)});
+            return false;">
 
 <table class="hidden">
 <tr>

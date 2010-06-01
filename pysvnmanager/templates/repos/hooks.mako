@@ -31,7 +31,7 @@ function init_repos_list()
 	showGlobalMessage();
 	showNoticesPopup();
 	new Ajax.Request(
-		'${h.url_for(controller="repos", action="init_repos_list")}', 
+		'${h.url(controller="repos", action="init_repos_list")}', 
 		{asynchronous:true, evalScripts:true, method:'post',
 			onComplete:
 				function(request)
@@ -76,7 +76,7 @@ function repos_changed()
 	{
 		showNoticesPopup();
 		new Ajax.Request(
-			'${h.url_for(controller="repos", action="get_plugin_list")}', 
+			'${h.url(controller="repos", action="get_plugin_list")}', 
 			{asynchronous:true, evalScripts:true, method:'post',
 				onComplete:
 					function(request)
@@ -86,7 +86,7 @@ function repos_changed()
 			
 		new Ajax.Updater(
 			'installed_hook_form_contents',
-			'${h.url_for(controller="repos", action="get_installed_hook_form")}', 
+			'${h.url(controller="repos", action="get_installed_hook_form")}', 
 			{asynchronous:true, evalScripts:true, method:'post',
 				onComplete:
 					function(request)
@@ -157,7 +157,7 @@ function show_hook_config_form(hookid)
 	showNoticesPopup();
 	new Ajax.Updater(
 		{success:'hook_setting_form_contents',failure:'message'},
-		'${h.url_for(controller="repos", action="get_hook_setting_form")}', 
+		'${h.url(controller="repos", action="get_hook_setting_form")}', 
 		{asynchronous:true, evalScripts:true, method:'post',
 			onComplete:
 				function(request)
@@ -190,8 +190,8 @@ ${_("Repository:")}
     <select name="repos_list" size="1" onChange='repos_changed()'>
     </select>
 % if c.is_super_user:
-    ${h.link_to(_("Add repository"), h.url_for(action="create"))}
-    ${h.link_to(_("Remove repository"), h.url_for(action="remove"))}
+    ${h.link_to(_("Add repository"), h.url(controller="repos", action="create"))}
+    ${h.link_to(_("Remove repository"), h.url(controller="repos", action="remove"))}
 % endif
 </DIV>
 
@@ -203,19 +203,19 @@ ${_("Uninstalled hooks:")}
 </form>
 </DIV>
 <DIV id="hook_setting_box" class=gainlayout style="visibility:hidden;position:absolute">
-## <form name="hook_setting_form" method="post" action="${h.url_for(action='setup_hook')}">
+## <form name="hook_setting_form" method="post" action="${h.url(controller="repos", action='setup_hook')}">
 <br>
-<%
-    context.write( 
-        h.form_remote_tag(
-            html={'id':'hook_setting_form'}, 
-            url=h.url_for(action='setup_hook'), 
-            update="message", 
-            method='post', before='showNoticesPopup()',
-            complete='hideNoticesPopup();switch_message_box();repos_changed()',
-        )
-    )
- %>
+
+<form action="${h.url(controller="repos", action='setup_hook')}"
+  id="hook_setting_form" method="POST"
+  onsubmit="showNoticesPopup(); 
+            new Ajax.Updater('message',
+                             '${h.url(controller="repos", action='setup_hook')}',
+                             {asynchronous:true, evalScripts:true, method:'post',
+                              onComplete:function(request){hideNoticesPopup();switch_message_box();repos_changed();},
+                              parameters:Form.serialize(this)});
+            return false;">
+
     <table class='hidden' width='90%'>
       <tr>
         <td>
@@ -233,19 +233,19 @@ ${_("Uninstalled hooks:")}
 <hr size='1'>
 
 <DIV id="installed_hook_box" class=gainlayout style="visibility:visible;position:relative">
-## <form name="installed_hook_form" method="post" action="${h.url_for(action='remove_hook')}"
+## <form name="installed_hook_form" method="post" action="${h.url(controller="repos", action='remove_hook')}"
 ##    	 onSubmit="installed_hook_form_submit(this)">
-<%
-    context.write( 
-        h.form_remote_tag(
-            html={'id':'installed_hook_form'}, 
-            url=h.url_for(action='uninstall_hook'), 
-            update="message",
-            method='post', before='installed_hook_form_submit(this); showNoticesPopup()',
-            complete='hideNoticesPopup();switch_message_box();repos_changed()',
-        )
-    )
- %>
+
+<form action="${h.url(controller="repos", action='uninstall_hook')}"
+  id="installed_hook_form" method="POST"
+  onsubmit="installed_hook_form_submit(this); showNoticesPopup();
+            new Ajax.Updater('message',
+                             '${h.url(controller="repos", action='uninstall_hook')}',
+                             {asynchronous:true, evalScripts:true, method:'post',
+                              onComplete:function(request){hideNoticesPopup();switch_message_box();repos_changed();},
+                              parameters:Form.serialize(this)});
+            return false;">
+
  	<input type='hidden' name='_repos'>
     <div id="installed_hook_form_contents"></div>
 </DIV>

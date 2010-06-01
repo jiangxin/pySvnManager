@@ -181,7 +181,7 @@ function init_repos_list()
 {
 	showNoticesPopup();
 	new Ajax.Request(
-		'${h.url_for(controller="authz", action="init_repos_list")}', 
+		'${h.url(controller="authz", action="init_repos_list")}', 
 		{asynchronous:true, evalScripts:true, method:'post',
 			onComplete:
 				function(request)
@@ -231,7 +231,7 @@ function repos_changed()
 
 		showNoticesPopup();
 		new Ajax.Request(
-			'${h.url_for(controller="authz", action="repos_changed")}', 
+			'${h.url(controller="authz", action="repos_changed")}', 
 			{asynchronous:true, evalScripts:true, method:'post',
 				onComplete:
 					function(request)
@@ -284,7 +284,7 @@ function path_changed()
 
 		showNoticesPopup();
 		new Ajax.Request(
-			'${h.url_for(controller="authz", action="path_changed")}', 
+			'${h.url(controller="authz", action="path_changed")}', 
 			{asynchronous:true, evalScripts:true, method:'post',
 				onComplete:
 					function(request)
@@ -490,7 +490,7 @@ function save_authz(form)
 	var params = {reposname:reposname, admins:admins, path:path, rules:rules, mode1:mode1, mode2:mode2, revision:revision};
 	showNoticesPopup();
 	new Ajax.Request(
-		'${h.url_for(controller="authz", action="save_authz")}', 
+		'${h.url(controller="authz", action="save_authz")}', 
 		{asynchronous:true, evalScripts:true, method:'post',
 			onComplete:
 				function(request)
@@ -544,7 +544,7 @@ function delete_authz(form)
 	
 	showNoticesPopup();
 	new Ajax.Request(
-		'${h.url_for(controller="authz", action="delete_authz")}', 
+		'${h.url(controller="authz", action="delete_authz")}', 
 		{asynchronous:true, evalScripts:true, method:'post',
 			onComplete:
 				function(request)

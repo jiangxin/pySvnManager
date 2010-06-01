@@ -7,18 +7,18 @@
 
 <h2>${_("Create repository")}</h2>
 
-##<form name="main_form" method="post" action="${h.url_for(action="create_submit")}">
-<%
-    context.write( 
-        h.form_remote_tag(
-            html={'id':'main_form'}, 
-            url=h.url_for(action='create_submit'), 
-            update="message",
-            method='post', before='showNoticesPopup()',
-            complete='hideNoticesPopup();switch_message_box();',
-        )
-    )
-%>
+##<form name="main_form" method="post" action="${h.url(controller="repos", action="create_submit")}">
+
+<form action="${h.url(controller="repos", action='create_submit')}"
+  id="main_form" method="POST"
+  onsubmit="showNoticesPopup();
+            new Ajax.Updater('message',
+                             '${h.url(controller="repos", action='create_submit')}',
+                             {asynchronous:true, evalScripts:true, method:'post',
+                              onComplete:function(request){hideNoticesPopup();switch_message_box();},
+                              parameters:Form.serialize(this)});
+            return false;">
+
 ${_("Repository name:")}
 	<input type="text" name="reposname" value="">
 	<br>

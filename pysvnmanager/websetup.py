@@ -39,6 +39,9 @@ def setup_app(command, conf, vars):
     if not pylons.test.pylonsapp:
         load_environment(conf.global_conf, conf.local_conf)
 
+    if not getattr(config,'here',None):
+        config['here'] = os.path.dirname(__file__)
+
     here = config['here']
 
     if not os.path.exists(here+'/config'):

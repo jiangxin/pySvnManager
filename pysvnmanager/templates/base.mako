@@ -3,7 +3,7 @@
   <head>
     ${self.head_tags()}
     ${self.ajax_script()}
-    ${h.stylesheet_link_tag('/css/common', media='all')}
+    ${h.stylesheet_link(h.url('/css/common.css'), media='all')}
 
     <SCRIPT LANGUAGE="JavaScript">
 <%
@@ -47,19 +47,21 @@ context.write(msg)
 <%def name="nav_bar()">
   <table>
       <tr>
-          <td>${h.link_to(_("Check permissions"), h.url_for(controller="check", id=None))}</td>
-          <td>${h.link_to(_("Role management"), h.url_for(controller="role", id=None))}</td>
-          <td>${h.link_to(_("ACL management"), h.url_for(controller="authz", id=None))}</td>
-          <td>${h.link_to(_("Repos management"), h.url_for(controller="repos", id=None))}</td>
-          <td>${h.link_to(_("Change log"), h.url_for(controller="logs", id=None))}</td>
+          <td>${h.link_to(_("Check permissions"), h.url(controller="check",action="index"))}</td>
+          <td>${h.link_to(_("Role management"), h.url(controller="role",action="index"))}</td>
+          <td>${h.link_to(_("ACL management"), h.url(controller="authz",action="index"))}</td>
+          <td>${h.link_to(_("Repos management"), h.url(controller="repos",action="index"))}</td>
+          <td>${h.link_to(_("Change log"), h.url(controller="logs",action="index"))}</td>
           <td>${_("Welcome")} ${session.get('user')}</td>
-          <td>${h.link_to(_("Logout"), h.url_for(controller="logout", id=None))}</td>
+          <td>${h.link_to(_("Logout"), h.url("logout"))}</td>
       </tr>
   </table>
 </%def>
 
 <%def name="ajax_script()">
-${h.javascript_include_tag(builtins=True)}
+${h.javascript_link(h.url('/javascripts/prototype.js'))}
+${h.javascript_link(h.url('/javascripts/scriptaculous.js'))}
+${h.javascript_link(h.url('/javascripts/unittest.js'))}
 
 <!-- IE layout bugfix -->
 <!--[if lt IE 7]><style>

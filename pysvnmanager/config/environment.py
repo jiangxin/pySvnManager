@@ -45,4 +45,9 @@ def load_environment(global_conf, app_conf):
     # CONFIGURATION OPTIONS HERE (note: all config options will override
     # any Pylons config options)
     
+    # By default, the tmpl_context (a.k.a 'c'), is no longer a AttribSafeContextObj.
+    # This means accessing attributes that don't exist will raise an AttributeError.
+    # To use the attribute-safe tmpl_context, add this line to the config/environment.py:
+    config['pylons.strict_tmpl_context'] = False
+
     return config

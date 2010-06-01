@@ -23,44 +23,44 @@ class TestCheckController(TestController):
 
     def test_index(self):
         # Test redirect to login pange
-        res = self.app.get(url_for(controller='check'))
-        assert res.status == 302
+        res = self.app.get(url(controller='check', action='index'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/login'), res.header('location')
 
         # Login as common user
         self.login('nobody')
-        res = self.app.get(url_for(controller='check'))
-        assert res.status == 302, res.status
+        res = self.app.get(url(controller='check', action='index'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/security/failed'), res.header('location')
         
         # Login as repos admin
         self.login('admin1')
-        res = self.app.get(url_for(controller='check'))
+        res = self.app.get(url(controller='check', action='index'))
         assert res.c.reposlist == [u'repos1'], res.c.reposlist
 
         # Login as repos admin
         self.login('admin2')
-        res = self.app.get(url_for(controller='check'))
+        res = self.app.get(url(controller='check', action='index'))
         assert res.c.reposlist == [u'repos1', u'repos2'], res.c.reposlist
 
         # Login as superuser
         self.login('root')
-        res = self.app.get(url_for(controller='check'))
-        assert res.status == 200
+        res = self.app.get(url(controller='check', action='index'))
+        assert res.status == 200, res.status
         assert '''<input type="submit" name="submit" value='Check Permissions'>''' in res.body, res.body
         assert res.c.reposlist == [u'/', u'document', u'project1', u'project2', u'repos1', u'repos2', u'repos3'], res.c.reposlist
 
 
     def test_access_map(self):
         # authn test
-        res = self.app.get(url_for(controller='check', action='access_map'))
-        assert res.status == 302
+        res = self.app.get(url(controller='check', action='access_map'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/login'), res.header('location')
 
         # authz test
         self.login('nobody')
-        res = self.app.get(url_for(controller='check', action='access_map'))
-        assert res.status == 302, res.status
+        res = self.app.get(url(controller='check', action='access_map'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/security/failed'), res.header('location')
         
         # Login as superuser
@@ -74,8 +74,8 @@ class TestCheckController(TestController):
                   'pathselector':'/trunk/src/test',
                   'abbr':'True',
                   }
-        res = self.app.get(url_for(controller='check', action='access_map'), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='check', action='access_map'), params)
+        assert res.status == 200, res.status
         assert '''<div id='acl_path_msg'>[repos1:/trunk/src/test] user1 =</div>''' in res.body, res.body
 
         params = {
@@ -87,7 +87,7 @@ class TestCheckController(TestController):
                   'pathselector':'/trunk/src/test',
                   'abbr':'False',
                   }
-        res = self.app.get(url_for(controller='check', action='access_map'), params)
+        res = self.app.get(url(controller='check', action='access_map'), params)
         assert '''<div id='acl_path_msg'>User user1 has ReadOnly (RO) rights for module reposX:/trunk/src/test</div><pre>
 ==================================================
 Access map on 'reposX' for user 'user1'
@@ -115,7 +115,7 @@ Access map on 'reposX' for user 'user1'
                   'pathname':'/trunk/src/test',
                   'abbr':'1',
                   }
-        res = self.app.get(url_for(controller='check', action='access_map'), params)
+        res = self.app.get(url(controller='check', action='access_map'), params)
         assert '''<div id='acl_path_msg'>[repos1:/trunk/src/test] user2 = r</div>''' in res.body, res.body
 
         params = {
@@ -127,7 +127,7 @@ Access map on 'reposX' for user 'user1'
                   'pathname':'/trunk/',
                   'abbr':'1',
                   }
-        res = self.app.get(url_for(controller='check', action='access_map'), params)
+        res = self.app.get(url(controller='check', action='access_map'), params)
         assert '''<div id='acl_path_msg'>[reposX:/trunk] user2 =</div>''' in res.body, res.body
 
         params = {
@@ -139,7 +139,7 @@ Access map on 'reposX' for user 'user1'
                   'pathselector':'/trunk',
                   'abbr':'1',
                   }
-        res = self.app.get(url_for(controller='check', action='access_map'), params)
+        res = self.app.get(url(controller='check', action='access_map'), params)
         assert '''<div id='acl_path_msg'>[repos1:/trunk] user3 =</div>''' in res.body, res.body
 
         params = {
@@ -151,7 +151,7 @@ Access map on 'reposX' for user 'user1'
                   'pathselector':'/trunk',
                   'abbr':'1',
                   }
-        res = self.app.get(url_for(controller='check', action='access_map'), params)
+        res = self.app.get(url(controller='check', action='access_map'), params)
         assert '''<div id='acl_path_msg'>[repos1:/trunk] user4 = r</div>''' in res.body, res.body
 
         params = {
@@ -163,7 +163,7 @@ Access map on 'reposX' for user 'user1'
                   'pathselector':'/trunk',
                   'abbr':'1',
                   }
-        res = self.app.get(url_for(controller='check', action='access_map'), params)
+        res = self.app.get(url(controller='check', action='access_map'), params)
         assert '''<div id='acl_path_msg'>[reposX:/trunk] user4 = r</div>''' in res.body, res.body
 
         params = {
@@ -175,7 +175,7 @@ Access map on 'reposX' for user 'user1'
                   'pathselector':'/trunk',
                   'abbr':'1',
                   }
-        res = self.app.get(url_for(controller='check', action='access_map'), params)
+        res = self.app.get(url(controller='check', action='access_map'), params)
         assert '''<div id='acl_path_msg'>[reposX:/trunk] user5 =</div>''' in res.body, res.body
 
         # Repos = *
@@ -189,7 +189,7 @@ Access map on 'reposX' for user 'user1'
                   'pathselector':'/trunk/src/test',
                   'abbr':'True',
                   }
-        res = self.app.get(url_for(controller='check', action='access_map'), params)
+        res = self.app.get(url(controller='check', action='access_map'), params)
         assert res.status == 200, res.status
         assert '''<div id='acl_path_msg'>[repos1:/trunk/src/test] user1 =<br>
 [repos2:/trunk/src/test] user1 = r</div><pre>
@@ -220,27 +220,27 @@ XX:
                   'pathselector':'/trunk/src/test',
                   'abbr':'True',
                   }
-        res = self.app.get(url_for(controller='check', action='access_map'), params)
+        res = self.app.get(url(controller='check', action='access_map'), params)
         assert res.status == 200, res.status
         assert res.body== 'Permission denied.', res.header('location')
 
     def test_authz_path(self):
         # authn test
-        res = self.app.get(url_for(controller='check', action='get_auth_path'))
-        assert res.status == 302
+        res = self.app.get(url(controller='check', action='get_auth_path'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/login'), res.header('location')
 
         # authz test
         self.login('nobody')
-        res = self.app.get(url_for(controller='check', action='get_auth_path'))
-        assert res.status == 302, res.status
+        res = self.app.get(url(controller='check', action='get_auth_path'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/security/failed'), res.header('location')
 
         self.login('root')
         params = {}
         params['repos'] = '/'
-        res = self.app.get(url_for(controller='check', action='get_auth_path'), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='check', action='get_auth_path'), params)
+        assert res.status == 200, res.status
         assert '''id[0]="...";name[0]="Please choose...";
 id[1]="/trunk/src";name[1]="/trunk/src";
 id[2]="/trunk";name[2]="/trunk";
@@ -251,13 +251,13 @@ total=6;
 ''' == res.body, res.body
 
         params['repos'] = 'noexist'
-        res = self.app.get(url_for(controller='check', action='get_auth_path'), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='check', action='get_auth_path'), params)
+        assert res.status == 200, res.status
         assert '' == res.body, res.body
 
         params['repos'] = 'repos1'
-        res = self.app.get(url_for(controller='check', action='get_auth_path'), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='check', action='get_auth_path'), params)
+        assert res.status == 200, res.status
         assert '''id[0]="...";name[0]="Please choose...";
 id[1]="/trunk/src";name[1]="/trunk/src";
 id[2]="/trunk";name[2]="/trunk";
@@ -266,8 +266,8 @@ total=4;
 ''' == res.body, res.body
 
         params['repos'] = 'document'
-        res = self.app.get(url_for(controller='check', action='get_auth_path'), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='check', action='get_auth_path'), params)
+        assert res.status == 200, res.status
         assert u'''id[0]="...";name[0]="Please choose...";
 id[1]="/branches";name[1]="/branches";
 id[2]="/tags";name[2]="/tags";

@@ -21,6 +21,7 @@ import logging
 from pysvnmanager.lib.base import *
 from pysvnmanager.lib.text import to_unicode
 from pysvnmanager.model.svnauthz import *
+from pylons.i18n import _, ungettext, N_
 
 log = logging.getLogger(__name__)
 
@@ -43,10 +44,10 @@ class RoleController(BaseController):
             g.catch_e = [unicode(e), traceback.format_exc(5) ]
             return
 
-    def __before__(self, action):
+    def __before__(self, action=None):
         super(RoleController, self).__before__(action)
         if not self.own_reposlist and not self.is_super_user:
-            return redirect_to(h.url_for(controller='security', action='failed'))
+            return redirect(url(controller='security', action='failed'))
         diff = self.authz.differ()
         if diff:
             c.global_message = _('Some one maybe you, has modified the svn authz file by hands. Please save once to fix possible config error.') + "<blockquote>" + "<br>".join(diff.splitlines()) + "</blockquote>"

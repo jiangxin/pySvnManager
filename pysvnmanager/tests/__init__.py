@@ -43,7 +43,6 @@ environ = {}
 
 import os
 import sys
-from routes import url_for
 from pylons import config
 from shutil import copyfile
 
@@ -67,7 +66,7 @@ class TestController(TestCase):
         return svnauthz.SvnAuthz(self.authz_file)
         
     def login(self, username, password=""):
-        res = self.app.get(url_for(controller='security'))
+        res = self.app.get(url(controller='security', action='index'))
         form = res.forms[0]
         form['username'] = username
         if not password:

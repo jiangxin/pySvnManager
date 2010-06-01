@@ -309,7 +309,7 @@ function reset_main_form()
 	var params = {select:name};
 	showNoticesPopup();
 	new Ajax.Request(
-		'${h.url_for(controller="role", action="get_role_info")}', 
+		'${h.url(controller="role", action="get_role_info")}', 
 		{asynchronous:true, evalScripts:true, method:'post',
 			onComplete:
 				function(request)
@@ -360,7 +360,7 @@ function role_changed()
 	{
 		showNoticesPopup();
 		new Ajax.Request(
-			'${h.url_for(controller="role", action="get_role_info")}', 
+			'${h.url(controller="role", action="get_role_info")}', 
 			{asynchronous:true, evalScripts:true, method:'post',
 				onComplete:
 					function(request)
@@ -373,7 +373,7 @@ function role_changed()
 	{
 		showNoticesPopup();
 		new Ajax.Request(
-			'${h.url_for(controller="role", action="get_role_info")}', 
+			'${h.url(controller="role", action="get_role_info")}', 
 			{asynchronous:true, evalScripts:true, method:'post',
 				onComplete:
 					function(request)
@@ -403,7 +403,7 @@ function save_group(form)
 
 	showNoticesPopup();
 	new Ajax.Request(
-		'${h.url_for(controller="role", action="save_group")}', 
+		'${h.url(controller="role", action="save_group")}', 
 		{asynchronous:true, evalScripts:true, method:'post',
 			onComplete:
 				function(request)
@@ -452,7 +452,7 @@ function delete_group(form)
 	
 	showNoticesPopup();
 	new Ajax.Request(
-		'${h.url_for(controller="role", action="delete_group")}', 
+		'${h.url(controller="role", action="delete_group")}', 
 		{asynchronous:true, evalScripts:true, method:'post',
 			onComplete:
 				function(request)
@@ -490,7 +490,7 @@ function save_alias(form)
 
 	showNoticesPopup();
 	new Ajax.Request(
-		'${h.url_for(controller="role", action="save_alias")}', 
+		'${h.url(controller="role", action="save_alias")}', 
 		{asynchronous:true, evalScripts:true, method:'post',
 			onComplete:
 				function(request)
@@ -537,7 +537,7 @@ function delete_alias(form)
 	
 	showNoticesPopup();
 	new Ajax.Request(
-		'${h.url_for(controller="role", action="delete_alias")}', 
+		'${h.url(controller="role", action="delete_alias")}', 
 		{asynchronous:true, evalScripts:true, method:'post',
 			onComplete:
 				function(request)

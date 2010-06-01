@@ -21,6 +21,7 @@ import cgi
 from paste.urlparser import PkgResourcesParser
 from pylons.middleware import error_document_template
 from webhelpers.html.builder import literal
+from pylons.i18n import _, ungettext, N_
 
 from pysvnmanager.lib.base import BaseController
 

@@ -22,12 +22,15 @@ Provides the BaseController class for subclassing.
 from pylons.controllers import WSGIController
 from pylons.templating import render_mako as render
 
-# obsolete?
 import pysvnmanager.lib.helpers as h
-from pylons.controllers.util import abort, etag_cache, redirect_to
-from pylons import c, cache, config, g, request, response, session
+from pylons.controllers.util import abort, etag_cache
+from pylons import app_globals, cache, config, request, response, session
 from pylons.i18n import _, ungettext, N_
 from pylons.i18n import set_lang, add_fallback
+from pylons import app_globals as g
+from pylons import tmpl_context as c
+from pylons import url
+from pylons.controllers.util import redirect
 
 import sys
 config_path = config["here"] + '/config'
@@ -38,8 +41,7 @@ from localconfig import LocalConfig as cfg
 class BaseController(WSGIController):
     requires_auth = []
 
-    def __before__(self, action):
-        
+    def __before__(self, action=None):
         if 'lang' in session:
             set_lang(session['lang'])
         #log.debug(request.languages)
@@ -53,8 +55,10 @@ class BaseController(WSGIController):
             pass
 
         ## Show exception and traceback info
-        if g.catch_e:
-            return redirect_to(h.url_for(controller='template', action='show_e'))
+        if getattr(g, 'catch_e', None):
+            return redirect(url(controller='template', action='show_e'))
+        else:
+           g.catch_e = []
 
         if isinstance(self.requires_auth, bool) and not self.requires_auth:
             pass
@@ -65,7 +69,7 @@ class BaseController(WSGIController):
             if 'user' not in session:
                 session['path_before_login'] = request.path_info
                 session.save()
-                return redirect_to(h.url_for(controller='security'))
+                return redirect(url('login'))
 
     def __call__(self, environ, start_response):
         """Invoke the Controller"""

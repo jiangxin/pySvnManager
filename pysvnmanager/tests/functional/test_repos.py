@@ -23,38 +23,38 @@ class TestReposController(TestController):
     def test_index(self):
 
         # Test redirect to login pange
-        res = self.app.get(url_for(controller='repos'))
-        assert res.status == 302
+        res = self.app.get(url(controller='repos', action='index'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/login'), res.header('location')
 
         # Login as common user
         self.login('nobody')
-        res = self.app.get(url_for(controller='repos'))
-        assert res.status == 302, res.status
+        res = self.app.get(url(controller='repos', action='index'))
+        assert res.status == "302 Found", res.status
         assert res.header('location').endswith('/security/failed'), res.header('location')
         
         # repos admin can access repos controller(not root admin), but only with authed repos
         self.login('admin2')
-        res = self.app.get(url_for(controller='repos'))
+        res = self.app.get(url(controller='repos', action='index'))
         assert res.status == 200, res.status
 
         # ??? Repos admin can or can not manage hooks for his/her repos ???
         self.login('admin2')
-        res = self.app.get(url_for(controller='repos', action='init_repos_list'))
+        res = self.app.get(url(controller='repos', action='init_repos_list'))
         assert """id[0]="...";name[0]="Please choose...";
 total=1;""" in res.body, res.body
 
         # Login as superuser
         self.login('root')
-        res = self.app.get(url_for(controller='repos'))
-        assert res.status == 200
+        res = self.app.get(url(controller='repos', action='index'))
+        assert res.status == 200, res.status
         assert """<div id="installed_hook_form_contents"></div>""" in res.body, res.body[:100]
 
     def test_init_repos_list(self):
         # Login as superuser
         self.login('root')
-        res = self.app.get(url_for(controller='repos', action="init_repos_list"))
-        assert res.status == 200
+        res = self.app.get(url(controller='repos', action="init_repos_list"))
+        assert res.status == 200, res.status
         assert """id[0]="...";name[0]="Please choose...";
 id[1]="repos3";name[1]="repos3";
 id[2]="project1";name[2]="project1 (!)";
@@ -66,8 +66,8 @@ total=4;""" in res.body, res.body[:200]
         params = {
                   'select':'project1', 
                   }
-        res = self.app.get(url_for(controller='repos', action="get_plugin_list"), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='repos', action="get_plugin_list"), params)
+        assert res.status == 200, res.status
         assert "CaseInsensitive" in res.body, res.body
         assert "EolStyleCheck" in res.body, res.body
         assert "Please choose..." in res.body, res.body
@@ -77,8 +77,8 @@ total=4;""" in res.body, res.body[:200]
         params = {
                   'select':'project1', 
                   }
-        res = self.app.get(url_for(controller='repos', action="get_installed_hook_form"), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='repos', action="get_installed_hook_form"), params)
+        assert res.status == 200, res.status
         assert "" == res.body, res.body
 
     def test_get_hook_setting_form(self):
@@ -87,8 +87,8 @@ total=4;""" in res.body, res.body[:200]
                   'repos':'project1', 
                   'plugin':'CaseInsensitive',
                   }
-        res = self.app.get(url_for(controller='repos', action="get_hook_setting_form"), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='repos', action="get_hook_setting_form"), params)
+        assert res.status == 200, res.status
         assert "A pre-commit hook to detect case-insensitive filename clashes." in res.body, res.body
     
     def test_install_uninstall_hook(self):
@@ -97,16 +97,16 @@ total=4;""" in res.body, res.body[:200]
                   '_repos':'project1',
                   '_plugin':'CaseInsensitiveXXX',
                   }
-        res = self.app.get(url_for(controller='repos', action="setup_hook"), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='repos', action="setup_hook"), params)
+        assert res.status == 200, res.status
         assert "Apply plugin 'CaseInsensitiveXXX' on 'project1' Failed" in res.body, res.body
 
         self.login('root')
         params = {
                   'select':'project1', 
                   }
-        res = self.app.get(url_for(controller='repos', action="get_plugin_list"), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='repos', action="get_plugin_list"), params)
+        assert res.status == 200, res.status
         assert "CaseInsensitive" in res.body, res.body
         assert "EolStyleCheck" in res.body, res.body
         assert "Please choose..." in res.body, res.body
@@ -116,16 +116,16 @@ total=4;""" in res.body, res.body[:200]
                   '_repos':'project1',
                   '_plugin':'CaseInsensitive',
                   }
-        res = self.app.get(url_for(controller='repos', action="setup_hook"), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='repos', action="setup_hook"), params)
+        assert res.status == 200, res.status
         assert "<div class='info'>Apply plugin 'CaseInsensitive' on 'project1' success.</div>" == res.body, res.body
 
         self.login('root')
         params = {
                   'select':'project1', 
                   }
-        res = self.app.get(url_for(controller='repos', action="get_plugin_list"), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='repos', action="get_plugin_list"), params)
+        assert res.status == 200, res.status
         assert "CaseInsensitive" not in res.body, res.body
         assert "EolStyleCheck" in res.body, res.body
         assert "Please choose..." in res.body, res.body
@@ -135,16 +135,16 @@ total=4;""" in res.body, res.body[:200]
                   '_repos':'project1',
                   '_plugin':'EolStyleCheck',
                   }
-        res = self.app.get(url_for(controller='repos', action="setup_hook"), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='repos', action="setup_hook"), params)
+        assert res.status == 200, res.status
         assert """<div class='info'>Apply plugin 'EolStyleCheck' on 'project1' success.</div>""" == res.body, res.body
 
         self.login('root')
         params = {
                   'select':'project1', 
                   }
-        res = self.app.get(url_for(controller='repos', action="get_plugin_list"), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='repos', action="get_plugin_list"), params)
+        assert res.status == 200, res.status
         assert "CaseInsensitive" not in res.body, res.body
         assert "EolStyleCheck" not in res.body, res.body
         assert "Please choose..." in res.body, res.body
@@ -155,16 +155,16 @@ total=4;""" in res.body, res.body[:200]
                   'pluginid_0':'CaseInsensitive',
                   'pluginid_1':'EolStyleCheck',
                   }
-        res = self.app.get(url_for(controller='repos', action="uninstall_hook"), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='repos', action="uninstall_hook"), params)
+        assert res.status == 200, res.status
         assert """<div class='info'>Delete plugin 'CaseInsensitive, EolStyleCheck' on 'project1' success.</div>""" == res.body, res.body
 
         self.login('root')
         params = {
                   'select':'project1', 
                   }
-        res = self.app.get(url_for(controller='repos', action="get_plugin_list"), params)
-        assert res.status == 200
+        res = self.app.get(url(controller='repos', action="get_plugin_list"), params)
+        assert res.status == 200, res.status
         assert "CaseInsensitive" in res.body, res.body
         assert "EolStyleCheck" in res.body, res.body
         assert "Please choose..." in res.body, res.body

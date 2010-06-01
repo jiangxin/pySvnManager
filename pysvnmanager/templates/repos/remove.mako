@@ -15,7 +15,7 @@ function init_repos_list()
 	showNoticesPopup();
 	var params = {filter:'blank'};
 	new Ajax.Request(
-		'${h.url_for(controller="repos", action="init_repos_list")}', 
+		'${h.url(controller="repos", action="init_repos_list")}', 
 		{asynchronous:true, evalScripts:true, method:'post',
 			onComplete:
 				function(request)
@@ -49,18 +49,18 @@ function ajax_init_repos_list(code)
 
 <h2>${_("Remove repository")}</h2>
 
-##<form name="main_form" method="post" action="${h.url_for(action="remove_submit")}">
-<%
-    context.write( 
-        h.form_remote_tag(
-            html={'id':'main_form'}, 
-            url=h.url_for(action='remove_submit'), 
-            update="message",
-            method='post', before='showNoticesPopup()',
-            complete='hideNoticesPopup();switch_message_box();init_repos_list();',
-        )
-    )
-%>
+##<form name="main_form" method="post" action="${h.url(controller="repos", action="remove_submit")}">
+
+<form action="${h.url(controller="repos", action='remove_submit')}"
+  id="main_form" method="POST"
+  onsubmit="showNoticesPopup();
+            new Ajax.Updater('message',
+                             '${h.url(controller="repos", action='remove_submit')}',
+                             {asynchronous:true, evalScripts:true, method:'post',
+                              onComplete:function(request){hideNoticesPopup();switch_message_box();init_repos_list();},
+                              parameters:Form.serialize(this)});
+            return false;">
+
 ${_("Repository name:")}
     <select id="repos_list" name="repos_list" size="1">
     </select>
