@@ -17,12 +17,9 @@
 # GNU General Public License for more details.
 
 import cgi
-import os.path
 
-from paste.urlparser import StaticURLParser
-from pylons import request
-from pylons.controllers.util import forward
-from pylons.middleware import error_document_template, media_path
+from paste.urlparser import PkgResourcesParser
+from pylons.middleware import error_document_template
 from webhelpers.html.builder import literal
 
 from pysvnmanager.lib.base import BaseController
@@ -35,12 +32,13 @@ class ErrorController(BaseController):
 
     This behaviour can be altered by changing the parameters to the
     ErrorDocuments middleware in your config/middleware.py file.
-    
+
     """
     def document(self):
         """Render the error document"""
+        request = self._py_object.request
         resp = request.environ.get('pylons.original_response')
-        content = literal(resp.body) or cgi.escape(request.GET.get('message'))
+        content = literal(resp.body) or cgi.escape(request.GET.get('message', ''))
         page = error_document_template % \
             dict(prefix=request.environ.get('SCRIPT_NAME', ''),
                  code=cgi.escape(request.GET.get('code', str(resp.status_int))),
@@ -49,16 +47,16 @@ class ErrorController(BaseController):
 
     def img(self, id):
         """Serve Pylons' stock images"""
-        return self._serve_file(os.path.join(media_path, 'img'), id)
+        return self._serve_file('/'.join(['media/img', id]))
 
     def style(self, id):
         """Serve Pylons' stock stylesheets"""
-        return self._serve_file(os.path.join(media_path, 'style'), id)
+        return self._serve_file('/'.join(['media/style', id]))
 
-    def _serve_file(self, root, path):
+    def _serve_file(self, path):
         """Call Paste's FileApp (a WSGI application) to serve the file
         at the specified path
         """
-        static = StaticURLParser(root)
+        request = self._py_object.request
         request.environ['PATH_INFO'] = '/%s' % path
-        return static(request.environ, self.start_response)
+        return PkgResourcesParser('pylons', 'pylons')(request.environ, self.start_response)

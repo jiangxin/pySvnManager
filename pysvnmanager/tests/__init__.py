@@ -24,46 +24,37 @@ command.
 This module initializes the application via ``websetup`` (`paster
 setup-app`) and provides the base testing objects.
 """
-import os
-import sys
-from shutil import copyfile
-from pylons import config
-
 from unittest import TestCase
 
 from paste.deploy import loadapp
-from paste.fixture import TestApp
 from paste.script.appinstall import SetupCommand
-from pylons import config
-from routes import url_for
+from pylons import url
+from routes.util import URLGenerator
+from webtest import TestApp
 
 import pylons.test
-import pkg_resources
 
-__all__ = ['url_for', 'TestController']
-
-here_dir = os.path.dirname(os.path.abspath(__file__))
-conf_dir = os.path.dirname(os.path.dirname(here_dir))
-
-sys.path.insert(0, conf_dir)
-pkg_resources.working_set.add_entry(conf_dir)
-pkg_resources.require('Paste')
-pkg_resources.require('PasteScript')
-
-test_file = os.path.join(conf_dir, 'test.ini')
+__all__ = ['environ', 'url', 'TestController']
 
 # Invoke websetup with the current config file
-SetupCommand('setup-app').run([config['__file__']])
+SetupCommand('setup-app').run([pylons.test.pylonsapp.config['__file__']])
+
+environ = {}
+
+import os
+import sys
+from routes import url_for
+from pylons import config
+from shutil import copyfile
 
 class TestController(TestCase):
 
     def __init__(self, *args, **kwargs):
         self.authz_file = os.path.dirname(__file__) + '/../../config/svn.access.test'
-        if hasattr(pylons.test, "pylonsapp"):
-            wsgiapp = pylons.test.pylonsapp
-        else:
-            wsgiapp = loadapp('config:%s' % config['__file__'])
+        wsgiapp = pylons.test.pylonsapp
+        config = wsgiapp.config
         self.app = TestApp(wsgiapp)
+        url._push_object(URLGenerator(config['routes.map'], environ))
         TestCase.__init__(self, *args, **kwargs)
 
     def rollback(self):

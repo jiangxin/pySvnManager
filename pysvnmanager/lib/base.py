@@ -22,22 +22,18 @@ Provides the BaseController class for subclassing.
 from pylons.controllers import WSGIController
 from pylons.templating import render_mako as render
 
-from pylons import c, cache, config, g, request, response, session
+# obsolete?
+import pysvnmanager.lib.helpers as h
 from pylons.controllers.util import abort, etag_cache, redirect_to
-from pylons.decorators import jsonify, validate
+from pylons import c, cache, config, g, request, response, session
 from pylons.i18n import _, ungettext, N_
 from pylons.i18n import set_lang, add_fallback
-import pysvnmanager.lib.helpers as h
-import pysvnmanager.model as model
 
 import sys
 config_path = config["here"] + '/config'
 if config_path not in sys.path:
     sys.path.insert(0, config_path)
 from localconfig import LocalConfig as cfg
-
-#import logging
-#log = logging.getLogger(__name__)
 
 class BaseController(WSGIController):
     requires_auth = []
@@ -76,9 +72,8 @@ class BaseController(WSGIController):
         # WSGIController.__call__ dispatches to the Controller method
         # the request is routed to. This routing information is
         # available in environ['pylons.routes_dict']
-
         return WSGIController.__call__(self, environ, start_response)
 
 # Include the '_' function in the public names
-__all__ = [__name for __name in locals().keys() if not __name.startswith('_') \
-           or __name == '_']
+#__all__ = [__name for __name in locals().keys() if not __name.startswith('_') \
+#           or __name == '_']

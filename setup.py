@@ -25,30 +25,30 @@ except ImportError:
 
 setup(
     name='pySvnManager',
-    version="0.3.0",
+    version="0.4.0",
     description='SVN authz web management tools.',
     author='Jiang Xin',
     author_email='jiangxin@ossxp.com',
     url='https://sourceforge.net/projects/pysvnmanager',
     install_requires=[
-            "Pylons>=0.9.7rc1",
-            "docutils",
-            "Babel",
-            #"Mako>=0.2.2",
-            #"WebHelpers>=0.6.1",
-            #"Routes>=1.9.2",
-            #"python-ldap",
+        "Pylons>=0.9.7",
+        "docutils",
+        "Babel",
+        #"Mako>=0.2.2",
+        #"WebHelpers>=0.6.1",
+        #"Routes>=1.9.2",
+        #"python-ldap",
     ],
-    setup_requires=["PasteScript==dev,>=1.6.3dev-r7326"],
+    setup_requires=["PasteScript>=1.6.3"],
     packages=find_packages(exclude=['ez_setup']),
     include_package_data=True,
     test_suite='nose.collector',
     package_data={'pysvnmanager': ['i18n/*/LC_MESSAGES/*.mo', 'config/*.in', ]},
-    message_extractors = {'pysvnmanager': [
+    message_extractors={'pysvnmanager': [
             ('**.py', 'python', None),
-            ('templates/**.mako', 'mako', None),
+            ('templates/**.mako', 'mako', {'input_encoding': 'utf-8'}),
             ('public/**', 'ignore', None)]},
-    zip_safe = False,
+    zip_safe=False,
     paster_plugins=['PasteScript', 'Pylons'],
     entry_points="""
     [paste.app_factory]

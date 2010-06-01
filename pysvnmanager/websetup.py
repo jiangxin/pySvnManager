@@ -19,6 +19,10 @@
 """Setup the pySvnManager application"""
 import logging
 
+import pylons.test
+
+from pysvnmanager.config.environment import load_environment
+
 from paste.deploy import appconfig
 from pylons import config
 from shutil import copyfile
@@ -31,7 +35,9 @@ log = logging.getLogger(__name__)
 
 def setup_app(command, conf, vars):
     """Place any commands to setup pysvnmanager here"""
-    load_environment(conf.global_conf, conf.local_conf)
+    # Don't reload the app if it was loaded under the testing environment
+    if not pylons.test.pylonsapp:
+        load_environment(conf.global_conf, conf.local_conf)
 
     here = config['here']
 
@@ -49,4 +55,3 @@ def setup_app(command, conf, vars):
             log.warning("Warning: %s already exist, ignored." % f)
         else:
             copyfile(src, dest)
-

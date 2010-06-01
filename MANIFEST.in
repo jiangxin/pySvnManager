@@ -1,6 +1,7 @@
+include pysvnmanager/config/deployment.ini_tmpl
+recursive-include pysvnmanager/config *.py *.in
 recursive-include pysvnmanager/public *
 recursive-include pysvnmanager/templates *
-recursive-include pysvnmanager/config *.py *.in
 recursive-include pysvnmanager/i18n *
 recursive-include pysvnmanager/hooks *.py
 recursive-include pysvnmanager/hooks/init/hook* *

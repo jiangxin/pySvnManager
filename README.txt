@@ -1,4 +1,4 @@
-This file is for you to describe the pysvnmanager application. Typically
+This file is for you to describe the pySvnManager application. Typically
 you would include information such as the information below:
 
 Prerequisite
