@@ -1,3 +1,6 @@
-Pylons>=0.9.7rc1
+Pylons>=1.0rc1
 docutils
 Babel
+Mako>=0.3.2
+WebHelpers>=1.0rc1
+Routes>=1.12.1

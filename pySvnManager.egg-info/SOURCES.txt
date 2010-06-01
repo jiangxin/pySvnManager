@@ -27,6 +27,7 @@ pysvnmanager/__init__.py
 pysvnmanager/websetup.py
 pysvnmanager/config/DefaultConfig.py
 pysvnmanager/config/__init__.py
+pysvnmanager/config/deployment.ini_tmpl
 pysvnmanager/config/environment.py
 pysvnmanager/config/localconfig.py.in
 pysvnmanager/config/middleware.py
@@ -139,6 +140,7 @@ pysvnmanager/model/svnauthz.py
 pysvnmanager/model/auth/__init__.py
 pysvnmanager/model/auth/http.py
 pysvnmanager/model/auth/ldap_login.py
+pysvnmanager/public/favicon.ico
 pysvnmanager/public/css/common.css
 pysvnmanager/public/img/alert.png
 pysvnmanager/public/img/attention.png
