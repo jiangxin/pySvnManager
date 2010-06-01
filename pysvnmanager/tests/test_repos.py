@@ -21,13 +21,14 @@ import os
 import sys
 sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
+from pysvnmanager.lib.base import *
 from pysvnmanager.tests import *
 from pysvnmanager import model
 from pysvnmanager.model import repos
 from pysvnmanager.model import hooks
 from pysvnmanager.hooks import plugins
 
-from pysvnmanager.lib.base import *
+import pylons.test
 
 import StringIO
 from pprint import pprint
@@ -35,8 +36,10 @@ from pprint import pprint
 class TestRepos(TestController):
     
     def __init__(self, *args):
-        # self.repos_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + '/svnroot'
-        self.repos_root = cfg.repos_root
+        # self.repos_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + '/svnroot.test'
+        wsgiapp = pylons.test.pylonsapp
+        config = wsgiapp.config
+        self.repos_root = config.get('repos_root', "") % {'here': config.get('here')}
         self.repos = repos.Repos(self.repos_root)
         super(TestRepos, self).__init__(*args)
 
@@ -78,8 +81,10 @@ class TestRepos(TestController):
 class TestReposPlugin(TestController):
     
     def __init__(self, *args):
-        # self.repos_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + '/svnroot'
-        self.repos_root = cfg.repos_root
+        # self.repos_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + '/svnroot.test'
+        wsgiapp = pylons.test.pylonsapp
+        config = wsgiapp.config
+        self.repos_root = config.get('repos_root', "") % {'here': config.get('here')}
         super(TestReposPlugin, self).__init__(*args)
 
     def setUp(self):

@@ -43,13 +43,13 @@ environ = {}
 
 import os
 import sys
-from pylons import config
 from shutil import copyfile
 
 class TestController(TestCase):
 
     def __init__(self, *args, **kwargs):
         self.authz_file = os.path.dirname(__file__) + '/../../config/svn.access.test'
+
         wsgiapp = pylons.test.pylonsapp
         config = wsgiapp.config
         self.app = TestApp(wsgiapp)
@@ -70,6 +70,8 @@ class TestController(TestCase):
         form = res.forms[0]
         form['username'] = username
         if not password:
+            wsgiapp = pylons.test.pylonsapp
+            config = wsgiapp.config
             d = eval(config.get('test_users', {}))
             password = d.get(username,'')
         form['password'] = password
