@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # POST-LOCK HOOK
 #
@@ -35,11 +35,11 @@
 # 'post-lock.bat' or 'post-lock.exe',
 # but the basic idea is the same.
 # 
-# Here is an example hook script, for a Unix /bin/sh interpreter:
+# Here is an example hook script, for a Unix /bin/bash interpreter:
 
 REPOS="$1"
 USER="$2"
 TOOLS_DIR=$REPOS/hooks/scripts
 
 # Send email to interested parties, let them know a lock was created:
-#$TOOLS_DIR/mailer/mailer.py lock "$REPOS" "$USER" $TOOLS_DIR/mailer/mailer.conf
+$TOOLS_DIR/mailer/mailer.py lock "$REPOS" "$USER" $TOOLS_DIR/mailer/mailer.conf

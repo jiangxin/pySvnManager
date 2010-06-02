@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # POST-COMMIT HOOK
 #
@@ -37,7 +37,7 @@
 # If you're having unexpected problems with a hook program, the
 # culprit may be unusual (or missing) environment variables.
 # 
-# Here is an example hook script, for a Unix /bin/sh interpreter.
+# Here is an example hook script, for a Unix /bin/bash interpreter.
 # For more examples and pre-written hooks, see those in
 # the Subversion repository at
 # http://svn.collab.net/repos/svn/trunk/tools/hook-scripts/ and
@@ -72,10 +72,12 @@ fi
 TRAC_POST_COMMIT_HOOK=/usr/share/doc/trac/contrib/trac-post-commit-hook
 if [ "$trac_post_commit_enabled" = "yes" ]; then
     if [ ! -z "$trac_env" ]; then
-        if [ -z "$trac_repos_name" ]; then
-            traccmd="$TRAC_POST_COMMIT_HOOK -p $trac_env -r $REV"
-        else
-            traccmd="$TRAC_POST_COMMIT_HOOK -p $trac_env -r $REV -R $trac_repos_name"
+        traccmd="$TRAC_POST_COMMIT_HOOK -p $trac_env -r $REV"
+        if [ ! -z "$trac_repos_name" ]; then
+            traccmd="$traccmd -R $trac_repos_name"
+        fi
+        if [ ! -z "$trac_fixed_status" ]; then
+            traccmd="$traccmd --status $trac_fixed_status"
         fi
         eval $traccmd
     fi 
@@ -84,9 +86,9 @@ fi
 ############################################################
 # Mantisbt integration
 if [ "$mantis_integration" = "yes" ]; then
-    SVNLOOK=/opt/svn/bin/svnlook
+    SVNLOOK=/usr/bin/svnlook
     MANTISBT=/opt/mantis/web
-    PHP=/opt/php5/bin/php5
+    PHP=/usr/bin/php5
 
     if [ -f "$MANTISBT/core/checkin.php" ]; then
       export LC_ALL=zh_CN.utf8

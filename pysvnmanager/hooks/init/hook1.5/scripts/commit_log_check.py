@@ -38,9 +38,9 @@ import getopt
 if os.name == 'nt':
     SVNLOOK = 'C:/Apps/Subversion/bin/svnlook.exe'
 else:
-    SVNLOOK = '/opt/svn/bin/svnlook'
+    SVNLOOK = '/usr/bin/svnlook'
 
-os.environ['LANG'] = os.environ['LC_ALL'] = 'zh_CN.UTF8'
+os.environ['LANG'] = os.environ['LC_ALL'] = 'zh_CN.utf8'
 program = sys.argv[0]
 
 def usage(code=0, msg=''):
@@ -142,7 +142,7 @@ def check_strlen(log_msg, size):
             idx = idx + 1
     
     if log_length < size:
-        error_msg = u"提交说明至少应包含 %d 个字符, 或者太简单了。\n" % size
+        error_msg = u"COMMIT_LOG_TOO_SIMPLE : 提交说明至少应包含 %d 个字符, 或者太简单了。\n" % size
         sys.stderr.write (error_msg.encode('utf-8'))
         sys.exit(1)
 
@@ -162,7 +162,7 @@ def check_pattern(log_msg, permit=None, prohibit=None):
                 matched = True
                 break
         if not matched:
-            error_msg = u"无法在提交说明中匹配表达式: \n%s。\n" % ',\n'.join(permit)
+            error_msg = u"PREDEFINED_PATTERN_NOT_IN_COMMIT_LOG: 无法在提交说明中匹配表达式: \n%s。\n" % ',\n'.join(permit)
             sys.stderr.write (error_msg.encode('utf-8'))
             sys.exit(1)
 
@@ -173,7 +173,7 @@ def check_pattern(log_msg, permit=None, prohibit=None):
                 matched = True
                 break
         if matched:
-            error_msg = u"不允许在log中出现类似表达式: \n%s。\n" % pat
+            error_msg = u"BAD_COMMIT_LOG : 不允许在log中出现类似表达式: \n%s。\n" % pat
             sys.stderr.write (error_msg.encode('utf-8'))
             sys.exit(1)
 

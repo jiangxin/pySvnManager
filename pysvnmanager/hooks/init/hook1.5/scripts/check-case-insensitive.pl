@@ -37,7 +37,7 @@ my $svnlook;
 if ($^O eq 'MSWin32') {
   $svnlook = '"c:\\Program Files\\subversion\\bin\\svnlook.exe"';
 } else {
-  $svnlook = '/opt/svn/bin/svnlook';
+  $svnlook = '/usr/bin/svnlook';
 }
 
 # This script can be called from a pre-commit hook on either Windows or a Unix
@@ -256,7 +256,7 @@ foreach my $newfile (@added) {
   $newtree{$lcnewfile} = $newfile;
 }
 if (defined($failmsg)) {
-  print STDERR "\n发现文件名大小写冲突:\n" . $failmsg . "\n";
+  print STDERR "\nFILE_NAME_CLASH - 发现文件名大小写冲突:\n" . $failmsg . "\n";
   exit 1;
 }
 

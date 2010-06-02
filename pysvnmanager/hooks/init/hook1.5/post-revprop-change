@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # POST-REVPROP-CHANGE HOOK
 #
@@ -40,7 +40,7 @@
 # If you're having unexpected problems with a hook program, the
 # culprit may be unusual (or missing) environment variables.
 # 
-# Here is an example hook script, for a Unix /bin/sh interpreter.
+# Here is an example hook script, for a Unix /bin/bash interpreter.
 # For more examples and pre-written hooks, see those in
 # the Subversion repository at
 # http://svn.collab.net/repos/svn/trunk/tools/hook-scripts/ and
