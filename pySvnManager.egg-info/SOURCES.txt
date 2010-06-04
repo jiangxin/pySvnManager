@@ -120,7 +120,9 @@ pysvnmanager/hooks/plugins/ReadonlySvnMirror.py
 pysvnmanager/hooks/plugins/TracPostCommit.py
 pysvnmanager/hooks/plugins/__init__.py
 pysvnmanager/i18n/pysvnmanager.pot
+pysvnmanager/i18n/en/LC_MESSAGES/pysvnmanager.mo
 pysvnmanager/i18n/en/LC_MESSAGES/pysvnmanager.po
+pysvnmanager/i18n/zh/LC_MESSAGES/pysvnmanager.mo
 pysvnmanager/i18n/zh/LC_MESSAGES/pysvnmanager.po
 pysvnmanager/lib/__init__.py
 pysvnmanager/lib/app_globals.py
