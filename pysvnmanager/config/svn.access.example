@@ -1,0 +1,109 @@
+# version : 0.2.1
+# admin : / = root, &admin
+# admin : repos1 = @admin
+# admin : repos2 = admin2
+# admin : repos3 = admin3
+
+
+[groups]
+admin = &admin, admin1, admin2, admin3
+all = @admin, @dev, @test
+dev = dev1, dev2, dev3
+test = test1, test2, test3
+biz = biz1, biz2, biz3
+group1 = @group2, @group3, user1, user11, user12
+group2 = user2, user21, user22
+# Group recursive error:
+group3 = user3, user31, user32, @group1
+office = @biz, user1, user2, user3
+
+[aliases]
+admin = jiangxin
+pm = dev1
+tm = test1 
+
+[document:/branches]
+* = 
+@admin = rw
+
+[document:/tags]
+* = 
+@admin = rw
+
+[document:/trunk/.htgroup]
+* = 
+@admin = rw
+
+[document:/trunk/tech]
+* = 
+@admin = rw
+@tech = rw
+
+[document:/trunk/tech/.htaccess]
+* = 
+@admin = rw
+
+[document:/trunk/商务部]
+* = 
+@admin = rw
+@biz = rw
+
+[document:/trunk/商务部/.htaccess]
+* = 
+@admin = rw
+
+[document:/trunk/行政部]
+* = 
+@admin = rw
+@office = rw
+
+[document:/trunk/行政部/.htaccess]
+* = 
+@admin = rw
+
+[repos2:/]
+* = rw
+
+[repos3:/]
+* = r
+
+[repos3:/tags]
+* = rw
+
+[repos3:/trunk]
+* = rw
+
+[repos3:/trunk/src]
+* = rw
+
+[repos1:/trunk/src]
+user1=
+
+[/trunk/src]
+user1=r
+user2=r
+
+[repos1:/trunk]
+user1=r
+user2=
+
+[/trunk]
+&pm = rw
+@dev = rw
+user2=
+
+[repos1:/]
+user3=
+
+[/]
+@admin = rw
+user3=r
+user4=r
+
+[/tags]
+&pm = rw
+$authenticated = r
+
+[/branches]
+&pm = rw
+$authenticated = r

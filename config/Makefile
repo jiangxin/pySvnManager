@@ -13,7 +13,7 @@ clean:
 %: $(SRCDIR)/%.in
 	cp $< $@
 
-%.test: $(SRCDIR)/%.in
+%.test: $(SRCDIR)/%.example
 	cp $< $@
 
 ../svnroot.test: ../pysvnmanager/tests/data/svnroot.tar.bz2

@@ -57,7 +57,7 @@ class TestController(TestCase):
         TestCase.__init__(self, *args, **kwargs)
 
     def rollback(self):
-        src = os.path.dirname(__file__) + '/../config/svn.access.in'
+        src = os.path.dirname(__file__) + '/../config/svn.access.example'
         dest = self.authz_file
         copyfile(src, dest)
         
