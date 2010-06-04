@@ -37,6 +37,11 @@ def setup_app(command, conf, vars):
     # Don't reload the app if it was loaded under the testing environment
     if not pylons.test.pylonsapp:
         load_environment(conf.global_conf, conf.local_conf)
+    else:
+        # Hack pylons: config['here'] is used in many places, so setup here.
+        from pylons import config
+        wsgiapp = pylons.test.pylonsapp
+        config['here'] = wsgiapp.config.get('here')
 
     here = conf['here']
 
