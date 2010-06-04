@@ -19,7 +19,6 @@ pySvnManager.egg-info/SOURCES.txt
 pySvnManager.egg-info/dependency_links.txt
 pySvnManager.egg-info/entry_points.txt
 pySvnManager.egg-info/not-zip-safe
-pySvnManager.egg-info/paste_deploy_config.ini_tmpl
 pySvnManager.egg-info/paster_plugins.txt
 pySvnManager.egg-info/requires.txt
 pySvnManager.egg-info/top_level.txt
