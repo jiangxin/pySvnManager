@@ -34,7 +34,7 @@ log = logging.getLogger(__name__)
 
 # i18n works only as pysvnmanager (a pylons app) model.
 from pylons import config
-if config.get('package') and not config.has_key('unittest'):
+if config.has_key('unittest'):
     from pylons.i18n import _
 else:
     def _(message): return message

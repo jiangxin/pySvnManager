@@ -25,7 +25,7 @@ from pysvnmanager.model.rest import reSTify
 
 # i18n works only as pysvnmanager (a pylons app) model.
 from pylons import config
-if config.get('package') and not config.has_key('unittest'):
+if not config.has_key('unittest'):
     from pylons.i18n import _
 else:
     _ = lambda x:x
