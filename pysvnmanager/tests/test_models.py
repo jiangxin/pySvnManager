@@ -662,7 +662,7 @@ team3 = user3, user33
         self.assert_(isinstance(self.authz.add_alias('root', user), Alias))
         self.assert_(unicode(self.authz.aliaslist) == '[aliases]\nroot = jiangxin\nsuperuser = jiangxin\n', repr(unicode(self.authz.aliaslist)))
         self.assert_(','.join(map(lambda x:x.name, self.authz.aliaslist)) ==
-                     'superuser,root', ','.join(map(lambda x:x.name,
+                     'root,superuser', ','.join(map(lambda x:x.name,
                                                     self.authz.aliaslist)))
 
         # add_group
@@ -735,7 +735,7 @@ team3 = user3, user33
         self.assert_(self.authz.del_rule('repos1', '/', ['*=rw']) == True)
         self.assert_(unicode(self.authz.get_module('repos1', '/')) == '[repos1:/]\n@team1 = rw\n', repr(unicode(self.authz.get_module('repos1', '/'))))
         self.assert_(','.join(map(lambda x:x.name, self.authz.grouplist)) ==
-                     'myteam,team1,*,$authenticated,team3,team4,team5',
+                     '$authenticated,*,myteam,team1,team3,team4,team5',
                      ','.join(map(lambda x:x.name, self.authz.grouplist)))
 
         # del_alias
@@ -755,11 +755,11 @@ team3 = user3, user33
         self.authz.chk_grp_ref_by_rules('myteam')
         self.assertRaises(Exception, self.authz.del_group,'@myteam')
         self.assert_(','.join(map(lambda x:x.name, self.authz.grouplist)) ==
-                     'myteam,team1,*,$authenticated,team3,team4,team5',
+                     '$authenticated,*,myteam,team1,team3,team4,team5',
                      ','.join(map(lambda x:x.name, self.authz.grouplist)))
         self.assert_(self.authz.del_group('@myteam',force=True) == True)
         self.assert_(','.join(map(lambda x:x.name, self.authz.grouplist)) ==
-                     'team1,*,$authenticated,team3,team4,team5',
+                     '$authenticated,*,team1,team3,team4,team5',
                      ','.join(map(lambda x:x.name, self.authz.grouplist)))
 
         # remove

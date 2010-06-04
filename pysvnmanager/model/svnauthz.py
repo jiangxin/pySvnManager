@@ -567,7 +567,13 @@ class UserList(object):
     """Store all users referenced by [group], [aliases], [repos:/a/b] sections.
     """
     def __init__(self):
-        self.user_list = []
+        self._user_list = []
+
+    def __get_user_list(self):
+        self._user_list.sort()
+        return self._user_list
+
+    user_list = property(__get_user_list)
 
     def __iter__(self):
         for i in self.user_list:
@@ -585,14 +591,14 @@ class UserList(object):
         if name[0] == '&' or name[0] == '@' or name[0] == '$' or name=='*':
             raise Exception, _("Not a valid username: %s") % name
 
-        for user in self.user_list:
+        for user in self._user_list:
             if user.name == name:
                 return user
 
         if autocreate:
             check_valid_username(name)
             user = User(name)
-            self.user_list.append(user)
+            self._user_list.append(user)
             return user
         else:
             return None
@@ -603,7 +609,13 @@ class AliasList(object):
     [group], [repos:/path/to] but not be set.
     """
     def __init__(self):
-        self.alias_list = []
+        self._alias_list = []
+
+    def __get_alias_list(self):
+        self._alias_list.sort()
+        return self._alias_list
+
+    alias_list = property(__get_alias_list)
 
     def __iter__(self):
         for i in self.alias_list:
@@ -620,14 +632,14 @@ class AliasList(object):
             return None
         if name[0] == '&':
             name = name[1:]
-        for alias in self.alias_list:
+        for alias in self._alias_list:
             if alias.aliasname == name:
                 return alias
 
         if autocreate:
             check_valid_aliasname(name)
             alias = Alias(name)
-            self.alias_list.append(alias)
+            self._alias_list.append(alias)
             return alias
         else:
             return None
@@ -637,15 +649,15 @@ class AliasList(object):
             alias = self.get(name)
         else:
             alias = name
-        if alias and alias in self.alias_list:
-            self.alias_list.remove(alias)
+        if alias and alias in self._alias_list:
+            self._alias_list.remove(alias)
             return True
         else:
             return False
 
     def __str__(self):
         buff = u"[aliases]\n"
-        for alias in sorted(self.alias_list):
+        for alias in self.alias_list:
             buff += unicode(alias)
             buff += u'\n'
         return buff
@@ -656,11 +668,17 @@ class GroupList(object):
     [groups], [repos:/path/to] but not be set.
     """
     def __init__(self):
-        self.group_list = []
+        self._group_list = []
 
     def __iter__(self):
         for i in self.group_list:
             yield i
+
+    def __get_group_list(self):
+        self._group_list.sort()
+        return self._group_list
+
+    group_list = property(__get_group_list)
 
     def get(self, name):
         return self.get_or_set(name, False)
@@ -672,14 +690,14 @@ class GroupList(object):
             return None
         if name[0] == '@':
             name = name[1:]
-        for group in self.group_list:
+        for group in self._group_list:
             if group.name == name:
                 return group
 
         if autocreate:
             check_valid_groupname(name)
             group = Group(name)
-            self.group_list.append(group)
+            self._group_list.append(group)
             return group
         else:
             return None
@@ -691,7 +709,7 @@ class GroupList(object):
             name = normalize_user(name)
         item = self.get(name)
         if item:
-            for group in self.group_list:
+            for group in self._group_list:
                 if group == item:
                     continue
                 if item in group.memberobjs:
@@ -702,14 +720,14 @@ class GroupList(object):
                         raise Exception, \
                                 _('Group %s is referenced by group %s.') \
                                 % (name, group.uname)
-            self.group_list.remove(item)
+            self._group_list.remove(item)
             return True
         else:
             return False
 
     def __str__(self):
         buff = u"[groups]\n"
-        for group in sorted(self.group_list):
+        for group in self.group_list:
             if group.name[0] != '$' and group.name != '*':
                 buff += unicode(group)
                 buff += u'\n'
