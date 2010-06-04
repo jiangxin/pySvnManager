@@ -1,7 +1,8 @@
-diff -r 71a233cd4e5d pySvnManager.egg-info/paste_deploy_config.ini_tmpl
---- a/pySvnManager.egg-info/paste_deploy_config.ini_tmpl	Sat Jul 04 16:54:01 2009 +0800
-+++ b/pySvnManager.egg-info/paste_deploy_config.ini_tmpl	Sun Jul 05 10:17:58 2009 +0800
-@@ -14,7 +14,7 @@
+diff --git a/pysvnmanager/config/deployment.ini_tmpl b/pysvnmanager/config/deployment.ini_tmpl
+index cf185d2..27a526d 100644
+--- a/pysvnmanager/config/deployment.ini_tmpl
++++ b/pysvnmanager/config/deployment.ini_tmpl
+@@ -14,7 +14,7 @@ use = egg:Paste#http
  host = 0.0.0.0
  port = 5000
  
@@ -9,8 +10,8 @@ diff -r 71a233cd4e5d pySvnManager.egg-info/paste_deploy_config.ini_tmpl
 +[app:myapp]
  use = egg:pySvnManager
  full_stack = true
- cache_dir = %(here)s/data
-@@ -50,11 +50,14 @@
+ static_files = true
+@@ -52,11 +52,14 @@ authn_file = %(here)s/config/svn.passwd
  authz_file = %(here)s/config/svn.access
  
  # svn repository root path

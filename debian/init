@@ -26,7 +26,8 @@ LOG_FILE=/opt/pysvnmanager/log/pysvnmanager.log
 PID_FILE=$APP_PATH/run/paster.pid
 
 # startup args
-DAEMON_OPTS=" serve --monitor-restart --log-file $LOG_FILE production.ini"
+#DAEMON_OPTS=" serve --monitor-restart --log-file $LOG_FILE production.ini"
+DAEMON_OPTS=" serve --log-file $LOG_FILE production.ini"
 
 # script name
 NAME=pysvnmanager

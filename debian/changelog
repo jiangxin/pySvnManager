@@ -1,3 +1,9 @@
+pysvnmanager (0.4.1r138-39) unstable; urgency=low
+
+  * Work with new pylons 1.0.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Fri, 04 Jun 2010 14:13:48 +0800
+
 pysvnmanager (0.3.1-39) unstable; urgency=low
 
   * Python 0.10 compatiblity.

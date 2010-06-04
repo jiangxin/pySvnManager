@@ -1,7 +1,8 @@
-diff -r 687af75244e9 pysvnmanager/controllers/security.py
---- a/pysvnmanager/controllers/security.py	Sat Jul 04 11:45:58 2009 +0800
-+++ b/pysvnmanager/controllers/security.py	Sat Jul 04 16:54:01 2009 +0800
-@@ -28,7 +28,28 @@
+diff --git a/pysvnmanager/controllers/security.py b/pysvnmanager/controllers/security.py
+index 8055a13..6762fca 100644
+--- a/pysvnmanager/controllers/security.py
++++ b/pysvnmanager/controllers/security.py
+@@ -29,8 +29,29 @@ class SecurityController(BaseController):
          """
          Show login form. Submits to login/submit
          """
@@ -9,14 +10,14 @@ diff -r 687af75244e9 pysvnmanager/controllers/security.py
 +        if request.environ.get("REMOTE_USER"):
 +            self._session_register(request.environ["REMOTE_USER"])
 +        return self._redirect()
-+
+ 
 +    def _redirect(self):
 +        if session.get('user'):
 +            # Send user back to the page he originally wanted to get to
 +            if session.get('path_before_login'):
 +                redirect_to(session['path_before_login'])
 +            else: # if previous target is unknown just send the user to a welcome page
-+                redirect_to(h.url_for(controller='check'))
++                redirect(url(controller='check',action='index'))
 +        else:
 +            return render('/login/login.mako')
 +
@@ -28,31 +29,31 @@ diff -r 687af75244e9 pysvnmanager/controllers/security.py
 +    def _session_clear(self):
 +        session.clear()
 +        session.save()
- 
++ 
      def submit(self):
          """
-@@ -46,20 +67,13 @@
+         Verify username and password
+@@ -47,20 +68,13 @@ class SecurityController(BaseController):
          
          # Mark user as logged in
          if auth_passed:
 -            session['user'] = username
 -            log.info(_(u"User %s logged in") % session['user'])
 -            session.save()
-+            self._session_register(username)
-+        else:
-+            self._session_clear()
-+            c.login_message = _(u"Login failed for user: %s") % username
- 
+-
 -            # Send user back to the page he originally wanted to get to
 -            if session.get('path_before_login'):
--                redirect_to(session['path_before_login'])
+-                redirect(session['path_before_login'])
 -            else: # if previous target is unknown just send the user to a welcome page
--                redirect_to(h.url_for(controller='check'))
--        else:
+-                redirect(url(controller='check',action='index'))
++            self._session_register(username)
+         else:
 -            session.clear()
 -            session.save()
--            c.login_message = _(u"Login failed for user: %s") % username
++            self._session_clear()
+             c.login_message = _(u"Login failed for user: %s") % username
 -            return render('/login/login.mako')
++
 +        # Do redirect
 +        return self._redirect()
  
