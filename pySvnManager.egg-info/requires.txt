@@ -1,4 +1,4 @@
-Pylons>=1.0rc1
+Pylons>=0.10rc1
 docutils
 Babel
 Mako>=0.3.2

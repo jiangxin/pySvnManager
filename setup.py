@@ -31,7 +31,7 @@ setup(
     author_email='jiangxin@ossxp.com',
     url='https://sourceforge.net/projects/pysvnmanager',
     install_requires=[
-        "Pylons>=1.0rc1",
+        "Pylons>=0.10rc1",
         "docutils",
         "Babel",
         "Mako>=0.3.2",
