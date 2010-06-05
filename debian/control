@@ -10,7 +10,7 @@ Homepage: http://www.ossxp.com/trac/pysvnmanager
 
 Package: pysvnmanager
 Architecture: all
-Pre-Depends: python-pylons (>= 1.0~rc1-1), python-docutils, python-pybabel | ossxp-python-babel
+Pre-Depends: python-pylons (>= 0.10~rc1-1), python-docutils, python-pybabel | ossxp-python-babel
 Depends: ${misc:Depends}, ${python:Depends}, ossxp-apache2
 Recommends: python-subversion, python-ldap
 XB-Python-Version: ${python:Versions}

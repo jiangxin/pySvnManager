@@ -8,7 +8,7 @@ all:
 clean:
 	-rm -f ../../pysvnmanager_*changes ../../pysvnmanager_*.deb 
 	-rm -rf $(SOURCEDIR)/.pc
-	(cd $(SOURCEDIR); git reset --hard master; git clean -f -d; git st )
+	(cd $(SOURCEDIR); git co master .; git clean -f -d; git st )
 
 dir: clean
 	(cd $(SOURCEDIR); [ -d debian ] || ln -s $$(dirname $$(dirname $$(pwd)))/debian debian; git status || true)

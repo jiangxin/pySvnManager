@@ -1,5 +1,5 @@
 diff --git a/pysvnmanager/controllers/security.py b/pysvnmanager/controllers/security.py
-index 8055a13..6762fca 100644
+index 19bf62e..3fc8cba 100644
 --- a/pysvnmanager/controllers/security.py
 +++ b/pysvnmanager/controllers/security.py
 @@ -29,8 +29,29 @@ class SecurityController(BaseController):
@@ -15,7 +15,7 @@ index 8055a13..6762fca 100644
 +        if session.get('user'):
 +            # Send user back to the page he originally wanted to get to
 +            if session.get('path_before_login'):
-+                redirect(session['path_before_login'])
++                redirect(url(session['path_before_login']))
 +            else: # if previous target is unknown just send the user to a welcome page
 +                redirect(url(controller='check',action='index'))
 +        else:
@@ -43,7 +43,7 @@ index 8055a13..6762fca 100644
 -
 -            # Send user back to the page he originally wanted to get to
 -            if session.get('path_before_login'):
--                redirect(session['path_before_login'])
+-                redirect(url(session['path_before_login']))
 -            else: # if previous target is unknown just send the user to a welcome page
 -                redirect(url(controller='check',action='index'))
 +            self._session_register(username)

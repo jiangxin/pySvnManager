@@ -1,6 +1,6 @@
-pysvnmanager (0.4.1r138-40) unstable; urgency=low
+pysvnmanager (0.4.1r140-40) unstable; urgency=low
 
-  * Work with new pylons 1.0.
+  * Work with new pylons 0.10 and 1.0.
 
  -- Jiang Xin <worldhello.net@gmail.com>  Fri, 04 Jun 2010 14:13:48 +0800
 
