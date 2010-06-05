@@ -11,7 +11,7 @@ clean:
 	(cd $(SOURCEDIR); git reset --hard master; git clean -f -d; git st )
 
 dir: clean
-	(cd $(SOURCEDIR); [ -d debian ] || ln -s $$(dirname $$(dirname $$(pwd)))/debian.sid debian; git status || true)
+	(cd $(SOURCEDIR); [ -d debian ] || ln -s $$(dirname $$(dirname $$(pwd)))/debian debian; git status || true)
 	sudo setfacl -Rb $(SOURCEDIR) ../debian
 
 build:
