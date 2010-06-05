@@ -53,7 +53,7 @@ class SecurityController(BaseController):
 
             # Send user back to the page he originally wanted to get to
             if session.get('path_before_login'):
-                redirect(session['path_before_login'])
+                redirect(url(session['path_before_login']))
             else: # if previous target is unknown just send the user to a welcome page
                 redirect(url(controller='check',action='index'))
         else:
