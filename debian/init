@@ -42,6 +42,11 @@ RUN_AS=www-data
 
 test -x $DAEMON || exit 0
 
+VIRTUALENV=/opt/pysvnmanager/virtualenv/bin/activate
+if [ -f $VIRTUALENV ]; then
+  . $VIRTUALENV
+fi
+
 set -e
 
 case "$1" in
