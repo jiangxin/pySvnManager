@@ -12,7 +12,12 @@ Package: pysvnmanager
 Architecture: all
 Pre-Depends: python-pylons (>= 0.10~rc1-1), python-docutils, python-pybabel | ossxp-python-babel
 Depends: ${misc:Depends}, ${python:Depends}, ossxp-apache2
-Recommends: python-subversion, python-ldap
+Recommends: python-subversion, python-ldap, pysvnmanager-doc
 XB-Python-Version: ${python:Versions}
 Description: subversion administration web interface based on pylons.
+ pySvnManager is a subversion web interface based on pylons.
+
+Package: pysvnmanager-doc
+Architecture: all
+Description: documents for pySvnManager.
  pySvnManager is a subversion web interface based on pylons.
