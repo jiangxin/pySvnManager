@@ -9,6 +9,8 @@ include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/python-distutils.mk
 include /usr/share/cdbs/1/rules/patchsys-quilt.mk
 
+DEB_PYTHON_DESTDIR=$(CURDIR)/debian/pysvnmanager
+
 ##common-build-arch::
 build/pysvnmanager::
 	python setup.py compile_catalog 

@@ -1,4 +1,4 @@
-pysvnmanager (0.4.1r140-41) unstable; urgency=low
+pysvnmanager (0.4.1r140-42) unstable; urgency=low
 
   * Can deploy pylons using virtualenv.
 
