@@ -1,0 +1,6 @@
+From: Jiang <jiangxin@ossxp.com>
+Subject: [PATCH] t/deployment.ini_tmpl
+
+Set prefix filter middleware, and integrate with apache https.
+
+Signed-off-by: Jiang <jiangxin@ossxp.com>
