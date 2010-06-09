@@ -1,5 +1,16 @@
+From: Jiang <jiangxin@ossxp.com>
+Subject: [PATCH] t/remote_user_login
+
+If remote_user already defined, register login user.
+
+Signed-off-by: Jiang <jiangxin@ossxp.com>
+
+---
+ pysvnmanager/controllers/security.py |   40 +++++++++++++++++++++++-----------
+ 1 files changed, 27 insertions(+), 13 deletions(-)
+
 diff --git a/pysvnmanager/controllers/security.py b/pysvnmanager/controllers/security.py
-index 19bf62e..3fc8cba 100644
+index ded2193..ca29041 100644
 --- a/pysvnmanager/controllers/security.py
 +++ b/pysvnmanager/controllers/security.py
 @@ -29,8 +29,29 @@ class SecurityController(BaseController):
@@ -33,7 +44,7 @@ index 19bf62e..3fc8cba 100644
      def submit(self):
          """
          Verify username and password
-@@ -47,20 +68,13 @@ class SecurityController(BaseController):
+@@ -47,21 +68,14 @@ class SecurityController(BaseController):
          
          # Mark user as logged in
          if auth_passed:
@@ -48,6 +59,7 @@ index 19bf62e..3fc8cba 100644
 -                redirect(url(controller='check',action='index'))
 +            self._session_register(username)
          else:
+             log.error("pySvnManager: User %s login failed from host [%s]" % ( username, request.remote_addr))
 -            session.clear()
 -            session.save()
 +            self._session_clear()
@@ -59,3 +71,5 @@ index 19bf62e..3fc8cba 100644
  
      def logout(self):
          """
+-- 
+tg: (ad97999..) t/remote_user_login (depends on: master)

@@ -23,8 +23,9 @@ DEB_PYTHON_INSTALL_ARGS_ALL += --single-version-externally-managed
 
 debian/patches/: debian/patches
 debian/patches:
-	rsync -av --exclude=.hg/ --exclude=.hgignore --exclude=status --delete ../../pysvnmanager/pysvnmanager-ossxp/.hg/patches/ debian/patches
-	sed -i -e '/#[-+]/ d' debian/patches/series
+	rm -rf debian/patches
+	tg export --all --quilt debian/patches
+	cd debian && git status
 
 .PHONY: debian/patches
 # vim: noet sw=4 ts=4

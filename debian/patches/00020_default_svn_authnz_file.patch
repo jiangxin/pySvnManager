@@ -1,9 +1,0 @@
-diff --git a/pysvnmanager/config/svn.passwd.in b/pysvnmanager/config/svn.passwd.in
-index 7904636..f9cb8c5 100644
---- a/pysvnmanager/config/svn.passwd.in
-+++ b/pysvnmanager/config/svn.passwd.in
-@@ -1,2 +1,2 @@
--root:58EvOwQjOEvWc
--jiangxin:qy86xgNhihxc.
-+## manage passwd file using 'htpasswd' command.
-+#jiangxin:$apr1$BbQo5sNd$Pw9LQio2uQri9MSW2iI911

@@ -1,5 +1,16 @@
+From: Jiang <jiangxin@ossxp.com>
+Subject: [PATCH] t/deployment.ini_tmpl
+
+Set prefix filter middleware, and integrate with apache https.
+
+Signed-off-by: Jiang <jiangxin@ossxp.com>
+
+---
+ pysvnmanager/config/deployment.ini_tmpl |   14 +++++++++-----
+ 1 files changed, 9 insertions(+), 5 deletions(-)
+
 diff --git a/pysvnmanager/config/deployment.ini_tmpl b/pysvnmanager/config/deployment.ini_tmpl
-index cf185d2..27a526d 100644
+index cf185d2..dcbec1a 100644
 --- a/pysvnmanager/config/deployment.ini_tmpl
 +++ b/pysvnmanager/config/deployment.ini_tmpl
 @@ -14,7 +14,7 @@ use = egg:Paste#http
@@ -11,7 +22,7 @@ index cf185d2..27a526d 100644
  use = egg:pySvnManager
  full_stack = true
  static_files = true
-@@ -52,11 +52,14 @@ authn_file = %(here)s/config/svn.passwd
+@@ -52,11 +52,15 @@ authn_file = %(here)s/config/svn.passwd
  authz_file = %(here)s/config/svn.access
  
  # svn repository root path
@@ -24,9 +35,12 @@ index cf185d2..27a526d 100644
 +[filter:proxy-prefix]
 +use = egg:PasteDeploy#prefix
 +prefix = /svnadmin
++scheme = https
 +
 +[pipeline:main]
 +pipeline = proxy-prefix myapp
  
  # Logging configuration
  [loggers]
+-- 
+tg: (ad97999..) t/deployment.ini_tmpl (depends on: master)

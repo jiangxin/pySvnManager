@@ -1,0 +1,40 @@
+From: Jiang <jiangxin@ossxp.com>
+Subject: [PATCH] t/svn_config_file
+
+<patch description>
+
+Signed-off-by: Jiang <jiangxin@ossxp.com>
+
+---
+ pysvnmanager/config/svn.access.in |    4 ----
+ pysvnmanager/config/svn.passwd.in |    3 +--
+ 2 files changed, 1 insertions(+), 6 deletions(-)
+
+diff --git a/pysvnmanager/config/svn.access.in b/pysvnmanager/config/svn.access.in
+index 174f600..8279c99 100755
+--- a/pysvnmanager/config/svn.access.in
++++ b/pysvnmanager/config/svn.access.in
+@@ -1,6 +1,5 @@
+ # version : 0.2.1
+ # admin : / = &admin, root
+-# admin : repos1 = @admin
+ 
+ [groups]
+ admin = &admin, root
+@@ -11,6 +10,3 @@ admin = jiangxin
+ [/]
+ @admin = rw
+ 
+-[repos1:/]
+-@admin = rw
+-
+diff --git a/pysvnmanager/config/svn.passwd.in b/pysvnmanager/config/svn.passwd.in
+index 7904636..a26f476 100644
+--- a/pysvnmanager/config/svn.passwd.in
++++ b/pysvnmanager/config/svn.passwd.in
+@@ -1,2 +1 @@
+-root:58EvOwQjOEvWc
+-jiangxin:qy86xgNhihxc.
++## manage passwd file using 'htpasswd' command.
+-- 
+tg: (ad97999..) t/svn_config_file (depends on: master)
