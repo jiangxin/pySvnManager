@@ -1,6 +1,6 @@
-pysvnmanager (0.4.1-1) unstable; urgency=low
+pysvnmanager (0.4-2) unstable; urgency=low
 
   * Initialized pySvnManager user guide.
 
- -- Jiang Xin <worldhello.net@gmail.com>  Mon, 07 Jun 2010 12:15:27 +0800
+ -- Jiang Xin <worldhello.net@gmail.com>  Wed, 09 Jun 2010 20:00:43 +0800
 

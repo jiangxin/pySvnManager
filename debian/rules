@@ -18,6 +18,9 @@ build/pysvnmanager::
 binary-fixup/pysvnmanager::
 	chown www-data.www-data debian/pysvnmanager/opt/pysvnmanager/log
 
+build/pysvnmanager-doc::
+	make -C $(CURDIR)/debian/doc build || true
+
 # If your package provides eggs, install egg-info directories instead of real eggs
 DEB_PYTHON_INSTALL_ARGS_ALL += --single-version-externally-managed
 

@@ -1,5 +1,5 @@
 # Set change log file for your documents
-CHANGELOG=../ossxp-mailman-doc.changelog
+CHANGELOG=../pysvnmanager-doc.changelog
 
 DOC_REV=$(shell head -1 $(CHANGELOG) | sed -e "s/^\S*\s\+(\(.*:\)\?\(\S\+\)).*/\2/")
 DOC_DATESTRING=$(shell grep "^ -- .* <.*>  .\+$$" $(CHANGELOG) | head -1 | sed -e "s/^.\+>  \(.\+\)$$/\1/g" )
