@@ -1,6 +1,5 @@
 # version : 0.2.1
 # admin : / = &admin, root
-# admin : repos1 = @admin
 
 [groups]
 admin = &admin, root
@@ -9,8 +8,5 @@ admin = &admin, root
 admin = jiangxin
 
 [/]
-@admin = rw
-
-[repos1:/]
 @admin = rw
 
