@@ -1,6 +1,7 @@
-pysvnmanager (0.4.1r141-42) unstable; urgency=low
+pysvnmanager (0.4.1r142-43) unstable; urgency=low
 
   * New webpage style from redmine.
+  * If use auth failed, write fail2ban compatible log.
 
  -- Jiang Xin <worldhello.net@gmail.com>  Wed, 09 Jun 2010 10:35:30 +0800
 
