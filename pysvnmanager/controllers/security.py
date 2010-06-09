@@ -57,6 +57,7 @@ class SecurityController(BaseController):
             else: # if previous target is unknown just send the user to a welcome page
                 redirect(url(controller='check',action='index'))
         else:
+            log.error("pySvnManager: User %s login failed from host [%s]" % ( username, request.remote_addr))
             session.clear()
             session.save()
             c.login_message = _(u"Login failed for user: %s") % username
