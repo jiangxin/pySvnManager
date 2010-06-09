@@ -1,26 +1,88 @@
-/*  common.css - borrow from MoinMoin Default Styles
-
-Copyright (c) 2001, 2002, 2003 by Juergen Hermann
-*/
+/*  common.css - borrow from Redmine and MoinMoin */
 
 /* content styles */
+html,body{min-height:100%;}
+body{font-size:13px;font-style:normal;color:#4e4e4e;font-family: Verdana, sans-serif; padding: 0;}
 
-html {
-	background-color: white;
-	color: black;
-	font-family: Arial, Lucida Grande, sans-serif;
-	font-size: 1em;
-}
-
+/* body with background color */
 body {
-	margin: 0;
+  text-align:center; /* for IE */
+  margin:0 auto; /* for the rest */
+  background:#39424b;
 }
+
+/* content: align center with fixed width */
+div.page
+{
+  text-align:left;
+  width:780px; /* or a percentage, or whatever */
+  margin:0 auto 0 auto;
+  padding:1em;
+  background:#ffffff;
+}
+
+/* header and footer: align center with fixed width */
+div.header, div.footer
+{
+  width:780px; /* or a percentage, or whatever */
+  margin:0 auto 0 auto;
+  padding:1em;
+}
+
+div.header {color:#F8F8F8;background-color:#507AAA;text-align:right;font-size:9pt;position:relative;}
+
+div.footer {background-color:#FFFFBB;text-align:right;font-size:9pt;font-style:italic;}
+
+div.footer {text-align:center;}
+hr.header, hr.footer {color:#b4aca1;background-color:#b4aca1;border-bottom:1px solid #ffffff;}
+
+.footer a,a:hover,a:link,a:active {color:#0071bb;text-decoration:none;}
+
+/* menu */
+#menu {position: absolute;  bottom: 0px;  left:6px; margin-right: -200px;}
+#menu ul {margin: 0;  padding: 0;}
+#menu li {
+  float:left;
+  list-style-type:none;
+  margin: 0px 2px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  white-space:nowrap;
+}
+#menu li a {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0;
+  padding: 4px 10px 4px 10px;
+}
+#menu li a:hover {background:#759FCF; color:#fff;}
+#menu li a.selected, #menu li a.selected:hover {background:#fff; color:#555;}
+
+#profile {position: absolute;  bottom: 0px;  right:6px;}
+#profile ul {margin: 0;  padding: 0;}
+#profile li {
+  float:left;
+  list-style-type:none;
+  margin: 0px 2px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  white-space:nowrap;
+}
+#profile li a {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0;
+  padding: 4px 10px 4px 10px;
+}
+#profile li a:hover {background:#759FCF; color:#fff;}
+#profile li a.selected, #profile li a.selected:hover {background:#fff; color:#555;}
+
 
 /* Links */
-
-a {color: #0044B3;}
-a:visited {color: #597BB3;}
-a.nonexistent, a.badinterwiki {color: gray;}
+a{color:#0071bb;outline:none;}
+a:hover{color:#ed1e24;text-decoration:none;}
 
 li p {
 	margin: .25em 0;

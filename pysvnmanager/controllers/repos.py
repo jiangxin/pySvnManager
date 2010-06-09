@@ -31,6 +31,7 @@ class ReposController(BaseController):
     requires_auth = True
     
     def __init__(self):
+        c.menu_active = "repos"
         try:
             self.authz = SvnAuthz(cfg.authz_file)
             self.login_as = session.get('user')

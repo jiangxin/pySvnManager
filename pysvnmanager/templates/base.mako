@@ -24,19 +24,31 @@ context.write(msg)
   </head>
   <body ${self.body_params()}>
 
-  <div id="popup_shadow" style="z-index:100;visibility:hidden;display:none;position:absolute;top:0px;width:100%;height:100%;background:#000000;opacity:0.0;filter:alpha(opacity=0);"></div>
-  <div id="popup_notices" style="z-index:101;border:1px solid gray;position:absolute;top:0;left:250px;visibility:hidden;display:none;background:#eeee20;">
-     ${_("Loading, please wait...")}
-  </div>
+    <div id="popup_shadow" style="z-index:100;visibility:hidden;display:none;position:absolute;top:0px;left:0px;width:100%;height:100%;background:#000000;opacity:0.0;filter:alpha(opacity=0);"></div>
+    <div id="popup_notices" style="z-index:101;border:1px solid gray;position:absolute;top:0;left:250px;visibility:hidden;display:none;background:#eeee20;">
+       ${_("Loading, please wait...")}
+    </div>
 
-	${self.nav_bar()}
+    <div class="header">
+	    ${self.nav_bar()}
+	    ${self.profile()}
+    </div>
 
-  <div id="message_box" style="visibility:hidden;position:absolute; margin:1em;" class=gainlayout>
-  <div id="message"></div>
-  &nbsp;&nbsp;&nbsp;&nbsp;<a class="clear-link" href="#" onClick="document.getElementById('message').innerHTML='';switch_message_box()">${_("Clear message")}</a>
-  </div>
+    <div id="message_box" style="visibility:hidden;position:absolute; margin:1em;" class=gainlayout>
+      <div id="message"></div>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <a class="clear-link" href="#"
+         onClick="document.getElementById('message').innerHTML='';switch_message_box()"
+         >${_("Clear message")}</a>
+    </div>
 	
-    ${next.body()}
+    <div class="page">
+      ${next.body()}
+    </div>
+
+    <div class="footer">
+      <% context.write( _("Powered by <a href=\"%(url1)s\">pySvnManager</a> &copy; 2008-2010 <a href=\"%(url2)s\">ossxp.com</a>") % {"url1": "http://pysvnmanager.sourceforge.net", "url2":"http://www.ossxp.com/"} ) %>
+    </div>
   </body>
 </html>
 
@@ -45,17 +57,30 @@ context.write(msg)
 </%def>
 
 <%def name="nav_bar()">
-  <table>
-      <tr>
-          <td>${h.link_to(_("Check permissions"), h.url(controller="check",action="index"))}</td>
-          <td>${h.link_to(_("Role management"), h.url(controller="role",action="index"))}</td>
-          <td>${h.link_to(_("ACL management"), h.url(controller="authz",action="index"))}</td>
-          <td>${h.link_to(_("Repos management"), h.url(controller="repos",action="index"))}</td>
-          <td>${h.link_to(_("Change log"), h.url(controller="logs",action="index"))}</td>
-          <td>${_("Welcome")} ${session.get('user')}</td>
-          <td>${h.link_to(_("Logout"), h.url("logout"))}</td>
-      </tr>
-  </table>
+  <div id="menu">
+    <ul>
+      <% class_name = c.menu_active == "check" and "selected" or "unselected" %>
+      <li>${h.link_to(_("Check permissions"), h.url(controller="check",action="index"), Class=class_name)}</li>
+      <% class_name = c.menu_active == "role" and "selected" or "unselected" %>
+      <li>${h.link_to(_("Role management"), h.url(controller="role",action="index"), Class=class_name)}</li>
+      <% class_name = c.menu_active == "authz" and "selected" or "unselected" %>
+      <li>${h.link_to(_("ACL management"), h.url(controller="authz",action="index"), Class=class_name)}</li>
+      <% class_name = c.menu_active == "repos" and "selected" or "unselected" %>
+      <li>${h.link_to(_("Repos management"), h.url(controller="repos",action="index"), Class=class_name)}</li>
+      <% class_name = c.menu_active == "logs" and "selected" or "unselected" %>
+      <li>${h.link_to(_("Change log"), h.url(controller="logs",action="index"), Class=class_name)}</li>
+      <li><em>${h.link_to(_("Help"), "http://www.ossxp.com/doc/pysvnmanager/", target="_blank")}</em></li>
+    </ul>
+  </div>
+</%def>
+
+<%def name="profile()">
+  <div id="profile">
+    <ul>
+      <li>${_("Welcome")} ${session.get('user')}</li>
+      <li>${h.link_to(_("Logout"), h.url("logout"))}</li>
+    </ul>
+  </div>
 </%def>
 
 <%def name="ajax_script()">

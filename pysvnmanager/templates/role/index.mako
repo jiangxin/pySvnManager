@@ -660,7 +660,7 @@ ${_("New alias name:")} <input type='text' name='alias_input' onChange="enable_s
 
 <!-- begin: group_edit_box -->
 <div id='group_edit_box' style="position:relative;" class=gainlayout>
-<table>
+<table class="hidden">
 <tr>
   <th align='center'>
   ${_("Members list")}
@@ -696,7 +696,7 @@ ${_("New alias name:")} <input type='text' name='alias_input' onChange="enable_s
 
 <!-- begin: alias_edit_box -->
 <div id='alias_edit_box' style="position:relative;" class=gainlayout>
-<table>
+<table class="hidden">
 <tr>
   <td valign='top'>
     ${_("User name:")}

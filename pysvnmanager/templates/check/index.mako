@@ -146,7 +146,7 @@ function ajax_update_path(code)
             <br/>
         <input type="radio" name="reposinput" value="manual"> 
             ${_("Manual input")}
-            <input type="text" name="reposname" value="${c.typed_repos}" 
+            <input type="text" name="reposname" size=15 value="${c.typed_repos}" 
                 onFocus="edit_repos(this.form)"
                 onBlur="update_path(this.form)">
     </td>
@@ -158,7 +158,7 @@ function ajax_update_path(code)
             </select><br/>
         <input type="radio" name="pathinput" value="manual"> 
             ${_("Manual input")}
-            <input type="text" name="pathname"" 
+            <input type="text" name="pathname"" size=15
                 onFocus="edit_path(this.form)">
     </td>
         <td>
