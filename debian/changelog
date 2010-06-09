@@ -1,3 +1,9 @@
+pysvnmanager (0.4.1r141-42) unstable; urgency=low
+
+  * New webpage style from redmine.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Wed, 09 Jun 2010 10:35:30 +0800
+
 pysvnmanager (0.4.1r140-42) unstable; urgency=low
 
   * Can deploy pylons using virtualenv.
