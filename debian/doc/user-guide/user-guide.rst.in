@@ -27,15 +27,18 @@ pySvnManager 本身的授权，而无须借助于诸如数据库等其它方式�
 =====
 pySvnManager 本身使用 Python setuptools 进行打包，因此可以像安装其它 Python 包一样，
 使用 easy_install 安装。此外，就像其它群英汇软件包一样，可以直接使用 Debian 或 Ubuntu
-本身的包管理器进行安装。两种安装方式的区别是，使用 Debian 或 Ubuntu 包管理器方式安装的
-pySvnManager 自动完成了和 Apache Web 服务器的整合工作，不像 easy_install 方式安装的，
-运行在 Python 内置的 Web 服务器和端口 5000 中。
+本身的包管理器进行安装。
+
+两种安装方式的区别是:
+
+* 使用 Debian 或 Ubuntu 包管理器方式安装的 pySvnManager 自动完成了和 Apache Web 服务器的整合工作
+* 使用 easy_install 方式安装的，运行在 Python 内置的 Web 服务器和端口 5000 中
 
 使用 Debian/Ubuntu 包管理器方式安装
 -------------------------------------
 Debian/Ubuntu 软件包安装两步曲：update, install
 
-..
+::
 
   $ sudo aptitude update
   $ sudo aptitude install pysvnmanager
@@ -44,7 +47,7 @@ Debian/Ubuntu 软件包安装两步曲：update, install
 
 * 安装 pysvnmanager 过程中，会自动安装相关依赖软件包：
 
-  ..
+  ::
 
     $ sudo aptitude install pysvnmanager
     正在读取软件包列表... 完成
@@ -68,8 +71,354 @@ Debian/Ubuntu 软件包安装两步曲：update, install
   * config/svn.access 是 SVN 授权文件
   * svnroot 目录或链接：指向 SVN 版本库根目录
 
+* 服务开启自动启动
+
+  * 服务启动脚本: /etc/init.d/pysvnmanager
+
+* 自动完成和 Apache 的整合
+
+  * 配置文件：/etc/apache2/include/subversion/pysvnmanager.conf 
+  * 通过 Subversion 虚拟主机下 /svnadmin 目录访问
+
+如果作为群英汇的用户，使用 Debian/Ubuntu 包管理安装 pySvnManager，可以完全不用理会后面介绍的安装模式，直接跳转到后面的配置章节。
+
 使用 easy_install 安装
 ------------------------
+pySvnManager 本身使用 setuptools 的部署机制，并且在 PYPI 网站上进行了注册，因此可以使用 easy_install 进行安装。
+
+::
+
+  $ easy_install pysvnmanager
+  Searching for pysvnmanager
+  Reading http://pypi.python.org/simple/pysvnmanager/
+  Reading https://sourceforge.net/projects/pysvnmanager
+  Reading http://pysvnmanager.sourceforge.net
+  Best match: pySvnManager 0.4.1dev-r140
+  Downloading http://pypi.python.org/packages/2.5/p/pySvnManager/pySvnManager-0.4.1dev_r140-py2.5.egg#md5=7d7064d4c79ab408e0b852fbb2427809
+  ...
+
+整个安装过程会自动安装依赖的软件包。如果需要直接安装在 Python 的系统目录 /usr/lib/python2.5/site-packages 下，则用 root 用户身份执行 easy_install。
+
+和使用 Debian/Ubuntu 软件包安装方式不同，使用 easy_install 只是将 pySvnManager 作为一个 Python 包安装在系统中，而尚未创建一个可用的站点。因此在使用前需要进一步的配置。
+
+* 创建一个目录，用于存储 pySvnManager 管理网站
+
+  ::
+
+    $ mkdir somedir
+    $ cd somedir
+
+* 生成一个 pySvnManager 站点配置文件
+
+  示例中的 pySvnManager 是通过 virtualenv 方式安装的，关于 virtualenv 可以参照下一节
+
+  ::
+
+    $ paster make-config pysvnmanager production.ini
+    Distribution already installed:
+      pySvnManager 0.4.1dev-r140 from /home/jiangxin/virt/lib/python2.5/site-packages/pySvnManager-0.4.1dev_r140-py2.5.egg
+    Creating production.ini
+    Now you should edit the config files
+      production.ini
+
+* 初始化 pySvnManager 站点
+
+  ::
+
+    $ paster setup-app production.ini
+    Running setup_config() from pysvnmanager.websetup
+
+* 初始化后的文件和目录:
+
+  * production.ini 是服务配置文件
+  * config/localconfig.py 是 pySvnManager 本身的配置文件
+  * config/svn.passwd 是用户口令文件，如果使用 LDAP 认证，此文件被忽略
+  * config/svn.access 是 SVN 授权文件
+  * svnroot 目录或链接：指向 SVN 版本库根目录
+
+* 运行服务
+
+  ::
+  
+    $ paster serve production.ini
+    Starting server in PID 1618.
+    serving on 0.0.0.0:5000 view at http://127.0.0.1:5000
+
+* 先不要着急用浏览器访问，因为我们尚未配置登录的认证用户和授权
+
+  我们会在后面的配置章节介绍
+
+Virtualenv 解决运行中出现的 python 包版本兼容问题
+---------------------------------------------------
+Pylons 是一个 python 的 MVC 框架，pySvnManager 就是基于这个框架开发的。这个框架所依赖的各个组件都用独立的 python 包发布，在前几年的版本演化过程中，新版本总是带来各样的兼容性问题，也很难保证在今后不会出现向后兼容问题。
+
+再有一个就是 Python 包多版本共存问题。不像 Ruby 的 gem 包，可以同时安装多个不同版本，并且通过依赖关系可以明确版本，Python 包只能安装一个版本。如果有不同的应用都使用了同一个包，例如，一个应用只能运行于 Pylons 0.9.7，另外一个应用只能运行在 Pylons 的新版本 1.0 上，难道两个应用要部署在不同的服务器上么？
+
+Python 可以用 virtualenv 工具包解决多版本共存问题。相当于在某个目录下建立一个隔离的 Python 环境，这个环境有独立的 python 命令，独立的 easy_install 命令，独立的 python 库目录...
+
+为了防止当 Pylons 框架升级后，造成 pySvnManager 不能运行，用 Debian/Ubuntu 安装的 pySvnManager 预留了 virtualenv 的接口。
+即一旦在 /opt/pysvnmanager/virtualenv 下部署了虚拟的 python 环境，则使用该环境下的 python 包。
+
+下面演示如何在 /opt/pysvnmanager/virtualenv 下部署虚拟 python 环境：
+
+* 先建立一个与外界完全隔离的 virtualenv 环境
+
+  ::
+
+    # virtualenv --no-site-packages /opt/pysvnmanager/virtualenv/
+    New python executable in /opt/pysvnmanager/virtualenv/bin/python
+    Installing setuptools............done.
+
+* 用 source 命令引入脚本，即将 virtualenv 环境带入到当前环境中
+
+  可以看到，当运行成功后，命令行的提示符有了变化，用 (virtualenv) 前缀标明当前运行环境是 virtualenv 隔离的 python 环境。
+
+  ::
+
+    # source /opt/pysvnmanager/virtualenv/bin/activate
+    (virtualenv)hp:/opt/pysvnmanager#
+
+* 看看 easy_install 命令位置？不再指向系统目录，而是来自虚拟环境下的 bin 目录了。
+
+  ::
+
+    # which easy_install
+    /opt/pysvnmanager/virtualenv/bin/easy_install
+
+* 安装 pySvnManager 依赖的第三方 python 包
+
+  说明：为了快速安装，在运行 easy_install 命令时，指定了公司内部的 PYPI 镜像
+
+  ::
+
+    # easy_install --index-url http://pypi.bj.ossxp.com/ --find-links http://pypi.bj.ossxp.com/ --allow-hosts *.bj.ossxp.com Pylons==1.0
+    Searching for Pylons==1.0
+    Reading http://pypi.bj.ossxp.com/
+    Reading http://pypi.bj.ossxp.com/Pylons/
+    Best match: Pylons 1.0
+    Downloading http://pypi.bj.ossxp.com/Pylons/Pylons-1.0.tar.gz#md5=b7687e26d0275eaf7bf44ca4883f4428
+    Processing Pylons-1.0.tar.gz
+    Running Pylons-1.0/setup.py -q bdist_egg --dist-dir /tmp/easy_install-FEwvFt/Pylons-1.0/egg-dist-tmp-BJ7NQH
+    Adding Pylons 1.0 to easy-install.pth file
+
+    Installed /opt/pysvnmanager/virtualenv/lib/python2.5/site-packages/Pylons-1.0-py2.5.egg
+
+    Processing dependencies for Pylons==1.0
+    ...
+
+* 修改 /opt/pysvnmanager/virtualenv/lib/python2.5/site-packages/easy-install.pth 文件
+
+  将系统的 Python 环境路径添加其中，以便能够在虚拟环境中访问到 python subversion binding 以及其它第三方 python 包
+
+  ::
+  
+   @@ -18,4 +18,7 @@
+    ./WebHelpers-1.0-py2.5.egg
+    ./Routes-1.12.1-py2.5.egg
+    ./Pygments-1.3.1-py2.5.egg
+   +/usr/lib/python2.5
+   +/usr/lib/python2.5/site-packages
+   +/usr/lib/pymodules/python2.5
+    import sys; new=sys.path[sys.__plen:]; del sys.path[sys.__plen:]; p=getattr(sys,'__egginsert',0); sys.path[p:p]=new; sys.__egginsert = p+len(new)
+
+* 重启 pysvnmanager，就会使用虚拟环境中的 python 包
+
+  ::
+
+    $ sudo /etc/init.d/pysvnmanager restart 
+
+
+需要安装的第三方工具
+--------------------
+RCS
+~~~~
+RCS 提供文件级的版本控制工具。pySvnManager 使用 RCS 工具包对 svn.access 文件进行版本控制。
+
+配置
+=====
+安装完毕后，还需要为 pySvnManager 实例配置认证和授权等。对 pySvnManager 实例进行配置，就是针对实例下的各个配置文件进行相应的编辑操作。对于使用 Debian/Ubunt 包管理器安装，缺省实例的路径在 /opt/pysvnmanager/default 目录下。
+
+应用启动配置文件 \*.ini
+-------------------------
+pySvnManager 应用的启动配置文件是一个 ini 文件。一般对于生产环境，常常使用名为 production.ini 的配置，开发平台使用 development.ini，不过该配置文件的文件名实际上没有限制。
+
+该配置文件中，关键的设置有：
+
+* 服务端口，缺省为 5000
+
+  ::
+
+    [server:main]
+    use = egg:Paste#http
+    host = 0.0.0.0
+    port = 5000
+
+* 配置文件位置
+
+  ::
+
+    # authn_file: a .htpasswd style password file, used for pysvnmanager authentication.
+    authn_file = %(here)s/config/svn.passwd
+
+    # authz_file: svn authz config file with administrative extension. (ossxp.com)
+    authz_file = %(here)s/config/svn.access
+    
+    # svn repository root path
+    repos_root = %(here)s/svnroot
+
+  其中
+
+  * authz_file 是 pySvnManager 维护的授权文件，缺省为 config 目录下的 svn.access 文件
+  * authn_file 是 Apache 认证口令文件，缺省为 config 目录下的 svn.passwd 文件。如果 pySvnManager 使用其它认证方式，该文件被忽略
+  * repos_root 是版本库根目录，新的版本库将会创建在该目录下。可以修改 repos_root 的指向，让其指向 Subversion 实际部署的版本库根路径
+
+* 与 Apache 整合设置
+
+  与 Apache 整合，往往要将 pySvnManager 实例至于某个目录之下，就需要在配置文件中增加中间件过滤器的配置。这主要是由名为 proxy-prefix 的过滤器实现的。
+  
+  缺省该 ini 文件的主要的配置都是在 [app:main] 小节中，对于 Debian/Ubuntu 包管理器安装的缺省实例，则自动配置了过滤器管道，实现 Apache 带前缀的 URL 和 pySvnManager 不带前缀的 URL 之间的映射。 如下面所示，[app:main] 小节被改名为 [app:myapp]，增加了 [filter:proxy-prefix] 小节和 [pipeline:main] 小节。
+
+  ::
+   
+    [app:myapp]
+    use = egg:pySvnManager
+    ...
+    
+    [filter:proxy-prefix]
+    use = egg:PasteDeploy#prefix
+    prefix = /svnadmin
+    
+    [pipeline:main]
+    pipeline = proxy-prefix myapp
+
+
+服务配置文件 config/localconfig.py
+------------------------------------
+主要是通过该配置文件进行认证方式的设置。该配置文件是对 pySvnManager 全局配置 DefaultConfig 的定制，因此除了认证相关的设置外，所有 DefaultConfig 类中的配置都可以在此文件中进行覆盖。
+
+注意：此文件为 python 格式的文件，编辑要遵照 python 语法，对于不了解 python 的用户切记不要擅自改动缩进，格式美观的就是正确的。
+
+缺省采用 HTTP BASIC 认证
+~~~~~~~~~~~~~~~~~~~~~~~~~
+缺省使用 svn.passwd 口令文件进行认证。在 config/localconfig.py 中的缺省配置就是使用口令文件进行认证：
+
+::
+
+    from pysvnmanager.model.auth.http import htpasswd_login
+    auth = [htpasswd_login]
+
+缺省的口令文件是 config/svn.passwd 文件，可以用工具 htpasswd 对口令进行维护
+
+* 添加新用户并创建口令
+
+  ::
+
+    $ htpasswd config/svn.passwd jiangxin
+    New password:
+    Re-type new password:
+    Adding password for user jiangxin
+
+* 修改用户口令
+
+  ::
+
+    $ htpasswd config/svn.passwd jiangxin
+    New password:
+    Re-type new password:
+    Updating password for user jiangxin
+
+* 删除用户
+
+  ::
+
+    $ htpasswd -D config/svn.passwd jiangxin
+    Deleting password for user jiangxin
+
+使用 LDAP 认证
+~~~~~~~~~~~~~~~~
+修改 config/localconfig.py，将认证方式设置为 ldap_login，示例如下：
+
+::
+
+    import ldap
+    from pysvnmanager.model.auth.ldap_login import ldap_login
+    auth = [ldap_login]
+
+    # LDAP login parameters
+    ldap_uri = 'ldap://localhost'
+    ldap_base = 'dc=foo,dc=bar'
+    ldap_filter = '(&(uid=%(username)s)(authorizedService=svn)(ossxpConfirmed=TRUE))'
+
+pySvnManager 授权
+--------------------
+当然不是所有通过认证的用户都能够访问 pySvnManager 并管理授权，必须是指定的管理员才能够访问。pySvnManager 使用扩展的 SVN 授权文件来为自身授权。
+
+缺省的 config/svn.access 授权示例：
+
+::
+
+  # version : 0.2.1
+  # admin : / = &admin, root
+  # admin : repos1 = @admin
+  
+  [groups]
+  admin = &admin, root
+  
+  [aliases]
+  admin = jiangxin
+  
+  [/]
+  @admin = rw
+  
+  [repos1:/]
+  @admin = rw
+
+其中该文件头部以井号开始的注释用于对版本库管理者进行授权。
+
+* 第一行标明当前配置文件的版本号，每次更改配置文件，版本号末尾数字自动加一
+
+* 后续的注释行以 admin 关键字标识，是版本库管理者授权
+
+* 第二行是对根版本库(/)进行授权。后面用逗号分割的用户列表是超级管理员，可以管理任何版本库
+
+  示例中是 别名为admin 的用户以及登录名为 root 的用户，拥有超级管理员权限
+
+* 第三行是对名为 repos1 的版本库进行授权，属于 admin 用户组的用户，对 repos1 版本库具有管理权限
+
+手动编辑该文件，设置超级管理员帐号。
+
+运行
+=====
+无论是 Debian 包管理器方式安装，还是 easy_install，都需要启动服务。缺省使用 python 内置Web服务，运行在 5000 端口。
+
+* 对于 Debian 包管理器，用 init 脚本启动
+
+  ::
+
+    $ sudo /etc/init.d/pysvnmanager restart
+
+* 对于 easy_install 安装并用 paster 部署的实例（架设部署配置文件为 production.ini）
+
+  ::
+
+    $ paster serve production.ini
+
+* 检查 5000 端口是否启动
+
+  ::
+
+    $ sudo netstat -ltnp | grep 5000
+    tcp        0      0 0.0.0.0:5000            0.0.0.0:*               LISTEN      2906/python
+
+* 对于 Debian 包管理器方式安装，打开浏览器，输入 SVN 虚拟主机下的 /svnadmin 地址，如：https://svn.moon.ossxp.com/svnadmin/ 。 在弹出的登录窗口中输入管理员用户名和口令。
+
+* 对于未与 Apache 整合的实例，直接用浏览器访问服务器的 5000 端口。在弹出的登录窗口中输入管理员用户名和口令。
+
+* log 目录下的日志，可以在服务无法运行时，对错误进行诊断
+
+创建版本库
+==========
+
 
 
 其它文档
