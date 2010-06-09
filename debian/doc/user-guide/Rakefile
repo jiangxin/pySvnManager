@@ -1,0 +1,14 @@
+
+require 'docbones'
+source_suffix = '.rst'
+::Docbones.setup source_suffix
+
+PROJ.root= "."
+PROJ.name = "user-guide"
+PROJ.index = "user-guide"
+PROJ.output = "../output/user-guide"
+PROJ.css_path = "/stylesheet/lightbox/nf.lightbox.css,/stylesheet/ossxp/doc.css"
+PROJ.js_path = "/javascript/jquery/1.4.2.js,/javascript/lightbox/nf.lightbox.js,/javascript/lightbox/load-nf.lightbox.js"
+PROJ.pdf_style = "/opt/ossxp/conf/pdf/ossxp.style"
+
+task:default 

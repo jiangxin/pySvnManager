@@ -1,0 +1,31 @@
+#!/bin/sh
+
+ROOTDIR=/opt/pysvnmanager/sites
+DEFAULT_SITE=/opt/pysvnmanager/default
+
+usage() {
+    echo "Usage: new_instance <site_name>"
+    exit 0
+}
+
+if [ $# -ne 1 ]; then
+    usage
+fi
+
+SITE=$1
+if paster -h >/dev/null 2>&1; then
+    if [ ! -d $ROOTDIR/$SITE ]; then
+        echo "Create site $ROOTDIR/$SITE ..."
+        mkdir -p $ROOTDIR/$SITE/run
+        paster make-config pySvnManager $ROOTDIR/$SITE/production.ini && \
+        paster setup-app $ROOTDIR/$SITE/production.ini\#myapp || true
+        chown -R www-data.www-data $ROOTDIR/$SITE
+        if [ ! -f ${DEFAULT_SITE} ]; then
+            echo "Link default site to $ROOTDIR/$SITE"
+            ln -s $ROOTDIR/$SITE ${DEFAULT_SITE}
+        fi
+    else
+        echo "Site: $SITE already exist!"
+        exit 1
+    fi
+fi

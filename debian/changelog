@@ -1,0 +1,63 @@
+pysvnmanager (0.4.1r141-42) unstable; urgency=low
+
+  * New webpage style from redmine.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Wed, 09 Jun 2010 10:35:30 +0800
+
+pysvnmanager (0.4.1r140-42) unstable; urgency=low
+
+  * Can deploy pylons using virtualenv.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Mon, 07 Jun 2010 18:26:31 +0800
+
+pysvnmanager (0.4.1r140-40) unstable; urgency=low
+
+  * Work with new pylons 0.10 and 1.0.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Fri, 04 Jun 2010 14:13:48 +0800
+
+pysvnmanager (0.3.1-39) unstable; urgency=low
+
+  * Python 0.10 compatiblity.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Tue, 20 Apr 2010 22:05:15 +0800
+
+pysvnmanager (0.3.0r124-39) unstable; urgency=low
+
+  * Pre-depends pylons, and pysvnmanager postinstall works.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Sat, 17 Apr 2010 17:26:23 +0800
+
+pysvnmanager (0.3.0r124-38) unstable; urgency=low
+
+  * catch bad config file exception;
+  * show warning message if svn authz modified outside pysvnmanager;
+  * http auth bugfix;
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Wed, 07 Oct 2009 18:07:57 +0800
+
+pysvnmanager (0.3.0r103-38) unstable; urgency=low
+
+  * save log files to /opt/pysvnmanager/log.
+  * postinst failed because paster not initialized.
+  * depends on python-pybabel.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Wed, 07 Oct 2009 18:07:57 +0800
+
+pysvnmanager (0.3.0r103-23) unstable; urgency=low
+
+  * pySvnmanager for debian sid depends on python-pylons > 0.9.7
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Sun, 30 Aug 2009 18:51:21 +0800
+
+pysvnmanager (0.2.3r99-23) unstable; urgency=low
+
+  * Setup-app failed, add a slash before "#myapp"
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Sun, 30 Aug 2009 18:51:21 +0800
+
+pysvnmanager (0.2.3r99-22) unstable; urgency=low
+
+  * First version for Debian lenny.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Sun, 23 Aug 2009 12:23:16 +0800

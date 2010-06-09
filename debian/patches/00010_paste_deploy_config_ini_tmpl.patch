@@ -1,0 +1,32 @@
+diff --git a/pysvnmanager/config/deployment.ini_tmpl b/pysvnmanager/config/deployment.ini_tmpl
+index cf185d2..27a526d 100644
+--- a/pysvnmanager/config/deployment.ini_tmpl
++++ b/pysvnmanager/config/deployment.ini_tmpl
+@@ -14,7 +14,7 @@ use = egg:Paste#http
+ host = 0.0.0.0
+ port = 5000
+ 
+-[app:main]
++[app:myapp]
+ use = egg:pySvnManager
+ full_stack = true
+ static_files = true
+@@ -52,11 +52,14 @@ authn_file = %(here)s/config/svn.passwd
+ authz_file = %(here)s/config/svn.access
+ 
+ # svn repository root path
+-repos_root = %(here)s/svnroot
++repos_root = /opt/svn/svnroot
+ 
+-#[filter:proxy-prefix]
+-#use = egg:PasteDeploy#prefix
+-#prefix = /svnadmin
++[filter:proxy-prefix]
++use = egg:PasteDeploy#prefix
++prefix = /svnadmin
++
++[pipeline:main]
++pipeline = proxy-prefix myapp
+ 
+ # Logging configuration
+ [loggers]
