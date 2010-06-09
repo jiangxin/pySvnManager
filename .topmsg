@@ -1,0 +1,6 @@
+From: Jiang <jiangxin@ossxp.com>
+Subject: [PATCH] t/remote_user_login
+
+If remote_user already defined, register login user.
+
+Signed-off-by: Jiang <jiangxin@ossxp.com>
