@@ -59,9 +59,6 @@ class AuthzController(BaseController):
         super(AuthzController, self).__before__(action)
         if not self.own_reposlist and not self.is_super_user:
             return redirect(url(controller='security', action='failed'))
-        diff = self.authz.differ()
-        if diff:
-            c.global_message = _('Some one maybe you, has modified the svn authz file by hands. Please save once to fix possible config error.') + "<blockquote>" + "<br>".join(diff.splitlines()) + "</blockquote>"
 
     def index(self):
         c.revision = self.authz.version

@@ -50,9 +50,6 @@ class CheckController(BaseController):
         super(CheckController, self).__before__(action)
         if not self.reposlist:
             return redirect(url(controller='security', action='failed'))
-        diff = self.authz.differ()
-        if diff:
-            c.global_message = _('Some one maybe you, has modified the svn authz file by hands. Please save once to fix possible config error.') + "<blockquote>" + "<br>".join(diff.splitlines()) + "</blockquote>"
         
     def index(self):
         c.reposlist = self.reposlist
