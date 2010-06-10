@@ -9,7 +9,7 @@
 <%
 msg = ''
 if hasattr(c, "global_message"):
-    msg += "var global_message = \"%s\";\n" % c.global_message
+    msg += "var global_message = \"%s\";\n" % c.global_message.replace('"', '\\"');
 else:
     msg += "var global_message = \"\";\n"
 context.write(msg)
@@ -33,16 +33,16 @@ context.write(msg)
 	    ${self.nav_bar()}
 	    ${self.profile()}
     </div>
-
-    <div id="message_box" style="visibility:hidden;position:absolute; margin:1em;" class=gainlayout>
-      <div id="message"></div>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <a class="clear-link" href="#"
-         onClick="document.getElementById('message').innerHTML='';switch_message_box()"
-         >${_("Clear message")}</a>
-    </div>
 	
     <div class="page">
+      <div id="message_box" style="visibility:hidden;position:absolute; margin:1em;" class=gainlayout>
+        <div id="message"></div>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a class="clear-link" href="#"
+           onClick="document.getElementById('message').innerHTML='';switch_message_box()"
+           >${_("Clear message")}</a>
+      </div>
+
       ${next.body()}
     </div>
 

@@ -71,12 +71,32 @@ class BaseController(WSGIController):
                 session.save()
                 return redirect(url('login'))
 
+        if hasattr(self, 'authz'):
+            diff = self.authz.differ()
+            if diff:
+                c.global_message = _('Some one maybe you, has modified the svn authz file by hands. Please %(begin)ssave once%(end)s to fix possible config error.') % {
+                    'begin': '<big><strong><a href="' + url(controller=self.__class__.__name__.lower()[0:-10], action="standardize") + '">',
+                    'end': '</a></strong></big>'
+                    }
+                c.global_message +=  "<blockquote>" + "<br>".join(diff.splitlines()) + "</blockquote>"
+
     def __call__(self, environ, start_response):
         """Invoke the Controller"""
         # WSGIController.__call__ dispatches to the Controller method
         # the request is routed to. This routing information is
         # available in environ['pylons.routes_dict']
         return WSGIController.__call__(self, environ, start_response)
+
+    def standardize(self):
+        if hasattr(self, 'authz'):
+            diff = self.authz.differ()
+            if diff:
+                self.authz.save(self.authz.version, comment=_("Modified external, save to avoid configuration error."))
+        if request.referer:
+            redirect(request.referer)
+        else:
+            redirect(url(controller=self.__class__.__name__.lower()[0:-10], action="index"))
+
 
 # Include the '_' function in the public names
 #__all__ = [__name for __name in locals().keys() if not __name.startswith('_') \
