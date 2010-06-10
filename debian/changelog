@@ -1,3 +1,9 @@
+pysvnmanager (0.4.1r143-43) unstable; urgency=low
+
+  * If authz file modified external, add a save link to warning message.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Thu, 10 Jun 2010 11:54:03 +0800
+
 pysvnmanager (0.4.1r142-43) unstable; urgency=low
 
   * New webpage style from redmine.

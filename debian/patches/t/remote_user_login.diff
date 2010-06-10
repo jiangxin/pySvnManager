@@ -72,4 +72,4 @@ index ded2193..ca29041 100644
      def logout(self):
          """
 -- 
-tg: (ad97999..) t/remote_user_login (depends on: master)
+tg: (331e65a..) t/remote_user_login (depends on: master)
