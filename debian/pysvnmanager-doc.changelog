@@ -1,8 +1,15 @@
+pysvnmanager (0.4-5) unstable; urgency=low
+
+  * Add dev-guilde.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Fri, 11 Jun 2010 10:09:53 +0800
+
 pysvnmanager (0.4-4) unstable; urgency=low
 
   * Add FAQ.
 
  -- Jiang Xin <worldhello.net@gmail.com>  Thu, 10 Jun 2010 14:29:10 +0800
+
 pysvnmanager (0.4-3) unstable; urgency=low
 
   * Initialized pySvnManager user guide.

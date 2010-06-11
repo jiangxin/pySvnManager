@@ -43,29 +43,29 @@ Subversion使用配置文件进行基于路径的授权，手工配置易于出�
   admin = &admin, admin1, admin2
   group1 = @group2, user1
   group2 = user2, @group1
-  
+
   [aliases]
   admin = jiangxin
-  
+
   [/]
   @admin = rw
-  
+
   [/trunk]
   $authenticated = rw
-  
+
   [repos1:/]
   * =
   user1 =
   @group1 = r
   @admin = rw
-  
+
   [repos1:/trunk/src]
   * =
   @group1 = rw
   @visiters = r
-    
+
 其中的错误或可能的错误有：
-    
+
 * 组的循环引用：
 
   group1 包含了group2，而group2又反过来包含group1，造成循环引用。
@@ -74,25 +74,25 @@ Subversion使用配置文件进行基于路径的授权，手工配置易于出�
 
   例如在 repos1 版本库的 /trunk/src 的策略中用到了 @visiters 组，
   而该组没有在[groups]小节中定义；
-      
+
 * 潜在的配置错误：
-          
+
   版本库repos1的根路径，欲限制user1的访问，而实际效果并非如此，
   因为uer1属于group1组，而group1组被授权。user1实际获得的权限是策略能够给予
   的最大权限；
-      
+
 * 潜在的配置错误：
 
   访问版本库repos1的 /trunk 目录，会参照缺省的[/trunk]小节设置，
   这可能跟管理员本意不符。需要对repos1的/trunk重新定义权限以覆盖缺省的
   [/trunk]小节的设置。
-    
+
 其中1和2的错误会造成Subversion服务中断故障！3和4的问题如果不经过测试很难发现！
 在我们为客户实施Subversion技术支持服务过程中，发现了用户迫切需要容错性强的
 授权管理工具，于是便有了开发图形化管理界面的打算。选择 Python 是因为 Python
 语言的魅力以及 Python 开发过程的高效。
-  
-  
+
+
 最终的实现
 -----------
 如何安装以及使用 pySvnManager，您可以参照 `用户手册`_ 。
@@ -119,11 +119,7 @@ Subversion使用配置文件进行基于路径的授权，手工配置易于出�
 
 * 文件 pysvnmanager/config/routing.py
 
-  Pylons 地址映射文件。
-
-* 文件 pysvnmanager/lib/base.py
-
-  控制器的基类 BaseController 定义文件
+  Pylons 映射 URL 到代码的路由文件。
 
 * 文件 pysvnmanager/lib/helpers.py
 
@@ -133,9 +129,13 @@ Subversion使用配置文件进行基于路径的授权，手工配置易于出�
 
   全局变量，用 app_globals 访问。老版本的 Pylons 用缩写 g 访问
 
+* 文件 pysvnmanager/lib/base.py
+
+  控制器的基类 BaseController 定义文件
+
 * 目录 pysvnmanager/controller
 
-  该目录下每一个 python 文件对应一个控制器（__init__.py 除外）
+  该目录下每一个 python 文件对应一个控制器（__init__.py 除外）。各个控制器都继承自 BaseController。
 
 * 目录 pysvnmanager/model
 
@@ -145,7 +145,7 @@ Subversion使用配置文件进行基于路径的授权，手工配置易于出�
 
   该目录下保存页面模板。页面模板是包含了一些宏和脚本的 HTML 页面或者页面片断。
 
-  文件 pysvnmanager/templates/base.mako 相当于各个页面模板的“基类”，其它页面模板引用该模板文件，并进行相应的扩充。
+  其中，文件 pysvnmanager/templates/base.mako 相当于各个页面模板的“基类”，其它页面模板引用该模板文件，并进行相应的扩充。
 
 * 目录 pysvnmanager/public
 
@@ -166,13 +166,13 @@ Subversion使用配置文件进行基于路径的授权，手工配置易于出�
 
 安装依赖的 Python 包
 ---------------------
-如果 pySvnManager 已经能够运行，那么恭喜你相关依赖的软件包都已经成功安装了。如果尚未安装，则进入 pySvnManager 代码检出目录，执行：
+如果 pySvnManager 已经能够运行，那么恭喜你，相关依赖的软件包都已经成功安装了。如果尚未安装，则进入 pySvnManager 代码检出目录，执行：
 
 ::
 
   $ sudo easy_install .
 
-则 pySvnManager 软件包以及相关依赖都自动安装了。
+则 pySvnManager 软件包以及相关依赖会自动安装。
 
 另外可能需要单独安装的软件包有：
 
@@ -182,7 +182,9 @@ Subversion使用配置文件进行基于路径的授权，手工配置易于出�
 
 * RCS
 
-  RCS 是对单独的文件进行版本控制的工具集，包括命令 ci, co, rcsdiff 等。在 Debian 下安装 RCS 使用如下命令：
+  RCS 是对单独的文件进行版本控制的工具集，包括命令 ci, co, rcsdiff 等。pySvnManager 利用该工具集对 SVN 授权文件进行管理。
+
+  在 Debian 下安装 RCS 使用如下命令：
 
   ::
 
@@ -194,7 +196,7 @@ Subversion使用配置文件进行基于路径的授权，手工配置易于出�
 
   ::
 
-    $ make -C config 
+    $ make -C config
 
 运行完该命令后，会在 config 目录下创建相关配置文件，以及创建一个供测试使用的 SVN 版本库根目录。
 
@@ -268,51 +270,51 @@ Subversion使用配置文件进行基于路径的授权，手工配置易于出�
 模型的敏捷开发
 ==============
 * 让我们先忘记Web吧!
-  
+
   虽然我们要开发出一套Web应用，但首先要忘掉Web。这看似矛盾，却正是MVC的要求和精髓。
 
   即对核心算法进行抽象，先实现 Model，之后再去考虑 Controller（控制器）和 View（Web展现）。
-    
+
 * 忘记详细设计吧：
-  
+
   敏捷开发，可不要等到图纸都出来再按图索骥。而是一种小步快跑的开发模式，将我们伟大的目标分解为一个一个小的目标，小到能够在一天之内就可以完成。
-  
+
 * 先从测试做起：
-  
+
   敏捷开发的一种是测试先行，让我们在第一个迭代中基于一个最简单的目标：实现单元测试框架。
-  
-  
-  
+
+
+
 迭代1：测试框架的建立
 ----------------------
 项目目标：首先搭建单元测试框架，并完成一个最小的功能集合。
-    
-    
+
+
 Begin with the end in mind
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 以终为始。我们可以先假设已经完成了模型，我们期待它有什么功能？
-      
+
 * 首先为我们的模型起个名字：svnauthz。
-      
+
 * Subversion路径授权中，用户对象（用户/别名/组）显然是最重要的基本单位，
   每一条授权策略都包含一个用户对象。那么我们第一个迭代就实现用户对象：
   User 类，Alias 类，Group 类。
-      
+
 * 假设 svnauthz 的 User, Alias, Group 类已经完成，我们期望他们实现的功能是什么呢？于是在纸上写下假想任务目标（模拟python交互式命令行）：
-      
-  ::      
+
+  ::
 
     >>> from svnauthz import User, Group, Alias
     >>> user1=User('Tom')
     >>> user2=User("Jerry")
     >>> print user1
     Tom # 显示 user1 内容（字符串化）
-    
+
     >>> alias1=Alias('admin')
     >>> alias1.user = user1
     >>> print alias1
     admin = Tom # 显示 alias1 内容（字符串化）
-    
+
     >>> group1 = Group('team1')
     >>> group2 = Group('team2')
     >>> group1.append(group2, user2, alias1, user1)
@@ -330,25 +332,25 @@ Begin with the end in mind
 将假想的任务目标翻译为测试用例。建立单元测试文件 test_svnauthz.py 如下：
 
   ::
-        
+
      #!/usr/bin/env python
      # -*- coding: utf-8 -*-
-     
+
      import unittest
      from svnauthz import *
-     
+
      class TestStage1(unittest.TestCase):
-     
+
          def testUser(self):
              user1 = User('Tom')
              self.assert_(str(user1) == 'Tom')
-         
+
          def testAlias(self):
              user1 = User('Tom')
              alias1=Alias('admin')
              alias1.user = user1
              self.assert_(str(alias1) == 'admin = Tom', str(alias1))
-         
+
          def testGroup(self):
              user1 = User('Tom')
              user2 = User('Jerry')
@@ -361,7 +363,7 @@ Begin with the end in mind
              self.assertRaises(Exception, group2.append, group1, user1)
              group2.append(group1, user1, autodrop=True)
              self.assert_(str(group2) == 'team2 = Tom')
-     
+
      if __name__ == '__main__': unittest.main()
 
 执行测试用例
@@ -378,12 +380,12 @@ Begin with the end in mind
 
 
 测试失败！不要紧，因为我们还没有写代码呢。
-    
-    
+
+
 编写模组，使测试用例通过
 ~~~~~~~~~~~~~~~~~~~~~~~~
 之前执行测试用例失败，报告：找不到 svnauthz 模组。因为模组还没有创建，当然找不到了。于是创建一个空的模组文件 svnauthz.py。
-      
+
   ::
 
     $ touch svnauthz.py
@@ -391,7 +393,7 @@ Begin with the end in mind
 
 执行测试用例：
 
-  ::      
+  ::
 
     $ python test_svnauthz.py
     EEE
@@ -404,42 +406,42 @@ Begin with the end in mind
     NameError: global name 'User' is not defined
     ...
 
-      
+
 **红灯** 而非 **异常** 。太棒了！我们只走了一小步，可是敏捷实践向前进了一大步。失败的原因已经不同了。错误报告说：
 
   User类未定义。
 
 于是我们写一些代码，让测试用例通过。
-      
+
 svnauthz.py 第一个版本的代码如下：
-      
+
   ::
 
     1 #!/usr/bin/env python
     2 # -*- coding: utf-8 -*-
-    3 
+    3
     4 """Subversion authz config file management.
-    5 
+    5
     6 Basic classes used for Subversion authz management.
     7 """
-    8 
+    8
     9 class User(object):
-    10 
+    10
     11     def __init__(self, name):
     12         name = name.strip()
-    13 
+    13
     14         if not name:
     15             raise Exception, 'Username is not provided'
-    16 
+    16
     17         self.__name = name
-    18 
+    18
     19     def __str__(self):
     20         return self.__name
 
 再次执行测试用例：
-      
+
   ::
-        
+
     $ python test_svnauthz.py -v
     testAlias (__main__.TestStage1) ... ERROR
     testGroup (__main__.TestStage1) ... ERROR
@@ -456,9 +458,9 @@ svnauthz.py 第一个版本的代码如下：
 
 
 好的，我们已经有一个测试用例（testUser）通过了！其他的测试用例呢？先把他们注释掉，以便提前感受一下完全通过测试（绿灯）的味道。
-      
+
 注意：我所说的注释掉不是删除代码，也不是把每一行变为注释，而是非常简单的将暂不考虑的测试用例改名。
-       
+
 * 将 def testAlias(self) 改为 def _testAlias(self)
 * 将 def testGroup(self) 改为 def _testGroup(self)
 * 注：只要不是以 test 开头都好。
@@ -480,7 +482,7 @@ svnauthz.py 第一个版本的代码如下：
 完善测试用例，就是希望测试用例能够尽量多的覆盖所有可能的情况，即代码覆盖度。
 
 检查代码覆盖度，在 Python 下有 coverage 包可用。用 easy_install 安装之后，就可以使用 coverage 命令了。
-      
+
   ::
 
     $ coverage -x test_svnauthz.py
@@ -498,10 +500,10 @@ svnauthz.py 第一个版本的代码如下：
 
 
 哦，看来我们离完美还是差了一点。从 coverage 的输出中可以看出，我们的测试用例并没有对 svnauthz.py 的代码测试完全：第15行没有测试到。也就是用空的用户名创建 User 对象，应该抛出异常。
-      
+
 我们在 testUser 用例的最后补充一条断言：
 
-  ::      
+  ::
 
     def testUser(self):
         user1 = User('Tom')
@@ -511,7 +513,7 @@ svnauthz.py 第一个版本的代码如下：
 
 再次检查一下测试用例对代码的覆盖度。哇，100% 通过！
 
-  ::      
+  ::
 
     $ coverage -x test_svnauthz.py
     .
@@ -524,16 +526,16 @@ svnauthz.py 第一个版本的代码如下：
     ----------------------------------------
     svnauthz       8      8   100%
 
-当然现实中是否需要 100% 的测试覆盖度，还要基于成本进行考虑，不可强求。
-    
+当然现实中是否需要 100% 的测试覆盖度，还要考虑实施的成本，不可强求。
+
 
 用例目录的重构
 ~~~~~~~~~~~~~~
 目前来讲，代码和测试用例共存于同一个目录。我们重构一下，将模组代码放在 src 目录，将测试用例放在 tests 目录。
-      
+
 执行测试用例：
-      
-  ::      
+
+  ::
 
     $ python tests/test_svnauthz.py
     Traceback (most recent call last):
@@ -553,9 +555,9 @@ svnauthz.py 第一个版本的代码如下：
 测试用例又可以成功执行了。
 
 nosetests
-~~~~~~~~~~      
+~~~~~~~~~~
 目录 tests 下如果有多个测试用例文件，难道要一个一个去调用么？或者用 unittest.TestSuite 去组织测试用例？其实不用这么麻烦，nosetests 可以自动发现目录下的测试用例，并执行。
-      
+
 鼻子测试（nosetests）是一个主动发现测试用例的 unittest 扩展。可以用 easy_install 来安装:
 
   ::
@@ -583,20 +585,20 @@ nosetests
 
     OK
 
-   
+
 持续迭代...
 ------------
 
 持续迭代，完成 User, Group, Alias, Rules, Module, Repos, SvnAuthz 等模组。
-      
+
 
 最终完成的 svnauthz
 --------------------
-      
+
 在 Python 交互模式下测试 svnauthz 模组：
-      
+
   ::
-      
+
     >>> buff = '''# admin: / = administrator
     ... [groups]
     ... group1=user1,user2
@@ -636,23 +638,23 @@ nosetests
 
 
 现在是时候给 svnauthz 套上一个华丽一点的外衣了。
-    
+
 
 
 华丽外衣——Pylons造
 ==================
 在接触 Pylons 和其他 MVC 框架之前，对 Python 的 Web 编程一直感到比较恐惧，因为看过 MoinMoin 的代码，要为每一种协议（CGI, FastCGI, mod_python, WSGI）写相应的处理代码，实在是麻烦透顶。还好有了Pylons等Web编程框架，为我们屏蔽了协议一层的复杂度。
-  
-Pylons 实现了 MVC 架构，在使用习惯上和 ROR 非常类似，因此从学习成本上考虑，我选择了 Pylons。 当然选择的正确与否有待商榷，参见: `Pylons nightmare ends?`__
-  
+
+Pylons 实现了 MVC 架构，在使用习惯上和 ROR 非常类似，因此从学习成本上考虑，我选择了 Pylons。 当然选择的正确与否有待商榷，参见博客: `Pylons nightmare ends?`__
+
 .. __: http://blog.ossxp.com/2010/06/1287/
-  
+
 
 建立 Web 应用框架
 ------------------
 我们的应用定名为 pySvnManager。建立同名的 Pylons 框架：
-    
-  ::    
+
+  ::
 
     $ paster create -t pylons pySvnManager
     Selected and implied templates:
@@ -678,14 +680,14 @@ Pylons 实现了 MVC 架构，在使用习惯上和 ROR 非常类似，因此从
 按照下面的方式启动应用：
 
   ::
-      
+
     $ paster serve --reload development.ini
     Starting subprocess with file monitor
     Starting server in PID 817.
     serving on http://127.0.0.1:5000
 
-用浏览器访问 http://127.0.0.1:5000 会看到一个网页。这个网页实际上调用的是 public/index.html 文件。如果删除该文件，则浏览器显示 404错误（网页未找到）。
-    
+用浏览器访问 http://127.0.0.1:5000 会看到一个网页。这个网页实际上调用的是 public/index.html 文件。为了将来能够将首页重定向到某个控制器的页面，删除该静态页面。删除该文件，我们会通过浏览器看到 404错误（网页未找到）。
+
 
 理解控制器
 ----------
@@ -699,49 +701,49 @@ Pylons 实现了 MVC 架构，在使用习惯上和 ROR 非常类似，因此从
 
 * 一个是控制器文件本身：controllers/check.py
 * 另外一个是单元测试文件：tests/functional/test_check.py。
- 
+
 用浏览器访问URL：http://127.0.0.1:5000/check/ 会看到Hello World。我们追根溯源，会看到 controllers/check.py 中的代码：
-      
+
   ::
 
     class CheckController(BaseController):
-    
+
         def index(self):
             return 'Hello World'
-      
+
 哦，原来如此。Pylons 已经将 URL到代码的映射搞定！就是将浏览器对 URL 的访问映射到控制器代码，再由控制器处理后将结果显示给浏览器。控制器调用实现逻辑（即Model），然后把从Model获取的结果填充到模板（View）中，于是 MVC 便实现了逻辑和展现分离。Pylons 框架实现的将URL映射到控制器代码，和 Windows 下 VC/Delphi 等GUI编程中将事件（鼠标、按钮等）映射到对应的代码是多么的近似。
 
 修改控制器映射
 --------------
 还记得我们已经删除了 public/index.html 文件么？我们现在通过修改控制器映射，将 Web 应用的缺省首页指向我们新建立的 controller。要修改的文件就是： config/routing.py
-      
+
   ::
 
-    18     map.connect('/error/{action}', controller='error')
-    19     map.connect('/error/{action}/{id}', controller='error')
-    20
-    21     # CUSTOM ROUTES HERE
-    22     map.connect('/', controller='check', action='index')
-    23
-    24     map.connect('/{controller}')
-    25     map.connect('/{controller}/{action}')
-    26     map.connect('/{controller}/{action}/{id}')
+    17     map.connect('/error/{action}', controller='error')
+    18     map.connect('/error/{action}/{id}', controller='error')
+    19
+    20     # CUSTOM ROUTES HERE
+    21     map.connect('home', '/', controller='check', action='index')
+    22
+    23     map.connect('/{controller}', action="index")
+    24     map.connect('/{controller}/{action}')
+    25     map.connect('/{controller}/{action}/{id}')
 
 
-第22行是我们新增的，告诉Pylons，将缺省的主页定位到名为 check 的控制器的 index 方法（动作）。
-      
+第 21 行是我们新增的，告诉Pylons，将缺省的主页定位到名为 check 的控制器的 index 方法（动作），并且我们将此条路由取名为 *"home"* 。
+
 我们打开浏览器访问 http://127.0.0.1:5000/ 会自动定位到 http://127.0.0.1:5000/check/index 。
-      
+
 加入模组和单元测试
 ------------------
 把我们已经开发完毕的 svnauthz 模组及其单元测试放到 pySvnManager 的代码树中，因为 svnauthz 和 pySvnManager 的耦合很紧，没有必要单独维护 svnauthz 模组。
-      
+
 pySvnManager/model 目录是放置模组的地方，将 svnauthz 的模组放在该目录下。
-      
+
 至于单元测试用例，则应该拷贝到 pysvnmanager/tests 目录下。该目录下有文件 test_models.py，就是用于测试模组的。
 
 我们可以用 test_svnauthz.py 覆盖 空文件 test_models.py ，并在该文件中设置 Python 包含路径， 以便能成功包含要测试的模组：
-      
+
   ::
 
     1 #!/usr/bin/env python
@@ -757,8 +759,8 @@ pySvnManager/model 目录是放置模组的地方，将 svnauthz 的模组放在
 
 
 实验一下 nosetests 是否依然可靠运行。
-      
-  ::      
+
+  ::
 
     $ nosetests
     .............
@@ -775,19 +777,19 @@ pySvnManager/model 目录是放置模组的地方，将 svnauthz 的模组放在
   .. figure:: images/check_controller.png
    :scale: 100
 
-* 路由：用户访问URL或提交表单，由 Pylons 负责将请求路由至控制器中的同名方法；
-* 调用模组：控制器访问模组 svnauthz 的相关调用，调用结果返回给控制器；
-* 调用视图：调用视图模板，并向其传递参数用于填充模板；
-* 模板展现：最终填充后的模板发向浏览器，最终展现给用户；
-    
+#. 路由：用户访问URL或提交表单，由 Pylons 负责将请求路由至控制器中的同名方法；
+#. 调用模组：控制器访问模组 svnauthz 的相关调用，调用结果返回给控制器；
+#. 调用视图：调用视图模板，并向其传递参数用于填充模板；
+#. 模板展现：最终填充后的模板发向浏览器，最终展现给用户；
+
 MVC中的数据流
 ~~~~~~~~~~~~~
-      
+
 * 控制器获取用户请求
 
   无论用户使用POST或者GET方式传递请求，都可以用 request.params 获取。
 
-  ::        
+  ::
 
     d = request.params  # request.params 是包含用户传参的dict
 
@@ -800,9 +802,9 @@ MVC中的数据流
 
   ::
 
-    c.access_map_msg =""
+    c.access_map_msg ="<pre>"
     c.access_map_msg+="\n\n".join(self.authz.get_access_map_msgs(username, repos))
-    c.access_map_msg+=""
+    c.access_map_msg+="</pre>"
     return render('/check/index.mako')
 
 * 视图模板用参数填充
@@ -811,25 +813,25 @@ MVC中的数据流
 
     <input type="submit" name="submit" value="提交">
     ${h.end_form()}
-      
+
     <hr>
     ${c.access_right_msg}
     <pre>
         ${c.access_map_msg}
     </pre>
 
-    
+
 页面模板布局
 ~~~~~~~~~~~~
 Check页面的布局参见：
-      
+
   .. figure:: images/html_design.png
    :scale: 80
-      
+
    控制器check的MVC框架示意图
-          
+
 各个部分的含义为：
-      
+
 #. 用户选择/输入框：选择或输入用户对象名称，可以为组、别名或用户名；
 #. 版本库选择/输入框：当选定一个版本库后，会更新③部分的授权路径列表；
 #. 授权路径选择/输入框：列表内容和版本库（②）相关；
@@ -837,7 +839,7 @@ Check页面的布局参见：
 #. 结果输出
 
 说明：其中 ③  和 ⑤  是动态内容，② 和④ 会触发表单提交。
-      
+
 模板语法示例
 ~~~~~~~~~~~~~
 Pylons缺省使用mako格式的模板。mako文件相当于ASP,PHP,JSP, 不过是Python语言的。模板文件的主体依旧是HTML，可以在模板中用“<% %>” 语法嵌入Python代码。例如：
@@ -872,23 +874,23 @@ Pylons缺省使用mako格式的模板。mako文件相当于ASP,PHP,JSP, 不过�
 
 可以用“${expression}”将页面Python代码的或者Controller 传递的变量/表达式的值直接嵌入到模板中输出。例如：
 
-  ::      
+  ::
 
-    <input type="radio" name="reposinput" value="select" 
+    <input type="radio" name="reposinput" value="select"
            ${c.checked_reposinput_select}> 选择代码库
     <select name="reposselector" size="0" onFocus="select_repos(this.form)">
            ${h.options_for_select(reposlist, c.selected_repos)}
     </select>
 
-    
+
 控制器的index方法
 ~~~~~~~~~~~~~~~~~
-使用 check/index.mako 模板来显示页面，之前通过为对象 c 赋值向模板传递参数，以便对模板相应字段进行填充。
+使用 check/index.mako 模板来显示页面，在控制器中已经预先为对象 c 赋值向模板传递参数，模板中相应字段填充后通过浏览器展示给用户。
 
   ::
 
     class CheckController(BaseController):
-        
+
         def __init__(self):
             self.authz = SvnAuthz(cfg.authz_file)
             c.reposlist = map(lambda x:x.name, self.authz.reposlist)
@@ -896,7 +898,7 @@ Pylons缺省使用mako格式的模板。mako文件相当于ASP,PHP,JSP, 不过�
             c.userlist.extend(map(lambda x:x.uname, self.authz.aliaslist))
             c.userlist.extend(map(lambda x:x.uname, self.authz.userlist))
             c.pathlist = []
-        
+
         def index(self):
             return render('/check/index.mako')
 
@@ -905,7 +907,7 @@ Pylons缺省使用mako格式的模板。mako文件相当于ASP,PHP,JSP, 不过�
 这是传统的表单处理流程，处理结束后返回一个页面。
 
   ::
- 
+
     class CheckController(BaseController):
         ...
         def submit(self):
@@ -924,26 +926,29 @@ Pylons缺省使用mako格式的模板。mako文件相当于ASP,PHP,JSP, 不过�
             # 调用并返回填充后的视图模板
             return render('/check/index.mako')
 
-  
+
 用AJAX取代传统的form提交
 --------------------------
 为什么用AJAX？
-        
+
 使用AJAX，用户对Web的体验会更“敏捷”：数据提交页面不会闪屏；页面局部更新速度快；网络带宽占用低。
-        
+
 AJAX开发相较传统模式的简单之处：
-        
+
 * 传统模式下，表单提交则整个页面重绘，为了维持页面用户对表单的状态改变，要多些不少代码。
 * 要在控制器和模板之间传递更多参数以保持页面状态。而AJAX不然，因为页面只是局部更新，
 * 不关心也不会影响页面其他部分的内容。
-        
+
 AJAX开发相较传统模式的难度：
 
-* 需要了解、精通JavaScript，而JavaScript存在调试麻烦、浏览器兼容性等很多障碍。
-    
+* 需要了解、精通JavaScript，而JavaScript存在调试麻烦、浏览器兼容性等诸多障碍。
+* 不过有了 Firebug 和 Firefox 的组合，JavaScript 调试起来也不难。
+
 启用Prototype的JavaScript框架
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Prototype是一个JavaScript框架，可以更加容易的使用AJAX实现动态Web。Pylons内置了prototype脚本。如果想要启用Pylons自带prototype 的JavaScript框架，只要在模板中嵌入如下WebHelpers语句： 
+Prototype是一个JavaScript框架，可以更加容易的使用AJAX实现动态Web。Pylons 老版本内置了prototype脚本。新版本 Pylons 则需要自己下载 prototype 脚本，复制到 public/javascript 目录中。
+
+在 Pylons 老版本中，如果想要引用 JavaScript 目录下所有脚本包括 prototype，只要在模板中嵌入一条语句：
 
   ::
 
@@ -951,82 +956,102 @@ Prototype是一个JavaScript框架，可以更加容易的使用AJAX实现动态
       <head>
         ${h.javascript_include_tag(builtins=True)}
 
-实际上会在页面中产生下面两个JavaScrip包含语句：
+语句 h.javascript_include_tag 会根据当前 javascript 目录下的脚本数量，生成类似下面的 JavaScrip 包含语句：
 
   ::
 
-    <script src="/javascripts/prototype.js" type="text/javascript"></script> 
+    <script src="/javascripts/prototype.js" type="text/javascript"></script>
     <script src="/javascripts/scriptaculous.js" type="text/javascript"></script>
-                  
-  
-最新版本的 Pylons 使用的 WebHelpers，不建议使用 webhelpers.rails，甚至在未来版本去掉 webhelpers.rails。也不再自动 import webhelpers.rails。对于要用到的 webhelpers 方法， 需要显示的声明。参见文件 lib/helpers.py。
-        
-  ::        
 
-    from routes import url_for, redirect_to
-    from webhelpers.html import escape, HTML, literal, url_escape
-    from webhelpers.html.tags import *
-    from webhelpers.rails.prototype import link_to_remote, form_remote_tag
-    from webhelpers.rails.scriptaculous import visual_effect
+而 javascript_include_tag 在 lib/helper.py 是用如下方式引入的：
+
+  ::
+
     from webhelpers.rails.asset_tag import javascript_include_tag, stylesheet_link_tag
 
 
-相关的 prototype 和 scriptaculous JavaScript 脚本，在新版的 Pylons 中也不提供，需要从相关站点下载，复制到 public/javascripts/ 目录下。
+但是最新版本的 WebHelpers，不建议使用 webhelpers.rails，甚至在最新的 1.0 版本完全的去掉了 webhelpers.rails。那么只有老老实实的在模板文件中逐一引入 JavaScript 脚本。
 
-建议逐步将 webhelpers.rails 调用替换。
-       
-       
+  ::
+
+    ${h.javascript_link(h.url('/javascripts/prototype.js'))}
+    ${h.javascript_link(h.url('/javascripts/scriptaculous.js'))}
+
+BTW, 真是不明白，向 rails 致敬有什么不好。
+
 改造CGI（controller）
 ~~~~~~~~~~~~~~~~~~~~~
-改造之后的CGI（controller的action）不再返回整个页面，而是返回局部的需要动态更新的内容，或者是返回一段数据供页面中的 JavaScript解析使用。
-      
-需要把原来返回一个整个页面的CGI(一个controller的一个方法)改造成多个CGI（多个方法）以针对不同情况返回不同的动态内容。
-      
+改造之后的CGI（controller的action）不再刷新整个页面，Ajax 调用到的 CGI 则只是返回局部的需要动态更新的内容，或者是返回一段数据供页面中的 JavaScript 解析使用。
+
+改造 CGI，就是要把原来返回一个整个页面的CGI(一个controller的一个方法)改造成多个CGI（多个方法）以针对不同情况返回不同的动态内容。
+
 例如：pySvnManager的check控制器的submit方法实际上要处理两种情况：
 
-* 一个是当选定一个版本库时要更新页面中的路径列表项（因为不同的版本库定义了不同的授权路径），
-* 另外一个是按下“检查权限”按钮要进行的表单提交，显示用户授权信息。
+* 一个是当在版本库下拉列表中选定一个版本库时，要更新页面中的路径列表项。因为不同的版本库定义了不同的授权路径
 
-将check控制器的submit方法改造为AJAX实现，就需要一分为二。
-      
-    
+* 另外一个是按下“检查权限”按钮不是简单的表单提交，而是动态的将获取的用户授权信息显示在页面相应区域中
+
+即将 check 控制器的submit方法改造为AJAX实现，就需要一分为二。
+
+
 页面模板充分利用DOM 和JavaScript
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 页面要动态更新的内容封装在一个DOM容器中；
 
 页面提交修改为执行一个JavaScript函数，该函数调用Ajax.Updater或者Ajax.Request函数；
-    
+
 改造示例一：用Ajax.Updater直接进行区域更新
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 当点击权限检查（④）按钮，原来的实现是直接进行表单的提交，修改之后为执行一段JavaScript代码。
-      
-文件 check/index.mako 中用WebHelpers.rails的form_remote_tag 快速创建了一个Ajax Form。
+
+文件 check/index.mako 中的表单元素，要换成一个 Ajax 风格的 Form 元素
+
+* 老版本的 Pylons 可以使用类似 rails 的方式快速创建 Ajax Form
+
+  即用 WebHelpers.rails 的form_remote_tag 方法：
 
   ::
-        
+
     ## AJAX Form
     <%
-      context.write( 
+      context.write(
           h.form_remote_tag(
-              html={'id':'main_form'}, 
-              url=h.url(action='access_map'), 
-              update=dict(success="acl_msg", failure="acl_error"), 
+              html={'id':'main_form'},
+              url=h.url(action='access_map'),
+              update=dict(success="acl_msg", failure="acl_error"),
               method='post', before='showNoticesPopup()',
               complete='hideNoticesPopup();'+h.visual_effect("Highlight", "acl_msg", duration=1),
           )
       )
     %>
 
-出现在页面中，则是如下的代码：
+* 新版本的 Pylons，更准确的说是 Webhelpers 因为去掉了 rails 模组，只能手工写 Form 表单了：
 
   ::
 
-    <form action="/check/access_map" id="main_form" method="POST" onsubmit="showNoticesPopup(); 
-          new Ajax.Updater({success:'acl_msg', failure:'acl_error'}, '/check/access_map', 
-            {asynchronous:true, evalScripts:true, method:'post', onComplete:function(request) 
-              {hideNoticesPopup(); new Effect.Highlight(&quot;acl_msg&quot;,{duration:1}); }, 
-              parameters:Form.serialize(this)}); 
-          return false;">
+    <form action="${h.url(controller='check', action='access_map')}"
+      id="main_form" method="POST"
+      onsubmit="showNoticesPopup();
+                new Ajax.Updater({success:'acl_msg',failure:'message'},
+                                 '${h.url(controller='check', action='access_map')}',
+                                 {asynchronous:true, evalScripts:true, method:'post',
+                                  onComplete:function(request){hideNoticesPopup();new Effect.Highlight('acl_msg',{duration:1});},
+                                  parameters:Form.serialize(this)});
+                return false;">
+
+最终显示在页面中的 Ajax Form 表单如下：
+
+  ::
+
+    <form action="/svnadmin/check/access_map"
+      id="main_form" method="POST"
+      onsubmit="showNoticesPopup(); 
+                new Ajax.Updater({success:'acl_msg',failure:'message'},
+                                 '/svnadmin/check/access_map',
+                                 {asynchronous:true, evalScripts:true, method:'post',
+                                  onComplete:function(request){hideNoticesPopup();new Effect.Highlight('acl_msg',{duration:1});},
+                                  parameters:Form.serialize(this)});
+                return false;">
 
 
 说明
@@ -1043,10 +1068,10 @@ Prototype是一个JavaScript框架，可以更加容易的使用AJAX实现动态
 改造示例二：用Ajax.Request获取并处理数据
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 当从版本库下拉框(②)选择时，将触发更新授权路径的列表(③)。原来的实现是提交整个表单并刷新整个页面，用AJAX改造后，只更新授权路径的列表(③)部分。
-      
+
 虽然也可以用Ajax.Updater来更新整个授权路径列表，但为了演示另外一种Ajax处理方式，以及获得更少的带宽占用和更快的响应，使用Ajax.Request来实现。
-      
-版本库下拉框(②)更新时，执行JavaScript函数：update_path()，而非提交表单： 
+
+版本库下拉框(②)更新时，执行JavaScript函数：update_path()，而非提交表单：
 
   ::
 
@@ -1054,7 +1079,7 @@ Prototype是一个JavaScript框架，可以更加容易的使用AJAX实现动态
 
 
 函数update_path()，执行Ajax.Request，从"get_auth_path"这个action获取信息， 并用返回值(request.reponseText)为参数调用JavaScript函数ajax_update_path。
-      
+
 
   ::
 
@@ -1069,45 +1094,44 @@ Prototype是一个JavaScript框架，可以更加容易的使用AJAX实现动态
         var params = {repos:repos};
         showNoticesPopup();
         new Ajax.Request(
-            '${h.url_for(controller="check", action="get_auth_path")}', 
-            {asynchronous:true, evalScripts:true, method:'post',
-                onComplete:
-                    function(request) 
-                    { hideNoticesPopup();
-                      ajax_update_path(request.responseText);},
-                parameters:params
-            });
+        '${h.url(controller="check", action="get_auth_path")}',
+        {asynchronous:true, evalScripts:true, method:'post',
+          onComplete:
+            function(request)
+              {hideNoticesPopup();ajax_update_path(request.responseText);},
+          parameters:params
+        });
     }
 
 函数ajax_update_path()，解析参数code，更新授权路径的下拉列表框。本例非常简单，直接将参数(code)当作JavaScript代码并执行(eval函数)，这是因为Ajax.Request获取到的内容是字符串格式的JavaScript代码。最终这些JavaScript代码在函数ajax_update_path中被执行，并用相应的数据更新了授权路径的列表(③)。
 
   ::
-      
+
     function ajax_update_path(code)
     {
-        var id = new Array();
-        var name = new Array();
-        var total = 0;
-        
-        pathselector = document.forms[0].pathselector;
-        lastselect = pathselector.value;
-        pathselector.options.length = 0;
-        
-        try {
-            eval(code);
-            for (var i=0; i < total; i++)
-                {
-                    pathselector.options[i] = new Option(name[i], id[i]);
-                    if (id[i]==lastselect)
-                    pathselector.options[i].selected = true;
-                }
+      var id = new Array();
+      var name = new Array();
+      var total = 0;
+
+      pathselector = document.forms[0].pathselector;
+      lastselect = pathselector.value;
+      pathselector.options.length = 0;
+
+      try {
+        eval(code);
+        for (var i=0; i < total; i++)
+        {
+          pathselector.options[i] = new Option(name[i], id[i]);
+          if (id[i]==lastselect)
+            pathselector.options[i].selected = true;
         }
-        catch(exception) {
+      }
+      catch(exception) {
           alert(exception);
-        }
+      }
     }
-        
-    
+
+
 控制器的单元测试
 -----------------
 每一个控制器，在tests/functional 目录下都一个对应的单元测试文件。Pylons的单元测试是使用 paste.fixture 来模拟浏览器对Web服务器的访问，通过对返回结果的检查实现测试。
@@ -1117,9 +1141,9 @@ Prototype是一个JavaScript框架，可以更加容易的使用AJAX实现动态
 配置nosetests
 ~~~~~~~~~~~~~~
 在setup.cfg文件中，对nosetests进行设置。可以设置采用不同的pylons配置文件。
-      
+
   ::
-      
+
     [nosetests]
     verbose=True
     verbosity=2
@@ -1131,47 +1155,47 @@ Prototype是一个JavaScript框架，可以更加容易的使用AJAX实现动态
 ~~~~~~~~~~~
 ::
 
-  res = self.app.get(url_for(controller='check')) 
-  assert res.status == 200 
-  assert '''<input type="submit" name="submit" value='Check Permissions'>''' in res.body 
-  assert res.c.reposlist == ['/', u'repos1', u'repos2', u'repos3', u'document']
+  res = self.app.get(url(controller='check', action='index'))
+  assert res.status == "200 OK", res.status
+  assert '''<input type="submit" name="submit" value='Check Permissions'>''' in res.body, res.body
+  assert res.tmpl_context.reposlist == ['/', u'repos1', u'repos2', u'repos3', u'document']
 
 测试示例二
 ~~~~~~~~~~~
 
 ::
-  
+
   params = {
-           'userinput':'select', 
+           'userinput':'select',
            'userselector':'user1',
-           'reposinput':'select', 
+           'reposinput':'select',
            'reposselector':'repos1',
            'pathinput':'manual',
            'pathname':'/trunk/src/test',
            'abbr':'True',
            }
   res = self.app.get(url_for(controller='check', action='access_map'), params)
-  assert res.status == 200
+  assert res.status == "200 OK", res.status
   assert '''<div id='acl_path_msg'>[repos1:/trunk/src/test] user1 =</div>''' in res.body, res.body
 
 实现其他的控制器
 ----------------
-Check控制器完成之后，进而对role和authz控制器进行开发，分别实现角色控制和授权管理的功能。在开发新的控制器过程中，我们还依然采取：模板(视图)设计，控制器设计，单元测试的流程。 
+Check控制器完成之后，进而对role和authz控制器进行开发，分别实现角色控制和授权管理的功能。在开发新的控制器过程中，我们还依然采取：模板(视图)设计，控制器设计，单元测试的流程。
 
 当完成所有的三个控制器之后，会发现似乎少了些什么？难道要任何人都可以查看 SVN 版本库的授权甚至修改版本库授权么？我们需要为 pySvnManager 增加认证和授权管理。
-  
+
 
 pySvnManager 本身的认证和授权
 ===============================
 pySvnManager 作为 Subversion 授权管理的软件，如果本身没有认证和授权机制，就会成为系统最大的漏洞。为此我们迫切需要为我们的应用增加认证和授权。还好，这实现起来并不是很困难。
-  
+
 
 为 BaseController 增加 __before__ 方法
 ---------------------------------------
 __before__ 是 WSGIController 特有的方法，在 Action 执行之前执行，可以用于初始化变量，以及做权限控制。
-    
+
 BaseController 是所有控制器的基类，在该基类增加授权功能，会自动为其他控制器所使用。BaseController 的代码在文件 lib/base.py 中。
-    
+
   ::
 
     class BaseController(WSGIController):
@@ -1187,17 +1211,16 @@ BaseController 是所有控制器的基类，在该基类增加授权功能，�
                 if 'user' not in session:
                     session['path_before_login'] = request.path_info
                     session.save()
-                    return redirect_to(h.url_for(controller='security'))
-
+                    return redirect(url('login'))
 
 从 BaseController 继承的类，可以设置 requires_auth 来增加授权。requires_auth 可以为 True 或者是一个包含要进行授权的动作列表。如果需要授权，会检查 session 中是否包含登录信息否则跳转到登录页面（security控制器）。
-    
- 
+
+
 为控制器中增加授权
 --------------------
 在需要增加授权的控制器中增加requires_auth的属性。
-    
-  ::     
+
+  ::
 
     class CheckController(BaseController):
         requires_auth = True
@@ -1205,70 +1228,77 @@ BaseController 是所有控制器的基类，在该基类增加授权功能，�
 Security 控制器实现
 -------------------
 Security控制器用于实现用户的登录和退出。要为Security控制器增加 login 和 logout方法，并且增加登录视图模板。流程见：
-    
+
   .. figure:: images/security_controller.png
    :scale: 100
-      
+
    控制器check的MVC框架示意图
-    
-    
+
+
 具体实现参见代码。
-    
+
 pySvnManager 授权
 ------------------
 在 SvnAuthz 类的实现中，在 svnauthz 文件中为版本库增加了管理员设置，来进行管理员的身份验证。我们就利用同样的代码对 pySvnManager 进行授权验证。
-    
+
 具体实现参见代码。
-    
+
 
 添加认证后的单元测试
 ---------------------
 添加授权后，执行nosetests，会发现控制器的单元测试报错。因为没有经过授权所有页面的输出都是“尚未授权”。实际上，只要在每一个测试用例运行之前，访问 security控制器的login方法，以实现登录，设置正确的session，则后续访问会自动带上cookie，得到正确的授权页面。
-    
+
 在控制器的测试用例基类TestController中加上login方法，以简化登录调用：
 
-  ::    
+  ::
 
     class TestController(TestCase):
         ...
         def login(self, username, password=""):
-            res = self.app.get(url_for(controller='security'))
-            form = res.forms[0]
-            form['username'] = username
+           
             if not password:
+                wsgiapp = pylons.test.pylonsapp
+                config = wsgiapp.config
                 d = eval(config.get('test_users', {}))
                 password = d.get(username,'')
-            form['password'] = password
-            form.submit()
+
+            self.app.post(url(controller='security', action='submit'), params={'username': username, 'password': password})
+
 
 在测试用例中调用login方法：
-    
+
   ::
 
+    # Test redirect to login pange
+    res = self.app.get(url(controller='check', action='index'))
+    assert res.status == "302 Found", res.status
+    assert res.location.endswith('/login'), res.location
+
+    # Login as superuser
     self.login('root')
-    res = self.app.get(url_for(controller='check')) 
-    assert res.status == 200 
-    assert '''<input type="submit" name="submit" value='Check Permissions'>''' in res.body 
-    assert res.c.reposlist == ['/', u'repos1', u'repos2', u'repos3', u'document']
+    res = self.app.get(url(controller='check', action='index'))
+    assert res.status == "200 OK", res.status
+    assert '''<input type="submit" name="submit" value='Check Permissions'>''' in res.body, res.body
+    assert res.tmpl_context.reposlist == [u'/', u'document', u'project1', u'project2', u'repos1', u'repos2', u'repos3'], res.tmpl_context.reposlist
 
 
 配置文件
 ========
 为了我们的程序更灵活，就要允许用户对某些设置进行定制，这就是我们这里要探讨的配置文件。
-  
-  
+
+
 Pylons的ini配置文件
 --------------------
 在前面我们提到TestController中加入login方法，实现测试用例中的模拟登录。其中代码中出现了 "config.get()"，这是什么呢？
 
   ::
-    
+
     if not password:
         d = eval(config.get('test_users', {}))
         password = d.get(username,'')
-    
-其实，config是Pylons读取ini文件创建的数据结构。在test.ini（用于单元测试的Pylons配置）中，包含test_users的配置，为单元测试的用户登录帐号提供默认口令：
-    
+
+其实，config是Pylons读取ini文件创建的数据结构。在test.ini（用于单元测试的 Pylons 配置）中，包含test_users的配置，为单元测试的用户登录帐号提供默认口令：
+
   ::
 
     [app:main]
@@ -1276,17 +1306,17 @@ Pylons的ini配置文件
     # Login test: user account and password
     test_users = {'root':'guess', 'jiangxin':'guess', 'nobody':'guess'}
     ...
-    
+
 注：test.ini的[app:main]小节和[server:main]小节中的设置，代码中可以通过config.get()获取到。
-    
- 
+
+
 localconfig.py
 ---------------
 Pylons的ini配置文件固然可以囊括程序中的所有可配置信息，但是还是觉得将配置文件写入一个Python文件直接import来得简单。这就是为什么我们程序中还出现了 localconfig.py 配置文件。
-    
+
 localconfig.py 包含从 DefaultConfig 派生的类，用户的修改保存在 localconfig.py 中。
 
-  ::    
+  ::
 
     # -*- coding: utf-8 -*-
 
@@ -1302,12 +1332,12 @@ localconfig.py 包含从 DefaultConfig 派生的类，用户的修改保存在 l
 国际化
 ======
 要将软件开源，就需要它能说多种语言。让程序支持多语种，Pylons实现非常简单，用Python的gettext模组实现国际化。
-  
+
 使用_()改写字符串输出
 ---------------------
 函数_()实际上是gettext模组的 ugettext方法别名。将程序中出现的字符串输出改为_()调用。例如，在模板文件中：
 
-  ::    
+  ::
 
     <tr>
         <th>Account</th>
@@ -1318,7 +1348,7 @@ localconfig.py 包含从 DefaultConfig 派生的类，用户的修改保存在 l
 修改为
 
   ::
-    
+
     <tr>
         <th>${_("Account")}</th>
         <th>${_("Repository")}</th>
@@ -1326,24 +1356,24 @@ localconfig.py 包含从 DefaultConfig 派生的类，用户的修改保存在 l
     </tr>
 
 控制器代码中：
-    
+
   ::
 
     def get_auth_path(self, repos=None, type=None, path=None):
         ..
         msg += 'id[0]="%s";' % '...'
         msg += 'name[0]="%s";\n' % "Please choose..."
-    
+
 修改为：
 
   ::
-    
+
     def get_auth_path(self, repos=None, type=None, path=None):
         ..
         msg += 'id[0]="%s";' % '...'
         msg += 'name[0]="%s";\n' % _("Please choose...")
 
-  
+
 自动语种选择
 ------------
 根据浏览器喜好自动选择缺省语种。
@@ -1364,10 +1394,10 @@ localconfig.py 包含从 DefaultConfig 派生的类，用户的修改保存在 l
 本地化翻译
 -----------
 本地化翻译相关命令
-      
+
  +-------------------------------------------+-----------------------------------------+
  |  任务                                     | 命令                                    |
- +===========================================+=========================================+         
+ +===========================================+=========================================+
  | 提取待翻译字符串，保存为模板文件(\*.pot)  | $ python setup.py extract_messages      |
  +-------------------------------------------+-----------------------------------------+
  | 根据模板文件，创建本地语种文件(\*.po)     | $ python setup.py init_catalog -l zh_CN |
@@ -1387,7 +1417,7 @@ localconfig.py 包含从 DefaultConfig 派生的类，用户的修改保存在 l
 软件集成
 =========
 Pylons框架开发出来的Web应用，一般是编译成egg包发布。Egg包就像是Java世界里的Jar包。Egg包的编译和管理用到了 Python Enterprise Application Kit（PEAK）的setuptools。setuptools可以视为更好的distutils。
-  
+
 设置 INI 文件模板
 ------------------
 当Pylons应用的Egg包安装以后，就可以进行部署了。部署第一步是在部署目录中创建一个INI文件：
@@ -1401,14 +1431,14 @@ Pylons框架开发出来的Web应用，一般是编译成egg包发布。Egg包�
 
 文件 config.ini从何而来？
 
-代码树中的文件： pySvnManager.egg-info/paste_deploy_config.ini_tmpl 就是作为创建新的应用的模板。定制该文件，使其包含pySvnManager应用特有的配置选项。
-    
-  
+代码树中的文件： pysvnmanager/config/deployment.ini_tmpl 就是作为创建新的应用的配置文件模板。定制该文件，使其包含pySvnManager应用特有的配置选项。
+
+
 应用部署的定制
 ---------------
 当在部署目录中创建INI文件后，还要执行setup-app命令，以完成应用的部署。
-    
- ::    
+
+ ::
 
     ~/deploy$ paster setup-app config.ini
     Running setup_config() from pysvnmanager.websetup
@@ -1424,69 +1454,86 @@ Pylons框架开发出来的Web应用，一般是编译成egg包发布。Egg包�
 
 执行setup-app命令创建的config目录以及文件是从何而来？
 
-实际上setup-app命令会执行pySvnManager中的websetup.py文件相应的方法。我们对websetup.py的setup_config方法进行设置，用以初始化应用（拷贝三个配置文件到config目录）。示例如下：
-    
+实际上 setup-app 命令会调用 pysvnmanager 目录下的 websetup.py 文件相应的方法。我们对 websetup.py 的 setup_config 方法进行定制，在初始化应用时，完成 pySvnManager 特有的配置文件创建工作：
+
   ::
 
-    def setup_config(command, filename, section, vars):
+    def setup_app(command, conf, vars):
         """Place any commands to setup pysvnmanager here"""
-        conf = appconfig('config:' + filename)
-        load_environment(conf.global_conf, conf.local_conf)
+        # Don't reload the app if it was loaded under the testing environment
+        if not pylons.test.pylonsapp:
+            load_environment(conf.global_conf, conf.local_conf)
+        else:
+            # Hack pylons: config['here'] is used in many places, so setup here.
+            from pylons import config
+            wsgiapp = pylons.test.pylonsapp
+            config['here'] = wsgiapp.config.get('here')
 
-        here = config['here']
+        here = conf['here']
 
         if not os.path.exists(here+'/config'):
             os.mkdir(here+'/config')
-        for f in ['svn.access', 'svn.passwd', 'localconfig.py']:
+        if not os.path.exists(here+'/config/RCS'):
+            os.mkdir(here+'/config/RCS')
+        if not os.path.exists(here+'/svnroot'):
+            os.mkdir(here+'/svnroot')
+        filelist = ['svn.access', 'svn.passwd', 'localconfig.py']
+        for f in filelist:
             src  = resource_filename('pysvnmanager', 'config/' + f+'.in')
             dest = here+'/config/' + f
             if os.path.exists(dest):
                 log.warning("Warning: %s already exist, ignored." % f)
             else:
                 copyfile(src, dest)
-    
-    
+
+
 编辑版本号等信息
 -----------------
 版本号等信息保存于文件setup.py。
 
-  ::      
+  ::
 
     setup(
         name='pySvnManager',
-        version="0.1.2",
+        version="0.4.1",
         description='SVN authz web management tools.',
         author='Jiang Xin',
         author_email='jiangxin@ossxp.com',
         url='https://sourceforge.net/projects/pysvnmanager',
 
-如果代码是保存在SVN中，编译时，还会将SVN的全局版本号作为软件的 Build 号添加在版本号的后面。
-    
-  
+若是代码采用了 Subversion 做版本控制，还有一个附加的好处。就是在编译时，自动构建版本号，即：将SVN的全局版本号作为软件的 Build 号添加在版本号的后面。
+
+如果代码采用 Subversion，但是使用 git-svn 做客户端，您需要对 setuptools 做一下小小的改造，参见博客：
+
+   `Python setuptools hack: get revision from git-svn`__
+
+.. __: http://blog.ossxp.com/2010/06/1295/
+
 编译
 ====
 创建源码包
 ----------
-执行如下命令：    
+执行如下命令：
 
   ::
-    
+
     $ python setup.py sdist
     ...
     $ ls dist/
-    pySvnManager-0.1.2dev-r14.tar.gz
+    pySvnManager-0.4.1dev-r143.tar.gz
 
+其中的 *r143* ，是根据当前代码在版本控制系统对应的版本号自动生成。
 
 创建二进制包
 ------------
-执行如下命令：    
+执行如下命令：
 
   ::
-    
+
     $ python setup.py bdist_egg
     ...
     $ ls dist/
-    pySvnManager-0.1.2dev_r14-py2.5.egg
+    pySvnManager-0.4.1dev_r143-py2.5.egg
 
 
 开源项目提交
@@ -1515,7 +1562,7 @@ pySvnManager项目首页
 
 Pylons Wiki
     http://wiki.pylonshq.com/
-      
+
 Pylons 文档
     http://docs.pylonshq.com/index.html
 
@@ -1530,8 +1577,4 @@ Scriptaculous JavaScript特效
 
 Setuptools
     http://peak.telecommunity.com/DevCenter/setuptools
-      
-    
-  
-  
 
