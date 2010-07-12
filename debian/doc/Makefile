@@ -13,7 +13,7 @@ DEVEL_DOC_DATE=$(shell date -d "$(DEVEL_DOC_DATESTRING)" +"%Y-%m-%d %H:%M:%S")
 all: build
 
 build:
-	(cd user-guide  && DOC_REV="$(USER_DOC_REV)"  DOC_DATE="$(USER_DOC_DATE)"  RUBYOPT=rubygems rake html pdf)
-	(cd devel-guide && DOC_REV="$(DEVEL_DOC_REV)" DOC_DATE="$(DEVEL_DOC_DATE)" RUBYOPT=rubygems rake html pdf)
+	(cd user-guide && DOC_REV="$(USER_DOC_REV)"  DOC_DATE="$(USER_DOC_DATE)"  RUBYOPT=rubygems rake html pdf)
+	(cd dev-guide  && DOC_REV="$(DEVEL_DOC_REV)" DOC_DATE="$(DEVEL_DOC_DATE)" RUBYOPT=rubygems rake html pdf)
 
 # vim: noet ts=4 sw=4
