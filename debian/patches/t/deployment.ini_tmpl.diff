@@ -43,4 +43,4 @@ index cf185d2..dcbec1a 100644
  # Logging configuration
  [loggers]
 -- 
-tg: (331e65a..) t/deployment.ini_tmpl (depends on: master)
+tg: (0da273c..) t/deployment.ini_tmpl (depends on: master)

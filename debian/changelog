@@ -1,3 +1,9 @@
+pysvnmanager (0.4.1r144-43) unstable; urgency=low
+
+  * Update shebang line of script: sh => bash.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Mon, 12 Jul 2010 15:08:27 +0800
+
 pysvnmanager (0.4.1r143-43) unstable; urgency=low
 
   * If authz file modified external, add a save link to warning message.
