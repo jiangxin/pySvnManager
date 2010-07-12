@@ -1,10 +1,4 @@
-pysvnmanager (1:1) unstable; urgency=low
-
-  * Split into two packages, and this is a meta package.
-
- -- Jiang Xin <worldhello.net@gmail.com>  Mon, 12 Jul 2010 14:57:12 +0800
-
-pysvnmanager (0.4-5) unstable; urgency=low
+pysvnmanager (0.4-5+) unstable; urgency=low
 
   * Add dev-guilde.
 

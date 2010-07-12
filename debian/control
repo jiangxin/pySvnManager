@@ -19,5 +19,18 @@ Description: subversion administration web interface based on pylons.
 
 Package: pysvnmanager-doc
 Architecture: all
-Description: documents for pySvnManager.
+Depends: pysvnmanager-doc-user, pysvnmanager-doc-devel
+Description: Meta package for pySvnManager documents.
+ pySvnManager is a subversion web interface based on pylons.
+
+Package: pysvnmanager-doc-user
+Architecture: all
+Conflicts: pysvnmanager-doc (<= 1:0)
+Description: pySvnManager document for users and admins.
+ pySvnManager is a subversion web interface based on pylons.
+
+Package: pysvnmanager-doc-devel
+Architecture: all
+Conflicts: pysvnmanager-doc (<= 1:0)
+Description: pySvnManager document for developers.
  pySvnManager is a subversion web interface based on pylons.

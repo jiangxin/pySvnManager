@@ -6,7 +6,7 @@ pySvnManager 用户手册
 :网址: http://www.ossxp.com/
 :版本: |doc_rev|
 :日期: |doc_date|
-:版权信息: Creative Commons
+:版权信息: |Creative Commons|_
 
 .. contents:: 目录
 .. sectnum::
@@ -15,6 +15,9 @@ pySvnManager 用户手册
 .. |date| date:: %Y-%m-%d %H:%M
 .. |doc_rev| replace:: ENV(DOC_REV)
 .. |doc_date| replace:: ENV(DOC_DATE)
+.. |Creative Commons| image:: images/cc-icon.png
+                              :scale: 100
+.. _Creative Commons: http://creativecommons.org/licenses/by-sa/3.0/
 
 
 pySvnManager 是群英汇开发的一个 Subversion 的管理后台，是用 Python
