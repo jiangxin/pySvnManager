@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # POST-REVPROP-CHANGE HOOK
 #
