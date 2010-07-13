@@ -1,9 +1,10 @@
-pysvnmanager (1:0.4.1r144-47) unstable; urgency=low
+pysvnmanager (1:0.4.1r144-48) unstable; urgency=low
 
   * Now pysvnmanager is a meta package.
   * Add virtualenv initial script.
   * Not start service if instance not initialized.
   * Install docutils in virtualenv.
+  * If run as virtualenv, paster is in virtualenv.
 
  -- Jiang Xin <worldhello.net@gmail.com>  Tue, 13 Jul 2010 10:54:01 +0800
 

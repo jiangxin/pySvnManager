@@ -22,6 +22,7 @@ INI_FILE=production.ini
 
 # path to paster bin
 DAEMON=/usr/bin/paster
+[ ! -x $DAEMON ] && DAEMON=`which paster || echo where_is_paster`
 
 # log file name
 LOG_FILE=/opt/pysvnmanager/log/pysvnmanager.log
@@ -48,6 +49,7 @@ test -x $DAEMON || exit 0
 VIRTUALENV=/opt/pysvnmanager/virtualenv/bin/activate
 if [ -f $VIRTUALENV ]; then
   . $VIRTUALENV
+  DAEMON=`which paster || echo where_is_paster`
 fi
 
 set -e
