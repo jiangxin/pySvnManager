@@ -13,6 +13,10 @@ if [ $# -ne 1 ]; then
 fi
 
 SITE=$1
+if [ ! ${SITE#-} = ${SITE} ]; then
+    usage
+fi
+
 if paster -h >/dev/null 2>&1; then
     if [ ! -d $ROOTDIR/$SITE ]; then
         echo "Create site $ROOTDIR/$SITE ..."
