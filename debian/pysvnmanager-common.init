@@ -17,6 +17,9 @@
 # path to app
 APP_PATH=/opt/pysvnmanager/default
 
+# path to app
+INI_FILE=production.ini
+
 # path to paster bin
 DAEMON=/usr/bin/paster
 
@@ -26,8 +29,8 @@ LOG_FILE=/opt/pysvnmanager/log/pysvnmanager.log
 PID_FILE=$APP_PATH/run/paster.pid
 
 # startup args
-#DAEMON_OPTS=" serve --monitor-restart --log-file $LOG_FILE production.ini"
-DAEMON_OPTS=" serve --log-file $LOG_FILE production.ini"
+#DAEMON_OPTS=" serve --monitor-restart --log-file $LOG_FILE $INI_FILE"
+DAEMON_OPTS=" serve --log-file $LOG_FILE $INI_FILE"
 
 # script name
 NAME=pysvnmanager
@@ -48,6 +51,11 @@ if [ -f $VIRTUALENV ]; then
 fi
 
 set -e
+
+if [ ! -e $APP_PATH/$INI_FILE ]; then
+    echo "App not init in ${APP_PATH}"
+    exit 0
+fi
 
 case "$1" in
   start)

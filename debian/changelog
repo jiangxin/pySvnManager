@@ -1,7 +1,8 @@
-pysvnmanager (1:0.4.1r144-44) unstable; urgency=low
+pysvnmanager (1:0.4.1r144-45) unstable; urgency=low
 
   * now pysvnmanager is a meta package.
   * add virtualenv initial script.
+  * not start service if instance not initialized.
 
  -- Jiang Xin <worldhello.net@gmail.com>  Tue, 13 Jul 2010 10:54:01 +0800
 
