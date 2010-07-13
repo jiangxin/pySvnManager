@@ -1,4 +1,4 @@
-pysvnmanager (1:0.4.1r144-48) unstable; urgency=low
+pysvnmanager (1:0.4.1r144-49) unstable; urgency=low
 
   * Now pysvnmanager is a meta package.
   * Add virtualenv initial script.

@@ -6,11 +6,11 @@ Set prefix filter middleware, and integrate with apache https.
 Signed-off-by: Jiang <jiangxin@ossxp.com>
 
 ---
- pysvnmanager/config/deployment.ini_tmpl |   14 +++++++++-----
- 1 files changed, 9 insertions(+), 5 deletions(-)
+ pysvnmanager/config/deployment.ini_tmpl |   22 +++++++++++++---------
+ 1 files changed, 13 insertions(+), 9 deletions(-)
 
 diff --git a/pysvnmanager/config/deployment.ini_tmpl b/pysvnmanager/config/deployment.ini_tmpl
-index cf185d2..dcbec1a 100644
+index cf185d2..4246c4a 100644
 --- a/pysvnmanager/config/deployment.ini_tmpl
 +++ b/pysvnmanager/config/deployment.ini_tmpl
 @@ -14,7 +14,7 @@ use = egg:Paste#http
@@ -22,22 +22,37 @@ index cf185d2..dcbec1a 100644
  use = egg:pySvnManager
  full_stack = true
  static_files = true
-@@ -52,11 +52,15 @@ authn_file = %(here)s/config/svn.passwd
+@@ -37,10 +37,6 @@ beaker.session.timeout = 3600
+ # execute malicious code after an exception is raised.
+ set debug = false
+ 
+-# If want to serve webapp with a prefix, un-comment this line, and add a
+-# [filter:proxy-prefix] section
+-#filter-with = proxy-prefix
+-
+ # Set unittest to True only for unittest mode. (nosetests)
+ # Warning: if unitest is enabled, i18n for svnauthz module not work any more.
+ #unittest = True
+@@ -52,11 +48,19 @@ authn_file = %(here)s/config/svn.passwd
  authz_file = %(here)s/config/svn.access
  
  # svn repository root path
 -repos_root = %(here)s/svnroot
 +repos_root = /opt/svn/svnroot
- 
--#[filter:proxy-prefix]
--#use = egg:PasteDeploy#prefix
--#prefix = /svnadmin
++
 +[filter:proxy-prefix]
 +use = egg:PasteDeploy#prefix
 +prefix = /svnadmin
 +scheme = https
 +
 +[pipeline:main]
++## Direct connect without proxy
++#pipeline = myapp
+ 
+-#[filter:proxy-prefix]
+-#use = egg:PasteDeploy#prefix
+-#prefix = /svnadmin
++## Serve webapp behind apache2, need this.
 +pipeline = proxy-prefix myapp
  
  # Logging configuration
