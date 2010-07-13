@@ -41,7 +41,7 @@ fi
 
 if [ -z "$2" ] && [ ! -d $SITE ]; then
     if [ -f /opt/pysvnmanager/virtualenv/bin/activate ]; then
-        source /opt/pysvnmanager/virtualenv/bin/activate
+        . /opt/pysvnmanager/virtualenv/bin/activate
     fi
 
     /opt/pysvnmanager/bin/new_instance default || true
