@@ -37,10 +37,6 @@ beaker.session.timeout = 3600
 # execute malicious code after an exception is raised.
 set debug = false
 
-# If want to serve webapp with a prefix, un-comment this line, and add a
-# [filter:proxy-prefix] section
-#filter-with = proxy-prefix
-
 # Set unittest to True only for unittest mode. (nosetests)
 # Warning: if unitest is enabled, i18n for svnauthz module not work any more.
 #unittest = True
@@ -60,6 +56,10 @@ prefix = /svnadmin
 scheme = https
 
 [pipeline:main]
+## Direct connect without proxy
+#pipeline = myapp
+
+## Serve webapp behind apache2, need this.
 pipeline = proxy-prefix myapp
 
 # Logging configuration
