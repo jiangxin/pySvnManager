@@ -1,3 +1,4 @@
 debian/bin/*               opt/pysvnmanager/bin
 debian/conf/etc/*          etc
 debian/package_info/*      opt/ossxp/lib/packages
+debian/virtualenv/Makefile opt/pysvnmanager/virtualenv

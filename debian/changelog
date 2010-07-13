@@ -1,3 +1,10 @@
+pysvnmanager (1:0.4.1r144-44) unstable; urgency=low
+
+  * now pysvnmanager is a meta package.
+  * add virtualenv initial script.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Tue, 13 Jul 2010 10:54:01 +0800
+
 pysvnmanager (0.4.1r144-43) unstable; urgency=low
 
   * Update shebang line of script: sh => bash.

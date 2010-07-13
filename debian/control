@@ -10,12 +10,39 @@ Homepage: http://www.ossxp.com/trac/pysvnmanager
 
 Package: pysvnmanager
 Architecture: all
-Pre-Depends: python-pylons (>= 0.10~rc1-1), python-docutils, python-pybabel | ossxp-python-babel
+Depends: pysvnmanager-common, pysvnmanager-deploy-sys | pysvnmanager-deploy-virt
+Description: Meta package for pySvnManager.
+ pySvnManager is a subversion web interface based on pylons.
+
+Package: pysvnmanager-common
+Architecture: all
 Depends: ${misc:Depends}, ${python:Depends}, ossxp-apache2
 Recommends: python-subversion, python-ldap, pysvnmanager-doc
+Conflicts: pysvnmanager (<= 1:0)
 XB-Python-Version: ${python:Versions}
 Description: subversion administration web interface based on pylons.
  pySvnManager is a subversion web interface based on pylons.
+ This version deployed depends on system's pylons package.
+
+Package: pysvnmanager-deploy-sys
+Architecture: all
+Pre-Depends: python-pylons (>= 0.10~rc1-1), python-docutils, python-pybabel | ossxp-python-babel
+Provides: pysvnmanager-deploy
+Depends: pysvnmanager-common
+XB-Python-Version: ${python:Versions}
+Description: subversion administration web interface based on pylons.
+ pySvnManager is a subversion web interface based on pylons.
+ This version deployed depends on system's pylons package.
+
+Package: pysvnmanager-deploy-virt
+Architecture: all
+Pre-Depends: python-virtualenv, python-setuptools
+Provides: pysvnmanager-deploy
+Depends: pysvnmanager-common
+XB-Python-Version: ${python:Versions}
+Description: subversion administration web interface based on pylons.
+ pySvnManager is a subversion web interface based on pylons.
+ For there is no system-wide pylons >= 0.10, install using easy_install using virualenv.
 
 Package: pysvnmanager-doc
 Architecture: all
