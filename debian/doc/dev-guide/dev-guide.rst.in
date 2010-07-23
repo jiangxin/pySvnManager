@@ -2,7 +2,7 @@
 pySvnManager 开发者手册
 =======================
 
-:作者: 北京群英汇信息技术有限公司
+:作者: `北京群英汇信息技术有限公司 <http://www.ossxp.com/>`_
 :网址: http://www.ossxp.com/
 :版本: |doc_rev|
 :日期: |doc_date|
@@ -10,13 +10,12 @@ pySvnManager 开发者手册
 
 .. contents:: 目录
 .. sectnum::
-.. header:: pySvnManager 开发者手册
-.. footer:: 北京群英汇信息技术有限公司
+.. header:: `pySvnManager 开发者手册 <http://www.ossxp.com/doc/pysvnmanager/dev-guide/dev-guide.html>`_
+.. footer:: 北京群英汇信息技术有限公司_ - http://www.ossxp.com/
 .. |date| date:: %Y-%m-%d %H:%M
 .. |doc_rev| replace:: ENV(DOC_REV)
 .. |doc_date| replace:: ENV(DOC_DATE)
 .. |Creative Commons| image:: images/cc-icon.png
-                              :scale: 100
 .. _Creative Commons: http://creativecommons.org/licenses/by-sa/3.0/
 
 
@@ -829,7 +828,7 @@ MVC中的数据流
 Check页面的布局参见：
 
   .. figure:: images/html_design.png
-   :scale: 80
+   :scale: 90
 
    控制器check的MVC框架示意图
 

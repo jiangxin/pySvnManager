@@ -2,7 +2,7 @@
 pySvnManager 用户手册
 ======================
 
-:作者: 北京群英汇信息技术有限公司
+:作者: `北京群英汇信息技术有限公司 <http://www.ossxp.com/>`_
 :网址: http://www.ossxp.com/
 :版本: |doc_rev|
 :日期: |doc_date|
@@ -10,13 +10,12 @@ pySvnManager 用户手册
 
 .. contents:: 目录
 .. sectnum::
-.. header:: pySvnManager 用户手册
-.. footer:: 北京群英汇信息技术有限公司
+.. header:: `pySvnManager 用户手册 <http://www.ossxp.com/doc/pysvnmanager/user-guide/user-guide.html>`_
+.. footer:: 北京群英汇信息技术有限公司_ - http://www.ossxp.com/
 .. |date| date:: %Y-%m-%d %H:%M
 .. |doc_rev| replace:: ENV(DOC_REV)
 .. |doc_date| replace:: ENV(DOC_DATE)
 .. |Creative Commons| image:: images/cc-icon.png
-                              :scale: 100
 .. _Creative Commons: http://creativecommons.org/licenses/by-sa/3.0/
 
 
@@ -420,24 +419,24 @@ pySvnManager 授权
   对于 Debian 包管理器方式安装，打开浏览器，输入 SVN 虚拟主机下的 /svnadmin 地址，如：https://svn.moon.ossxp.com/svnadmin/ 。对于未与 Apache 整合的实例，直接用浏览器访问服务器的 5000 端口。在弹出的登录窗口中输入管理员用户名和口令。
 
   .. figure:: images/login.png
-   :scale: 60
+   :scale: 75
 
 创建版本库
 ==========
 点击 “版本库管理” 标签，显示版本库管理界面。
 
   .. figure:: images/repos-index.png
-   :scale: 60
+   :scale: 80
 
 再点击页面内的 “添加版本库” 的链接，进入版本库添加界面。如下图：
 
   .. figure:: images/repos-add.png
-   :scale: 60
+   :scale: 80
 
 输入版本名称，点击“创建版本库”，完成版本库创建。
 
   .. figure:: images/repos-added.png
-   :scale: 60
+   :scale: 80
 
 注：对于刚刚创建的版本库（尚未包括任何提交），可以通过界面提供的删除版本库功能，将新创建的空的版本库删除。对于包含数据的版本库，则不能通过 pySvnManager 的界面删除。
 
@@ -446,7 +445,7 @@ pySvnManager 授权
 版本库刚刚建立完毕，管理员需要对新建立的版本库进行设置工作。点击 “版本库管理” 标签，在版本库下拉列表中选择要配置的版本库，显示如下界面。
 
   .. figure:: images/repos-hooks.png
-   :scale: 60
+   :scale: 80
 
 检查SVN客户端版本
 -----------------
@@ -455,12 +454,12 @@ SVN 新版本(1.5之后)，提供了合并追踪功能，如果使用老版本�
 * 在尚未安装的插件列表中选择：“客户端版本检查” 插件，会看到关于该插件的说明：
 
   .. figure:: images/repos-hook-capcheck.png
-   :scale: 60
+   :scale: 80
 
 * 点击“安装此插件”，完成该插件的安装。
 
   .. figure:: images/repos-hook-capcheck-ok.png
-   :scale: 60
+   :scale: 80
 
 SVN 只读镜像
 ------------
@@ -469,7 +468,7 @@ SVN 只读镜像
 该插件的配置界面如下
 
   .. figure:: images/repos-hook-capcheck-ok.png
-   :scale: 60
+   :scale: 80
 
 * 在 Svnsync 管理员输入框中，输入唯一允许提交的用户名
 * 选择启用
@@ -484,7 +483,7 @@ SVN 本身在对文件版本控制时，对文件名大小写敏感，就是说�
 * 在尚未安装的插件列表中选择：“检查大小写引起的文件名冲突” 插件
 
   .. figure:: images/repos-hook-filename.png
-   :scale: 60
+   :scale: 80
 
 * 点击“安装插件”，完成安装
 
@@ -495,7 +494,7 @@ SVN 本身在对文件版本控制时，对文件名大小写敏感，就是说�
 * 在尚未安装的插件列表中选择：“提交说明检查” 插件
 
   .. figure:: images/repos-hook-logcheck.png
-   :scale: 60
+   :scale: 80
 
 * 对插件进行相关配置
 * 点击“安装插件”，完成安装
@@ -507,7 +506,7 @@ SVN 本身在对文件版本控制时，对文件名大小写敏感，就是说�
 * 在尚未安装的插件列表中选择：“文件类型和换行符检查” 插件
 
   .. figure:: images/repos-hook-eolcheck.png
-   :scale: 60
+   :scale: 80
 
 * 当选择严谨模式时，必须为每一个新提交的文本文件设定 svn:eol-style 属性，否则禁止提交
 * 当选择宽松模式时，如果新提交的文本文件本身的换行符就是 Linux 风格换行符，则对该文件忽略 svn:eol-style 检查，因为毕竟强制 svn:eol-style 检查，会让 SVN 新手感到厌烦。
@@ -520,7 +519,7 @@ Mantis 是一款缺陷跟踪软件，本插件用于将版本库提交关联到 
 和 Mantis 整合除了安装本插件外，还要求 Mantis 和 Subversion 部署在同一个服务器中，并且可能需要调整该插件中 Mantis 的安装路径。
 
   .. figure:: images/repos-hook-mantis.png
-   :scale: 60
+   :scale: 80
 
    整合 Mantis 插件的安装界面
 
@@ -532,7 +531,7 @@ Trac 是一款缺陷跟踪软件，本插件用于将版本库提交关联到 Tr
 和 Trac 整合除了安装本插件外，还要求 Trac 和 Subversion 部署在同一个服务器中，并且需要对 Trac 环境进行相关设置。
 
   .. figure:: images/repos-hook-trac.png
-   :scale: 60
+   :scale: 80
 
    整合 Trac 插件的安装界面
 
@@ -543,7 +542,7 @@ Trac 是一款缺陷跟踪软件，本插件用于将版本库提交关联到 Tr
 安装/配置界面如下：
 
   .. figure:: images/repos-hook-email.png
-   :scale: 60
+   :scale: 80
 
 * 邮件通知的配置只有一个输入框用于录入命令行参数
 
@@ -570,14 +569,14 @@ Trac 是一款缺陷跟踪软件，本插件用于将版本库提交关联到 Tr
 安装界面如下：
 
   .. figure:: images/repos-hook-revprop.png
-   :scale: 60
+   :scale: 80
 
 修改和删除版本库插件设置
 -------------------------
 已安装的插件以按照顺序显示在页面中。
 
   .. figure:: images/repos-hook-installed.png
-   :scale: 60
+   :scale: 80
 
 点击已安装插件的标题链接，进入到该插件的配置界面。
 
@@ -605,12 +604,12 @@ Trac 是一款缺陷跟踪软件，本插件用于将版本库提交关联到 Tr
 在“角色管理”页面中，有两个链接分别用于创建“新用户组”和“新别名”。
 
   .. figure:: images/role-index.png
-   :scale: 60
+   :scale: 80
 
 点击“新用户组”，显示创建新用户组界面。
 
   .. figure:: images/role-newgroup.png
-   :scale: 60
+   :scale: 80
 
 * 在 ①  处填写用户组名称（由字母和数字组成）
 * 列表 ②  是该用户组成员列表，如果需要从用户组中删除成员，在该列表中选择成员，然后点击 ⑤ 
@@ -624,7 +623,7 @@ Trac 是一款缺陷跟踪软件，本插件用于将版本库提交关联到 Tr
 在“角色管理”页面的角色下拉框中，选择要编辑的团队名称，进入团队编辑界面，如下：
 
   .. figure:: images/role-editgroup.png
-   :scale: 60
+   :scale: 80
 
 编辑团队成员列表的对话框的使用方法和创建新团队的对话框使用方法相同。
 
@@ -637,12 +636,12 @@ Trac 是一款缺陷跟踪软件，本插件用于将版本库提交关联到 Tr
 在“角色管理”页面中，有两个链接分别用于创建“新用户组”和“新别名”。
 
   .. figure:: images/role-index.png
-   :scale: 60
+   :scale: 80
 
 点击“新别名”，显示创建新别名界面。
 
   .. figure:: images/role-newalias.png
-   :scale: 60
+   :scale: 80
 
 * 在 ①  处填写别名名称（由字母和数字组成）
 * 列表 ②  是备选用户列表，从该列表中选择用户，则新建的别名对应于该用户
@@ -654,7 +653,7 @@ Trac 是一款缺陷跟踪软件，本插件用于将版本库提交关联到 Tr
 在“角色管理”页面的角色下拉框中，选择要编辑的别名名称，进入别名编辑界面，如下：
 
   .. figure:: images/role-editalias.png
-   :scale: 60
+   :scale: 80
 
 编辑别名的对话框的使用方法和创建新别名对话框使用方法相同。
 
@@ -667,7 +666,7 @@ Trac 是一款缺陷跟踪软件，本插件用于将版本库提交关联到 Tr
 权限控制是用于对 Subversion 版本库进行精细授权。点击菜单中的“权限控制”进入权限控制的页面：
 
   .. figure:: images/authz-index.png
-   :scale: 60
+   :scale: 80
 
 在版本库下拉列表，可以看到版本库列表。在实例中的版本列表中包含三类版本库，缺省版本库（/），带 ! 符号标识的版本库，用 ? 符号标识的版本库。
 
@@ -686,7 +685,7 @@ Trac 是一款缺陷跟踪软件，本插件用于将版本库提交关联到 Tr
   "/" 版本库并不和任何具体的物理版本库相对应，而是指代缺省的版本库。该缺省版本库的设置有着特殊的含义
 
   .. figure:: images/authz-default.png
-   :scale: 60
+   :scale: 80
 
   * "/" 版本库的管理员，是超级管理员，能够管理所有的版本库设置，并能够创建新版本库
 
@@ -699,7 +698,7 @@ Trac 是一款缺陷跟踪软件，本插件用于将版本库提交关联到 Tr
 在权限控制的界面的版本列表中选择一个版本库，便进入到版本库授权编辑界面。
 
   .. figure:: images/authz-edit.png
-   :scale: 60
+   :scale: 80
 
 * 在 ①  处填写版本库管理员名称，缺省为空
 
@@ -731,7 +730,7 @@ Trac 是一款缺陷跟踪软件，本插件用于将版本库提交关联到 Tr
 建立新版本库授权的界面如下：
 
   .. figure:: images/authz-new.png
-   :scale: 60
+   :scale: 80
 
 * 输入版本库名称
 * 输入版本库的管理员名称。可以是逗号分隔的多个管理员，以 & 开头的是别名，以 @ 开头的是用户组
@@ -753,19 +752,19 @@ Subversion 的版本库授权模型较为复杂，而且存在路径的递归以
 为了避免错误的授权，本软件还提供权限检查功能。实际上登录后的首页就是权限检查界面。
 
   .. figure:: images/check-index.png
-   :scale: 60
+   :scale: 80
 
 选择角色，选择版本库，选择模组（不选择则检查所有模组），之后点击“权限检查”，会显示检查结果。
 
   .. figure:: images/check-example.png
-   :scale: 60
+   :scale: 80
 
 修改日志
 ========
 Subversion 授权文件的变更历史，可以在“修改日志”中进行查看，还可以比较任何两个版本之间的差异。
 
   .. figure:: images/log-example.png
-   :scale: 60
+   :scale: 80
 
 FAQ
 ====
@@ -784,6 +783,6 @@ pySvnManager 为每次 SVN 授权文件的修订都分配唯一的版本号，�
 当手工完成 SVN 授权文件的修改后，访问 pySvnManager 网站，会在页面中显示警告，如下图。
 
   .. figure:: images/external-edit.png
-   :scale: 60
+   :scale: 80
 
 点击警告信息中的“保存”链接，会重新保存 SVN 授权文件，解决配置文件中可能出现的配置错误、组循环嵌套、角色未定义等等。
