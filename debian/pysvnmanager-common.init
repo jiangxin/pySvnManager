@@ -44,13 +44,13 @@ RUN_AS=www-data
 
 ############### END EDIT ME ##################
 
-test -x $DAEMON || exit 0
-
 VIRTUALENV=/opt/pysvnmanager/virtualenv/bin/activate
 if [ -f $VIRTUALENV ]; then
   . $VIRTUALENV
   DAEMON=`which paster || echo where_is_paster`
 fi
+
+test -x $DAEMON || exit 0
 
 set -e
 
