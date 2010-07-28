@@ -34,7 +34,7 @@ debian/patches:
 	cd debian && git status
 
 clean::
-	rm -f debian/doc/doc-build-stamp
+	make -C debian/doc clean
 
 .PHONY: debian/patches
 # vim: noet sw=4 ts=4
