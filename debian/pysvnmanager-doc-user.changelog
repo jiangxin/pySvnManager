@@ -1,3 +1,9 @@
+pysvnmanager (0.4-6+) unstable; urgency=low
+
+  * New pdf header and footer.
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Fri, 23 Jul 2010 15:34:59 +0800
+
 pysvnmanager (0.4-6) unstable; urgency=low
 
   * Resize image, and generate pdf using hacked rst2pdf.
