@@ -118,15 +118,15 @@ class ReposController(BaseController):
         h = _hooks.Hooks(cfg.repos_root + '/' + reposname)
         msg = ''
         if len(h.applied_plugins) > 0:
-            msg += _("Installed hooks:")
+            msg += "<span class='title'>%s</span>" % _("Installed hooks:")
             msg += "<br>\n"
             num = 0
             
-            msg += "<table class='hidden'>\n"
+            msg += "<table class='list' width='100%'>\n"
             msg += "<tr><th align='left'></th>" + \
-                    "<th align='left'>" + _("Id") + "</th>" + \
+                    "<th align='left' width='20%'>" + _("Id") + "</th>" + \
                     "<th align='left'>" + _("Plugin name") + "</th>" + \
-                    "<th align='left'>" + _("Type") + "</th>" + \
+                    "<th align='left' width='15%'>" + _("Type") + "</th>" + \
                     "</tr>\n"
             for name in h.applied_plugins:
                 msg += "<tr><td width='1' rolspan='2'>"
@@ -137,10 +137,10 @@ class ReposController(BaseController):
                 msg += "<td>" + h.plugins[name].name + "</td>\n"
                 msg += "<td>" + h.plugins[name].get_type() + "</td>\n"
                 msg += "</tr>\n"
-                msg += "<tr><td></td><td colspan='3'>" + h.plugins[name].show_install_info() + "</td></tr>\n"
+                msg += "<tr><td></td><td colspan='3' class='plugin-desc'>" + h.plugins[name].show_install_info() + "</td></tr>\n"
                 num += 1
             msg += "</table>\n"
-            msg += '<input type="submit" name="uninstall_hook" value="%s">\n' % _("Remove selected hooks")
+            msg += '<input type="submit" name="uninstall_hook" value="%s" class="input-button">\n' % _("Remove selected hooks")
 
         return msg
     

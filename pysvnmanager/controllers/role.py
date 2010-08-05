@@ -22,6 +22,7 @@ from pysvnmanager.lib.base import *
 from pysvnmanager.lib.text import to_unicode
 from pysvnmanager.model.svnauthz import *
 from pylons.i18n import _, ungettext, N_
+from pysvnmanager.model.person import sync_users_with_ldap
 
 log = logging.getLogger(__name__)
 
@@ -36,7 +37,7 @@ class RoleController(BaseController):
             # Used as checked in user to rcs file.
             self.authz.login_as = self.login_as
             self.aliaslist  = map(lambda x:x.uname, self.authz.aliaslist)
-            self.userlist = map(lambda x:x.uname, self.authz.userlist)
+            self.userlist = map(lambda x:(x.uname, x.nice_name), self.authz.nice_userlist)
             self.grouplist = map(lambda x:x.uname, self.authz.grouplist)
             self.is_super_user = self.authz.is_super_user(self.login_as)
             self.own_reposlist = self.authz.get_manageable_repos_list(self.login_as)
@@ -56,6 +57,10 @@ class RoleController(BaseController):
         c.userlist = self.userlist
         c.grouplist = self.grouplist
         c.is_super_user = self.is_super_user
+        if cfg.ldap_base:
+            c.ldap_enabled = True
+        else:
+            c.ldap_enabled = False
         return render('/role/index.mako')
     
     def get_role_info(self, role=None):
@@ -99,7 +104,7 @@ class RoleController(BaseController):
                     elif uname[0] == '&':
                         msg += 'name[%d]="%s";\n' % (members_count, _("Alias:")+uname[1:])
                     else:
-                        msg += 'name[%d]="%s";\n' % (members_count, uname)
+                        msg += 'name[%d]="%s";\n' % (members_count, (i.nice_name and "%s (%s)" % (i.uname, i.nice_name)) or i.uname)
                     members_count += 1;
                 msg += 'members_count=%d;\n' % members_count
 
@@ -209,4 +214,16 @@ class RoleController(BaseController):
 
         return msg
 
-        
+
+    def update_users(self):
+        assert self.is_super_user
+
+        add, delete, update = sync_users_with_ldap(cfg)
+
+        message = _(u"Add %(add)d users, delete %(delete)d users, update %(update)d users.") % \
+            { 'add': add, 'delete': delete, 'update': update }
+        return message
+
+ 
+
+# vim: et ts=4 sw=4

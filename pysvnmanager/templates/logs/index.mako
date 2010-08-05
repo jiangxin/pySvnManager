@@ -1,4 +1,5 @@
 ## -*- coding: utf-8 -*-
+## vim: et ts=4 sw=4
 <%inherit file="/base.mako" />
 
 <%def name="head_tags()">
@@ -11,48 +12,48 @@ function paginate(num)
     showNoticesPopup();
     var params = {page:num};
     new Ajax.Updater(
-    	{success:'logs',failure:'logs'}, 
-    	'${h.url(controller="logs", action="paginate")}',
-    	{asynchronous:true, evalScripts:true, method:'post', 
-    		onComplete:
-    			function(request)
-    				{hideNoticesPopup();
-    				new Effect.Highlight("logs",{duration:1});},
-    		parameters:params});
+        {success:'logs',failure:'logs'},
+        '${h.url(controller="logs", action="paginate")}',
+        {asynchronous:true, evalScripts:true, method:'post',
+            onComplete:
+                function(request)
+                    {hideNoticesPopup();
+                    new Effect.Highlight("logs",{duration:1});},
+            parameters:params});
 }
 
 function get_selected_radio(radio)
 {
-	for (var i = 0; i<radio.length; i++)
-	{
-		if (radio[i].checked)
-		{
-			return i;
-		}
-	}
+    for (var i = 0; i<radio.length; i++)
+    {
+        if (radio[i].checked)
+        {
+            return i;
+        }
+    }
 }
 
 function get_selected_radio_value(radio)
 {
-	i = get_selected_radio(radio)
-	return radio[i].value
+    i = get_selected_radio(radio)
+    return radio[i].value
 }
 
 function compare(form)
 {
-	left = get_selected_radio_value(document.main_form.left)
-	right = get_selected_radio_value(document.main_form.right)
-	showNoticesPopup();
+    left = get_selected_radio_value(document.main_form.left)
+    right = get_selected_radio_value(document.main_form.right)
+    showNoticesPopup();
     var params = {left:left, right:right};
-	new Ajax.Updater(
-    	{success:'compare',failure:'compare'}, 
-    	'${h.url(controller="logs", action="compare")}',
-    	{asynchronous:true, evalScripts:true, method:'post', 
-    		onComplete:
-    			function(request)
-    				{hideNoticesPopup();
-    				new Effect.Highlight("compare",{duration:1});},
-    		parameters:params});
+    new Ajax.Updater(
+        {success:'compare',failure:'compare'},
+        '${h.url(controller="logs", action="compare")}',
+        {asynchronous:true, evalScripts:true, method:'post',
+            onComplete:
+                function(request)
+                    {hideNoticesPopup();
+                    new Effect.Highlight("compare",{duration:1});},
+            parameters:params});
 
 }
 </SCRIPT>
@@ -65,7 +66,7 @@ function compare(form)
   context.write(c.display);
 %>
 </div>
-<input type="submit" name="submit" value='${_("Compare revisions")}'>
+<input type="submit" name="submit" value='${_("Compare revisions")}' class="input-button">
 
 <div id="compare"></div>
 

@@ -23,7 +23,7 @@ class TemplateController(BaseController):
 
     def __init__(self):
         ## To prevent redirect loop
-        if g.catch_e:
+        if hasattr(g, "catch_e") and g.catch_e:
             self.catch_e = g.catch_e[:]
             g.catch_e = None
         else:

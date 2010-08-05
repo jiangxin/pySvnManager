@@ -1,4 +1,5 @@
 ## -*- coding: utf-8 -*-
+## vim: et ts=4 sw=4
 <h3>
   ${_("Exception:")}
 </h3>
