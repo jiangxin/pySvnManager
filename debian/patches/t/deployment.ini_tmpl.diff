@@ -10,7 +10,7 @@ Signed-off-by: Jiang <jiangxin@ossxp.com>
  1 files changed, 13 insertions(+), 9 deletions(-)
 
 diff --git a/pysvnmanager/config/deployment.ini_tmpl b/pysvnmanager/config/deployment.ini_tmpl
-index cf185d2..4246c4a 100644
+index c770f4f..7645d9b 100644
 --- a/pysvnmanager/config/deployment.ini_tmpl
 +++ b/pysvnmanager/config/deployment.ini_tmpl
 @@ -14,7 +14,7 @@ use = egg:Paste#http
@@ -22,7 +22,7 @@ index cf185d2..4246c4a 100644
  use = egg:pySvnManager
  full_stack = true
  static_files = true
-@@ -37,10 +37,6 @@ beaker.session.timeout = 3600
+@@ -40,10 +40,6 @@ sqlalchemy.url = sqlite:///production.db
  # execute malicious code after an exception is raised.
  set debug = false
  
@@ -33,7 +33,7 @@ index cf185d2..4246c4a 100644
  # Set unittest to True only for unittest mode. (nosetests)
  # Warning: if unitest is enabled, i18n for svnauthz module not work any more.
  #unittest = True
-@@ -52,11 +48,19 @@ authn_file = %(here)s/config/svn.passwd
+@@ -55,11 +51,19 @@ authn_file = %(here)s/config/svn.passwd
  authz_file = %(here)s/config/svn.access
  
  # svn repository root path
@@ -58,4 +58,4 @@ index cf185d2..4246c4a 100644
  # Logging configuration
  [loggers]
 -- 
-tg: (0da273c..) t/deployment.ini_tmpl (depends on: master)
+tg: (f3aba2b..) t/deployment.ini_tmpl (depends on: master)

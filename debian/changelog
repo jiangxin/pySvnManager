@@ -1,3 +1,9 @@
+pysvnmanager (1:0.5.0r154-50) unstable; urgency=low
+
+  * Promote to 0.5.0: ldap user sync, add database support.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Thu, 05 Aug 2010 21:52:28 +0800
+
 pysvnmanager (1:0.4.1r144-50) unstable; urgency=low
 
   * Install babel in virtualenv.

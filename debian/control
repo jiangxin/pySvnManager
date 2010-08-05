@@ -17,7 +17,7 @@ Description: Meta package for pySvnManager.
 Package: pysvnmanager-common
 Architecture: all
 Depends: ${misc:Depends}, ${python:Depends}, ossxp-apache2
-Recommends: rcs, python-subversion, python-ldap, pysvnmanager-doc
+Recommends: rcs, python-subversion, python-ldap, pysvnmanager-doc, python-sqlalchemy, python-sqlalchemy-ext
 Conflicts: pysvnmanager (<= 1:0)
 XB-Python-Version: ${python:Versions}
 Description: subversion administration web interface based on pylons.
