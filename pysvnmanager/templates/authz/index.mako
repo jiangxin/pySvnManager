@@ -608,7 +608,8 @@ function disable_delete_btn()
     <select name="repos_list" size="1" onChange='repos_changed()' class="select-repos">
     </select>
 % if c.is_super_user:
-    <a href="#" onclick='new_repos()'>[+${_("New repository")}]</a>
+    <a href="#" onclick='new_repos()'><img
+        src="${h.url("/img/edit.png")}" title="${_("New repository")}" alt="(+)"></a>${_("New repository")}
 % endif
 </DIV>
 
@@ -640,7 +641,8 @@ function disable_delete_btn()
 </span>
     <select name="path_list" size="1" onChange='path_changed()' class="select-mod">
     </select>
-<a href="#" onclick='new_module()'>[+${_("New module")}]</a>
+    <a href="#" onclick='new_module()'><img
+        src="${h.url("/img/edit.png")}" title="${_("New module")}" alt="(+)"> ${_("New module")}</a>
 </DIV>
 <!-- end: path_list box -->
 
@@ -675,12 +677,15 @@ function disable_delete_btn()
     <select name="authz_list" size="10" class="select-col1" multiple></select>
   </td>
   <td class='button'>
-    <a href='#' onClick='add_authz()'>&lt;=</a>
-    <a href='#' onClick='move_authz()'>=&gt;</a>
+    <a href='#' onClick='add_authz()'><img src="${h.url("/img/left.png")}" title="${_("Add membership")}" alt="${_("Add membership")}"></a>
+    <br>
+    <a href='#' onClick='move_authz()'><img src="${h.url("/img/right.png")}" title="${_("Remove membership")}" alt="${_("Remove membership")}"></a>
+    <br>
   </td>
   <td>
     <select name="user_list" size="10" class="select-col2" multiple></select><br>
-    <input type="text" name="username" size="10" maxlength="50"><br>
+    <img src="${h.url("/img/edit.png")}" title="${_("Manual input")}" alt="${_("Manual input")}">
+    <input type="text" name="username" size="10" maxlength="50" class="input-fix2"><br>
     <input type="radio" name="user_rights" value="r">${_("ReadOnly")}
     <input type="radio" name="user_rights" value="w">${_("Full")}
     <input type="radio" name="user_rights" value="n">${_("Denied")}
@@ -696,9 +701,9 @@ function disable_delete_btn()
 <tr>
   <td align='center'>
     <input type="hidden" name="reposname">
-    <input type="button" name="save_btn"   value='${_("Save")}' onClick="save_authz(this.form)">
-    <input type="button" name="delete_btn" value='${_("Delete")}' onClick="delete_authz(this.form)">
-    <input type="button" name="cancel_btn" value='${_("Cancel")}' onClick="repos_changed()">
+    <input type="button" name="save_btn"   value='${_("Save")}' onClick="save_authz(this.form)" class="input-button">
+    <input type="button" name="delete_btn" value='${_("Delete")}' onClick="delete_authz(this.form)" class="input-button">
+    <input type="button" name="cancel_btn" value='${_("Cancel")}' onClick="repos_changed()" class="input-button">
   </td>
 </tr>
 </table>

@@ -193,8 +193,12 @@ function installed_hook_form_submit(form)
     <select name="repos_list" size="1" onChange='repos_changed()' class="select-repos">
     </select>
 % if c.is_super_user:
-    ${h.link_to(_("Add repository"), h.url(controller="repos", action="create"))}
-    ${h.link_to(_("Remove repository"), h.url(controller="repos", action="remove"))}
+    <a href="${h.url(controller="repos", action="create")}"><img
+        src="${h.url("/img/add.png")}"  title="${_("Add repository")}" alt="(+)"></a>
+        ${_("Add repository")}&nbsp;&nbsp;
+    <a href="${h.url(controller="repos", action="remove")}"><img
+        src="${h.url("/img/delete.png")}"  title="${_("Remove blank repository")}" alt="(-)"></a>
+        ${_("Remove blank repository")}
 % endif
 </DIV>
 

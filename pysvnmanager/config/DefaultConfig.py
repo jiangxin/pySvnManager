@@ -43,10 +43,11 @@ class DefaultConfig:
     #auth = [ldap_login] # ldap auth only
     
     # LDAP parameters
+    # if ldap_base is set, means ldap sync user is enabled.
+    ldap_base = None
     ldap_uri = 'ldap://localhost'
     ldap_binddn = ''
     ldap_bindpw = ''
-    ldap_base = 'dc=foo,dc=bar'
     ldap_scope = 2 # ldap.SCOPE_SUBTREE = 2
     ldap_filter = '(&(uid=%(username)s)(authorizedService=svn)(ossxpConfirmed=TRUE))'
     ldap_timeout = 10 # how long we wait for the ldap server [s]

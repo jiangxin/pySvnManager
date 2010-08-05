@@ -664,9 +664,17 @@ function disable_delete_btn()
 </span>
     ${h.select("role_list", "", role_list_opts, onChange='role_changed()', Class="select-fix1")}
 % if c.is_super_user:
-    <a href="#" onclick='new_group()'>[+${_("New Group")}]</a>
-    <a href="#" onclick='new_alias()'>[+${_("New Alias")}]</a>
-    <a href="#" onclick='update_users()'>[${_("Users update from LDAP")}]</a>
+    <a href="#" onclick='new_group()'><img
+        src="${h.url('/img/group.png')}" title="${_("New Group")}" alt="${_("New Group")}"></a>
+        ${_("New Group")} &nbsp;&nbsp;
+    <a href="#" onclick='new_alias()'><img
+        src="${h.url('/img/alias.png')}" title="${_("New Alias")}" alt="${_("New Alias")}"></a>
+        ${_("New Alias")} &nbsp;&nbsp;
+% if c.ldap_enabled:
+    <a href="#" onclick='update_users()'><img
+        src="${h.url('/img/ldap_sync.png')}" title="${_("Users update from LDAP")}" alt="${_("Users update from LDAP")}"></a>
+        ${_("Users update from LDAP")}
+% endif
 % endif
 </div>
 
@@ -706,11 +714,14 @@ function disable_delete_btn()
     <select name="member_list" size="10" class="select-col1" multiple></select>
   </td>
   <td class="button">
-    <a href='#' onClick='add_members()'>&lt;=</a>
-    <a href='#' onClick='del_members()'>=&gt;</a>
+    <a href='#' onClick='add_members()'><img src="${h.url("/img/left.png")}" title="${_("Add membership")}" alt="${_("Add membership")}"></a>
+    <br>
+    <a href='#' onClick='del_members()'><img src="${h.url("/img/right.png")}" title="${_("Remove membership")}" alt="${_("Remove membership")}"></a>
+    <br>
   </td>
   <td class="left">
     <select name="not_member_list" size="10" class="select-col2" multiple></select><br>
+    <img src="${h.url("/img/edit.png")}" title="${_("Manual input")}" alt="${_("Manual input")}">
     <input type="text" name="not_member_input" size="10" maxlength="50" class="input-role">
   </td>
 </tr>
@@ -734,7 +745,9 @@ function disable_delete_btn()
   <td>
     ${h.select("alias_as_list", "", alias_as_list_opts, onChange="enable_save_btn();disable_delete_btn()", Class="select-role")}
     <br>
-    &nbsp;&nbsp;<input type="text" name="alias_as_input" size="10" maxlength="50" onChange="enable_save_btn();disable_delete_btn()" class="input-role">
+    &nbsp;&nbsp;
+    <img src="${h.url("/img/edit.png")}" title="${_("Manual input")}" alt="${_("Manual input")}">
+    <input type="text" name="alias_as_input" size="10" maxlength="50" onChange="enable_save_btn();disable_delete_btn()" class="input-role">
   </td>
 </tr>
 </table>

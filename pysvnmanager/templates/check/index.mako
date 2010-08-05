@@ -136,7 +136,7 @@ function ajax_update_path(code)
             ${h.select("userselector", c.selected_username, userlist, onFocus="select_username(this.form)", Class="select-fix1")}
             <br/>
         <input type="radio" name="userinput" value="manual">
-            ${_("Manual input")}
+            <img src="${h.url("/img/edit.png")}" title="${_("Manual input")}" alt="${_("Manual input")}">
             <input type="text" name="username" size=15 maxlength=80 value="${c.typed_username}"
                 onFocus="edit_username(this.form)" class="input-fix1">
     </td>
@@ -146,7 +146,7 @@ function ajax_update_path(code)
             ${h.select("reposselector", c.selected_repos, reposlist, onFocus="select_repos(this.form)", onChange="update_path(this.form)", Class="select-fix1")}
             <br/>
         <input type="radio" name="reposinput" value="manual">
-            ${_("Manual input")}
+            <img src="${h.url("/img/edit.png")}" title="${_("Manual input")}" alt="${_("Manual input")}">
             <input type="text" name="reposname" size=15 value="${c.typed_repos}"
                 onFocus="edit_repos(this.form)"
                 onBlur="update_path(this.form)"
@@ -158,7 +158,7 @@ function ajax_update_path(code)
             <select name="pathselector" size="0" onFocus="select_path(this.form)" class="select-fix1">
             </select><br/>
         <input type="radio" name="pathinput" value="manual">
-            ${_("Manual input")}
+            <img src="${h.url("/img/edit.png")}" title="${_("Manual input")}" alt="${_("Manual input")}">
             <input type="text" name="pathname"" size=15
                 onFocus="edit_path(this.form)"
                 class="input-fix1">

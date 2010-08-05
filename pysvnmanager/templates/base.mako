@@ -27,7 +27,7 @@ context.write(msg)
 
     <div id="popup_shadow" style="z-index:100;visibility:hidden;display:none;position:absolute;top:0px;left:0px;width:100%;height:100%;background:#000000;opacity:0.0;filter:alpha(opacity=0);"></div>
     <div id="popup_notices" style="z-index:101;border:1px solid gray;position:absolute;top:0;left:250px;visibility:hidden;display:none;background:#eeee20;">
-       ${_("Loading, please wait...")}
+       <img src="${h.url('/img/loading.gif')}"> ${_("Loading, please wait...")}
     </div>
 
     <div class="header">

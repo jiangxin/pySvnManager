@@ -57,6 +57,10 @@ class RoleController(BaseController):
         c.userlist = self.userlist
         c.grouplist = self.grouplist
         c.is_super_user = self.is_super_user
+        if cfg.ldap_base:
+            c.ldap_enabled = True
+        else:
+            c.ldap_enabled = False
         return render('/role/index.mako')
     
     def get_role_info(self, role=None):

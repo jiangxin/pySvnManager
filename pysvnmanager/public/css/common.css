@@ -93,6 +93,7 @@ h4, .wiki h3 {font-size: 13px;padding: 2px 10px 1px 0px;margin-bottom: 5px; bord
 /* Links */
 a{color:#0071bb;outline:none;}
 a:hover{color:#ed1e24;text-decoration:none;}
+a,a:link,a:active {text-decoration:none;}
 
 li p {
 	margin: .25em 0;

@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pysvnmanager\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-08-05 17:07+0800\n"
-"PO-Revision-Date: 2010-08-05 17:14+0800\n"
+"POT-Creation-Date: 2010-08-05 21:39+0800\n"
+"PO-Revision-Date: 2010-08-05 21:40+0800\n"
 "Last-Translator: Jiang Xin <worldhello.net@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: \n"
@@ -41,8 +41,8 @@ msgstr "注册用户"
 msgid "Anonymous"
 msgstr "匿名用户"
 
-#: pysvnmanager/controllers/authz.py:76 pysvnmanager/controllers/role.py:79
-#: pysvnmanager/controllers/role.py:99
+#: pysvnmanager/controllers/authz.py:76 pysvnmanager/controllers/role.py:83
+#: pysvnmanager/controllers/role.py:103
 #: pysvnmanager/templates/authz/index.mako:147
 #: pysvnmanager/templates/check/index.mako:18
 #: pysvnmanager/templates/role/index.mako:20
@@ -50,8 +50,8 @@ msgstr "匿名用户"
 msgid "Group:"
 msgstr "团队:"
 
-#: pysvnmanager/controllers/authz.py:79 pysvnmanager/controllers/role.py:84
-#: pysvnmanager/controllers/role.py:101
+#: pysvnmanager/controllers/authz.py:79 pysvnmanager/controllers/role.py:88
+#: pysvnmanager/controllers/role.py:105
 #: pysvnmanager/templates/authz/index.mako:149
 #: pysvnmanager/templates/check/index.mako:20
 #: pysvnmanager/templates/role/index.mako:25
@@ -61,7 +61,7 @@ msgstr "别名:"
 
 #: pysvnmanager/controllers/authz.py:96 pysvnmanager/controllers/authz.py:127
 #: pysvnmanager/controllers/check.py:113 pysvnmanager/controllers/repos.py:79
-#: pysvnmanager/controllers/repos.py:105 pysvnmanager/controllers/role.py:72
+#: pysvnmanager/controllers/repos.py:105 pysvnmanager/controllers/role.py:76
 #: pysvnmanager/templates/check/index.mako:10
 #: pysvnmanager/templates/check/index.mako:26
 #: pysvnmanager/templates/role/index.mako:14
@@ -218,27 +218,27 @@ msgstr ""
 msgid "Delete blank repository '%(repos)s' success."
 msgstr "成功删除版本库'%(repos)s'。"
 
-#: pysvnmanager/controllers/role.py:133
+#: pysvnmanager/controllers/role.py:137
 #, python-format
 msgid "User %(user)s changed group: %(grp)s. (rev:%(rev)s)"
 msgstr "用户 %(user)s 修改用户组: %(grp)s。(rev:%(rev)s)"
 
-#: pysvnmanager/controllers/role.py:154
+#: pysvnmanager/controllers/role.py:158
 #, python-format
 msgid "User %(user)s delete group: %(grp)s. (rev:%(rev)s)"
 msgstr "用户 %(user)s 删除用户组: %(grp)s。(rev:%(rev)s)"
 
-#: pysvnmanager/controllers/role.py:177
+#: pysvnmanager/controllers/role.py:181
 #, python-format
 msgid "User %(user)s changed alias: %(alias)s. (rev:%(rev)s)"
 msgstr "用户 %(user)s 修改别名: %(alias)s。(rev:%(rev)s)"
 
-#: pysvnmanager/controllers/role.py:198
+#: pysvnmanager/controllers/role.py:202
 #, python-format
 msgid "User %(user)s delete alias: %(alias)s. (rev:%(rev)s,%(msg)s)"
 msgstr "用户 %(user)s 删除别名: %(alias)s。(rev:%(rev)s,%(msg)s)"
 
-#: pysvnmanager/controllers/role.py:219
+#: pysvnmanager/controllers/role.py:223
 #, python-format
 msgid "Add %(add)d users, delete %(delete)d users, update %(update)d users."
 msgstr "%(add)d 个用户被添加， %(delete)d 个用户被删除， %(update)d 个用户被更新。"
@@ -853,12 +853,12 @@ msgid "Readonly"
 msgstr "只读"
 
 #: pysvnmanager/templates/authz/index.mako:172
-#: pysvnmanager/templates/authz/index.mako:674
+#: pysvnmanager/templates/authz/index.mako:690
 msgid "Full"
 msgstr "完全权限"
 
 #: pysvnmanager/templates/authz/index.mako:176
-#: pysvnmanager/templates/authz/index.mako:675
+#: pysvnmanager/templates/authz/index.mako:691
 msgid "Denied"
 msgstr "禁用"
 
@@ -912,65 +912,84 @@ msgstr "无法删除模组 "
 msgid "Successfully delete module:"
 msgstr "成功删除模组:"
 
-#: pysvnmanager/templates/authz/index.mako:605
-#: pysvnmanager/templates/repos/hooks.mako:190
+#: pysvnmanager/templates/authz/index.mako:606
+#: pysvnmanager/templates/repos/hooks.mako:191
 msgid "Repository:"
 msgstr "版本库:"
 
-#: pysvnmanager/templates/authz/index.mako:609
+#: pysvnmanager/templates/authz/index.mako:612
 msgid "New repository"
 msgstr "新版本库"
 
-#: pysvnmanager/templates/authz/index.mako:614
+#: pysvnmanager/templates/authz/index.mako:618
 msgid "Repository Name:"
 msgstr "版本库名称:"
 
-#: pysvnmanager/templates/authz/index.mako:619
+#: pysvnmanager/templates/authz/index.mako:625
 msgid "Administrators:"
 msgstr "管理员:"
 
-#: pysvnmanager/templates/authz/index.mako:631
+#: pysvnmanager/templates/authz/index.mako:640
 msgid "Module:"
 msgstr "模组:"
 
-#: pysvnmanager/templates/authz/index.mako:634
+#: pysvnmanager/templates/authz/index.mako:645
 msgid "New module"
 msgstr "新模组"
 
-#: pysvnmanager/templates/authz/index.mako:640
+#: pysvnmanager/templates/authz/index.mako:652
 msgid "Module Path:"
 msgstr "模组路径:"
 
-#: pysvnmanager/templates/authz/index.mako:654
+#: pysvnmanager/templates/authz/index.mako:667
 msgid "ACL"
 msgstr "ACL"
 
-#: pysvnmanager/templates/authz/index.mako:659
+#: pysvnmanager/templates/authz/index.mako:672
 msgid "Users"
 msgstr "用户"
 
-#: pysvnmanager/templates/authz/index.mako:673
+#: pysvnmanager/templates/authz/index.mako:680
+#: pysvnmanager/templates/role/index.mako:717
+msgid "Add membership"
+msgstr "添加成员"
+
+#: pysvnmanager/templates/authz/index.mako:682
+#: pysvnmanager/templates/role/index.mako:719
+msgid "Remove membership"
+msgstr "移除成员"
+
+#: pysvnmanager/templates/authz/index.mako:687
+#: pysvnmanager/templates/check/index.mako:139
+#: pysvnmanager/templates/check/index.mako:149
+#: pysvnmanager/templates/check/index.mako:161
+#: pysvnmanager/templates/role/index.mako:724
+#: pysvnmanager/templates/role/index.mako:749
+msgid "Manual input"
+msgstr "手工输入"
+
+#: pysvnmanager/templates/authz/index.mako:689
 msgid "ReadOnly"
 msgstr "只读"
 
-#: pysvnmanager/templates/authz/index.mako:688
-#: pysvnmanager/templates/role/index.mako:741
+#: pysvnmanager/templates/authz/index.mako:704
+#: pysvnmanager/templates/role/index.mako:762
 msgid "Save"
 msgstr "保存"
 
-#: pysvnmanager/templates/authz/index.mako:689
-#: pysvnmanager/templates/role/index.mako:742
+#: pysvnmanager/templates/authz/index.mako:705
+#: pysvnmanager/templates/role/index.mako:763
 msgid "Delete"
 msgstr "删除"
 
-#: pysvnmanager/templates/authz/index.mako:690
-#: pysvnmanager/templates/role/index.mako:743
+#: pysvnmanager/templates/authz/index.mako:706
+#: pysvnmanager/templates/role/index.mako:764
 msgid "Cancel"
 msgstr "取消"
 
 #: pysvnmanager/templates/check/index.mako:6
 #: pysvnmanager/templates/check/index.mako:109
-#: pysvnmanager/templates/check/index.mako:175
+#: pysvnmanager/templates/check/index.mako:173
 msgid "Check Permissions"
 msgstr "权限检查"
 
@@ -997,24 +1016,6 @@ msgstr "版本库"
 #: pysvnmanager/templates/check/index.mako:130
 msgid "Modules"
 msgstr "模组"
-
-#: pysvnmanager/templates/check/index.mako:136
-msgid "Select username"
-msgstr "选择用户名"
-
-#: pysvnmanager/templates/check/index.mako:140
-#: pysvnmanager/templates/check/index.mako:151
-#: pysvnmanager/templates/check/index.mako:163
-msgid "Manual input"
-msgstr "手工输入"
-
-#: pysvnmanager/templates/check/index.mako:147
-msgid "Select repository"
-msgstr "选择版本库"
-
-#: pysvnmanager/templates/check/index.mako:159
-msgid "Select module"
-msgstr "选择模组"
 
 #: pysvnmanager/templates/login/login.mako:11
 #: pysvnmanager/templates/login/login.mako:17
@@ -1065,33 +1066,38 @@ msgstr "回滚至此版本"
 
 #: pysvnmanager/templates/repos/create.mako:6
 #: pysvnmanager/templates/repos/create.mako:9
-#: pysvnmanager/templates/repos/create.mako:26
+#: pysvnmanager/templates/repos/create.mako:28
 msgid "Create repository"
 msgstr "创建版本库"
 
-#: pysvnmanager/templates/repos/create.mako:23
-#: pysvnmanager/templates/repos/remove.mako:65
+#: pysvnmanager/templates/repos/create.mako:24
+#: pysvnmanager/templates/repos/remove.mako:66
 msgid "Repository name:"
 msgstr "版本库名称："
 
-#: pysvnmanager/templates/repos/hooks.mako:194
+#: pysvnmanager/templates/repos/hooks.mako:197
+#: pysvnmanager/templates/repos/hooks.mako:198
 msgid "Add repository"
 msgstr "添加版本库"
 
-#: pysvnmanager/templates/repos/hooks.mako:195
-#: pysvnmanager/templates/repos/remove.mako:6
-#: pysvnmanager/templates/repos/remove.mako:51
-#: pysvnmanager/templates/repos/remove.mako:69
-msgid "Remove repository"
-msgstr "删除版本库"
-
+#: pysvnmanager/templates/repos/hooks.mako:200
 #: pysvnmanager/templates/repos/hooks.mako:201
+msgid "Remove blank repository"
+msgstr "删除空版本库"
+
+#: pysvnmanager/templates/repos/hooks.mako:208
 msgid "Uninstalled hooks:"
 msgstr "尚未安装的插件："
 
-#: pysvnmanager/templates/repos/hooks.mako:227
+#: pysvnmanager/templates/repos/hooks.mako:235
 msgid "Install this plugin"
 msgstr "安装此插件"
+
+#: pysvnmanager/templates/repos/remove.mako:6
+#: pysvnmanager/templates/repos/remove.mako:51
+#: pysvnmanager/templates/repos/remove.mako:71
+msgid "Remove repository"
+msgstr "删除版本库"
 
 #: pysvnmanager/templates/role/index.mako:7
 #: pysvnmanager/templates/role/index.mako:655
@@ -1138,43 +1144,54 @@ msgstr "删除别名失败："
 msgid "Delete alias successfully."
 msgstr "成功删除别名。"
 
-#: pysvnmanager/templates/role/index.mako:662
+#: pysvnmanager/templates/role/index.mako:663
 msgid "Select a role name:"
 msgstr "选择一个角色:"
 
-#: pysvnmanager/templates/role/index.mako:665
+#: pysvnmanager/templates/role/index.mako:668
+#: pysvnmanager/templates/role/index.mako:669
 msgid "New Group"
 msgstr "新用户组"
 
-#: pysvnmanager/templates/role/index.mako:666
+#: pysvnmanager/templates/role/index.mako:671
+#: pysvnmanager/templates/role/index.mako:672
 msgid "New Alias"
 msgstr "新别名"
 
-#: pysvnmanager/templates/role/index.mako:667
+#: pysvnmanager/templates/role/index.mako:675
+#: pysvnmanager/templates/role/index.mako:676
 msgid "Users update from LDAP"
 msgstr "和LDAP用户同步"
 
-#: pysvnmanager/templates/role/index.mako:672
+#: pysvnmanager/templates/role/index.mako:683
 msgid "New group name:"
 msgstr "新用户组名称:"
 
-#: pysvnmanager/templates/role/index.mako:676
+#: pysvnmanager/templates/role/index.mako:690
 msgid "New alias name:"
 msgstr "新别名名称:"
 
-#: pysvnmanager/templates/role/index.mako:688
+#: pysvnmanager/templates/role/index.mako:704
 msgid "Members list"
 msgstr "成员列表"
 
-#: pysvnmanager/templates/role/index.mako:693
+#: pysvnmanager/templates/role/index.mako:709
 msgid "Other users"
 msgstr "其他用户"
 
-#: pysvnmanager/templates/role/index.mako:712
+#: pysvnmanager/templates/role/index.mako:731
 msgid "Ignore recursive"
 msgstr "忽略组间循环引用"
 
-#: pysvnmanager/templates/role/index.mako:724
+#: pysvnmanager/templates/role/index.mako:743
 msgid "User name:"
 msgstr "用户名:"
 
+#~ msgid "Select username"
+#~ msgstr "选择用户名"
+
+#~ msgid "Select repository"
+#~ msgstr "选择版本库"
+
+#~ msgid "Select module"
+#~ msgstr "选择模组"

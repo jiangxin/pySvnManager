@@ -18,5 +18,5 @@ ${c.contents}
   <input type="submit" name="submit" value='${_("Rollback to this revision")}'>
   &nbsp;&nbsp;&nbsp;&nbsp;
 % endif
-  <input type="button" name="close" value='${_("Close")}' onclick="window.close();">
+  <input type="button" name="close" value='${_("Close")}' onclick="window.close();" class="input-button">
 </form>
