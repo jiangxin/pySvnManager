@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+## -*- coding: utf-8 -*-
+## vim: et ts=4 sw=4
 <html>
   <head>
     ${self.head_tags()}
@@ -26,14 +27,14 @@ context.write(msg)
 
     <div id="popup_shadow" style="z-index:100;visibility:hidden;display:none;position:absolute;top:0px;left:0px;width:100%;height:100%;background:#000000;opacity:0.0;filter:alpha(opacity=0);"></div>
     <div id="popup_notices" style="z-index:101;border:1px solid gray;position:absolute;top:0;left:250px;visibility:hidden;display:none;background:#eeee20;">
-       ${_("Loading, please wait...")}
+       <img src="${h.url('/img/loading.gif')}"> ${_("Loading, please wait...")}
     </div>
 
     <div class="header">
-	    ${self.nav_bar()}
-	    ${self.profile()}
+        ${self.nav_bar()}
+        ${self.profile()}
     </div>
-	
+
     <div class="page">
       <div id="message_box" style="visibility:hidden;position:absolute; margin:1em;" class=gainlayout>
         <div id="message"></div>
@@ -131,69 +132,69 @@ function getWinHeight()
 <script language='javascript'>
 function showPopupShadow()
 {
-  document.getElementById('popup_shadow').style.visibility = 'visible';
-  document.getElementById('popup_shadow').style.display = 'inline';
+    document.getElementById('popup_shadow').style.visibility = 'visible';
+    document.getElementById('popup_shadow').style.display = 'inline';
 }
 
 function hidePopupShadow()
 {
-  document.getElementById('popup_shadow').style.visibility = 'hidden';
-  document.getElementById('popup_shadow').style.display = 'none';
+    document.getElementById('popup_shadow').style.visibility = 'hidden';
+    document.getElementById('popup_shadow').style.display = 'none';
 }
 
 function showNoticesPopup()
 {
-  showPopupShadow();
+    showPopupShadow();
 
-  document.getElementById('popup_notices').style.top= '0px';
-  document.getElementById('popup_notices').style.left= getWinWidth()/2+'px';
-  document.getElementById('popup_notices').style.visibility = 'visible';
-  document.getElementById('popup_notices').style.display = 'inline';
+    document.getElementById('popup_notices').style.top= '0px';
+    document.getElementById('popup_notices').style.left= getWinWidth()/2+'px';
+    document.getElementById('popup_notices').style.visibility = 'visible';
+    document.getElementById('popup_notices').style.display = 'inline';
 }
 
 function hideNoticesPopup()
 {
-  hidePopupShadow();
+    hidePopupShadow();
 
-  document.getElementById('popup_notices').style.visibility = 'hidden';
-  document.getElementById('popup_notices').style.display = 'none';
+    document.getElementById('popup_notices').style.visibility = 'hidden';
+    document.getElementById('popup_notices').style.display = 'none';
 }
 
 function warn_msg(message)
 {
-	set_message_box("<div class='warning'>"+message+"<div>");
+    set_message_box("<div class='warning'>"+message+"<div>");
 }
 
 function error_msg(message)
 {
-	set_message_box("<div class='error'>"+message+"<div>");
+    set_message_box("<div class='error'>"+message+"<div>");
 }
 
 function info_msg(message)
 {
-	set_message_box("<div class='info'>"+message+"<div>");
+    set_message_box("<div class='info'>"+message+"<div>");
 }
 
 function set_message_box(message)
 {
-	document.getElementById('message').innerHTML=message;
-	switch_message_box();
+    document.getElementById('message').innerHTML=message;
+    switch_message_box();
 }
 
 function switch_message_box()
 {
-	c=document.getElementById('message').innerHTML;
-	s=document.getElementById('message_box').style;
-	if (c)
-	{
-		s.visibility='visible';
-		s.position = 'relative';
-	}
-	else
-	{
-		s.visibility='hidden';
-		s.position = 'absolute';
-	}
+    c=document.getElementById('message').innerHTML;
+    s=document.getElementById('message_box').style;
+    if (c)
+    {
+        s.visibility='visible';
+        s.position = 'relative';
+    }
+    else
+    {
+        s.visibility='hidden';
+        s.position = 'absolute';
+    }
 }
 </script>
 </%def>

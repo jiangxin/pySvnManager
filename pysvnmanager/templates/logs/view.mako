@@ -1,4 +1,5 @@
 ## -*- coding: utf-8 -*-
+## vim: et ts=4 sw=4
 <%inherit file="/base.mako" />
 <%def name="head_tags()">
     <title>${_("Administration logs")}</title>
@@ -17,5 +18,5 @@ ${c.contents}
   <input type="submit" name="submit" value='${_("Rollback to this revision")}'>
   &nbsp;&nbsp;&nbsp;&nbsp;
 % endif
-  <input type="button" name="close" value='${_("Close")}' onclick="window.close();">
+  <input type="button" name="close" value='${_("Close")}' onclick="window.close();" class="input-button">
 </form>

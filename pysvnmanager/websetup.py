@@ -29,6 +29,8 @@ import os
 from pkg_resources import resource_filename
 
 from pysvnmanager.config.environment import load_environment
+from pysvnmanager.model.meta import Session, metadata, Base
+from pysvnmanager import model
 
 log = logging.getLogger(__name__)
 
@@ -59,3 +61,18 @@ def setup_app(command, conf, vars):
             log.warning("Warning: %s already exist, ignored." % f)
         else:
             copyfile(src, dest)
+
+    # Create the tables if they don't already exist
+    log.info("Creating tables...")
+    Base.metadata.create_all(bind=Session.bind)
+    log.info("Successfully set up.")
+
+    ## log.info("Adding front page data...")
+    ## person = model.Person(uid=u'jiangxin',
+    ##                       firstname=u'鑫',
+    ##                       lastname=u'蒋',
+    ##                       nickname=u'蒋鑫',
+    ##                       mail=u'jiangxin@ossxp.com')
+    ## Session.add(person)
+    ## Session.commit()
+

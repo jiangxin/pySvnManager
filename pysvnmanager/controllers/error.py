@@ -19,6 +19,8 @@
 import cgi
 
 from paste.urlparser import PkgResourcesParser
+from pylons import request
+from pylons.controllers.util import forward
 from pylons.middleware import error_document_template
 from webhelpers.html.builder import literal
 from pylons.i18n import _, ungettext, N_
@@ -26,6 +28,7 @@ from pylons.i18n import _, ungettext, N_
 from pysvnmanager.lib.base import BaseController
 
 class ErrorController(BaseController):
+
     """Generates error documents as and when they are required.
 
     The ErrorDocuments middleware forwards to ErrorController when error
@@ -35,9 +38,9 @@ class ErrorController(BaseController):
     ErrorDocuments middleware in your config/middleware.py file.
 
     """
+
     def document(self):
         """Render the error document"""
-        request = self._py_object.request
         resp = request.environ.get('pylons.original_response')
         content = literal(resp.body) or cgi.escape(request.GET.get('message', ''))
         page = error_document_template % \
@@ -58,6 +61,5 @@ class ErrorController(BaseController):
         """Call Paste's FileApp (a WSGI application) to serve the file
         at the specified path
         """
-        request = self._py_object.request
         request.environ['PATH_INFO'] = '/%s' % path
-        return PkgResourcesParser('pylons', 'pylons')(request.environ, self.start_response)
+        return forward(PkgResourcesParser('pylons', 'pylons'))
