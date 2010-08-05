@@ -77,7 +77,7 @@ class AuthzController(BaseController):
         for alias in self.authz.aliaslist:
             i = alias.uname
             all_avail_users.append([i, _("Alias:")+i[1:]])
-        for user in self.authz.userlist:
+        for user in self.authz.nice_userlist:
             if user.nice_name:
                 all_avail_users.append([user.uname, "%s (%s)" % (user.uname, user.nice_name)])
             else:

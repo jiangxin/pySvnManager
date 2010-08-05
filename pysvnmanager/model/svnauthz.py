@@ -1208,8 +1208,9 @@ class SvnAuthz(object):
         # Used as check-in message to rcs file.
         self.comment = []
         self.load(fileobj)
-        # Load users from databases.
-        self.load_db()
+
+        # only init nice_userlist once.
+        self.nice_userlist_init = False
     
     def __clear(self):
         self.__userlist  = UserList()
@@ -1224,6 +1225,20 @@ class SvnAuthz(object):
         return self.__userlist
 
     userlist = property(__get_userlist)
+
+    def __get_nice_userlist(self):
+        if not self.nice_userlist_init:
+            self.nice_userlist_init = True
+            for person in Session.query(Person).all():
+                self.userlist.get_or_set(name=person.uid,
+                                         firstname=person.firstname,
+                                         lastname=person.lastname,
+                                         nickname=person.nickname,
+                                         mail=person.mail)
+
+        return self.__userlist
+
+    nice_userlist = property(__get_nice_userlist)
 
     def __get_aliaslist(self):
         return self.__aliaslist
@@ -1289,15 +1304,6 @@ class SvnAuthz(object):
                         continue
                     self.parse_module(section, contents)
 
-
-    def load_db(self):
-        self.person_q = Session.query(Person)
-        for person in self.person_q.all():
-            self.userlist.get_or_set(name=person.uid,
-                                     firstname=person.firstname,
-                                     lastname=person.lastname,
-                                     nickname=person.nickname,
-                                     mail=person.mail)
 
 
     def save(self, revision, comment=""):

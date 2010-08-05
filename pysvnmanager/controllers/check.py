@@ -55,7 +55,7 @@ class CheckController(BaseController):
         c.reposlist = self.reposlist
         c.userlist = map(lambda x:(x.uname, None), self.authz.grouplist)
         c.userlist.extend(map(lambda x:(x.uname, None), self.authz.aliaslist))
-        c.userlist.extend(map(lambda x:(x.uname, x.nice_name), self.authz.userlist))
+        c.userlist.extend(map(lambda x:(x.uname, x.nice_name), self.authz.nice_userlist))
         c.pathlist = []
         return render('/check/index.mako')
     

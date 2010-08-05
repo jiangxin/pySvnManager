@@ -63,30 +63,78 @@ def sync_users_with_ldap(config):
     if not ldap.is_bind():
         return False
 
-    lusers = ldap.fetch_all_users()
-    if lusers:
-        # clear user table...
+    lusers = {}
+    for dn, ldap_dict in ldap.fetch_all_users():
+        if ldap.verbose:
+            log.debug("Find user: %r" % dn)
+        uid = ldap_dict.get( ldap.attr_uid )[0]
+        lusers[uid] = {
+                        'dn':        dn,
+                        'name':      uid,
+                        'firstname': unicode(ldap_dict.get( ldap.attr_givenname, [''])[0], 'utf-8'),
+                        'lastname':  unicode(ldap_dict.get( ldap.attr_sn, [''])[0], 'utf-8'),
+                        'nickname':  unicode(ldap_dict.get( ldap.attr_cn, [''])[0], 'utf-8'),
+                        'mail':      unicode(ldap_dict.get( ldap.attr_mail, [''])[0], 'utf-8') }
 
-        # add users from ldap
-        for dn, ldap_dict in lusers:
-            if ldap.verbose:
-                log.debug("Find user: %r" % dn)
+    dbusers = {}
+    for person in Session.query(Person).all():
+        dbusers[person.uid] = person
 
-            uid       = ldap_dict.get( ldap.attr_uid )[0]
-            firstname = ldap_dict.get( ldap.attr_givenname, [''])[0]
-            lastname  = ldap_dict.get( ldap.attr_sn, [''])[0]
-            nickname  = ldap_dict.get( ldap.attr_cn, [''])[0]
-            mail      = ldap_dict.get( ldap.attr_mail, [''])[0]
+    lset  = set(lusers.keys())
+    dbset = set(dbusers.keys())
+
+    # add new record:
+    db_commit = False
+    for uid in lset - dbset:
+        db_commit = True
+        log.debug("add user: %r" % uid)
+
+        person = Person(uid=uid,
+                        firstname=lusers[uid]['firstname'],
+                        lastname=lusers[uid]['lastname'],
+                        nickname=lusers[uid]['nickname'],
+                        mail=lusers[uid]['mail'])
+
+        Session.add(person)
+
+    if db_commit:
+        Session.commit()
+
+    # delete outofdate record
+    db_commit = False
+    for uid in dbset - lset:
+        db_commit = True
+        log.debug("Delete user: %r" % uid)
+
+        Session.delete( dbusers[uid] )
+
+    if db_commit:
+        Session.commit()
+
+    # update users
+    db_commit = False
+    for uid in dbset & lset:
+        if ( dbusers[uid].firstname != lusers[uid]['firstname'] or
+             dbusers[uid].lastname  != lusers[uid]['lastname'] or
+             dbusers[uid].mail      != lusers[uid]['mail'] or
+             dbusers[uid].nickname  != lusers[uid]['nickname'] ):
+            db_commit = True
+            log.debug("Update user: %r" % uid)
+
+            Session.delete( dbusers[uid] )
+
             person = Person(uid=uid,
-                            firstname=firstname,
-                            lastname=lastname,
-                            nickname=nickname,
-                            mail=mail)
+                            firstname=lusers[uid]['firstname'],
+                            lastname=lusers[uid]['lastname'],
+                            nickname=lusers[uid]['nickname'],
+                            mail=lusers[uid]['mail'])
 
             Session.add(person)
 
+    if db_commit:
         Session.commit()
 
 
- 
+
+
 # vim: et ts=4 sw=4

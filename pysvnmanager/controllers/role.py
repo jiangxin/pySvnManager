@@ -36,7 +36,7 @@ class RoleController(BaseController):
             # Used as checked in user to rcs file.
             self.authz.login_as = self.login_as
             self.aliaslist  = map(lambda x:x.uname, self.authz.aliaslist)
-            self.userlist = map(lambda x:(x.uname, x.nice_name), self.authz.userlist)
+            self.userlist = map(lambda x:(x.uname, x.nice_name), self.authz.nice_userlist)
             self.grouplist = map(lambda x:x.uname, self.authz.grouplist)
             self.is_super_user = self.authz.is_super_user(self.login_as)
             self.own_reposlist = self.authz.get_manageable_repos_list(self.login_as)
