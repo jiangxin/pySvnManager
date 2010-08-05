@@ -565,6 +565,23 @@ function delete_alias_complete(message, aliasname)
     }
 }
 
+function update_users()
+{
+    showNoticesPopup();
+    new Ajax.Request(
+        '${h.url(controller="role", action="update_users")}',
+        {asynchronous:true, evalScripts:true, method:'post',
+            onComplete:
+                function(request)
+                    {hideNoticesPopup();update_users_notifier(request.responseText);}
+        });
+}
+
+function update_users_notifier(message)
+{
+    info_msg(message);
+}
+
 function new_group()
 {
     show_new_group_form();
@@ -647,6 +664,7 @@ ${_("Select a role name:")}
 % if c.is_super_user:
     <a href="#" onclick='new_group()'>[+${_("New Group")}]</a>
     <a href="#" onclick='new_alias()'>[+${_("New Alias")}]</a>
+    <a href="#" onclick='update_users()'>[${_("Users update from LDAP")}]</a>
 % endif
 </div>
 

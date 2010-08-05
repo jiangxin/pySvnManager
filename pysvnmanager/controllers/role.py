@@ -22,6 +22,7 @@ from pysvnmanager.lib.base import *
 from pysvnmanager.lib.text import to_unicode
 from pysvnmanager.model.svnauthz import *
 from pylons.i18n import _, ungettext, N_
+from pysvnmanager.model.person import sync_users_with_ldap
 
 log = logging.getLogger(__name__)
 
@@ -208,5 +209,17 @@ class RoleController(BaseController):
         if msg: log.error(msg)
 
         return msg
+
+
+    def update_users(self):
+        assert self.is_super_user
+
+        add, delete, update = sync_users_with_ldap(cfg)
+
+        message = _(u"Add %(add)d users, delete %(delete)d users, update %(update)d users.") % \
+            { 'add': add, 'delete': delete, 'update': update }
+        return message
+
+ 
 
 # vim: et ts=4 sw=4

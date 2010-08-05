@@ -58,6 +58,7 @@ class Person(Base):
         return u"<Person('%s, %s')" % (self.uid, self.nickname)
 
 def sync_users_with_ldap(config):
+    result = []
     ldap = LDAP(config)
 
     if not ldap.is_bind():
@@ -84,9 +85,9 @@ def sync_users_with_ldap(config):
     dbset = set(dbusers.keys())
 
     # add new record:
-    db_commit = False
+    count = 0
     for uid in lset - dbset:
-        db_commit = True
+        count += 1
         log.debug("add user: %r" % uid)
 
         person = Person(uid=uid,
@@ -97,28 +98,30 @@ def sync_users_with_ldap(config):
 
         Session.add(person)
 
-    if db_commit:
+    if count:
         Session.commit()
+    result.append(count)
 
     # delete outofdate record
-    db_commit = False
+    count = 0
     for uid in dbset - lset:
-        db_commit = True
+        count += 1
         log.debug("Delete user: %r" % uid)
 
         Session.delete( dbusers[uid] )
 
-    if db_commit:
+    if count:
         Session.commit()
+    result.append(count)
 
     # update users
-    db_commit = False
+    count = 0
     for uid in dbset & lset:
         if ( dbusers[uid].firstname != lusers[uid]['firstname'] or
              dbusers[uid].lastname  != lusers[uid]['lastname'] or
              dbusers[uid].mail      != lusers[uid]['mail'] or
              dbusers[uid].nickname  != lusers[uid]['nickname'] ):
-            db_commit = True
+            count += 1
             log.debug("Update user: %r" % uid)
 
             Session.delete( dbusers[uid] )
@@ -131,8 +134,11 @@ def sync_users_with_ldap(config):
 
             Session.add(person)
 
-    if db_commit:
+    if count:
         Session.commit()
+    result.append(count)
+
+    return result
 
 
 
