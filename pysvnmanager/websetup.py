@@ -29,6 +29,7 @@ import os
 from pkg_resources import resource_filename
 
 from pysvnmanager.config.environment import load_environment
+from pysvnmanager.model.meta import Session, metadata
 
 log = logging.getLogger(__name__)
 
@@ -59,3 +60,6 @@ def setup_app(command, conf, vars):
             log.warning("Warning: %s already exist, ignored." % f)
         else:
             copyfile(src, dest)
+
+    # Create the tables if they don't already exist
+    metadata.create_all(bind=Session.bind)

@@ -37,6 +37,7 @@ setup(
         "Mako>=0.3.2",
         "WebHelpers>=1.0rc1",
         "Routes>=1.12.1",
+        "SQLAlchemy>=0.5",
         #"python-ldap",
     ],
     setup_requires=["PasteScript>=1.6.3"],

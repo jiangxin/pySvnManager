@@ -131,6 +131,7 @@ pysvnmanager/lib/text.py
 pysvnmanager/model/__init__.py
 pysvnmanager/model/configobj.py
 pysvnmanager/model/hooks.py
+pysvnmanager/model/meta.py
 pysvnmanager/model/my_fnmatch.py
 pysvnmanager/model/rcsbackup.py
 pysvnmanager/model/repos.py
