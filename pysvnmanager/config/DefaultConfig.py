@@ -53,3 +53,9 @@ class DefaultConfig:
     ldap_coding = 'utf-8' # coding used for ldap queries and result values
     ldap_start_tls = False
     
+    ldap_uid_attribute = 'uid'
+    ldap_aliasname_attribute = 'cn'
+    ldap_surname_attribute = 'sn'
+    ldap_givenname_attribute = 'givenName'
+    ldap_email_attribute = 'mail'
+
