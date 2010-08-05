@@ -1,4 +1,19 @@
 # -*- coding: utf-8 -*-
+#
+# Copyright (C) 2008 OpenSourceXpress Ltd. (http://www.ossxp.com)
+# Author: Jiang Xin
+# Contact: http://www.ossxp.com/
+#          http://blog.ossxp.com/
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
 import ldap
 import sys
@@ -13,6 +28,23 @@ class LDAP(object):
         self.config = config
         self.verbose = getattr(self.config, 'ldap_verbose', False)
         self.coding = getattr(self.config, 'ldap_coding', 'utf-8')
+
+        filter = getattr( self.config, 'ldap_filter',
+                '(!(objectClass=gosaUserTemplate))(authorizedService=svn)(ossxpConfirmed=TRUE)' ) or ''
+        if '(uid=%(username)s)' in filter:
+            filter = filter.replace('(uid=%(username)s)', '(!(objectClass=gosaUserTemplate))')
+        if filter.startswith('(&'):
+            filter = filter[2:-1]
+        if filter and not filter.startswith('('):
+            filter = '(%s)' % filter
+        self.filter = filter
+
+        self.attr_uid       = getattr(self.config, 'ldap_uid_attribute',        'uid')
+        self.attr_givenname = getattr(self.config, 'ldap_givenname_attribute',  'givenName')
+        self.attr_sn        = getattr(self.config, 'ldap_surname_attribute',    'sn')
+        self.attr_cn        = getattr(self.config, 'ldap_aliasname_attribute',  'cn')
+        self.attr_mail      = getattr(self.config, 'ldap_email_attribute',      'mail')
+
         self.l = self.ldap_bind()
 
 
@@ -93,19 +125,21 @@ class LDAP(object):
 
         try:
             # you can use %(username)s here to get the stuff entered in the form:
-            filterstr = getattr(self.config, 'ldap_filter', '(&(uid=%(username)s)(authorizedService=svn)(ossxpConfirmed=TRUE))') % { 'username': username }
+            filter = "(&(uid=%s)%s)" % (username, self.filter)
 
             if attrs is None:
-                attrs = [getattr(self.config, attr) for attr in [
-                                         'ldap_uid_attribute',
-                                         'ldap_email_attribute',
-                                         'ldap_aliasname_attribute',
-                                         'ldap_surname_attribute',
-                                         'ldap_givenname_attribute',
-                                         ] if getattr(self.config, attr) is not None]
-            if self.verbose: log.debug("LDAP: Searching %r" % filterstr)
-            lusers = self.l.search_st(self.config.ldap_base, getattr(self.config, 'ldap_scope', ldap.SCOPE_SUBTREE), filterstr.encode(self.coding),
-                                 attrlist=attrs, timeout=getattr(self.config, 'ldap_timeout', 10))
+                attrs = [ self.attr_uid,
+                          self.attr_givenname,
+                          self.attr_sn,
+                          self.attr_cn,
+                          self.attr_mail ]
+
+            if self.verbose: log.debug("LDAP: Searching %r" % filter)
+            lusers = self.l.search_st(self.config.ldap_base,
+                                      getattr(self.config, 'ldap_scope', ldap.SCOPE_SUBTREE),
+                                      filter.encode(self.coding),
+                                      attrlist=attrs,
+                                      timeout=getattr(self.config, 'ldap_timeout', 10))
 
             # we remove entries with dn == None to get the real result list:
             lusers = [(dn, ldap_dict) for dn, ldap_dict in lusers if dn is not None]
@@ -139,9 +173,9 @@ class LDAP(object):
         result_length = len(lusers)
         if result_length != 1:
             if result_length > 1:
-                log.debug("LDAP: Search found more than one (%d) matches for %r." % (result_length, filterstr))
+                log.debug("LDAP: Search found more than one (%d) matches." % result_length)
             if result_length == 0:
-                if self.verbose: log.debug("LDAP: Search found no matches for %r." % (filterstr, ))
+                if self.verbose: log.debug("LDAP: Search found no matches.")
             return False # if ldap returns unusable results, we veto the user and don't let him in
 
         dn, ldap_dict = lusers[0]
@@ -162,6 +196,50 @@ class LDAP(object):
             return False # something went completely wrong, in doubt we veto the login
         else:
             return True
+
+
+    def fetch_all_users(self, filter=None, attrs=None):
+        if not self.is_bind():
+            return None
+
+        try:
+            if not filter:
+                filter = "(&(uid=*)%s)" % self.filter
+
+            if attrs is None:
+                attrs = [ self.attr_uid,
+                          self.attr_givenname,
+                          self.attr_sn,
+                          self.attr_cn,
+                          self.attr_mail ]
+
+            if self.verbose: log.debug("LDAP: Searching %r" % filter)
+            lusers = self.l.search_st(self.config.ldap_base,
+                                      getattr(self.config, 'ldap_scope',ldap.SCOPE_SUBTREE),
+                                      filter.encode(self.coding),
+                                      attrlist=attrs,
+                                      timeout=getattr(self.config, 'ldap_timeout', 10))
+
+            # we remove entries with dn == None to get the real result list:
+            lusers = [(dn, ldap_dict) for dn, ldap_dict in lusers if dn is not None]
+            if self.verbose:
+                for dn, ldap_dict in lusers:
+                    log.debug("LDAP: dn:%r" % dn)
+                    for key, val in ldap_dict.items():
+                        log.debug("    %r: %r" % (key, val))
+
+        except ldap.INVALID_CREDENTIALS, err:
+            log.debug("LDAP: invalid credentials (wrong password?) for dn %r (username: %r)" % (dn, username))
+            return None # if ldap says no, we veto the user and don't let him in
+
+        except:
+            import traceback
+            info = sys.exc_info()
+            log.debug("LDAP: caught an exception, traceback follows...")
+            log.debug(''.join(traceback.format_exception(*info)))
+            return None # something went completely wrong, in doubt we veto the login
+        else:
+            return lusers
 
 
  

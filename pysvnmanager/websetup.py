@@ -67,12 +67,12 @@ def setup_app(command, conf, vars):
     Base.metadata.create_all(bind=Session.bind)
     log.info("Successfully set up.")
 
-    log.info("Adding front page data...")
-    person = model.Person(uid=u'jiangxin',
-                          firstname=u'鑫',
-                          lastname=u'蒋',
-                          nickname=u'蒋鑫',
-                          mail=u'jiangxin@ossxp.com')
-    Session.add(person)
-    Session.commit()
+    ## log.info("Adding front page data...")
+    ## person = model.Person(uid=u'jiangxin',
+    ##                       firstname=u'鑫',
+    ##                       lastname=u'蒋',
+    ##                       nickname=u'蒋鑫',
+    ##                       mail=u'jiangxin@ossxp.com')
+    ## Session.add(person)
+    ## Session.commit()
 
