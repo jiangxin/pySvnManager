@@ -31,6 +31,7 @@ from pylons import app_globals as g
 from pylons import tmpl_context as c
 from pylons import url
 from pylons.controllers.util import redirect
+from pysvnmanager.model.meta import Session
 
 import sys
 config_path = config["here"] + '/config'
@@ -85,7 +86,10 @@ class BaseController(WSGIController):
         # WSGIController.__call__ dispatches to the Controller method
         # the request is routed to. This routing information is
         # available in environ['pylons.routes_dict']
-        return WSGIController.__call__(self, environ, start_response)
+        try:
+            return WSGIController.__call__(self, environ, start_response)
+        finally:
+            Session.remove()
 
     def standardize(self):
         if hasattr(self, 'authz'):

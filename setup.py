@@ -25,7 +25,7 @@ except ImportError:
 
 setup(
     name='pySvnManager',
-    version="0.4.1",
+    version="0.5.0",
     description='SVN authz web management tools.',
     author='Jiang Xin',
     author_email='jiangxin@ossxp.com',
@@ -37,6 +37,7 @@ setup(
         "Mako>=0.3.2",
         "WebHelpers>=1.0rc1",
         "Routes>=1.12.1",
+        "SQLAlchemy>=0.5",
         #"python-ldap",
     ],
     setup_requires=["PasteScript>=1.6.3"],
