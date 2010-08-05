@@ -36,7 +36,7 @@ class RoleController(BaseController):
             # Used as checked in user to rcs file.
             self.authz.login_as = self.login_as
             self.aliaslist  = map(lambda x:x.uname, self.authz.aliaslist)
-            self.userlist = map(lambda x:x.uname, self.authz.userlist)
+            self.userlist = map(lambda x:(x.uname, x.nice_name), self.authz.userlist)
             self.grouplist = map(lambda x:x.uname, self.authz.grouplist)
             self.is_super_user = self.authz.is_super_user(self.login_as)
             self.own_reposlist = self.authz.get_manageable_repos_list(self.login_as)
@@ -99,7 +99,7 @@ class RoleController(BaseController):
                     elif uname[0] == '&':
                         msg += 'name[%d]="%s";\n' % (members_count, _("Alias:")+uname[1:])
                     else:
-                        msg += 'name[%d]="%s";\n' % (members_count, uname)
+                        msg += 'name[%d]="%s";\n' % (members_count, (i.nice_name and "%s (%s)" % (i.uname, i.nice_name)) or i.uname)
                     members_count += 1;
                 msg += 'members_count=%d;\n' % members_count
 
@@ -209,4 +209,4 @@ class RoleController(BaseController):
 
         return msg
 
-        
+# vim: et ts=4 sw=4

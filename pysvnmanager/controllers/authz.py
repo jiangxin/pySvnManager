@@ -66,20 +66,22 @@ class AuthzController(BaseController):
         # used for functional test.
         c.reposlist = self.own_reposlist
         all_avail_users = []
-        all_avail_users.append([_("All users(with anon)"), '*'])
-        all_avail_users.append([_("Known users"), '$authenticated'])
-        all_avail_users.append([_("Anonymous"), '$anonymous'])
+        all_avail_users.append(['*', _("All users(with anon)")])
+        all_avail_users.append(['$authenticated', _("Known users")])
+        all_avail_users.append(['$anonymous', _("Anonymous")])
         for group in self.authz.grouplist:
             i = group.uname
             if i == '*' or i =='$authenticated' or i == '$anonymous':
                 continue
-            all_avail_users.append([_("Group:")+i[1:], i])
+            all_avail_users.append([i, _("Group:")+i[1:]])
         for alias in self.authz.aliaslist:
             i = alias.uname
-            all_avail_users.append([_("Alias:")+i[1:], i])
+            all_avail_users.append([i, _("Alias:")+i[1:]])
         for user in self.authz.userlist:
-            i = user.uname
-            all_avail_users.append([i, i])
+            if user.nice_name:
+                all_avail_users.append([user.uname, "%s (%s)" % (user.uname, user.nice_name)])
+            else:
+                all_avail_users.append([user.uname, user.uname])
         
         c.all_avail_users = all_avail_users
 

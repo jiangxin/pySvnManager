@@ -1,4 +1,5 @@
 ## -*- coding: utf-8 -*-
+## vim: et ts=4 sw=4
 <%inherit file="/base.mako" />
 
 <%def name="head_tags()">
@@ -20,8 +21,8 @@
             return false;">
 
 ${_("Repository name:")}
-	<input type="text" name="reposname" value="">
-	<br>
+    <input type="text" name="reposname" value="">
+    <br>
     <input type="submit" name="submit" value="${_("Create repository")}">
 
 </form>

@@ -1,4 +1,5 @@
 ## -*- coding: utf-8 -*-
+## vim: et ts=4 sw=4
 <%inherit file="/base.mako" />
 
 <%def name="head_tags()">
@@ -6,23 +7,25 @@
 </%def>
 
 <%
-userlist = [('...', _("Please choose...")), 
-            ('*', _("All users(with anon)")), 
-            ('$authenticated', _("Known users")), 
+userlist = [('...', _("Please choose...")),
+            ('*', _("All users(with anon)")),
+            ('$authenticated', _("Known users")),
             ('$anonymous', _("Anonymous")),]
-for i in c.userlist:
-    if i == '*' or i =='$authenticated' or i == '$anonymous':
+for id, display in c.userlist:
+    if id == '*' or id =='$authenticated' or id == '$anonymous':
         continue
-    if i[0] == '@':
-        userlist.append((i, _("Group:")+i[1:]))
-    elif i[0] == '&':
-        userlist.append((i, _("Alias:")+i[1:]))
+    if id[0] == '@':
+        userlist.append((id, _("Group:")+id[1:]))
+    elif id[0] == '&':
+        userlist.append((id, _("Alias:")+id[1:]))
+    elif display:
+        userlist.append([id, "%s (%s)" % (id, display)])
     else:
-        userlist.append([i, i])
+        userlist.append([id, id])
 
 reposlist = [('...', _("Please choose...")), ('*', _("All repos"))]
 if '/' in c.reposlist:
-	reposlist.append(('/', _("Default")))
+    reposlist.append(('/', _("Default")))
 for i in c.reposlist:
     if i == '/':
         continue
@@ -69,36 +72,36 @@ function update_path(form)
     var params = {repos:repos};
     showNoticesPopup();
     new Ajax.Request(
-		'${h.url(controller="check", action="get_auth_path")}', 
-		{asynchronous:true, evalScripts:true, method:'post',
-			onComplete:
-				function(request)
-					{hideNoticesPopup();ajax_update_path(request.responseText);},
-			parameters:params
-		});	
+        '${h.url(controller="check", action="get_auth_path")}',
+        {asynchronous:true, evalScripts:true, method:'post',
+            onComplete:
+                function(request)
+                    {hideNoticesPopup();ajax_update_path(request.responseText);},
+            parameters:params
+        });
 }
 function ajax_update_path(code)
 {
-	var id = new Array();
-	var name = new Array();
-	var total = 0;
-	
-	pathselector = document.forms[0].pathselector;
-	lastselect = pathselector.value;
-	pathselector.options.length = 0;
+    var id = new Array();
+    var name = new Array();
+    var total = 0;
 
-	try {
-		eval(code);
-		for (var i=0; i < total; i++)
-		{
-			pathselector.options[i] = new Option(name[i], id[i]);
-			if (id[i]==lastselect)
-				pathselector.options[i].selected = true;
-		}
-	}
-	catch(exception) {
-    	alert(exception);
-	}
+    pathselector = document.forms[0].pathselector;
+    lastselect = pathselector.value;
+    pathselector.options.length = 0;
+
+    try {
+        eval(code);
+        for (var i=0; i < total; i++)
+        {
+            pathselector.options[i] = new Option(name[i], id[i]);
+            if (id[i]==lastselect)
+                pathselector.options[i].selected = true;
+        }
+    }
+    catch(exception) {
+        alert(exception);
+    }
 }
 
 </SCRIPT>
@@ -112,7 +115,7 @@ function ajax_update_path(code)
 
 <form action="${h.url(controller='check', action='access_map')}"
   id="main_form" method="POST"
-  onsubmit="showNoticesPopup(); 
+  onsubmit="showNoticesPopup();
             new Ajax.Updater({success:'acl_msg',failure:'message'},
                              '${h.url(controller='check', action='access_map')}',
                              {asynchronous:true, evalScripts:true, method:'post',
@@ -135,7 +138,7 @@ function ajax_update_path(code)
             <br/>
         <input type="radio" name="userinput" value="manual">
             ${_("Manual input")}
-            <input type="text" name="username" size=15 maxlength=80 value="${c.typed_username}" 
+            <input type="text" name="username" size=15 maxlength=80 value="${c.typed_username}"
                 onFocus="edit_username(this.form)">
     </td>
 
@@ -144,9 +147,9 @@ function ajax_update_path(code)
             ${_("Select repository")}
             ${h.select("reposselector", c.selected_repos, reposlist, onFocus="select_repos(this.form)", onChange="update_path(this.form)")}
             <br/>
-        <input type="radio" name="reposinput" value="manual"> 
+        <input type="radio" name="reposinput" value="manual">
             ${_("Manual input")}
-            <input type="text" name="reposname" size=15 value="${c.typed_repos}" 
+            <input type="text" name="reposname" size=15 value="${c.typed_repos}"
                 onFocus="edit_repos(this.form)"
                 onBlur="update_path(this.form)">
     </td>
@@ -156,7 +159,7 @@ function ajax_update_path(code)
             ${_("Select module")}
             <select name="pathselector" size="0" onFocus="select_path(this.form)">
             </select><br/>
-        <input type="radio" name="pathinput" value="manual"> 
+        <input type="radio" name="pathinput" value="manual">
             ${_("Manual input")}
             <input type="text" name="pathname"" size=15
                 onFocus="edit_path(this.form)">

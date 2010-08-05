@@ -1,4 +1,5 @@
 ## -*- coding: utf-8 -*-
+## vim: et ts=4 sw=4
 <%inherit file="/base.mako" />
 <%def name="head_tags()">
     <title>${_("Administration logs")}</title>

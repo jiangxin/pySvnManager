@@ -29,6 +29,10 @@ import sys
 import os
 import my_fnmatch
 import StringIO
+
+from pysvnmanager.model.meta import Session
+from pysvnmanager.model import Person
+
 import logging
 log = logging.getLogger(__name__)
 
@@ -150,19 +154,35 @@ class User(object):
     Exception: Username is not provided
     """
 
-    def __init__(self, name):
+    def __init__(self, name, firstname=None, lastname=None, nickname=None, mail=None):
         name = normalize_user(name)
 
         if not name:
             raise Exception, 'Username is not provided'
 
         self.__name = name
+        self.firstname = firstname
+        self.lastname  = lastname
+        self.nickname  = nickname
+        self.mail      = mail
 
     def __get_unique_name(self):
         return self.__name
 
     uname = property(__get_unique_name)
     name  = property(__get_unique_name)
+
+    def __get_nice_name(self):
+        if self.nickname:
+            return self.nickname
+        elif not self.firstname and not self.lastname:
+            return None
+        elif self.firstname and self.lastname:
+            return self.lastname + ' ' + self.firstname
+        else:
+            return self.firstname or self.lastname
+
+    nice_name = property(__get_nice_name)
 
     def __cmp__(self, obj):
         """For userlist sorting"""
@@ -582,7 +602,7 @@ class UserList(object):
     def get(self, name):
         return self.get_or_set(name, autocreate=False)
 
-    def get_or_set(self, name, autocreate = True):
+    def get_or_set(self, name, firstname=None, lastname=None, nickname=None, mail=None, autocreate = True):
         assert isinstance(name, basestring)
         
         name = normalize_user(name)
@@ -593,11 +613,19 @@ class UserList(object):
 
         for user in self._user_list:
             if user.name == name:
+                if firstname is not None:
+                    user.firstname = firstname
+                if lastname is not None:
+                    user.lastname = lastname
+                if nickname is not None:
+                    user.nickname = nickname
+                if mail is not None:
+                    user.mail = mail
                 return user
 
         if autocreate:
             check_valid_username(name)
-            user = User(name)
+            user = User(name, firstname=firstname, lastname=lastname, nickname=nickname, mail=mail)
             self._user_list.append(user)
             return user
         else:
@@ -622,7 +650,7 @@ class AliasList(object):
             yield i
 
     def get(self, name):
-        return self.get_or_set(name, False)
+        return self.get_or_set(name, autocreate=False)
 
     def get_or_set(self, name, autocreate = True):
         assert isinstance(name, basestring)
@@ -681,7 +709,7 @@ class GroupList(object):
     group_list = property(__get_group_list)
 
     def get(self, name):
-        return self.get_or_set(name, False)
+        return self.get_or_set(name, autocreate=False)
 
     def get_or_set(self, name, autocreate = True):
         assert isinstance(name, basestring)
@@ -1091,7 +1119,7 @@ class ReposList(object):
             yield i
 
     def get(self, name):
-        return self.get_or_set(name, False)
+        return self.get_or_set(name, autocreate=False)
 
     def get_or_set(self, name, autocreate = True):
         name = normalize_repos(name)
@@ -1180,6 +1208,8 @@ class SvnAuthz(object):
         # Used as check-in message to rcs file.
         self.comment = []
         self.load(fileobj)
+        # Load users from databases.
+        self.load_db()
     
     def __clear(self):
         self.__userlist  = UserList()
@@ -1258,6 +1288,17 @@ class SvnAuthz(object):
                     if section == 'groups' or section == 'aliases':
                         continue
                     self.parse_module(section, contents)
+
+
+    def load_db(self):
+        self.person_q = Session.query(Person)
+        for person in self.person_q.all():
+            self.userlist.get_or_set(name=person.uid,
+                                     firstname=person.firstname,
+                                     lastname=person.lastname,
+                                     nickname=person.nickname,
+                                     mail=person.mail)
+
 
     def save(self, revision, comment=""):
         if comment: self.comment.append(comment)
