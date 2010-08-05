@@ -602,8 +602,10 @@ function disable_delete_btn()
 <DIV style="position:relative;" class=gainlayout>
 
 <DIV id="repos_list_box" class=gainlayout>
-${_("Repository:")}
-    <select name="repos_list" size="1" onChange='repos_changed()'>
+<span class="title">
+  ${_("Repository:")}
+</span>
+    <select name="repos_list" size="1" onChange='repos_changed()' class="select-repos">
     </select>
 % if c.is_super_user:
     <a href="#" onclick='new_repos()'>[+${_("New repository")}]</a>
@@ -611,12 +613,17 @@ ${_("Repository:")}
 </DIV>
 
 <DIV id="repos_input_box" class=gainlayout style="visibility:hidden;">
-${_("Repository Name:")}
-    <input type="text" name="repos_input" onChange="enable_save_btn()">
+<span class="title">
+  ${_("Repository Name:")}
+</span>
+<input type="text" name="repos_input" onChange="enable_save_btn()" class="input-repos">
 </DIV>
 
 <DIV id="admins_box" class=gainlayout style="visibility:hidden;">
-${_("Administrators:")} <input type="text" name="admins" size="25" maxlength="255" onChange="enable_save_btn();disable_delete_btn()">
+<span class="title">
+  ${_("Administrators:")}
+</span>
+<input type="text" name="admins" size="25" maxlength="255" onChange="enable_save_btn();disable_delete_btn()" class="input-fix2">
 </DIV>
 
 </DIV>
@@ -628,8 +635,10 @@ ${_("Administrators:")} <input type="text" name="admins" size="25" maxlength="25
 <!-- begin: path_list box -->
 <DIV id="path_list_box" class=gainlayout style="visibility:hidden;">
 
-${_("Module:")}
-    <select name="path_list" size="1" onChange='path_changed()'>
+<span class="title">
+  ${_("Module:")}
+</span>
+    <select name="path_list" size="1" onChange='path_changed()' class="select-mod">
     </select>
 <a href="#" onclick='new_module()'>[+${_("New module")}]</a>
 </DIV>
@@ -637,12 +646,14 @@ ${_("Module:")}
 
 <!-- begin: path_input box -->
 <DIV id="path_input_box" class=gainlayout style="visibility:hidden;">
-${_("Module Path:")}
-    <input type="text" name="path_input" onChange="enable_save_btn()">
+<span class="title">
+  ${_("Module Path:")}
+</span>
+    <input type="text" name="path_input" onChange="enable_save_btn()" class="input-fix2">
 </DIV>
 <!-- end: path_input box -->
 
-<table class="hidden">
+<table class="list" width="80%">
 <tr>
 <td>
 
@@ -653,7 +664,7 @@ ${_("Module Path:")}
   <th align='center'>
     ${_("ACL")}
   </th>
-  <th>
+  <th class="hide" width="10%">
   </th>
   <th align='center'>
     ${_("Users")}
@@ -661,14 +672,14 @@ ${_("Module Path:")}
 </tr>
 <tr>
   <td align='right'>
-    <select name="authz_list" size="10" multiple></select>
+    <select name="authz_list" size="10" class="select-col1" multiple></select>
   </td>
-  <td valign='center'>
+  <td class='button'>
     <a href='#' onClick='add_authz()'>&lt;=</a>
     <a href='#' onClick='move_authz()'>=&gt;</a>
   </td>
   <td>
-    <select name="user_list" size="10" multiple></select><br>
+    <select name="user_list" size="10" class="select-col2" multiple></select><br>
     <input type="text" name="username" size="10" maxlength="50"><br>
     <input type="radio" name="user_rights" value="r">${_("ReadOnly")}
     <input type="radio" name="user_rights" value="w">${_("Full")}

@@ -20,9 +20,11 @@
                               parameters:Form.serialize(this)});
             return false;">
 
-${_("Repository name:")}
-    <input type="text" name="reposname" value="">
+<span class="title">
+  ${_("Repository name:")}
+</span>
+    <input type="text" name="reposname" value="" class="input-repos">
     <br>
-    <input type="submit" name="submit" value="${_("Create repository")}">
+    <input type="submit" name="submit" value="${_("Create repository")}" class="input-button">
 
 </form>

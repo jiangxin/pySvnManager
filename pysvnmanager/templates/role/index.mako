@@ -659,8 +659,10 @@ function disable_delete_btn()
 <DIV style="position:relative;" class=gainlayout>
 
 <div id='role_list_box' style="position:relative;" class=gainlayout>
-${_("Select a role name:")}
-    ${h.select("role_list", "", role_list_opts, onChange='role_changed()')}
+<span class="title">
+  ${_("Select a role name:")}
+</span>
+    ${h.select("role_list", "", role_list_opts, onChange='role_changed()', Class="select-fix1")}
 % if c.is_super_user:
     <a href="#" onclick='new_group()'>[+${_("New Group")}]</a>
     <a href="#" onclick='new_alias()'>[+${_("New Alias")}]</a>
@@ -669,11 +671,17 @@ ${_("Select a role name:")}
 </div>
 
 <div id='group_input_box' style="position:relative;" class=gainlayout>
-${_("New group name:")} <input type='text' name='group_input' onChange="enable_save_btn()">
+<span class="title">
+  ${_("New group name:")}
+</span>
+<input type='text' name='group_input' onChange="enable_save_btn()" class="input-fix2">
 </div>
 
 <div id='alias_input_box' style="position:relative;" class=gainlayout>
-${_("New alias name:")} <input type='text' name='alias_input' onChange="enable_save_btn()">
+<span class="title">
+  ${_("New alias name:")}
+</span>
+<input type='text' name='alias_input' onChange="enable_save_btn()" class="input-fix2">
 </div>
 
 </DIV>
@@ -682,28 +690,28 @@ ${_("New alias name:")} <input type='text' name='alias_input' onChange="enable_s
 
 <!-- begin: group_edit_box -->
 <div id='group_edit_box' style="position:relative;" class=gainlayout>
-<table class="hidden">
-<tr>
+<table class="list" width="80%">
+<tr class=list width="45%">
   <th align='center'>
   ${_("Members list")}
   </th>
-  <th>
+  <th class="hide" width="10%">
   </th>
-  <th align='center'>
+  <th align='center' width="45%">
   ${_("Other users")}
   </th>
 </tr>
 <tr>
-  <td align='right'>
-    <select name="member_list" size="10" multiple></select>
+  <td class="right">
+    <select name="member_list" size="10" class="select-col1" multiple></select>
   </td>
-  <td valign='center'>
+  <td class="button">
     <a href='#' onClick='add_members()'>&lt;=</a>
     <a href='#' onClick='del_members()'>=&gt;</a>
   </td>
-  <td>
-    <select name="not_member_list" size="10" multiple></select><br>
-    <input type="text" name="not_member_input" size="10" maxlength="50">
+  <td class="left">
+    <select name="not_member_list" size="10" class="select-col2" multiple></select><br>
+    <input type="text" name="not_member_input" size="10" maxlength="50" class="input-role">
   </td>
 </tr>
 <tr>
@@ -720,13 +728,13 @@ ${_("New alias name:")} <input type='text' name='alias_input' onChange="enable_s
 <div id='alias_edit_box' style="position:relative;" class=gainlayout>
 <table class="hidden">
 <tr>
-  <td valign='top'>
+  <th valign='top'>
     ${_("User name:")}
-  </td>
+  </th>
   <td>
-    ${h.select("alias_as_list", "", alias_as_list_opts, onChange="enable_save_btn();disable_delete_btn()")}
+    ${h.select("alias_as_list", "", alias_as_list_opts, onChange="enable_save_btn();disable_delete_btn()", Class="select-role")}
     <br>
-    <input type="text" name="alias_as_input" size="10" maxlength="50" onChange="enable_save_btn();disable_delete_btn()">
+    &nbsp;&nbsp;<input type="text" name="alias_as_input" size="10" maxlength="50" onChange="enable_save_btn();disable_delete_btn()" class="input-role">
   </td>
 </tr>
 </table>
@@ -738,9 +746,9 @@ ${_("New alias name:")} <input type='text' name='alias_input' onChange="enable_s
 <!-- begin: action_box -->
 <div id='action_box' style="position:relative;" class=gainlayout>
   <input type="hidden" name="rolename">
-  <input type="button" name="save_btn"   value='${_("Save")}'  onClick="do_save(this.form)" ${c.is_super_user or "DISABLED"}>
-  <input type="button" name="delete_btn" value='${_("Delete")}' onClick="do_delete(this.form)" ${c.is_super_user or "DISABLED"}>
-  <input type="button" name="cancel_btn" value='${_("Cancel")}' onClick="role_changed()" ${c.is_super_user or "DISABLED"}>
+  <input type="button" class="input-button" name="save_btn"   value='${_("Save")}'  onClick="do_save(this.form)" ${c.is_super_user or "DISABLED"}>
+  <input type="button" class="input-button" name="delete_btn" value='${_("Delete")}' onClick="do_delete(this.form)" ${c.is_super_user or "DISABLED"}>
+  <input type="button" class="input-button" name="cancel_btn" value='${_("Cancel")}' onClick="role_changed()" ${c.is_super_user or "DISABLED"}>
 </div>
 <!-- end: action_box -->
 

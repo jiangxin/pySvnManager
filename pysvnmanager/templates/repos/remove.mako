@@ -62,10 +62,12 @@ function ajax_init_repos_list(code)
                               parameters:Form.serialize(this)});
             return false;">
 
-${_("Repository name:")}
-    <select id="repos_list" name="repos_list" size="1">
+<span class="title">
+  ${_("Repository name:")}
+</span>
+    <select id="repos_list" name="repos_list" size="1" class="select-repos">
     </select>
     <br>
-    <input type="submit" name="submit" value="${_("Remove repository")}">
+    <input type="submit" name="submit" value="${_("Remove repository")}" class="input-button">
 
 </form>

@@ -66,7 +66,7 @@ function compare(form)
   context.write(c.display);
 %>
 </div>
-<input type="submit" name="submit" value='${_("Compare revisions")}'>
+<input type="submit" name="submit" value='${_("Compare revisions")}' class="input-button">
 
 <div id="compare"></div>
 

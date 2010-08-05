@@ -123,7 +123,7 @@ function ajax_update_path(code)
                               parameters:Form.serialize(this)});
             return false;">
 
-<table class="hidden">
+<table class="list">
 <tr>
     <th>${_("Account")}</th>
     <th>${_("Repository")}</th>
@@ -133,38 +133,36 @@ function ajax_update_path(code)
 <tr>
     <td>
         <input type="radio" name="userinput" value="select" Checked>
-            ${_("Select username")}
-            ${h.select("userselector", c.selected_username, userlist, onFocus="select_username(this.form)")}
+            ${h.select("userselector", c.selected_username, userlist, onFocus="select_username(this.form)", Class="select-fix1")}
             <br/>
         <input type="radio" name="userinput" value="manual">
             ${_("Manual input")}
             <input type="text" name="username" size=15 maxlength=80 value="${c.typed_username}"
-                onFocus="edit_username(this.form)">
+                onFocus="edit_username(this.form)" class="input-fix1">
     </td>
 
     <td>
         <input type="radio" name="reposinput" value="select" Checked onClick="update_path(this.form)">
-            ${_("Select repository")}
-            ${h.select("reposselector", c.selected_repos, reposlist, onFocus="select_repos(this.form)", onChange="update_path(this.form)")}
+            ${h.select("reposselector", c.selected_repos, reposlist, onFocus="select_repos(this.form)", onChange="update_path(this.form)", Class="select-fix1")}
             <br/>
         <input type="radio" name="reposinput" value="manual">
             ${_("Manual input")}
             <input type="text" name="reposname" size=15 value="${c.typed_repos}"
                 onFocus="edit_repos(this.form)"
-                onBlur="update_path(this.form)">
+                onBlur="update_path(this.form)"
+                class="input-fix1">
     </td>
 
     <td>
         <input type="radio" name="pathinput" value="select" Checked>
-            ${_("Select module")}
-            <select name="pathselector" size="0" onFocus="select_path(this.form)">
+            <select name="pathselector" size="0" onFocus="select_path(this.form)" class="select-fix1">
             </select><br/>
         <input type="radio" name="pathinput" value="manual">
             ${_("Manual input")}
             <input type="text" name="pathname"" size=15
-                onFocus="edit_path(this.form)">
-    </td>
-        <td>
+                onFocus="edit_path(this.form)"
+                class="input-fix1">
+
         <div id="path">
         ## classic form: ${c.path_options}
         </div>
@@ -172,7 +170,7 @@ function ajax_update_path(code)
 </tr>
 </table>
 
-<input type="submit" name="submit" value='${_("Check Permissions")}'>
+<input type="submit" name="submit" value='${_("Check Permissions")}' class="input-button">
 
 ${h.end_form()}
 

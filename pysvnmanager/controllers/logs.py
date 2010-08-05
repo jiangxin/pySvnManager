@@ -68,7 +68,7 @@ class LogsController(BaseController):
         buff  = '<div>%s</div>' % paginate
         buff +='''
 <div>
-<table>
+<table class="logs">
 <tr>
     <th>%(rev)s</th>
     <th>%(who)s</th>

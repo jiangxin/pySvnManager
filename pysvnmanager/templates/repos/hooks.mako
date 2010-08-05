@@ -187,8 +187,10 @@ function installed_hook_form_submit(form)
 <DIV style="position:relative;" class=gainlayout>
 
 <DIV id="repos_list_box" class=gainlayout>
-${_("Repository:")}
-    <select name="repos_list" size="1" onChange='repos_changed()'>
+<span class="title">
+  ${_("Repository:")}
+</span>
+    <select name="repos_list" size="1" onChange='repos_changed()' class="select-repos">
     </select>
 % if c.is_super_user:
     ${h.link_to(_("Add repository"), h.url(controller="repos", action="create"))}
@@ -198,8 +200,10 @@ ${_("Repository:")}
 
 <DIV id="uninstall_hook_box" class=gainlayout style="visibility:hidden;position:absolute">
 <hr>
-${_("Uninstalled hooks:")}
-    <select name="unset_plugin_list" size="1" onChange='select_unset_hook_list()'>
+<span class="title">
+  ${_("Uninstalled hooks:")}
+</span>
+    <select name="unset_plugin_list" size="1" onChange='select_unset_hook_list()' class="select-plugin">
     </select>
 </form>
 </DIV>
@@ -217,21 +221,21 @@ ${_("Uninstalled hooks:")}
                               parameters:Form.serialize(this)});
             return false;">
 
-    <table class='hidden' width='90%'>
+    <table class='hidden' width='100%'>
       <tr>
         <td>
           <div id="hook_setting_form_contents"></div>
         </td></tr>
       <tr>
         <td align='center'>
-          <input type="submit" name="apply" value="${_("Install this plugin")}">
+          <input type="submit" name="apply" value="${_("Install this plugin")}" class="input-button">
         </td>
       </tr>
     </table>
 </form>
 </DIV>
 
-<hr size='1'>
+<hr>
 
 <DIV id="installed_hook_box" class=gainlayout style="visibility:visible;position:relative">
 ## <form name="installed_hook_form" method="post" action="${h.url(controller="repos", action='remove_hook')}"
@@ -247,7 +251,7 @@ ${_("Uninstalled hooks:")}
                               parameters:Form.serialize(this)});
             return false;">
 
-    <input type='hidden' name='_repos'>
+    <input type='hidden' name='_repos' class="input-button">
     <div id="installed_hook_form_contents"></div>
 </DIV>
 
