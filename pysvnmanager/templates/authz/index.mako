@@ -23,26 +23,26 @@ context.write(msg)
 // Display repos list only.
 function show_init_form()
 {
-    document.getElementById('repos_list_box').style.visibility = 'visible';
-    document.getElementById('repos_list_box').style.position = 'relative';
+    $('repos_list_box').style.visibility = 'visible';
+    $('repos_list_box').style.position = 'relative';
 
-    document.getElementById('repos_input_box').style.visibility = 'hidden';
-    document.getElementById('repos_input_box').style.position = 'absolute';
+    $('repos_input_box').style.visibility = 'hidden';
+    $('repos_input_box').style.position = 'absolute';
 
-    document.getElementById('admins_box').style.visibility = 'hidden';
-    document.getElementById('admins_box').style.position = 'absolute';
+    $('admins_box').style.visibility = 'hidden';
+    $('admins_box').style.position = 'absolute';
 
-    document.getElementById('path_list_box').style.visibility = 'hidden';
-    document.getElementById('path_list_box').style.position = 'absolute';
+    $('path_list_box').style.visibility = 'hidden';
+    $('path_list_box').style.position = 'absolute';
 
-    document.getElementById('path_input_box').style.visibility = 'hidden';
-    document.getElementById('path_input_box').style.position = 'absolute';
+    $('path_input_box').style.visibility = 'hidden';
+    $('path_input_box').style.position = 'absolute';
 
-    document.getElementById('authz_box').style.visibility = 'hidden';
-    document.getElementById('authz_box').style.position = 'absolute';
+    $('authz_box').style.visibility = 'hidden';
+    $('authz_box').style.position = 'absolute';
 
-    document.getElementById('action_box').style.visibility = 'hidden';
-    document.getElementById('action_box').style.position = 'absolute';
+    $('action_box').style.visibility = 'hidden';
+    $('action_box').style.position = 'absolute';
 }
 
 // Display repos_list, admins_input, path_list.
@@ -50,14 +50,14 @@ function show_repos_form()
 {
     show_init_form();
 
-    document.getElementById('admins_box').style.visibility = 'visible';
-    document.getElementById('admins_box').style.position = 'relative';
+    $('admins_box').style.visibility = 'visible';
+    $('admins_box').style.position = 'relative';
 
-    document.getElementById('path_list_box').style.visibility = 'visible';
-    document.getElementById('path_list_box').style.position = 'relative';
+    $('path_list_box').style.visibility = 'visible';
+    $('path_list_box').style.position = 'relative';
 
-    document.getElementById('action_box').style.visibility = 'visible';
-    document.getElementById('action_box').style.position = 'relative';
+    $('action_box').style.visibility = 'visible';
+    $('action_box').style.position = 'relative';
 
     disable_save_btn();
     disable_delete_btn();
@@ -68,8 +68,8 @@ function show_module_form()
 {
     show_repos_form();
 
-    document.getElementById('authz_box').style.visibility = 'visible';
-    document.getElementById('authz_box').style.position = 'relative';
+    $('authz_box').style.visibility = 'visible';
+    $('authz_box').style.position = 'relative';
 
     disable_save_btn();
     enable_delete_btn();
@@ -80,14 +80,14 @@ function show_new_module_form()
 {
     show_module_form();
 
-    document.getElementById('path_list_box').style.visibility = 'hidden';
-    document.getElementById('path_list_box').style.position = 'absolute';
+    $('path_list_box').style.visibility = 'hidden';
+    $('path_list_box').style.position = 'absolute';
 
-    document.getElementById('path_input_box').style.visibility = 'visible';
-    document.getElementById('path_input_box').style.position = 'relative';
+    $('path_input_box').style.visibility = 'visible';
+    $('path_input_box').style.position = 'relative';
 
-    document.getElementById('authz_box').style.visibility = 'visible';
-    document.getElementById('authz_box').style.position = 'relative';
+    $('authz_box').style.visibility = 'visible';
+    $('authz_box').style.position = 'relative';
 
     disable_save_btn();
     disable_delete_btn();
@@ -98,20 +98,20 @@ function show_new_repos_form()
 {
     show_repos_form();
 
-    document.getElementById('repos_list_box').style.visibility = 'hidden';
-    document.getElementById('repos_list_box').style.position = 'absolute';
+    $('repos_list_box').style.visibility = 'hidden';
+    $('repos_list_box').style.position = 'absolute';
 
-    document.getElementById('repos_input_box').style.visibility = 'visible';
-    document.getElementById('repos_input_box').style.position = 'relative';
+    $('repos_input_box').style.visibility = 'visible';
+    $('repos_input_box').style.position = 'relative';
 
-    document.getElementById('path_list_box').style.visibility = 'hidden';
-    document.getElementById('path_list_box').style.position = 'absolute';
+    $('path_list_box').style.visibility = 'hidden';
+    $('path_list_box').style.position = 'absolute';
 
-    document.getElementById('path_input_box').style.visibility = 'visible';
-    document.getElementById('path_input_box').style.position = 'relative';
+    $('path_input_box').style.visibility = 'visible';
+    $('path_input_box').style.position = 'relative';
 
-    document.getElementById('authz_box').style.visibility = 'visible';
-    document.getElementById('authz_box').style.position = 'relative';
+    $('authz_box').style.visibility = 'visible';
+    $('authz_box').style.position = 'relative';
 
     disable_save_btn();
     disable_delete_btn();
@@ -439,7 +439,7 @@ function move_authz()
 
 function save_authz(form)
 {
-    if(document.getElementById('repos_list_box').style.visibility == 'visible')
+    if($('repos_list_box').style.visibility == 'visible')
     {
         mode1 = "edit";
         reposname = form.repos_list.value;
@@ -450,7 +450,7 @@ function save_authz(form)
         reposname = form.repos_input.value;
     }
 
-    if(document.getElementById('path_list_box').style.visibility == 'visible')
+    if($('path_list_box').style.visibility == 'visible')
     {
         mode2 = "edit";
         path = form.path_list.value;

@@ -13,17 +13,17 @@
 // Display repos list only.
 function show_init_form()
 {
-    document.getElementById('repos_list_box').style.visibility = 'visible';
-    document.getElementById('repos_list_box').style.position = 'relative';
+    $('repos_list_box').style.visibility = 'visible';
+    $('repos_list_box').style.position = 'relative';
 
-    document.getElementById('uninstall_hook_box').style.visibility = 'hidden';
-    document.getElementById('uninstall_hook_box').style.position = 'absolute';
+    $('uninstall_hook_box').style.visibility = 'hidden';
+    $('uninstall_hook_box').style.position = 'absolute';
 
-    document.getElementById('hook_setting_box').style.visibility = 'hidden';
-    document.getElementById('hook_setting_box').style.position = 'absolute';
+    $('hook_setting_box').style.visibility = 'hidden';
+    $('hook_setting_box').style.position = 'absolute';
 
-    document.getElementById('installed_hook_box').style.visibility = 'visible';
-    document.getElementById('installed_hook_box').style.position = 'relative';
+    $('installed_hook_box').style.visibility = 'visible';
+    $('installed_hook_box').style.position = 'relative';
 }
 
 
@@ -119,15 +119,15 @@ function ajax_repos_changed(code)
         eval(code);
         if (total==1)
         {
-            document.getElementById('uninstall_hook_box').style.visibility = 'hidden';
-            document.getElementById('uninstall_hook_box').style.position = 'absolute';
-            document.getElementById('hook_setting_box').style.visibility = 'hidden';
-            document.getElementById('hook_setting_box').style.position = 'absolute';
+            $('uninstall_hook_box').style.visibility = 'hidden';
+            $('uninstall_hook_box').style.position = 'absolute';
+            $('hook_setting_box').style.visibility = 'hidden';
+            $('hook_setting_box').style.position = 'absolute';
         }
         else
         {
-            document.getElementById('uninstall_hook_box').style.visibility = 'visible';
-            document.getElementById('uninstall_hook_box').style.position = 'relative';
+            $('uninstall_hook_box').style.visibility = 'visible';
+            $('uninstall_hook_box').style.position = 'relative';
             for (var i=0; i < total; i++)
             {
                 unset_plugin_list.options[i] = new Option(name[i], id[i]);
@@ -147,9 +147,9 @@ function select_unset_hook_list()
 
     if (pluginname=='...'||pluginname=='')
     {
-        document.getElementById('hook_setting_form_contents').innerHTML = "";
-        document.getElementById('hook_setting_box').style.visibility = 'hidden';
-        document.getElementById('hook_setting_box').style.position = 'absolute';
+        $('hook_setting_form_contents').innerHTML = "";
+        $('hook_setting_box').style.visibility = 'hidden';
+        $('hook_setting_box').style.position = 'absolute';
     }
     else
     {
@@ -162,8 +162,8 @@ function show_hook_config_form(hookid)
     var reposname  = document.main_form.repos_list.value;
     var params = {repos:reposname, plugin:hookid};
 
-    document.getElementById('hook_setting_box').style.visibility = 'visible';
-    document.getElementById('hook_setting_box').style.position = 'relative';
+    $('hook_setting_box').style.visibility = 'visible';
+    $('hook_setting_box').style.position = 'relative';
     showNoticesPopup();
     new Ajax.Updater(
         {success:'hook_setting_form_contents'},
