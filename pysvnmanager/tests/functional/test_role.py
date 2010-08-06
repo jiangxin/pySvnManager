@@ -38,15 +38,15 @@ class TestRoleController(TestController):
         res = self.app.get(url(controller='role', action='index'))
         assert res.status == "200 OK", res.status
         assert """
-    <input type="button" name="save_btn"   value='Save'  onClick="do_save(this.form)" DISABLED>
-    <input type="button" name="delete_btn" value='Delete' onClick="do_delete(this.form)" DISABLED>
-    <input type="button" name="cancel_btn" value='Cancel' onClick="role_changed()" DISABLED>""" in res.body, res.body[-300:]
+  <input type="button" class="input-button" name="save_btn"   value='Save'  onClick="do_save(this.form)" DISABLED>
+  <input type="button" class="input-button" name="delete_btn" value='Delete' onClick="do_delete(this.form)" DISABLED>
+  <input type="button" class="input-button" name="cancel_btn" value='Cancel' onClick="role_changed()" DISABLED>""" in res.body, res.body[-700:]
 
         # Login as superuser
         self.login('root')
         res = self.app.get(url(controller='role', action='index'))
         assert res.status == "200 OK", res.status
-        assert """<input type="button" name="save_btn"   value='Save'""" in res.body, res.body
+        assert """<input type="button" class="input-button" name="save_btn"   value='Save'""" in res.body, res.body
 
     def test_get_role_info(self):
         # authn test
