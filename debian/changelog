@@ -1,3 +1,9 @@
+pysvnmanager (1:0.5.1r156-50) unstable; urgency=low
+
+  * Promote to 0.5.1: Better IE support.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Fri, 06 Aug 2010 11:25:48 +0800
+
 pysvnmanager (1:0.5.0r154-50) unstable; urgency=low
 
   * Promote to 0.5.0: ldap user sync, add database support.

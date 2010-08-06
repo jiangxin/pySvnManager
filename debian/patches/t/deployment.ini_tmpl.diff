@@ -10,7 +10,7 @@ Signed-off-by: Jiang <jiangxin@ossxp.com>
  1 files changed, 13 insertions(+), 9 deletions(-)
 
 diff --git a/pysvnmanager/config/deployment.ini_tmpl b/pysvnmanager/config/deployment.ini_tmpl
-index c770f4f..7645d9b 100644
+index 66e5fcc..a60905d 100644
 --- a/pysvnmanager/config/deployment.ini_tmpl
 +++ b/pysvnmanager/config/deployment.ini_tmpl
 @@ -14,7 +14,7 @@ use = egg:Paste#http
@@ -22,7 +22,7 @@ index c770f4f..7645d9b 100644
  use = egg:pySvnManager
  full_stack = true
  static_files = true
-@@ -40,10 +40,6 @@ sqlalchemy.url = sqlite:///production.db
+@@ -40,10 +40,6 @@ sqlalchemy.url = sqlite:///%(here)s/db/production.db
  # execute malicious code after an exception is raised.
  set debug = false
  
@@ -58,4 +58,4 @@ index c770f4f..7645d9b 100644
  # Logging configuration
  [loggers]
 -- 
-tg: (f3aba2b..) t/deployment.ini_tmpl (depends on: master)
+tg: (471acf8..) t/deployment.ini_tmpl (depends on: master)
