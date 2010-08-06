@@ -13,10 +13,9 @@
 ${c.contents}
 </textarea>
 
-<form name="main_form" action="${h.url(controller="logs", action='rollback')}" onsubmit="return confirm('${_("Rollback to this revision, are you sure?")}');">
+<form name="main_form" action="${h.url(controller="logs", action='rollback', id=c.id)}" onsubmit="return confirm('${_("Rollback to this revision, are you sure?")}');">
 % if c.rollback_enabled:
-  <input type="submit" name="submit" value='${_("Rollback to this revision")}'>
-  &nbsp;&nbsp;&nbsp;&nbsp;
+  <input type="submit" name="submit" value='${_("Rollback to this revision")}' class="input-button">
 % endif
   <input type="button" name="close" value='${_("Close")}' onclick="window.close();" class="input-button">
 </form>

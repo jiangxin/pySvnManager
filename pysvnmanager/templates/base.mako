@@ -41,12 +41,19 @@ context.write(msg)
     </div>
 
     <div class="page">
-      <div id="message_box" style="visibility:hidden;position:absolute; margin:1em;" class=gainlayout>
-        <div id="message"></div>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <a class="clear-link" href="#"
-           onClick="document.getElementById('message').innerHTML='';switch_message_box()"
-           >${_("Clear message")}</a>
+      <div id="message-box" style="visibility:hidden;position:absolute; margin:1em;" class=gainlayout>
+        <table class="borderless" width="90%">
+          <tr>
+            <td id="message-icon"></td>
+            <td><div id="message"></div></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              <a class="clear-link" href="#" onClick="set_message_box('')">${_("Clear message")}</a>
+            </td>
+          </tr>
+        </table>
       </div>
 
       ${next.body()}
@@ -137,68 +144,94 @@ function getWinHeight()
 <script language='javascript'>
 function showPopupShadow()
 {
-    document.getElementById('popup_shadow').style.visibility = 'visible';
-    document.getElementById('popup_shadow').style.display = 'inline';
+    $('popup_shadow').style.visibility = 'visible';
+    $('popup_shadow').style.display = 'inline';
 }
 
 function hidePopupShadow()
 {
-    document.getElementById('popup_shadow').style.visibility = 'hidden';
-    document.getElementById('popup_shadow').style.display = 'none';
+    $('popup_shadow').style.visibility = 'hidden';
+    $('popup_shadow').style.display = 'none';
 }
 
 function showNoticesPopup()
 {
     showPopupShadow();
 
-    document.getElementById('popup_notices').style.top= '0px';
-    document.getElementById('popup_notices').style.left= getWinWidth()/2+'px';
-    document.getElementById('popup_notices').style.visibility = 'visible';
-    document.getElementById('popup_notices').style.display = 'inline';
+    $('popup_notices').style.top= '0px';
+    $('popup_notices').style.left= getWinWidth()/2+'px';
+    $('popup_notices').style.visibility = 'visible';
+    $('popup_notices').style.display = 'inline';
 }
 
 function hideNoticesPopup()
 {
     hidePopupShadow();
 
-    document.getElementById('popup_notices').style.visibility = 'hidden';
-    document.getElementById('popup_notices').style.display = 'none';
+    $('popup_notices').style.visibility = 'hidden';
+    $('popup_notices').style.display = 'none';
 }
 
 function warn_msg(message)
 {
-    set_message_box("<div class='warning'>"+message+"<div>");
+    set_message_box(message, "warning");
 }
 
 function error_msg(message)
 {
-    set_message_box("<div class='error'>"+message+"<div>");
+    set_message_box(message, "error");
 }
 
 function info_msg(message)
 {
-    set_message_box("<div class='info'>"+message+"<div>");
+    set_message_box(message, "info");
 }
 
-function set_message_box(message)
+function set_message_box_json(message)
 {
-    document.getElementById('message').innerHTML=message;
+    var j = message.evalJSON();
+    set_message_box(j.message, j.type);
+}
+
+function set_message_box(message, admon)
+{
+    var icon = $('message-icon');
+    $('message').innerHTML=message;
+
+    if (admon == "warning") {
+        icon.addClassName   ("icon-warning");
+    } else {
+        icon.removeClassName("icon-warning");
+    }
+    if (admon == "info") {
+        icon.addClassName   ("icon-info");
+    } else {
+        icon.removeClassName("icon-info");
+    }
+    if (admon == "error") {
+        icon.addClassName   ("icon-error");
+    } else {
+        icon.removeClassName("icon-error");
+    }
+
     switch_message_box();
 }
 
 function switch_message_box()
 {
-    c=document.getElementById('message').innerHTML;
-    s=document.getElementById('message_box').style;
-    if (c)
+    var msgbox = $('message-box');
+    if ($('message').innerHTML)
     {
-        s.visibility='visible';
-        s.position = 'relative';
+        if (msgbox.style.visibility == 'hidden')
+        {
+            msgbox.style.visibility = 'visible';
+            msgbox.style.position = 'relative';
+        }
+        msgbox.show();
     }
-    else
+    else 
     {
-        s.visibility='hidden';
-        s.position = 'absolute';
+        msgbox.hide();
     }
 }
 </script>

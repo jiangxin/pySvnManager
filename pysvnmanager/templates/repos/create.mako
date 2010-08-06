@@ -13,11 +13,21 @@
 <form action="${h.url(controller="repos", action='create_submit')}"
   id="main_form" method="POST"
   onsubmit="showNoticesPopup();
-            new Ajax.Updater('message',
-                             '${h.url(controller="repos", action='create_submit')}',
-                             {asynchronous:true, evalScripts:true, method:'post',
-                              onComplete:function(request){hideNoticesPopup();switch_message_box();},
-                              parameters:Form.serialize(this)});
+            new Ajax.Request(
+                '${h.url(controller="repos", action='create_submit')}',
+                {
+                 asynchronous:true, evalScripts:true, method:'post',
+                 onFailure:
+                    function(request)
+                        {set_message_box(request.responseText, 'error');},
+                 onSuccess:
+                    function(request)
+                        {set_message_box_json(request.responseText);},
+                 onComplete:
+                    function(request)
+                        {hideNoticesPopup();},
+                 parameters:Form.serialize(this)
+                });
             return false;">
 
 <span class="title">
