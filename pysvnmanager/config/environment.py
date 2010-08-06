@@ -50,7 +50,19 @@ def load_environment(global_conf, app_conf):
     else:
         from sqlalchemy import create_engine
         engine = create_engine('sqlite:///%(here)s/db/fallback.db' % config)
+
     init_model(engine)
+
+    # Create database if not exists.
+    if ( engine.url.drivername in ['sqlite'] and
+         not os.path.exists( engine.url.database ) ):
+
+        if not os.path.exists( os.path.dirname( engine.url.database ) ):
+            os.makedirs( os.path.dirname( engine.url.database ) )
+
+        # initialized database here.
+        from pysvnmanager.model.meta import Session, metadata, Base
+        Base.metadata.create_all(bind=Session.bind)
 
     # CONFIGURATION OPTIONS HERE (note: all config options will override
     # any Pylons config options)
