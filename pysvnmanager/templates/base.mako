@@ -6,6 +6,11 @@
     ${self.ajax_script()}
     ${h.stylesheet_link(h.url('/css/common.css'), media='all')}
 
+    <!-- css only for MS IE6/IE7 browsers -->
+    <!--[if lt IE 8]>
+    ${h.stylesheet_link(h.url('/css/msie.css'), media='all')}
+    <![endif]-->
+
     <SCRIPT LANGUAGE="JavaScript">
 <%
 msg = ''
