@@ -144,6 +144,7 @@ pysvnmanager/model/auth/http.py
 pysvnmanager/model/auth/ldap_login.py
 pysvnmanager/public/favicon.ico
 pysvnmanager/public/css/common.css
+pysvnmanager/public/css/msie.css
 pysvnmanager/public/img/add.png
 pysvnmanager/public/img/alert.png
 pysvnmanager/public/img/alias.png
