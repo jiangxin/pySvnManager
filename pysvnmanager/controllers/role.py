@@ -222,6 +222,10 @@ class RoleController(BaseController):
 
         message = _(u"Add %(add)d users, delete %(delete)d users, update %(update)d users.") % \
             { 'add': add, 'delete': delete, 'update': update }
+        if add + delete + update > 0:
+            message += "<p>"
+            message += _(u"Reload this page immediately, and show the update users list.")
+
         return message
 
  

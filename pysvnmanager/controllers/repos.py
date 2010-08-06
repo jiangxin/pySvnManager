@@ -24,6 +24,7 @@ from pysvnmanager.model.svnauthz import *
 from pysvnmanager.model import repos as _repos
 from pysvnmanager.model import hooks as _hooks
 from pylons.i18n import _, ungettext, N_
+import json
 
 log = logging.getLogger(__name__)
 
@@ -165,11 +166,20 @@ class ReposController(BaseController):
             plugin = h.plugins[pluginname]
             plugin.install(d)
         except Exception, e:
-            result = "<div class='error'>" + _("Apply plugin '%(plugin)s' on '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
-                        "plugin": pluginname, "repos":reposname, "msg": to_unicode(e) } + "</div>"
+            result = json.dumps( {
+                    "type": "error",
+                    "message": _("Apply plugin '%(plugin)s' on '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
+                          "plugin": pluginname,
+                          "repos":reposname,
+                          "msg": to_unicode(e) }
+                    } )
         else:
-            result = "<div class='info'>" + _("Apply plugin '%(plugin)s' on '%(repos)s' success.") % {
-                        "plugin": pluginname, "repos":reposname} + "</div>"
+            result = json.dumps( {
+                    "type": "info",
+                    "message": _("Apply plugin '%(plugin)s' on '%(repos)s' success.") % {
+                          "plugin": pluginname,
+                          "repos":reposname }
+                    } )
         return result
     
     def uninstall_hook(self):
@@ -190,13 +200,25 @@ class ReposController(BaseController):
                     hookobj.plugins[pluginname].uninstall()
                     log.info("my delete plugin %s, %s" % (pluginname, hookobj.plugins[pluginname].name))
             except Exception, e:
-                result = "<div class='error'>" + _("Delete plugin '%(plugin)s' on '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
-                        "plugin": ", ".join(plugin_list), "repos":reposname, "msg": to_unicode(e) } + "</div>"
+                result = json.dumps( {
+                        "type": "error",
+                        "message": _("Delete plugin '%(plugin)s' on '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
+                                "plugin": ", ".join(plugin_list),
+                                "repos":reposname,
+                                "msg": to_unicode(e) }
+                        } )
             else:
-                result = "<div class='info'>" + _("Delete plugin '%(plugin)s' on '%(repos)s' success.") % {
-                        "plugin": ", ".join(plugin_list), "repos":reposname} + "</div>"
+                result = json.dumps( {
+                        "type": "info",
+                        "message": _("Delete plugin '%(plugin)s' on '%(repos)s' success.") % {
+                                "plugin": ", ".join(plugin_list),
+                                "repos":reposname }
+                        } )
         else:
-            result = "<div class='error'>" + _("No plugin has been deleted for '%(repos)s'.") % {"repos":reposname} + "</div>"
+            result = json.dumps( {
+                    "type": "error",
+                    "message": _("No plugin has been deleted for '%(repos)s'.") % {"repos":reposname}
+                    } )
         return result
 
     def create_submit(self):
@@ -206,10 +228,16 @@ class ReposController(BaseController):
             self.validate_repos(reposname)
             self.repos.create(reposname)
         except Exception, e:
-            result = "<div class='error'>" + _("Create repository '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
-                        "repos":reposname, "msg": to_unicode(e) } + "</div>"
+            result = json.dumps( {
+                    "type": "error",
+                    "message": _("Create repository '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
+                            "repos":reposname, "msg": to_unicode(e) }
+                    } )
         else:
-            result = "<div class='info'>" + _("Create repository '%(repos)s' success.") % {"repos":reposname} + "</div>"
+            result = json.dumps( {
+                    "type": "info",
+                    "message": _("Create repository '%(repos)s' success.") % {"repos":reposname} 
+                    } )
         return result
         
     def create(self):
@@ -225,13 +253,22 @@ class ReposController(BaseController):
             self.validate_repos(reposname)
             self.repos.delete(reposname)
         except Exception, e:
-            result = "<div class='error'>" + _("Delete repository '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
-                        "repos":reposname, "msg": to_unicode(e) } + "</div>"
+            result = json.dumps( {
+                    "type": "error",
+                    "message": _("Delete repository '%(repos)s' Failed. Error message:<br>\n%(msg)s") % {
+                            "repos":reposname, "msg": to_unicode(e) }
+                    } )
         else:
-            result = "<div class='info'>" + _("Delete blank repository '%(repos)s' success.") % {"repos":reposname} + "</div>"
+            result = json.dumps( {
+                    "type": "info",
+                    "message": _("Delete blank repository '%(repos)s' success.") % {"repos":reposname}
+                    } )
         return result
     
     def remove(self):
         if not self.is_super_user:
             return redirect(url(controller='security', action='failed'))
         return render('/repos/remove.mako')
+
+
+# vim: et ts=4 sw=4

@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pysvnmanager\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-08-05 21:39+0800\n"
-"PO-Revision-Date: 2010-08-05 21:40+0800\n"
+"POT-Creation-Date: 2010-08-06 15:34+0800\n"
+"PO-Revision-Date: 2010-08-06 15:35+0800\n"
 "Last-Translator: Jiang Xin <worldhello.net@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: \n"
@@ -118,20 +118,20 @@ msgstr "说明"
 msgid "Compare"
 msgstr "比较"
 
-#: pysvnmanager/controllers/logs.py:125
+#: pysvnmanager/controllers/logs.py:123
 msgid "Page: "
 msgstr "页面: "
 
-#: pysvnmanager/controllers/logs.py:161
+#: pysvnmanager/controllers/logs.py:159
 msgid "Compares between"
 msgstr "版本间比较"
 
-#: pysvnmanager/controllers/logs.py:181
+#: pysvnmanager/controllers/logs.py:179
 #, python-format
 msgid "Rollback successfully to revision: %s"
 msgstr "成功回滚至版本: %s"
 
-#: pysvnmanager/controllers/logs.py:188
+#: pysvnmanager/controllers/logs.py:186
 #, python-format
 msgid "Rollback failed: %s"
 msgstr "回滚失败: %s"
@@ -242,6 +242,10 @@ msgstr "用户 %(user)s 删除别名: %(alias)s。(rev:%(rev)s,%(msg)s)"
 #, python-format
 msgid "Add %(add)d users, delete %(delete)d users, update %(update)d users."
 msgstr "%(add)d 个用户被添加， %(delete)d 个用户被删除， %(update)d 个用户被更新。"
+
+#: pysvnmanager/controllers/role.py:227
+msgid "Reload this page immediately, and show the update users list."
+msgstr "涮新本页面，以便显示更新的用户列表。"
 
 #: pysvnmanager/controllers/security.py:51
 #, python-format
@@ -782,15 +786,15 @@ msgstr ""
 "%(deny)s\n"
 "%(sep)s\n"
 
-#: pysvnmanager/templates/base.mako:30
+#: pysvnmanager/templates/base.mako:35
 msgid "Loading, please wait..."
 msgstr "数据加载中，请稍后..."
 
-#: pysvnmanager/templates/base.mako:44
+#: pysvnmanager/templates/base.mako:49
 msgid "Clear message"
 msgstr "清除消息"
 
-#: pysvnmanager/templates/base.mako:51
+#: pysvnmanager/templates/base.mako:56
 #, python-format
 msgid ""
 "Powered by <a href=\"%(url1)s\">pySvnManager</a> &copy; 2008-2010 <a href="
@@ -799,39 +803,39 @@ msgstr ""
 "基于 <a href=\"%(url1)s\">pySvnManager</a> &copy; 2008-2010 <a href="
 "\"%(url2)s\">北京群英汇</a>"
 
-#: pysvnmanager/templates/base.mako:64
+#: pysvnmanager/templates/base.mako:69
 msgid "Check permissions"
 msgstr "权限检查"
 
-#: pysvnmanager/templates/base.mako:66
+#: pysvnmanager/templates/base.mako:71
 msgid "Role management"
 msgstr "角色管理"
 
-#: pysvnmanager/templates/base.mako:68
+#: pysvnmanager/templates/base.mako:73
 #: pysvnmanager/templates/authz/index.mako:6
 #: pysvnmanager/templates/authz/index.mako:598
 msgid "ACL management"
 msgstr "权限控制"
 
-#: pysvnmanager/templates/base.mako:70
+#: pysvnmanager/templates/base.mako:75
 #: pysvnmanager/templates/repos/hooks.mako:6
 #: pysvnmanager/templates/repos/hooks.mako:184
 msgid "Repos management"
 msgstr "版本库管理"
 
-#: pysvnmanager/templates/base.mako:72
+#: pysvnmanager/templates/base.mako:77
 msgid "Change log"
 msgstr "修改日志"
 
-#: pysvnmanager/templates/base.mako:73
+#: pysvnmanager/templates/base.mako:78
 msgid "Help"
 msgstr "帮助"
 
-#: pysvnmanager/templates/base.mako:81
+#: pysvnmanager/templates/base.mako:86
 msgid "Welcome"
 msgstr "欢迎,"
 
-#: pysvnmanager/templates/base.mako:82
+#: pysvnmanager/templates/base.mako:87
 msgid "Logout"
 msgstr "登出"
 
@@ -960,9 +964,9 @@ msgid "Remove membership"
 msgstr "移除成员"
 
 #: pysvnmanager/templates/authz/index.mako:687
-#: pysvnmanager/templates/check/index.mako:139
-#: pysvnmanager/templates/check/index.mako:149
-#: pysvnmanager/templates/check/index.mako:161
+#: pysvnmanager/templates/check/index.mako:138
+#: pysvnmanager/templates/check/index.mako:147
+#: pysvnmanager/templates/check/index.mako:159
 #: pysvnmanager/templates/role/index.mako:724
 #: pysvnmanager/templates/role/index.mako:749
 msgid "Manual input"
@@ -989,7 +993,7 @@ msgstr "取消"
 
 #: pysvnmanager/templates/check/index.mako:6
 #: pysvnmanager/templates/check/index.mako:109
-#: pysvnmanager/templates/check/index.mako:173
+#: pysvnmanager/templates/check/index.mako:171
 msgid "Check Permissions"
 msgstr "权限检查"
 
