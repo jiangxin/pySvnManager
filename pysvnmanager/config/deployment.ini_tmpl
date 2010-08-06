@@ -33,7 +33,7 @@ beaker.session.cookie_expires = False
 beaker.session.timeout = 3600
 
 # SQLAlchemy database URL
-sqlalchemy.url = sqlite:///production.db
+sqlalchemy.url = sqlite:///%(here)s/db/production.db
 
 # WARNING: *THE LINE BELOW MUST BE UNCOMMENTED ON A PRODUCTION ENVIRONMENT*
 # Debug mode will enable the interactive debugging tool, allowing ANYONE to

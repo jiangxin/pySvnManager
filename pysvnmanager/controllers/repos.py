@@ -122,7 +122,7 @@ class ReposController(BaseController):
             msg += "<br>\n"
             num = 0
             
-            msg += "<table class='list' width='100%'>\n"
+            msg += "<table class='list' width='99%'>\n"
             msg += "<tr><th align='left'></th>" + \
                     "<th align='left' width='20%'>" + _("Id") + "</th>" + \
                     "<th align='left'>" + _("Plugin name") + "</th>" + \
