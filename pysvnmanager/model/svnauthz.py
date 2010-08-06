@@ -38,10 +38,7 @@ log = logging.getLogger(__name__)
 
 # i18n works only as pysvnmanager (a pylons app) model.
 from pylons import config
-if config.has_key('unittest'):
-    from pylons.i18n import _
-else:
-    def _(message): return message
+from pylons.i18n import _
 
 #reload(sys) # in Python2.5, method sys.setdefaultencoding 
             #will be delete after initialize. we need reload it.
