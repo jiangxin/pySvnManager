@@ -70,7 +70,7 @@ function repos_changed()
 
     if (name=='...'||name=='')
     {
-        document.getElementById('installed_hook_form_contents').innerHTML = "";
+        $('installed_hook_form_contents').innerHTML = "";
         show_init_form();
     }
     else
@@ -79,9 +79,15 @@ function repos_changed()
         new Ajax.Request(
             '${h.url(controller="repos", action="get_plugin_list")}',
             {asynchronous:true, evalScripts:true, method:'post',
+                onFailure:
+                    function(request)
+                        {set_message_box(request.responseText, 'error');},
+                onSuccess:
+                    function(request)
+                        {ajax_repos_changed(request.responseText);},
                 onComplete:
                     function(request)
-                        {hideNoticesPopup();ajax_repos_changed(request.responseText);},
+                        {hideNoticesPopup();},
                 parameters:params
             });
 
@@ -89,6 +95,9 @@ function repos_changed()
             'installed_hook_form_contents',
             '${h.url(controller="repos", action="get_installed_hook_form")}',
             {asynchronous:true, evalScripts:true, method:'post',
+                onFailure:
+                    function(request)
+                        {set_message_box(request.responseText, 'error');},
                 onComplete:
                     function(request)
                         {hideNoticesPopup();},
@@ -157,9 +166,12 @@ function show_hook_config_form(hookid)
     document.getElementById('hook_setting_box').style.position = 'relative';
     showNoticesPopup();
     new Ajax.Updater(
-        {success:'hook_setting_form_contents',failure:'message'},
+        {success:'hook_setting_form_contents'},
         '${h.url(controller="repos", action="get_hook_setting_form")}',
         {asynchronous:true, evalScripts:true, method:'post',
+            onFailure:
+                function(request)
+                    {set_message_box(request.responseText, 'error');},
             onComplete:
                 function(request)
                     {hideNoticesPopup();},
@@ -218,11 +230,18 @@ function installed_hook_form_submit(form)
 <form action="${h.url(controller="repos", action='setup_hook')}"
   id="hook_setting_form" method="POST"
   onsubmit="showNoticesPopup();
-            new Ajax.Updater('message',
-                             '${h.url(controller="repos", action='setup_hook')}',
-                             {asynchronous:true, evalScripts:true, method:'post',
-                              onComplete:function(request){hideNoticesPopup();switch_message_box();repos_changed();},
-                              parameters:Form.serialize(this)});
+            new Ajax.Request(
+                '${h.url(controller="repos", action='setup_hook')}',
+                {
+                 asynchronous:true, evalScripts:true, method:'post',
+                 onFailure:
+                    function(request)
+                        {set_message_box(request.responseText, 'error');},
+                 onComplete:
+                    function(request)
+                    {hideNoticesPopup();set_message_box_json(request.responseText);repos_changed();},
+                 parameters:Form.serialize(this)
+                });
             return false;">
 
     <table class='hidden' width='99%'>
@@ -248,11 +267,18 @@ function installed_hook_form_submit(form)
 <form action="${h.url(controller="repos", action='uninstall_hook')}"
   id="installed_hook_form" method="POST"
   onsubmit="installed_hook_form_submit(this); showNoticesPopup();
-            new Ajax.Updater('message',
-                             '${h.url(controller="repos", action='uninstall_hook')}',
-                             {asynchronous:true, evalScripts:true, method:'post',
-                              onComplete:function(request){hideNoticesPopup();switch_message_box();repos_changed();},
-                              parameters:Form.serialize(this)});
+            new Ajax.Request(
+                '${h.url(controller="repos", action='uninstall_hook')}',
+                {
+                 asynchronous:true, evalScripts:true, method:'post',
+                 onFailure:
+                    function(request)
+                        {set_message_box(request.responseText, 'error');},
+                 onComplete:
+                    function(request)
+                    {hideNoticesPopup();set_message_box_json(request.responseText);repos_changed();},
+                 parameters:Form.serialize(this)
+                });
             return false;">
 
     <input type='hidden' name='_repos' class="input-button">
