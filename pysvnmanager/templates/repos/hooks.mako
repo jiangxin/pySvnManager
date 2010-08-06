@@ -225,7 +225,7 @@ function installed_hook_form_submit(form)
                               parameters:Form.serialize(this)});
             return false;">
 
-    <table class='hidden' width='100%'>
+    <table class='hidden' width='99%'>
       <tr>
         <td>
           <div id="hook_setting_form_contents"></div>
