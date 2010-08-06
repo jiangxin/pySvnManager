@@ -146,14 +146,13 @@ pysvnmanager/public/favicon.ico
 pysvnmanager/public/css/common.css
 pysvnmanager/public/css/msie.css
 pysvnmanager/public/img/add.png
-pysvnmanager/public/img/alert.png
 pysvnmanager/public/img/alias.png
-pysvnmanager/public/img/attention.png
 pysvnmanager/public/img/delete.png
 pysvnmanager/public/img/edit.png
 pysvnmanager/public/img/group.png
-pysvnmanager/public/img/icon-error.png
-pysvnmanager/public/img/icon-info.png
+pysvnmanager/public/img/icon-error.gif
+pysvnmanager/public/img/icon-info.gif
+pysvnmanager/public/img/icon-warning.gif
 pysvnmanager/public/img/ldap_sync.png
 pysvnmanager/public/img/left.png
 pysvnmanager/public/img/loading.gif

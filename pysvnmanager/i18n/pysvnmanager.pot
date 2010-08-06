@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: pySvnManager 0.4.1\n"
+"Project-Id-Version: pySvnManager 0.5.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-08-05 21:39+0800\n"
+"POT-Creation-Date: 2010-08-06 15:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,20 +106,20 @@ msgstr ""
 msgid "Compare"
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:125
+#: pysvnmanager/controllers/logs.py:123
 msgid "Page: "
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:161
+#: pysvnmanager/controllers/logs.py:159
 msgid "Compares between"
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:181
+#: pysvnmanager/controllers/logs.py:179
 #, python-format
 msgid "Rollback successfully to revision: %s"
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:188
+#: pysvnmanager/controllers/logs.py:186
 #, python-format
 msgid "Rollback failed: %s"
 msgstr ""
@@ -220,6 +220,10 @@ msgstr ""
 #: pysvnmanager/controllers/role.py:223
 #, python-format
 msgid "Add %(add)d users, delete %(delete)d users, update %(update)d users."
+msgstr ""
+
+#: pysvnmanager/controllers/role.py:227
+msgid "Reload this page immediately, and show the update users list."
 msgstr ""
 
 #: pysvnmanager/controllers/security.py:51
@@ -695,52 +699,52 @@ msgid ""
 "%(sep)s\n"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:30
+#: pysvnmanager/templates/base.mako:35
 msgid "Loading, please wait..."
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:44
+#: pysvnmanager/templates/base.mako:49
 msgid "Clear message"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:51
+#: pysvnmanager/templates/base.mako:56
 #, python-format
 msgid ""
 "Powered by <a href=\"%(url1)s\">pySvnManager</a> &copy; 2008-2010 <a "
 "href=\"%(url2)s\">ossxp.com</a>"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:64
+#: pysvnmanager/templates/base.mako:69
 msgid "Check permissions"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:66
+#: pysvnmanager/templates/base.mako:71
 msgid "Role management"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:68 pysvnmanager/templates/authz/index.mako:6
+#: pysvnmanager/templates/base.mako:73 pysvnmanager/templates/authz/index.mako:6
 #: pysvnmanager/templates/authz/index.mako:598
 msgid "ACL management"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:70 pysvnmanager/templates/repos/hooks.mako:6
+#: pysvnmanager/templates/base.mako:75 pysvnmanager/templates/repos/hooks.mako:6
 #: pysvnmanager/templates/repos/hooks.mako:184
 msgid "Repos management"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:72
+#: pysvnmanager/templates/base.mako:77
 msgid "Change log"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:73
+#: pysvnmanager/templates/base.mako:78
 msgid "Help"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:81
+#: pysvnmanager/templates/base.mako:86
 msgid "Welcome"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:82
+#: pysvnmanager/templates/base.mako:87
 msgid "Logout"
 msgstr ""
 
@@ -869,9 +873,9 @@ msgid "Remove membership"
 msgstr ""
 
 #: pysvnmanager/templates/authz/index.mako:687
-#: pysvnmanager/templates/check/index.mako:139
-#: pysvnmanager/templates/check/index.mako:149
-#: pysvnmanager/templates/check/index.mako:161
+#: pysvnmanager/templates/check/index.mako:138
+#: pysvnmanager/templates/check/index.mako:147
+#: pysvnmanager/templates/check/index.mako:159
 #: pysvnmanager/templates/role/index.mako:724
 #: pysvnmanager/templates/role/index.mako:749
 msgid "Manual input"
@@ -898,7 +902,7 @@ msgstr ""
 
 #: pysvnmanager/templates/check/index.mako:6
 #: pysvnmanager/templates/check/index.mako:109
-#: pysvnmanager/templates/check/index.mako:173
+#: pysvnmanager/templates/check/index.mako:171
 msgid "Check Permissions"
 msgstr ""
 
