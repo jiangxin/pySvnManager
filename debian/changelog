@@ -1,3 +1,9 @@
+pysvnmanager (1:0.5.2r165-52) unstable; urgency=low
+
+  * Python 2.5 should install simplejson.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Fri, 06 Aug 2010 20:51:58 +0800
+
 pysvnmanager (1:0.5.2r164-51) unstable; urgency=low
 
   * Promote to 0.5.2: Better IE support.
