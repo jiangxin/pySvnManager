@@ -24,7 +24,11 @@ from pysvnmanager.model.svnauthz import *
 from pysvnmanager.model import repos as _repos
 from pysvnmanager.model import hooks as _hooks
 from pylons.i18n import _, ungettext, N_
-import json
+
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
 log = logging.getLogger(__name__)
 
