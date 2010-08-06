@@ -168,6 +168,7 @@ class LogsController(BaseController):
         assert id and isinstance(id, basestring)
         c.contents = self.rcslog.cat(id)
         c.log = self.rcslog.get_logs(id, id)[0]
+        c.id = id
         if self.rcslog.head != id and self.is_super_user:
             c.rollback_enabled = True
         else:

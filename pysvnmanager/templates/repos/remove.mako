@@ -31,7 +31,7 @@ function ajax_init_repos_list(code)
     var name = new Array();
     var total = 0;
 
-    repos_list = document.getElementById('repos_list');
+    repos_list = $('repos_list');
     repos_list.options.length = 0;
 
     try {
@@ -55,13 +55,23 @@ function ajax_init_repos_list(code)
 <form action="${h.url(controller="repos", action='remove_submit')}"
   id="main_form" method="POST"
   onsubmit="showNoticesPopup();
-            new Ajax.Updater('message',
-                             '${h.url(controller="repos", action='remove_submit')}',
-                             {asynchronous:true, evalScripts:true, method:'post',
-                              onComplete:function(request){hideNoticesPopup();switch_message_box();init_repos_list();},
-                              parameters:Form.serialize(this)});
+            new Ajax.Request(
+                '${h.url(controller="repos", action='remove_submit')}',
+                {
+                 asynchronous:true, evalScripts:true, method:'post',
+                 onFailure:
+                    function(request)
+                        {set_message_box(request.responseText, 'error');},
+                 onSuccess:
+                    function(request)
+                        {set_message_box_json(request.responseText);init_repos_list();},
+                 onComplete:
+                    function(request)
+                        {hideNoticesPopup();set_message_box_json(request.responseText);init_repos_list();},
+                 parameters:Form.serialize(this)
+                });
             return false;">
-
+        
 <span class="title">
   ${_("Repository name:")}
 </span>

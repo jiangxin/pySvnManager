@@ -1,11 +1,3 @@
-/*  msie.css - MoinMoin MS Internet explorer bug workarounds */
-
-/* IE6 and IE7 both suck with :before */
-pre.comment       { padding-left: 20px; background: url('../img/attention.png')  left center no-repeat; }
-#message .info    { padding-left: 20px; background: url('../img/icon-info.png')  left center no-repeat; }
-#message .warning { padding-left: 20px; background: url('../img/alert.png')      left center no-repeat; }
-#message .error   { padding-left: 20px; background: url('../img/icon-error.png') left center no-repeat; }
-
 /* Some * html hacks for IE6 and below only (IE7 ignores * html) */
 
 /* IE6 has a bug with rendering of float elements. We workaround this bug by

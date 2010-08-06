@@ -70,34 +70,34 @@ context.write(msg)
 
 function show_init_form()
 {
-    document.getElementById('role_list_box').style.visibility = 'visible';
-    document.getElementById('role_list_box').style.position = 'relative';
+    $('role_list_box').style.visibility = 'visible';
+    $('role_list_box').style.position = 'relative';
 
-    document.getElementById('group_input_box').style.visibility = 'hidden';
-    document.getElementById('group_input_box').style.position = 'absolute';
+    $('group_input_box').style.visibility = 'hidden';
+    $('group_input_box').style.position = 'absolute';
 
-    document.getElementById('alias_input_box').style.visibility = 'hidden';
-    document.getElementById('alias_input_box').style.position = 'absolute';
+    $('alias_input_box').style.visibility = 'hidden';
+    $('alias_input_box').style.position = 'absolute';
 
-    document.getElementById('group_edit_box').style.visibility = 'hidden';
-    document.getElementById('group_edit_box').style.position = 'absolute';
+    $('group_edit_box').style.visibility = 'hidden';
+    $('group_edit_box').style.position = 'absolute';
 
-    document.getElementById('alias_edit_box').style.visibility = 'hidden';
-    document.getElementById('alias_edit_box').style.position = 'absolute';
+    $('alias_edit_box').style.visibility = 'hidden';
+    $('alias_edit_box').style.position = 'absolute';
 
-    document.getElementById('action_box').style.visibility = 'hidden';
-    document.getElementById('action_box').style.position = 'absolute';
+    $('action_box').style.visibility = 'hidden';
+    $('action_box').style.position = 'absolute';
 }
 
 function show_group_form()
 {
     show_init_form();
 
-    document.getElementById('group_edit_box').style.visibility = 'visible';
-    document.getElementById('group_edit_box').style.position = 'relative';
+    $('group_edit_box').style.visibility = 'visible';
+    $('group_edit_box').style.position = 'relative';
 
-    document.getElementById('action_box').style.visibility = 'visible';
-    document.getElementById('action_box').style.position = 'relative';
+    $('action_box').style.visibility = 'visible';
+    $('action_box').style.position = 'relative';
 
     disable_save_btn();
     enable_delete_btn();
@@ -107,11 +107,11 @@ function show_alias_form()
 {
     show_init_form();
 
-    document.getElementById('alias_edit_box').style.visibility = 'visible';
-    document.getElementById('alias_edit_box').style.position = 'relative';
+    $('alias_edit_box').style.visibility = 'visible';
+    $('alias_edit_box').style.position = 'relative';
 
-    document.getElementById('action_box').style.visibility = 'visible';
-    document.getElementById('action_box').style.position = 'relative';
+    $('action_box').style.visibility = 'visible';
+    $('action_box').style.position = 'relative';
 
     disable_save_btn();
     enable_delete_btn();
@@ -121,11 +121,11 @@ function show_new_group_form()
 {
     show_group_form();
 
-    document.getElementById('role_list_box').style.visibility = 'hidden';
-    document.getElementById('role_list_box').style.position = 'absolute';
+    $('role_list_box').style.visibility = 'hidden';
+    $('role_list_box').style.position = 'absolute';
 
-    document.getElementById('group_input_box').style.visibility = 'visible';
-    document.getElementById('group_input_box').style.position = 'relative';
+    $('group_input_box').style.visibility = 'visible';
+    $('group_input_box').style.position = 'relative';
 
     disable_save_btn();
     disable_delete_btn();
@@ -135,11 +135,11 @@ function show_new_alias_form()
 {
     show_alias_form();
 
-    document.getElementById('role_list_box').style.visibility = 'hidden';
-    document.getElementById('role_list_box').style.position = 'absolute';
+    $('role_list_box').style.visibility = 'hidden';
+    $('role_list_box').style.position = 'absolute';
 
-    document.getElementById('alias_input_box').style.visibility = 'visible';
-    document.getElementById('alias_input_box').style.position = 'relative';
+    $('alias_input_box').style.visibility = 'visible';
+    $('alias_input_box').style.position = 'relative';
 
     disable_save_btn();
     disable_delete_btn();
@@ -198,13 +198,13 @@ function del_members()
 
 function get_role_name()
 {
-    if (document.getElementById('alias_input_box').style.visibility == 'visible')
+    if ($('alias_input_box').style.visibility == 'visible')
     {
         name = document.main_form.alias_input.value
         if (name.charAt(0) != '&')
             name = '&'+name
     }
-    else if (document.getElementById('group_input_box').style.visibility == 'visible')
+    else if ($('group_input_box').style.visibility == 'visible')
     {
         name = document.main_form.group_input.value
         if (name.charAt(0) != '@')
@@ -603,9 +603,9 @@ function new_alias()
 
 function do_save(form)
 {
-    if (document.getElementById('alias_edit_box').style.visibility == 'visible')
+    if ($('alias_edit_box').style.visibility == 'visible')
         save_alias(form);
-    else if (document.getElementById('group_edit_box').style.visibility == 'visible')
+    else if ($('group_edit_box').style.visibility == 'visible')
         save_group(form);
     else
         alert("Action not implement.")
@@ -613,9 +613,9 @@ function do_save(form)
 
 function do_delete(form)
 {
-    if (document.getElementById('alias_edit_box').style.visibility == 'visible')
+    if ($('alias_edit_box').style.visibility == 'visible')
         delete_alias(form);
-    else if (document.getElementById('group_edit_box').style.visibility == 'visible')
+    else if ($('group_edit_box').style.visibility == 'visible')
         delete_group(form);
     else
         alert("Action not implement.")
