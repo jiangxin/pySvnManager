@@ -133,8 +133,7 @@ function ajax_update_path(code)
 <tr>
     <td>
         <input type="radio" name="userinput" value="select" Checked>
-            ${h.select("userselector", c.selected_username, userlist, onFocus="select_username(this.form)", Class="select-fix1")}
-            <br/>
+            ${h.select("userselector", c.selected_username, userlist, onFocus="select_username(this.form)", Class="select-fix1")}<br/>
         <input type="radio" name="userinput" value="manual">
             <img src="${h.url("/img/edit.png")}" title="${_("Manual input")}" alt="${_("Manual input")}">
             <input type="text" name="username" size=15 maxlength=80 value="${c.typed_username}"
@@ -143,8 +142,7 @@ function ajax_update_path(code)
 
     <td>
         <input type="radio" name="reposinput" value="select" Checked onClick="update_path(this.form)">
-            ${h.select("reposselector", c.selected_repos, reposlist, onFocus="select_repos(this.form)", onChange="update_path(this.form)", Class="select-fix1")}
-            <br/>
+            ${h.select("reposselector", c.selected_repos, reposlist, onFocus="select_repos(this.form)", onChange="update_path(this.form)", Class="select-fix1")}<br/>
         <input type="radio" name="reposinput" value="manual">
             <img src="${h.url("/img/edit.png")}" title="${_("Manual input")}" alt="${_("Manual input")}">
             <input type="text" name="reposname" size=15 value="${c.typed_repos}"
