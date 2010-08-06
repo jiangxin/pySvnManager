@@ -45,7 +45,11 @@ def load_environment(global_conf, app_conf):
         imports=['from webhelpers.html import escape'])
 
     # Setup the SQLAlchemy database engine
-    engine = engine_from_config(config, 'sqlalchemy.')
+    if 'sqlalchemy.url' in config:
+        engine = engine_from_config(config, 'sqlalchemy.')
+    else:
+        from sqlalchemy import create_engine
+        engine = create_engine('sqlite:///%(here)s/db/fallback.db' % config)
     init_model(engine)
 
     # CONFIGURATION OPTIONS HERE (note: all config options will override
