@@ -145,14 +145,8 @@ pre.comment {
     border: 0;
 }
 
-pre.comment:before {
-    content: url(../img/attention.png);
-}
-
 
 /* .comment css definition must be top of .red/.green/.blue or it won't work */
-.comment { color: #555555; background-color: #DDDDFF; }
-
 .red { background-color: #FFCCCC; }
 .green { background-color: #CCFFCC; }
 .blue { background-color: #CCCCFF; }
@@ -169,31 +163,28 @@ table
 	border-collapse: collapse;
 }
 
-th { font-weight:bold; font-size:13px; }
 
 th, td
 {
 	padding: 0.25em 0.5em 0.25em 0.5em;
 	border: 1pt solid #ADB9CC;
+  font-size:12px; 
 }
+
+th { font-weight:bold; font-size:13px; }
 
 td p {
 	margin: 0;
 	padding: 0;
 }
 
-table.hidden {
+table.borderless, table.hidden {
 	margin: 0.5em 0 0 0.5em;
 	border:  0px;
 	border-collapse: collapse;
 }
 
-table.hidden th {
-    font-weight: bold;
-	border: 0px;
-}
-
-table.hidden td {
+table.borderless th, table.hidden th, table.borderless td, table.hidden td {
 	border: 0px;
 }
 
@@ -259,35 +250,18 @@ strong.highlight
 	padding: 1pt;
 }
 
-#message_box {
-	background-color: #FFD700;
-	PADDING: 0.5em;
-}
+#message-box { background-color: #FFD700; PADDING: 0.5em; }
+#message-box td { font-size:14px; } 
+
+#message-box .icon-info { background: url('../img/icon-info.gif') left center no-repeat;       padding: 0px; width:16px;}
+#message-box .icon-error   { background: url('../img/icon-error.gif') left center no-repeat;   padding: 0px; width:16px;}
+#message-box .icon-warning { background: url('../img/icon-warning.gif') left center no-repeat; padding: 0px; width:16px;}
+#message-box .icon-comment { background: url('../img/attention.gif') left center no-repeat;    padding: 0px; width:16px;}
 
 #message .hint {font-style: italic;}
-#message .info {
-    float: none;
-    font-size: 12px;
-    color: black;
-}
-#message .info:before {
-    content: url('../img/icon-info.png');
-    margin: 0 0.5em 0 0.25em;
-    vertical-align: middle;
-}
-#message .warning:before {
-    content: url('../img/alert.png');
-    margin: 0 0.5em 0 0.125em;
-    vertical-align: middle;
-}
-#message .error:before {
-    content: url('../img/icon-error.png'); 
-    margin: 0 0.5em 0 0.125em;
-    vertical-align: middle;
-}
-#message a.clear-link {
+
+#message-box a.clear-link {
     display: block;
     margin: 0.75em 0 0 0;
-    font-size: small;
+    font-size: .8em;
 }
-

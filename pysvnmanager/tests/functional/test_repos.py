@@ -118,7 +118,7 @@ total=4;""" in res.body, res.body[:"200 OK"]
                   }
         res = self.app.get(url(controller='repos', action="setup_hook"), params)
         assert res.status == "200 OK", res.status
-        assert "<div class='info'>Apply plugin 'CaseInsensitive' on 'project1' success.</div>" == res.body, res.body
+        assert "Apply plugin 'CaseInsensitive' on 'project1' success." in res.body, res.body
 
         self.login('root')
         params = {
@@ -137,7 +137,7 @@ total=4;""" in res.body, res.body[:"200 OK"]
                   }
         res = self.app.get(url(controller='repos', action="setup_hook"), params)
         assert res.status == "200 OK", res.status
-        assert """<div class='info'>Apply plugin 'EolStyleCheck' on 'project1' success.</div>""" == res.body, res.body
+        assert """Apply plugin 'EolStyleCheck' on 'project1' success.""" in res.body, res.body
 
         self.login('root')
         params = {
@@ -157,7 +157,7 @@ total=4;""" in res.body, res.body[:"200 OK"]
                   }
         res = self.app.get(url(controller='repos', action="uninstall_hook"), params)
         assert res.status == "200 OK", res.status
-        assert """<div class='info'>Delete plugin 'CaseInsensitive, EolStyleCheck' on 'project1' success.</div>""" == res.body, res.body
+        assert """Delete plugin 'CaseInsensitive, EolStyleCheck' on 'project1' success.""" in res.body, res.body
 
         self.login('root')
         params = {
