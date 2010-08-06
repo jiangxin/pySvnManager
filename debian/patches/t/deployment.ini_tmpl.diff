@@ -58,4 +58,4 @@ index 66e5fcc..a60905d 100644
  # Logging configuration
  [loggers]
 -- 
-tg: (471acf8..) t/deployment.ini_tmpl (depends on: master)
+tg: (bef5c46..) t/deployment.ini_tmpl (depends on: master)

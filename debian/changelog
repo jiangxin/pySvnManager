@@ -1,3 +1,19 @@
+pysvnmanager (1:0.5.2r164-51) unstable; urgency=low
+
+  * Promote to 0.5.2: Better IE support.
+  * Database easy setup: create sqlite database on-the-fly when
+    pysvnmanager loaded. And if ini file not upgrade, use default
+    sqlalchemy url.
+  * Bugfix: authz check page i18n ok.
+  * Bugfix: cannot rollback without id.
+  * Simplify javascript using prototype.
+  * Icons in MessageBox can be displayed in IE.
+  * Repos plugins return JSON, and update message box using new
+    set_message_box_json function.
+  * When sync users with ldap, tell user not forget reload the page.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Fri, 06 Aug 2010 20:51:58 +0800
+
 pysvnmanager (1:0.5.1r156-50) unstable; urgency=low
 
   * Promote to 0.5.1: Better IE support.
