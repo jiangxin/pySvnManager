@@ -72,9 +72,9 @@ class LogsController(BaseController):
 <tr>
     <th>%(rev)s</th>
     <th>%(who)s</th>
-    <th>%(when)s</th>
+    <th class="datetime">%(when)s</th>
     <th>%(why)s</th>
-    <th>%(comp)s</th>
+    <th colspan="2">%(comp)s</th>
 </tr>''' % {'rev': _("Rev"), 
             'who': _("Who"), 
             'when': _("When"), 
@@ -86,13 +86,11 @@ class LogsController(BaseController):
             buff += '''
 <tr>
     <td>%(rev)s</t>
-    <td>%(who)s</td>
-    <td>%(when)s</td>
+    <td class="name">%(who)s</td>
+    <td class="datetime">%(when)s</td>
     <td>%(why)s</td>
-    <td>
-        <input type="radio" name="left" value="%(rev)s">
-        <input type="radio" name="right" value="%(rev)s">
-    </td>
+    <td class="right-through"><input type="radio" name="left" value="%(rev)s"></td>
+    <td class="left-through"><input type="radio" name="right" value="%(rev)s"></td>
 </tr>''' % {'rev' : logs[i].get('revision',''), 
             'who' : logs[i].get('author',''), 
             'when': logs[i].get('date',''), 

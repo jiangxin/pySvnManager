@@ -23,14 +23,14 @@
   <table class="hidden">
     <tr>
       <td>${_("Username:")}</td>
-      <td><input type='text' name="username"></td></tr>
+      <td><input type='text' name="username" class="input-fix1"></td></tr>
     <tr>
       <td>${_("Password:")}</td>
-      <td><input type='password' name="password"></td></tr>
+      <td><input type='password' name="password" class="input-fix1"></td></tr>
     <tr>
       <td colspan="2">${c.login_message}</td></tr>
     <tr>
-      <td colspan="2" align="center"><input type='submit' name='submit' value='${_("Login")}'></td></tr>
+      <td colspan="2" align="center"><input type='submit' name='submit' value='${_("Login")}' class="input-button"></td></tr>
   </table>
 <br>
 </form>

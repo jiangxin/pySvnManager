@@ -47,7 +47,7 @@ class TestCheckController(TestController):
         self.login('root')
         res = self.app.get(url(controller='check', action='index'))
         assert res.status == "200 OK", res.status
-        assert '''<input type="submit" name="submit" value='Check Permissions'>''' in res.body, res.body
+        assert """<input type="submit" name="submit" value='Check Permissions' class="input-button">""" in res.body, res.body
         assert res.tmpl_context.reposlist == [u'/', u'document', u'project1', u'project2', u'repos1', u'repos2', u'repos3'], res.tmpl_context.reposlist
 
 
