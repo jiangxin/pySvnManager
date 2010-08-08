@@ -35,7 +35,10 @@ if [ -z "$2" ]; then
     fi
 fi
 
-if [ -z "$2" ] && [ ! -f /opt/pysvnmanager/virtualenv/bin/activate ]; then
+if [ ! -f /opt/pysvnmanager/virtualenv/bin/activate ]; then
+    make -C /opt/pysvnmanager/virtualenv all
+elif dpkg --compare-versions "$2" lt "1:0.5.2r165-53" ; then
+    ## version 1:0.5.2r165-52: + simplejson.
     make -C /opt/pysvnmanager/virtualenv all
 fi
 

@@ -1,3 +1,10 @@
+pysvnmanager (0.5-8) unstable; urgency=low
+
+  * New UI screenshot.
+  * New feature: ldap user account sync.
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Sun, 08 Aug 2010 17:28:31 +0800
+
 pysvnmanager (0.4-7) unstable; urgency=low
 
   * New pdf header and footer.

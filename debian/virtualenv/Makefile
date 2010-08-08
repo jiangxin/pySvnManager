@@ -3,7 +3,7 @@ help:
 	@echo "make pylons: install pylons"
 	@echo "make site-packages: virutal env use site-packages"
 
-all: env pylons with-site-packages
+all: env no-site-packages pylons with-site-packages
 
 env:
 	## Create virtual environment using virtualenv

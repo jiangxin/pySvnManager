@@ -1,3 +1,9 @@
+pysvnmanager (1:0.5.2r165-53) unstable; urgency=low
+
+  * Install pysvnmanager-deploy-virt whatever.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Sun, 08 Aug 2010 17:29:04 +0800
+
 pysvnmanager (1:0.5.2r165-52) unstable; urgency=low
 
   * Python 2.5 should install simplejson.
