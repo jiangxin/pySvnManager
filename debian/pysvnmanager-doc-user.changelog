@@ -1,3 +1,9 @@
+pysvnmanager (0.5-9) unstable; urgency=low
+
+  * Integrate with apache using WSGI.
+
+ -- Jiang Xin <jiangxin@ossxp.com>  Mon, 09 Aug 2010 22:37:22 +0800
+
 pysvnmanager (0.5-8) unstable; urgency=low
 
   * New UI screenshot.

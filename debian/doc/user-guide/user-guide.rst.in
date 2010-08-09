@@ -87,7 +87,11 @@ Debian/Ubuntu 软件包安装两步曲：update, install
 
 * 服务开启自动启动
 
-  * 服务启动脚本: /etc/init.d/pysvnmanager
+  .. note:: **新版本的 pySvnManager 不再需要启动服务**
+
+     新版本的 pySvnManager 采用 WSGI 方式运行，而不再使用类似 Tomcat/Apache 的反向代理的方式整合 pySvnManager。
+
+     如果仍然通过 /etc/init.d/pysvnmanager 脚本启动服务，请尽快切换到 WSGI 方式运行。既可以保证服务的稳定性，又可以支持单点登录。
 
 * 自动完成和 Apache 的整合
 
@@ -229,12 +233,6 @@ Python 可以用 virtualenv 工具包解决多版本共存问题。相当于在�
   
     $ mv /opt/pysvnmanager/virtualenv/lib/python2.5/no-global-site-packages.txt \
          /opt/pysvnmanager/virtualenv/lib/python2.5/with-global-site-packages.txt
-
-* 重启 pysvnmanager，就会使用虚拟环境中的 python 包
-
-  ::
-
-    $ sudo /etc/init.d/pysvnmanager restart 
 
 .. hint:: **pysvnmanager-deploy-virt 软件包**
 
@@ -427,13 +425,11 @@ pySvnManager 授权
 
 运行
 =====
-无论是 Debian 包管理器方式安装，还是 easy_install，都需要启动服务。缺省使用 python 内置Web服务，运行在 5000 端口。
+Debian 包管理器方式安装，使用 WSGI 方式运行，无须启动 5000 端口的服务。
 
-* 对于 Debian 包管理器，用 init 脚本启动
+对于 Debian 包管理器方式安装，打开浏览器，输入 SVN 虚拟主机下的 /svnadmin 地址，如：https://svn.moon.ossxp.com/svnadmin/ 。
 
-  ::
-
-    $ sudo /etc/init.d/pysvnmanager restart
+如果使用 easy_install 方式安装，缺省需要启动服务。python 内置Web服务，缺省运行在 5000 端口。
 
 * 对于 easy_install 安装并用 paster 部署的实例（架设部署配置文件为 production.ini）
 
@@ -452,7 +448,7 @@ pySvnManager 授权
 
 * 打开浏览器，访问 pySvnManager 站点
 
-  对于 Debian 包管理器方式安装，打开浏览器，输入 SVN 虚拟主机下的 /svnadmin 地址，如：https://svn.moon.ossxp.com/svnadmin/ 。对于未与 Apache 整合的实例，直接用浏览器访问服务器的 5000 端口。在弹出的登录窗口中输入管理员用户名和口令。
+  对于未与 Apache 整合的实例，直接用浏览器访问服务器的 5000 端口。在弹出的登录窗口中输入管理员用户名和口令。
 
   .. figure:: images/login.png
    :scale: 75
