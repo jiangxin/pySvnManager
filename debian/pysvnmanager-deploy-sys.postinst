@@ -37,16 +37,6 @@ if [ -z "$2" ]; then
     if [ ! -f /opt/svn/conf/svn.access ]; then
         ln -sf $SITE/config/svn.access /opt/svn/conf/svn.access
     fi
-
-    # Automatically restart
-    if [ -x "/etc/init.d/pysvnmanager" ]; then
-        update-rc.d pysvnmanager defaults >/dev/null || true
-        if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
-            invoke-rc.d pysvnmanager start || true
-        else
-            /etc/init.d/pysvnmanager start || true
-        fi
-    fi
 fi
 
 exit 0

@@ -1,0 +1,55 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+"""
+    pySvnManager - FastCGI Driver Script
+    
+    @copyright: 2008-2010 Jiang Xin <jiangxin@ossxp.com>
+    @license: GNU GPL, see COPYING for details.
+"""
+
+import os, sys
+
+INSTANCE_DIR   = "/opt/pysvnmanager/sites/default"
+VIRTUALENV_DIR = "/opt/pysvnmanager/virtualenv"
+INSTANCE_INI   = "production.ini"
+
+if True:
+
+    import site
+    python_version = '.'.join( sys.version.split('.')[0:2] )
+    sitedir = os.path.join( VIRTUALENV_DIR, 'lib/python%s' % python_version )
+    if os.path.exists( sitedir ):
+        site.addsitedir( sitedir )
+
+    os.environ['PYTHON_EGG_CACHE'] = os.path.join( INSTANCE_DIR, 'run' )
+    
+    sys.stdout = sys.stderr
+    from paste.deploy import loadapp
+    from paste.exceptions.errormiddleware import ErrorMiddleware
+    
+    application = loadapp( 'config:%s' %  os.path.join( INSTANCE_DIR, INSTANCE_INI ) )
+    #application = ErrorMiddleware(application, debug=True)
+
+
+
+
+else:
+    # Debug WSGI
+
+    def application(environ, start_response):
+        status = '200 OK'
+        result = []
+        result.append( 'Hello World!' )
+        result.append( '-' * 60 )
+        result.append( sys.version )
+        result.append( '-' * 60 )
+        result.append( "\n".join( sys.path ) )
+        output = "\n".join(result)
+
+        response_headers = [('Content-type', 'text/plain'), ]
+                            #('Content-Length', str(len(output)))]
+        start_response(status, response_headers)
+
+        return [output]
+
+# vim: et ts=4 sw=4

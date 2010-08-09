@@ -1,3 +1,9 @@
+pysvnmanager (1:0.5.2r167-56) unstable; urgency=low
+
+  * Single signon support.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Mon, 09 Aug 2010 22:22:32 +0800
+
 pysvnmanager (1:0.5.2r166-55) unstable; urgency=low
 
   * Show commit tile as localtime in rcslog view page.

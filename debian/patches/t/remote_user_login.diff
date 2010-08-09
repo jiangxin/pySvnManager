@@ -6,14 +6,22 @@ If remote_user already defined, register login user.
 Signed-off-by: Jiang <jiangxin@ossxp.com>
 
 ---
- pysvnmanager/controllers/security.py |   40 +++++++++++++++++++++++-----------
- 1 files changed, 27 insertions(+), 13 deletions(-)
+ pysvnmanager/controllers/security.py |   57 +++++++++++++++++++++++++--------
+ 1 files changed, 43 insertions(+), 14 deletions(-)
 
 diff --git a/pysvnmanager/controllers/security.py b/pysvnmanager/controllers/security.py
-index ded2193..ca29041 100644
+index ded2193..0dbc00b 100644
 --- a/pysvnmanager/controllers/security.py
 +++ b/pysvnmanager/controllers/security.py
-@@ -29,8 +29,29 @@ class SecurityController(BaseController):
+@@ -16,6 +16,7 @@
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+ 
++import datetime
+ import logging
+ 
+ from pysvnmanager.lib.base import *
+@@ -29,8 +30,29 @@ class SecurityController(BaseController):
          """
          Show login form. Submits to login/submit
          """
@@ -44,7 +52,7 @@ index ded2193..ca29041 100644
      def submit(self):
          """
          Verify username and password
-@@ -47,21 +68,14 @@ class SecurityController(BaseController):
+@@ -47,21 +69,14 @@ class SecurityController(BaseController):
          
          # Mark user as logged in
          if auth_passed:
@@ -71,5 +79,28 @@ index ded2193..ca29041 100644
  
      def logout(self):
          """
+@@ -71,7 +86,21 @@ class SecurityController(BaseController):
+             log.info(_("User %s logged out") % session['user'])
+             del session['user']
+             session.save()
+-        redirect(url("login"))
++        if getattr(cfg, 'logout_url', None):
++            expire_cookies = []
++            if getattr(cfg, 'logout_cookie', None):
++                if isinstance(cfg.logout_cookie, (list, tuple)):
++                    expire_cookies.extend( cfg.logout_cookie )
++                else:
++                    expire_cookies.append( cfg.logout_cookie )
++            if request.environ.get("COSIGN_SERVICE"):
++                expire_cookies.append( request.environ.get("COSIGN_SERVICE") )
++            for cookie in expire_cookies:
++                response.set_cookie(cookie, '', expires=datetime.datetime(1970,1,1))
++
++            redirect( cfg.logout_url + "?" + url("login") )
++        else:
++            redirect(url("login"))
+ 
+     def failed(self):
+         return render('/auth_failed.mako')
 -- 
-tg: (5fa073a..) t/remote_user_login (depends on: master)
+tg: (6347cab..) t/remote_user_login (depends on: master)

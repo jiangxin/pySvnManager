@@ -7,10 +7,11 @@ Signed-off-by: Jiang <jiangxin@ossxp.com>
 
 ---
  pysvnmanager/config/deployment.ini_tmpl |   22 +++++++++++++---------
- 1 files changed, 13 insertions(+), 9 deletions(-)
+ pysvnmanager/config/localconfig.py.in   |   26 ++++++++++++++++----------
+ 2 files changed, 29 insertions(+), 19 deletions(-)
 
 diff --git a/pysvnmanager/config/deployment.ini_tmpl b/pysvnmanager/config/deployment.ini_tmpl
-index 66e5fcc..a60905d 100644
+index 66e5fcc..7d3ac7d 100644
 --- a/pysvnmanager/config/deployment.ini_tmpl
 +++ b/pysvnmanager/config/deployment.ini_tmpl
 @@ -14,7 +14,7 @@ use = egg:Paste#http
@@ -45,17 +46,57 @@ index 66e5fcc..a60905d 100644
 +prefix = /svnadmin
 +scheme = https
 +
-+[pipeline:main]
++#[pipeline:main]
 +## Direct connect without proxy
-+#pipeline = myapp
++pipeline = myapp
  
 -#[filter:proxy-prefix]
 -#use = egg:PasteDeploy#prefix
 -#prefix = /svnadmin
-+## Serve webapp behind apache2, need this.
-+pipeline = proxy-prefix myapp
++## Serve webapp behind apache2 proxy, need this.
++#pipeline = proxy-prefix myapp
  
  # Logging configuration
  [loggers]
+diff --git a/pysvnmanager/config/localconfig.py.in b/pysvnmanager/config/localconfig.py.in
+index 0b56a15..948efce 100644
+--- a/pysvnmanager/config/localconfig.py.in
++++ b/pysvnmanager/config/localconfig.py.in
+@@ -10,19 +10,25 @@ class LocalConfig(DefaultConfig):
+     # pysvnmanager authentication method.
+     # You can use htpasswd_login, or ldap_login, or both.
+     # You can also implement your own auth module.
+-    from pysvnmanager.model.auth.http import htpasswd_login
+-    auth = [htpasswd_login]
++    #from pysvnmanager.model.auth.http import htpasswd_login
++    #auth = [htpasswd_login]
+ 
+     # Htpasswd login parameters
+     # Note: custom `authn_file' in your <deploy>.ini file
+ 
+-    #import ldap
+-    #from pysvnmanager.model.auth.ldap_login import ldap_login
+-    #auth = [ldap_login]
++    import ldap
++    from pysvnmanager.model.auth.ldap_login import ldap_login
++    auth = [ldap_login]
+ 
+     ## LDAP login parameters
+-    #ldap_uri = 'ldap://localhost'
+-    #ldap_binddn = 'cn=ldapadmin,dc=foo,dc=bar'
+-    #ldap_bindpw = 'guess'
+-    #ldap_base = 'dc=foo,dc=bar'
+-    #ldap_filter = '(authorizedService=svn)(ossxpConfirmed=TRUE)'
++    ldap_uri = 'ldap://localhost'
++    ldap_binddn = 'cn=ldapadmin,dc=foo,dc=bar'
++    ldap_bindpw = 'guess'
++    ldap_base = 'dc=foo,dc=bar'
++    ldap_filter = '(authorizedService=svn)(ossxpConfirmed=TRUE)'
++
++    ## Logout redirect url, if using external auth backend
++    logout_url = 'http://weblogin.foo.bar/cgi-bin/logout'
++
++    ## If needs to expire certain cookie, list here.
++    #logout_cookie = ['cookiename']
 -- 
-tg: (683380b..) t/deployment.ini_tmpl (depends on: master)
+tg: (12c8ed2..) t/deployment.ini_tmpl (depends on: master)

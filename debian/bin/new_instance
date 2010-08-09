@@ -22,9 +22,16 @@ if paster -h >/dev/null 2>&1; then
         echo "Create site $ROOTDIR/$SITE ..."
         mkdir -p $ROOTDIR/$SITE/run
         mkdir -p $ROOTDIR/$SITE/db
+        mkdir -p $ROOTDIR/$SITE/cgi-bin
+
         paster make-config pySvnManager $ROOTDIR/$SITE/production.ini && \
         paster setup-app $ROOTDIR/$SITE/production.ini\#myapp || true
+
+        cp /opt/pysvnmanager/bin/pysvnmanager.fcgi.in $ROOTDIR/$SITE/cgi-bin/pysvnmanager.fcgi
+        sed -i -e '/^INSTANCE_DIR/ s@^\(.*=\).*$@\1 "$ROOTDIR/$SITE"@g'  pysvnmanager.fcgi.in 
+
         chown -R www-data.www-data $ROOTDIR/$SITE
+
         if [ ! -f ${DEFAULT_SITE} ]; then
             echo "Link default site to $ROOTDIR/$SITE"
             ln -s $ROOTDIR/$SITE ${DEFAULT_SITE}
