@@ -1,6 +1,7 @@
-pysvnmanager (1:0.5.2r166-53) unstable; urgency=low
+pysvnmanager (1:0.5.2r166-54) unstable; urgency=low
 
   * Show commit tile as localtime in rcslog view page.
+  * Set deploy-virt and deploy-sys conflict.
 
  -- Jiang Xin <worldhello.net@gmail.com>  Mon, 09 Aug 2010 15:57:21 +0800
 

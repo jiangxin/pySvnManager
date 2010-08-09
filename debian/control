@@ -29,6 +29,7 @@ Architecture: all
 Pre-Depends: python-pylons (>= 0.10~rc1-1), python-docutils, python-pybabel | ossxp-python-babel
 Provides: pysvnmanager-deploy
 Depends: pysvnmanager-common, python-sqlalchemy (>= 0.5.7), python (>= 2.6) | python-simplejson
+Conflicts: pysvnmanager-deploy
 XB-Python-Version: ${python:Versions}
 Description: subversion administration web interface based on pylons.
  pySvnManager is a subversion web interface based on pylons.
@@ -39,6 +40,7 @@ Architecture: all
 Pre-Depends: python-virtualenv, python-setuptools
 Provides: pysvnmanager-deploy
 Depends: pysvnmanager-common
+Conflicts: pysvnmanager-deploy
 XB-Python-Version: ${python:Versions}
 Description: subversion administration web interface based on pylons.
  pySvnManager is a subversion web interface based on pylons.
