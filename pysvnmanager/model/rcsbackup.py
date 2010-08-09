@@ -23,6 +23,7 @@ import os
 import sys
 import re
 import math
+import datetime, time
 
 import logging
 log = logging.getLogger(__name__)
@@ -40,6 +41,13 @@ CMD_RCS="RCSINIT= rcs"
 CMD_RLOG="RCSINIT= rlog"
 CMD_RCSDIFF="RCSINIT= rcsdiff"
 
+
+def utc_to_local(timestr):
+    dt_utc = datetime.datetime.strptime(timestr, "%Y/%m/%d %H:%M:%S")
+    dt_local = dt_utc - datetime.timedelta(seconds=time.altzone)
+    return dt_local.strftime("%Y/%m/%d %H:%M:%S")
+
+
 def is_rcs_exist(wcfile):
     wcpath = os.path.dirname(os.path.abspath(wcfile))
     if os.path.isdir(wcpath+'/RCS'):
@@ -47,6 +55,7 @@ def is_rcs_exist(wcfile):
     else:
         rcsfile = wcfile+',v'
     return os.path.exists(rcsfile)
+
 
 def backup(wcfile, comment='', user=''):
     if not wcfile:
@@ -279,7 +288,7 @@ class RcsLog(object):
             m = self.p['date'].search(lines[1])
             commit_time = ""
             if m:
-                commit_time = to_unicode(m.group(1))
+                commit_time = utc_to_local( to_unicode(m.group(1)) )
             else:
                 log.error("not find date in line: %s" % lines[1])
                 continue
@@ -314,3 +323,5 @@ class RcsLog(object):
 
     def backup(self, comment='', user=''):
         return backup(self.__file, comment, user)
+
+# vim: et ts=4 sw=4

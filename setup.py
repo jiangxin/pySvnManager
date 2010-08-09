@@ -39,6 +39,7 @@ setup(
         "Routes>=1.12.1",
         "SQLAlchemy>=0.5",
         #"python-ldap",
+        #"simplejson",
     ],
     setup_requires=["PasteScript>=1.6.3"],
     packages=find_packages(exclude=['ez_setup']),
