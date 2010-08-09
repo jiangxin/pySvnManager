@@ -20,9 +20,9 @@ class LocalConfig(DefaultConfig):
     #from pysvnmanager.model.auth.ldap_login import ldap_login
     #auth = [ldap_login]
 
-    # LDAP login parameters
+    ## LDAP login parameters
     #ldap_uri = 'ldap://localhost'
     #ldap_binddn = 'cn=ldapadmin,dc=foo,dc=bar'
     #ldap_bindpw = 'guess'
     #ldap_base = 'dc=foo,dc=bar'
-    #ldap_filter = '(&(uid=%(username)s)(authorizedService=svn)(ossxpConfirmed=TRUE))'
+    #ldap_filter = '(authorizedService=svn)(ossxpConfirmed=TRUE)'
