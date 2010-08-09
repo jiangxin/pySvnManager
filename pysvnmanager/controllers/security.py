@@ -16,6 +16,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+import datetime
 import logging
 
 from pysvnmanager.lib.base import *
@@ -85,7 +86,21 @@ class SecurityController(BaseController):
             log.info(_("User %s logged out") % session['user'])
             del session['user']
             session.save()
-        redirect(url("login"))
+        if getattr(cfg, 'logout_url', None):
+            expire_cookies = []
+            if getattr(cfg, 'logout_cookie', None):
+                if isinstance(cfg.logout_cookie, (list, tuple)):
+                    expire_cookies.extend( cfg.logout_cookie )
+                else:
+                    expire_cookies.append( cfg.logout_cookie )
+            if request.environ.get("COSIGN_SERVICE"):
+                expire_cookies.append( request.environ.get("COSIGN_SERVICE") )
+            for cookie in expire_cookies:
+                response.set_cookie(cookie, '', expires=datetime.datetime(1970,1,1))
+
+            redirect( cfg.logout_url + "?" + url("login") )
+        else:
+            redirect(url("login"))
 
     def failed(self):
         return render('/auth_failed.mako')
