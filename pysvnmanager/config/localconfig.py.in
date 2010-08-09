@@ -10,19 +10,25 @@ class LocalConfig(DefaultConfig):
     # pysvnmanager authentication method.
     # You can use htpasswd_login, or ldap_login, or both.
     # You can also implement your own auth module.
-    from pysvnmanager.model.auth.http import htpasswd_login
-    auth = [htpasswd_login]
+    #from pysvnmanager.model.auth.http import htpasswd_login
+    #auth = [htpasswd_login]
 
     # Htpasswd login parameters
     # Note: custom `authn_file' in your <deploy>.ini file
 
-    #import ldap
-    #from pysvnmanager.model.auth.ldap_login import ldap_login
-    #auth = [ldap_login]
+    import ldap
+    from pysvnmanager.model.auth.ldap_login import ldap_login
+    auth = [ldap_login]
 
     ## LDAP login parameters
-    #ldap_uri = 'ldap://localhost'
-    #ldap_binddn = 'cn=ldapadmin,dc=foo,dc=bar'
-    #ldap_bindpw = 'guess'
-    #ldap_base = 'dc=foo,dc=bar'
-    #ldap_filter = '(authorizedService=svn)(ossxpConfirmed=TRUE)'
+    ldap_uri = 'ldap://localhost'
+    ldap_binddn = 'cn=ldapadmin,dc=foo,dc=bar'
+    ldap_bindpw = 'guess'
+    ldap_base = 'dc=foo,dc=bar'
+    ldap_filter = '(authorizedService=svn)(ossxpConfirmed=TRUE)'
+
+    ## Logout redirect url, if using external auth backend
+    logout_url = 'http://weblogin.foo.bar/cgi-bin/logout'
+
+    ## If needs to expire certain cookie, list here.
+    #logout_cookie = ['cookiename']
