@@ -86,19 +86,24 @@ class SecurityController(BaseController):
             log.info(_("User %s logged out") % session['user'])
             del session['user']
             session.save()
-        if getattr(cfg, 'logout_url', None):
-            expire_cookies = []
-            if getattr(cfg, 'logout_cookie', None):
-                if isinstance(cfg.logout_cookie, (list, tuple)):
-                    expire_cookies.extend( cfg.logout_cookie )
-                else:
-                    expire_cookies.append( cfg.logout_cookie )
-            if request.environ.get("COSIGN_SERVICE"):
-                expire_cookies.append( request.environ.get("COSIGN_SERVICE") )
-            for cookie in expire_cookies:
-                response.set_cookie(cookie, '', expires=datetime.datetime(1970,1,1))
 
-            redirect( cfg.logout_url + "?" + url("login") )
+        expire_cookies = []
+        if getattr(cfg, 'logout_cookie', None):
+            if isinstance(cfg.logout_cookie, (list, tuple)):
+                expire_cookies.extend( cfg.logout_cookie )
+            else:
+                expire_cookies.append( cfg.logout_cookie )
+        # AUTH_TYPE == Cosign
+        if request.environ.get("COSIGN_SERVICE"):
+            expire_cookies.append( request.environ.get("COSIGN_SERVICE") )
+        for cookie in expire_cookies:
+            response.set_cookie(cookie, '', expires=datetime.datetime(1970,1,1))
+
+        if getattr(cfg, 'logout_url', None):
+            if request.environ.get('HTTP_REFERER'):
+                redirect( cfg.logout_url + "?" +  request.environ.get('HTTP_REFERER') )
+            else:
+                redirect( cfg.logout_url )
         else:
             redirect(url("login"))
 
