@@ -17,6 +17,10 @@ if [ ! ${SITE#-} = ${SITE} ]; then
     usage
 fi
 
+if [ -f /opt/pysvnmanager/virtualenv/bin/activate ]; then
+  . /opt/pysvnmanager/virtualenv/bin/activate
+fi
+
 if paster -h >/dev/null 2>&1; then
     if [ ! -d $ROOTDIR/$SITE ]; then
         echo "Create site $ROOTDIR/$SITE ..."

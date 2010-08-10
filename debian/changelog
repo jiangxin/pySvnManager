@@ -1,3 +1,10 @@
+pysvnmanager (1:0.5.2r167-60) unstable; urgency=low
+
+  * Load other version virtualenv if no lib for current python.
+  * Virtualenv installation can use PYPI mirrors.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Tue, 10 Aug 2010 16:04:52 +0800
+
 pysvnmanager (1:0.5.2r167-59) unstable; urgency=low
 
   * Install cgi-bin for old instance.
