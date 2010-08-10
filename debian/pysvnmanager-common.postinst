@@ -77,9 +77,6 @@ if dpkg --compare-versions "$2" lt-nl "1:0.5.2r167-60"; then
     sed -i -e "/^INSTANCE_DIR\s*=\s*/ c INSTANCE_DIR   = \"${instance}\"" ${instance}/cgi-bin/pysvnmanager.wsgi
     chmod a+x ${instance}/cgi-bin/pysvnmanager.wsgi
   done
-
-  # replace config files using macro...
-  /opt/ossxp/bin/ossxp_pkgadmin.py change || true
 fi
 
 
