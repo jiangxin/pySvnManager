@@ -8,30 +8,29 @@
 """
 
 import os, sys
+import site
 
 INSTANCE_DIR   = "/opt/pysvnmanager/sites/default"
 VIRTUALENV_DIR = "/opt/pysvnmanager/virtualenv"
 INSTANCE_INI   = "production.ini"
 
-if True:
+# Add virtualenv if available
+python_version = '.'.join( sys.version.split('.')[0:2] )
+sitedir = os.path.join( VIRTUALENV_DIR, 'lib/python%s/site-packages' % python_version )
+if os.path.exists( sitedir ):
+    site.addsitedir( sitedir )
 
-    import site
-    python_version = '.'.join( sys.version.split('.')[0:2] )
-    sitedir = os.path.join( VIRTUALENV_DIR, 'lib/python%s' % python_version )
-    if os.path.exists( sitedir ):
-        site.addsitedir( sitedir )
+if True:
+    # Run pySvnManager instance
 
     os.environ['PYTHON_EGG_CACHE'] = os.path.join( INSTANCE_DIR, 'run' )
-    
+
     sys.stdout = sys.stderr
     from paste.deploy import loadapp
     from paste.exceptions.errormiddleware import ErrorMiddleware
     
     application = loadapp( 'config:%s' %  os.path.join( INSTANCE_DIR, INSTANCE_INI ) )
     #application = ErrorMiddleware(application, debug=True)
-
-
-
 
 else:
     # Debug WSGI
@@ -47,9 +46,7 @@ else:
         output = "\n".join(result)
 
         response_headers = [('Content-type', 'text/plain'), ]
-                            #('Content-Length', str(len(output)))]
         start_response(status, response_headers)
-
         return [output]
 
 # vim: et ts=4 sw=4
