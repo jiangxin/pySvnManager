@@ -1,3 +1,9 @@
+pysvnmanager (1:0.5.2r167-59) unstable; urgency=low
+
+  * Install cgi-bin for old instance.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Tue, 10 Aug 2010 11:34:56 +0800
+
 pysvnmanager (1:0.5.2r167-58) unstable; urgency=low
 
   * Update old pysvnmanager deploy method, using wsgi and use cosign

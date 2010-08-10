@@ -28,11 +28,12 @@ if paster -h >/dev/null 2>&1; then
         paster setup-app $ROOTDIR/$SITE/production.ini\#myapp || true
 
         cp /opt/pysvnmanager/contrib/pysvnmanager.wsgi.in $ROOTDIR/$SITE/cgi-bin/pysvnmanager.wsgi
-        sed -i -e '/^INSTANCE_DIR/ s@^\(.*=\).*$@\1 "$ROOTDIR/$SITE"@g'  $ROOTDIR/$SITE/cgi-bin/pysvnmanager.wsgi
+        sed -i -e "/^INSTANCE_DIR/ c INSTANCE_DIR   = \"$ROOTDIR/$SITE\"" $ROOTDIR/$SITE/cgi-bin/pysvnmanager.wsgi
+        chmod a+x $ROOTDIR/$SITE/cgi-bin/pysvnmanager.wsgi
 
         chown -R www-data.www-data $ROOTDIR/$SITE
 
-        if [ ! -f ${DEFAULT_SITE} ]; then
+        if [ ! -f ${DEFAULT_SITE} ] && [ ! -d ${DEFAULT_SITE} ]; then
             echo "Link default site to $ROOTDIR/$SITE"
             ln -s $ROOTDIR/$SITE ${DEFAULT_SITE}
         fi

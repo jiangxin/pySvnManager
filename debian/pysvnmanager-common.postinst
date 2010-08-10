@@ -68,4 +68,21 @@ if dpkg --compare-versions "$2" lt-nl "1:0.5.2r167-58"; then
   /opt/ossxp/bin/ossxp_pkgadmin.py change
 fi
 
+## create cgi-bin scripts
+if dpkg --compare-versions "$2" lt-nl "1:0.5.2r167-59"; then
+  for ini in /opt/pysvnmanager/sites/*/production.ini; do
+    instance=`dirname $ini`
+    if [ ! -x ${instance}/cgi-bin/pysvnmanager.wsgi ]; then
+      mkdir -p ${instance}/cgi-bin
+      cp /opt/pysvnmanager/contrib/pysvnmanager.wsgi.in ${instance}/cgi-bin/pysvnmanager.wsgi
+      sed -i -e "/^INSTANCE_DIR\s*=\s*/ c INSTANCE_DIR   = \"${instance}\"" ${instance}/cgi-bin/pysvnmanager.wsgi
+      chmod a+x ${instance}/cgi-bin/pysvnmanager.wsgi
+    fi
+  done
+
+  # replace config files using macro...
+  /opt/ossxp/bin/ossxp_pkgadmin.py change || true
+fi
+
+
 exit 0
