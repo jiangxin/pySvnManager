@@ -19,6 +19,11 @@ python_version = '.'.join( sys.version.split('.')[0:2] )
 sitedir = os.path.join( VIRTUALENV_DIR, 'lib/python%s/site-packages' % python_version )
 if os.path.exists( sitedir ):
     site.addsitedir( sitedir )
+else:
+    for python_version in ["2.5", "2.6", "2.7"]:
+        sitedir = os.path.join( VIRTUALENV_DIR, 'lib/python%s/site-packages' % python_version )
+        if os.path.exists( sitedir ):
+            site.addsitedir( sitedir )
 
 if True:
     # Run pySvnManager instance
