@@ -6,14 +6,23 @@ Set prefix filter middleware, and integrate with apache https.
 Signed-off-by: Jiang <jiangxin@ossxp.com>
 
 ---
- pysvnmanager/config/deployment.ini_tmpl |   22 +++++++++++++---------
+ pysvnmanager/config/deployment.ini_tmpl |   24 ++++++++++++++----------
  pysvnmanager/config/localconfig.py.in   |   26 ++++++++++++++++----------
- 2 files changed, 29 insertions(+), 19 deletions(-)
+ 2 files changed, 30 insertions(+), 20 deletions(-)
 
 diff --git a/pysvnmanager/config/deployment.ini_tmpl b/pysvnmanager/config/deployment.ini_tmpl
-index 66e5fcc..7d3ac7d 100644
+index 66e5fcc..e3eeff0 100644
 --- a/pysvnmanager/config/deployment.ini_tmpl
 +++ b/pysvnmanager/config/deployment.ini_tmpl
+@@ -4,7 +4,7 @@
+ # The %(here)s variable will be replaced with the parent directory of this file
+ #
+ [DEFAULT]
+-debug = true
++debug = false
+ email_to = you@yourdomain.com
+ smtp_server = localhost
+ error_email_from = paste@localhost
 @@ -14,7 +14,7 @@ use = egg:Paste#http
  host = 0.0.0.0
  port = 5000

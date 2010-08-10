@@ -1,14 +1,13 @@
+pysvnmanager (1:0.5.2r167-58) unstable; urgency=low
+
+  * Update old pysvnmanager deploy method, using wsgi and use cosign
+    single signon.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Tue, 10 Aug 2010 11:34:56 +0800
+
 pysvnmanager (1:0.5.2r167-57) unstable; urgency=low
 
   * Single signon support.
-  * add depends on libapache2-mod-wsgi.
-  * add depends on libapache2-mod-wsgi.
-  * add depends on libapache2-mod-wsgi.
-  * add depends on libapache2-mod-wsgi.
-  * add depends on libapache2-mod-wsgi.
-  * add depends on libapache2-mod-wsgi.
-  * add depends on libapache2-mod-wsgi.
-  * add depends on libapache2-mod-wsgi.
   * add depends on libapache2-mod-wsgi.
 
  -- Jiang Xin <worldhello.net@gmail.com>  Mon, 09 Aug 2010 22:22:32 +0800
