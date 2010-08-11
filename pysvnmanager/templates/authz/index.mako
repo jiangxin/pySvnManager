@@ -351,7 +351,7 @@ function refresh_user_list()
         while(all_users_id[i]>ml[j] && j<ml.length-1)
             j+=1;
 
-        if (all_users_id[i] == ml[j] || all_users_id[i] == reposname)
+        if (all_users_id[i] == ml[j])
             continue;
 
         name = uf_name(all_users_id[i])
