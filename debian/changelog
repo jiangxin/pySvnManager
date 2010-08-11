@@ -1,3 +1,10 @@
+pysvnmanager (1:0.5.2r168-60) unstable; urgency=low
+
+  * bugfix: if username is the same with reposname, not show user
+    in auth dialog.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Wed, 11 Aug 2010 09:17:49 +0800
+
 pysvnmanager (1:0.5.2r167-60) unstable; urgency=low
 
   * Load other version virtualenv if no lib for current python.
