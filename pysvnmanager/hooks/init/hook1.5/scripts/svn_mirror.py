@@ -51,6 +51,8 @@ from subprocess import Popen, PIPE, STDOUT
 program = sys.argv[0]
 log = logging.getLogger('main')
 
+SVNSYNCCMD = "LC_ALL=C svnsync --non-interactive --no-auth-cache --trust-server-cert "
+
 def parse_options(argv=None):
     try:
         opts, args = getopt.getopt( 
@@ -155,9 +157,9 @@ def svnsync(repo, rev, urls, username, password, prop):
     for mirror in urls.split(";"):
         mirror = mirror.strip()
         if prop:
-            commands.append( "svnsync copy-revprops %(mirror)s %(rev)s --non-interactive --no-auth-cache --sync-username %(username)s --sync-password %(password)s" % locals() )
+            commands.append( SVNSYNCCMD + "copy-revprops %(mirror)s %(rev)s --sync-username %(username)s --sync-password %(password)s" % locals() )
         else:
-            commands.append( "svnsync sync %(mirror)s --non-interactive --no-auth-cache --sync-username %(username)s --sync-password %(password)s" % locals() )
+            commands.append( SVNSYNCCMD + "sync %(mirror)s --sync-username %(username)s --sync-password %(password)s" % locals() )
 
     for command in commands:
         proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )

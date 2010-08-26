@@ -22,6 +22,9 @@ from pysvnmanager.hooks.plugins import _
 from webhelpers.util import html_escape
 from subprocess import Popen, PIPE, STDOUT
 
+SVNCMD = "LC_ALL=C svn --non-interactive --no-auth-cache --trust-server-cert "
+SVNSYNCCMD = "LC_ALL=C svnsync --non-interactive --no-auth-cache --trust-server-cert "
+
 class SvnSyncMaster(PluginBase):
 
     # Brief name for this plugin.
@@ -49,6 +52,7 @@ class SvnSyncMaster(PluginBase):
     key_urls = "mirror_urls"
     
     section = "mirror"
+
     
     def enabled(self):
         """
@@ -173,16 +177,16 @@ class SvnSyncMaster(PluginBase):
     def svnsync_init(self, urls, username, password):
         def svn_info(url, username, password):
             if username and password:
-                command = "LC_ALL=C svn info %(url)s --username %(username)s --password %(password)s" % locals()
+                command = SVNCMD + "info %(url)s --username %(username)s --password %(password)s" % locals()
             else:
-                command = "LC_ALL=C svn info %(url)s" % locals()
+                command = SVNCMD + "info %(url)s" % locals()
             proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
             output = proc.communicate()[0]
             if proc.returncode != 0:
                 log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (command, proc.returncode))
                 if output:
                     log.error( "Command output:\n" + output )
-                raise Exception("Mirror %(url)s can not access. Detail: %(output)s." % locals())
+                raise Exception("Mirror %(url)s can not access. %(command)s, Detail: %(output)s." % locals())
             else:
                 log.debug( "command: %s" % command )
                 if output:
@@ -191,9 +195,9 @@ class SvnSyncMaster(PluginBase):
 
         def svn_revprop0(url, username, password): 
             if username and password:
-                command = "LC_ALL=C svn pl -v -r0 --revprop %(url)s --username %(username)s --password %(password)s" % locals()
+                command = SVNCMD + "pl -v -r0 --revprop %(url)s --username %(username)s --password %(password)s" % locals()
             else:
-                command = "LC_ALL=C svn pl -v -r0 --revprop %(url)s" % locals()
+                command = SVNCMD + "pl -v -r0 --revprop %(url)s" % locals()
             proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
             output = proc.communicate()[0]
             if proc.returncode != 0:
@@ -221,9 +225,9 @@ class SvnSyncMaster(PluginBase):
             srcurl = "file://" + self.repos
             if sync_info.sync_url is None:
                 if username and password:
-                    command = "svnsync init %(url)s %(srcurl)s --sync-username %(username)s --sync-password %(password)s" % locals()
+                    command = SVNSYNCCMD + "init %(url)s %(srcurl)s --sync-username %(username)s --sync-password %(password)s" % locals()
                 else:
-                    command = "svnsync init %(url)s %(srcurl)s" % locals()
+                    command = SVNSYNCCMD + "init %(url)s %(srcurl)s" % locals()
                 proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
                 output = proc.communicate()[0]
                 if proc.returncode != 0:
@@ -240,9 +244,9 @@ class SvnSyncMaster(PluginBase):
                 if dinfo.rev and int(dinfo.rev) > 0:
                     newrev = dinfo.rev
                     if username and password:
-                        command = "svn ps --revprop -r0 svn:sync-last-merged-rev %(newrev)s %(url)s --username %(username)s --password %(password)s" % locals()
+                        command = SVNCMD + "ps --revprop -r0 svn:sync-last-merged-rev %(newrev)s %(url)s --username %(username)s --password %(password)s" % locals()
                     else:
-                        command = "svn ps --revprop -r0 svn:sync-last-merged-rev %(newrev)s %(url)s" % locals()
+                        command = SVNCMD + "ps --revprop -r0 svn:sync-last-merged-rev %(newrev)s %(url)s" % locals()
                     proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
                     output = proc.communicate()[0]
                     if proc.returncode != 0:
@@ -258,9 +262,9 @@ class SvnSyncMaster(PluginBase):
             # sync_info.sync_url is not srcurl, reset it to srcurl
             elif sync_info.sync_url and sync_info.sync_url != srcurl:
                 if username and password:
-                    command = "svn ps --revprop -r0 svn:sync-from-url %(srcurl)s %(url)s --username %(username)s --password %(password)s" % locals()
+                    command = SVNCMD + "ps --revprop -r0 svn:sync-from-url %(srcurl)s %(url)s --username %(username)s --password %(password)s" % locals()
                 else:
-                    command = "svn ps --revprop -r0 svn:sync-from-url %(srcurl)s %(url)s" % locals()
+                    command = SVNCMD + "ps --revprop -r0 svn:sync-from-url %(srcurl)s %(url)s" % locals()
                 proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
                 output = proc.communicate()[0]
                 if proc.returncode != 0:
