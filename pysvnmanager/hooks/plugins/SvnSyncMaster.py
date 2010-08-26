@@ -20,6 +20,7 @@
 from pysvnmanager.hooks.plugins import *
 from pysvnmanager.hooks.plugins import _
 from webhelpers.util import html_escape
+from subprocess import Popen, PIPE, STDOUT
 
 class SvnSyncMaster(PluginBase):
 
@@ -159,12 +160,174 @@ class SvnSyncMaster(PluginBase):
             urls = ''
         if urls == '':
             switch = 'no'
+
+        if switch != 'no':
+            self.svnsync_init(urls, username, password)
+
         self.set_config(self.key_switch, switch)
         self.set_config(self.key_username, username)
         self.set_config(self.key_password, password)
         self.set_config(self.key_urls, urls)
         self.save()
-        
+
+    def svnsync_init(self, urls, username, password):
+        def svn_info(url, username, password):
+            if username and password:
+                command = "LC_ALL=C svn info %(url)s --username %(username)s --password %(password)s" % locals()
+            else:
+                command = "LC_ALL=C svn info %(url)s" % locals()
+            proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
+            output = proc.communicate()[0]
+            if proc.returncode != 0:
+                log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (command, proc.returncode))
+                if output:
+                    log.error( "Command output:\n" + output )
+                raise Exception("Mirror %(url)s can not access. Detail: %(output)s." % locals())
+            else:
+                log.debug( "command: %s" % command )
+                if output:
+                    log.debug( "output:\n" + output )
+            return SVN_INFO(output)
+
+        def svn_revprop0(url, username, password): 
+            if username and password:
+                command = "LC_ALL=C svn pl -v -r0 --revprop %(url)s --username %(username)s --password %(password)s" % locals()
+            else:
+                command = "LC_ALL=C svn pl -v -r0 --revprop %(url)s" % locals()
+            proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
+            output = proc.communicate()[0]
+            if proc.returncode != 0:
+                log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (command, proc.returncode))
+                if output:
+                    log.error( "Command output:\n" + output )
+                raise Exception("Revprop of mirror %(url)s can not access. Detail: %(output)s." % locals())
+            else:
+                log.debug( "command: %s" % command )
+                if output:
+                    log.debug( "output:\n" + output )
+            return SVN_SYNC_INFO(output)
+
+        sinfo = svn_info("file://"+self.repos, None, None)
+        for url in urls.split(';'):
+            # if mirror SVN can not access, exception raised.
+            dinfo = svn_info(url, username, password)
+
+            # UUID matched?
+            if sinfo.uuid != dinfo.uuid:
+                raise Exception("UUID not matched, %s not like a mirror." % url)
+            sync_info = svn_revprop0(url, username, password)
+
+            # Sync not initialized, initiate it now.
+            srcurl = "file://" + self.repos
+            if sync_info.sync_url is None:
+                if username and password:
+                    command = "svnsync init %(url)s %(srcurl)s --sync-username %(username)s --sync-password %(password)s" % locals()
+                else:
+                    command = "svnsync init %(url)s %(srcurl)s" % locals()
+                proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
+                output = proc.communicate()[0]
+                if proc.returncode != 0:
+                    log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (command, proc.returncode))
+                    if output:
+                        log.error( "Command output:\n" + output )
+                    raise Exception("Svnsync init failed! Detail: %(output)s." % locals())
+                else:
+                    log.debug( "command: %s" % command )
+                    if output:
+                        log.debug( "output:\n" + output )
+
+                # If dinfo.rev is not 0, reset sync-last-merged-rev to dinfo.rev
+                if dinfo.rev and int(dinfo.rev) > 0:
+                    newrev = dinfo.rev
+                    if username and password:
+                        command = "svn ps --revprop -r0 svn:sync-last-merged-rev %(newrev)s %(url)s --username %(username)s --password %(password)s" % locals()
+                    else:
+                        command = "svn ps --revprop -r0 svn:sync-last-merged-rev %(newrev)s %(url)s" % locals()
+                    proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
+                    output = proc.communicate()[0]
+                    if proc.returncode != 0:
+                        log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (command, proc.returncode))
+                        if output:
+                            log.error( "Command output:\n" + output )
+                        raise Exception("Reset sync-last-merged-rev failed! Detail: %(output)s." % locals())
+                    else:
+                        log.debug( "command: %s" % command )
+                        if output:
+                            log.debug( "output:\n" + output )
+
+            # sync_info.sync_url is not srcurl, reset it to srcurl
+            elif sync_info.sync_url and sync_info.sync_url != srcurl:
+                if username and password:
+                    command = "svn ps --revprop -r0 svn:sync-from-url %(srcurl)s %(url)s --username %(username)s --password %(password)s" % locals()
+                else:
+                    command = "svn ps --revprop -r0 svn:sync-from-url %(srcurl)s %(url)s" % locals()
+                proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
+                output = proc.communicate()[0]
+                if proc.returncode != 0:
+                    log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (command, proc.returncode))
+                    if output:
+                        log.error( "Command output:\n" + output )
+                    raise Exception("Reset sync-from-url failed! Detail: %(output)s." % locals())
+                else:
+                    log.debug( "command: %s" % command )
+                    if output:
+                        log.debug( "output:\n" + output )
+
+
+class SVN_INFO(object):
+    def __init__(self, output):
+        self.url = None
+        self.root = None
+        self.uuid = None
+        self.rev = None
+
+        if output:
+            self.parse(output)
+
+    def parse(self, output):
+        if output:
+            if isinstance(output, (str, unicode)):
+                output = output.splitlines()
+            for line in output:
+                if line.startswith("URL:"):
+                    self.url = line.split(':',1)[1].strip()
+                elif line.startswith("Repository Root:"):
+                    self.root = line.split(':',1)[1].strip()
+                elif line.startswith("Repository UUID:"):
+                    self.uuid = line.split(':',1)[1].strip()
+                elif line.startswith("Revision:"):
+                    self.rev = line.split(':',1)[1].strip()
+
+
+class SVN_SYNC_INFO(object):
+    def __init__(self, output):
+        self.sync_url = None
+        self.sync_uuid = None
+        self.sync_rev = None
+
+        if output:
+            self.parse(output)
+
+    def parse(self, output):
+        if output:
+            if isinstance(output, (str, unicode)):
+                output = output.splitlines()
+            i = 0
+            while True:
+                if i >= len(output):
+                    break
+                if output[i].strip().startswith("svn:sync-from-uuid"):
+                    i+=1
+                    self.sync_uuid = output[i].strip()
+                elif output[i].strip().startswith("sync-last-merged-rev"):
+                    i+=1
+                    self.sync_rev = output[i].strip()
+                elif output[i].strip().startswith("svn:sync-from-url"):
+                    i+=1
+                    self.sync_url = output[i].strip()
+                i+=1
+
+
 def execute(repospath=""):
     """
     Generate and return a hooks plugin object
@@ -174,3 +337,5 @@ def execute(repospath=""):
     @return: Plugin object
     """
     return SvnSyncMaster(repospath)
+
+# vim: et ts=4 sw=4
