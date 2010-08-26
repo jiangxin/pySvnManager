@@ -6,16 +6,16 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: pySvnManager 0.5.1\n"
+"Project-Id-Version: pySvnManager 0.5.2\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-08-06 15:34+0800\n"
+"POT-Creation-Date: 2010-08-26 20:17+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 0.9.4\n"
+"Generated-By: Babel 0.9.5\n"
 
 #: pysvnmanager/controllers/authz.py:69 pysvnmanager/templates/authz/index.mako:151
 #: pysvnmanager/templates/check/index.mako:11
@@ -49,8 +49,8 @@ msgid "Alias:"
 msgstr ""
 
 #: pysvnmanager/controllers/authz.py:96 pysvnmanager/controllers/authz.py:127
-#: pysvnmanager/controllers/check.py:113 pysvnmanager/controllers/repos.py:79
-#: pysvnmanager/controllers/repos.py:105 pysvnmanager/controllers/role.py:76
+#: pysvnmanager/controllers/check.py:113 pysvnmanager/controllers/repos.py:84
+#: pysvnmanager/controllers/repos.py:110 pysvnmanager/controllers/role.py:76
 #: pysvnmanager/templates/check/index.mako:10
 #: pysvnmanager/templates/check/index.mako:26
 #: pysvnmanager/templates/role/index.mako:14
@@ -114,85 +114,85 @@ msgstr ""
 msgid "Compares between"
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:179
+#: pysvnmanager/controllers/logs.py:180
 #, python-format
 msgid "Rollback successfully to revision: %s"
 msgstr ""
 
-#: pysvnmanager/controllers/logs.py:186
+#: pysvnmanager/controllers/logs.py:187
 #, python-format
 msgid "Rollback failed: %s"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:121
+#: pysvnmanager/controllers/repos.py:126
 msgid "Installed hooks:"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:127
+#: pysvnmanager/controllers/repos.py:132
 msgid "Id"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:128
+#: pysvnmanager/controllers/repos.py:133
 msgid "Plugin name"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:129 pysvnmanager/hooks/plugins/__init__.py:326
+#: pysvnmanager/controllers/repos.py:134 pysvnmanager/hooks/plugins/__init__.py:326
 msgid "Type"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:143
+#: pysvnmanager/controllers/repos.py:148
 msgid "Remove selected hooks"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:168
+#: pysvnmanager/controllers/repos.py:175
 #, python-format
 msgid ""
 "Apply plugin '%(plugin)s' on '%(repos)s' Failed. Error message:<br>\n"
 "%(msg)s"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:171
+#: pysvnmanager/controllers/repos.py:183
 #, python-format
 msgid "Apply plugin '%(plugin)s' on '%(repos)s' success."
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:193
+#: pysvnmanager/controllers/repos.py:209
 #, python-format
 msgid ""
 "Delete plugin '%(plugin)s' on '%(repos)s' Failed. Error message:<br>\n"
 "%(msg)s"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:196
+#: pysvnmanager/controllers/repos.py:217
 #, python-format
 msgid "Delete plugin '%(plugin)s' on '%(repos)s' success."
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:199
+#: pysvnmanager/controllers/repos.py:224
 #, python-format
 msgid "No plugin has been deleted for '%(repos)s'."
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:209
+#: pysvnmanager/controllers/repos.py:237
 #, python-format
 msgid ""
 "Create repository '%(repos)s' Failed. Error message:<br>\n"
 "%(msg)s"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:212
+#: pysvnmanager/controllers/repos.py:243
 #, python-format
 msgid "Create repository '%(repos)s' success."
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:228
+#: pysvnmanager/controllers/repos.py:262
 #, python-format
 msgid ""
 "Delete repository '%(repos)s' Failed. Error message:<br>\n"
 "%(msg)s"
 msgstr ""
 
-#: pysvnmanager/controllers/repos.py:231
+#: pysvnmanager/controllers/repos.py:268
 #, python-format
 msgid "Delete blank repository '%(repos)s' success."
 msgstr ""
@@ -313,6 +313,7 @@ msgstr ""
 #: pysvnmanager/hooks/plugins/EmailNotify.py:89
 #: pysvnmanager/hooks/plugins/EolStyleCheck.py:63
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:65
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:69
 #: pysvnmanager/hooks/plugins/TracPostCommit.py:66
 msgid "Current configuration"
 msgstr ""
@@ -343,6 +344,7 @@ msgstr ""
 #: pysvnmanager/hooks/plugins/EmailNotify.py:113
 #: pysvnmanager/hooks/plugins/EolStyleCheck.py:87
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:91
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:101
 #: pysvnmanager/hooks/plugins/TracPostCommit.py:94
 msgid "Fill this form"
 msgstr ""
@@ -354,6 +356,7 @@ msgstr ""
 #: pysvnmanager/hooks/plugins/CommitLogCheck.py:106
 #: pysvnmanager/hooks/plugins/EmailNotify.py:120
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:98
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:108
 #: pysvnmanager/hooks/plugins/TracPostCommit.py:101
 msgid "Enable"
 msgstr ""
@@ -361,6 +364,7 @@ msgstr ""
 #: pysvnmanager/hooks/plugins/CommitLogCheck.py:108
 #: pysvnmanager/hooks/plugins/EmailNotify.py:122
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:100
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:110
 #: pysvnmanager/hooks/plugins/TracPostCommit.py:103
 msgid "Disable"
 msgstr ""
@@ -505,6 +509,49 @@ msgstr ""
 msgid "Svnsync administrator: "
 msgstr ""
 
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:27
+msgid "Sync with downstream svn mirrors"
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:33
+msgid ""
+"This subversion repository is a svnsync master server. Each new commit will "
+"propagate to downstream svn mirrors."
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:37
+msgid ""
+"This master svn repository maybe configured with one or several svn "
+"mirrors.You must give the url svn mirrors (one with each line), and give the "
+"username and password who initiates the mirror task."
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:71
+msgid "Mirror enabled."
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:73
+msgid "Mirror disabled."
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:77
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:112
+msgid "Svnsync username:"
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:81
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:122
+msgid "Url of downstream svn mirrors:"
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:105
+msgid "Enable svn repo mirror: "
+msgstr ""
+
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:117
+msgid "Svnsync password:"
+msgstr ""
+
 #: pysvnmanager/hooks/plugins/TracPostCommit.py:27
 msgid "Trac integration with subversion's post commit hook."
 msgstr ""
@@ -601,75 +648,75 @@ msgstr ""
 msgid "Repos %s is not a blank repository."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:82
+#: pysvnmanager/model/svnauthz.py:79
 msgid "Name is not given."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:84
+#: pysvnmanager/model/svnauthz.py:81
 msgid "Name is not string."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:88
+#: pysvnmanager/model/svnauthz.py:85
 #, python-format
 msgid "Name (%s) contains invalid characters."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:512
+#: pysvnmanager/model/svnauthz.py:509
 #, python-format
 msgid "Recursive group membership for %s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:612
+#: pysvnmanager/model/svnauthz.py:609
 #, python-format
 msgid "Not a valid username: %s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:749
+#: pysvnmanager/model/svnauthz.py:746
 #, python-format
 msgid "Group %s is referenced by group %s."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1319
+#: pysvnmanager/model/svnauthz.py:1316
 msgid "Update failed! You are working on a out-of-date revision."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1596 pysvnmanager/model/svnauthz.py:1603
-#: pysvnmanager/model/svnauthz.py:1607
+#: pysvnmanager/model/svnauthz.py:1593 pysvnmanager/model/svnauthz.py:1600
+#: pysvnmanager/model/svnauthz.py:1604
 #, python-format
 msgid "Unknown rule format: %s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1621
+#: pysvnmanager/model/svnauthz.py:1618
 #, python-format
 msgid "No module exist for %s:%s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1731
+#: pysvnmanager/model/svnauthz.py:1728
 #, python-format
 msgid "Alias %s is referenced by group %s."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1743
+#: pysvnmanager/model/svnauthz.py:1740
 #, python-format
 msgid "%s is referenced by [%s]."
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1879
+#: pysvnmanager/model/svnauthz.py:1876
 #, python-format
 msgid "User %(username)s has Full (RW) rights for module %(repos)s:%(path)s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1881
+#: pysvnmanager/model/svnauthz.py:1878
 #, python-format
 msgid "User %(username)s has ReadOnly (RO) rights for module %(repos)s:%(path)s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1883
+#: pysvnmanager/model/svnauthz.py:1880
 #, python-format
 msgid "User %(username)s can *NOT* access to module %(repos)s:%(path)s"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1923
+#: pysvnmanager/model/svnauthz.py:1920
 #, python-format
 msgid ""
 "\n"
@@ -681,7 +728,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: pysvnmanager/model/svnauthz.py:1942
+#: pysvnmanager/model/svnauthz.py:1939
 #, python-format
 msgid ""
 "\n"
@@ -703,48 +750,48 @@ msgstr ""
 msgid "Loading, please wait..."
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:49
+#: pysvnmanager/templates/base.mako:53
 msgid "Clear message"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:56
+#: pysvnmanager/templates/base.mako:63
 #, python-format
 msgid ""
 "Powered by <a href=\"%(url1)s\">pySvnManager</a> &copy; 2008-2010 <a "
 "href=\"%(url2)s\">ossxp.com</a>"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:69
+#: pysvnmanager/templates/base.mako:76
 msgid "Check permissions"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:71
+#: pysvnmanager/templates/base.mako:78
 msgid "Role management"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:73 pysvnmanager/templates/authz/index.mako:6
+#: pysvnmanager/templates/base.mako:80 pysvnmanager/templates/authz/index.mako:6
 #: pysvnmanager/templates/authz/index.mako:598
 msgid "ACL management"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:75 pysvnmanager/templates/repos/hooks.mako:6
-#: pysvnmanager/templates/repos/hooks.mako:184
+#: pysvnmanager/templates/base.mako:82 pysvnmanager/templates/repos/hooks.mako:6
+#: pysvnmanager/templates/repos/hooks.mako:196
 msgid "Repos management"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:77
+#: pysvnmanager/templates/base.mako:84
 msgid "Change log"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:78
+#: pysvnmanager/templates/base.mako:85
 msgid "Help"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:86
+#: pysvnmanager/templates/base.mako:93
 msgid "Welcome"
 msgstr ""
 
-#: pysvnmanager/templates/base.mako:87
+#: pysvnmanager/templates/base.mako:94
 msgid "Logout"
 msgstr ""
 
@@ -826,7 +873,7 @@ msgid "Successfully delete module:"
 msgstr ""
 
 #: pysvnmanager/templates/authz/index.mako:606
-#: pysvnmanager/templates/repos/hooks.mako:191
+#: pysvnmanager/templates/repos/hooks.mako:203
 msgid "Repository:"
 msgstr ""
 
@@ -961,7 +1008,7 @@ msgid "Rollback"
 msgstr ""
 
 #: pysvnmanager/templates/logs/rollback.mako:15
-#: pysvnmanager/templates/logs/view.mako:21
+#: pysvnmanager/templates/logs/view.mako:20
 msgid "Close"
 msgstr ""
 
@@ -979,36 +1026,36 @@ msgstr ""
 
 #: pysvnmanager/templates/repos/create.mako:6
 #: pysvnmanager/templates/repos/create.mako:9
-#: pysvnmanager/templates/repos/create.mako:28
+#: pysvnmanager/templates/repos/create.mako:38
 msgid "Create repository"
 msgstr ""
 
-#: pysvnmanager/templates/repos/create.mako:24
-#: pysvnmanager/templates/repos/remove.mako:66
+#: pysvnmanager/templates/repos/create.mako:34
+#: pysvnmanager/templates/repos/remove.mako:76
 msgid "Repository name:"
 msgstr ""
 
-#: pysvnmanager/templates/repos/hooks.mako:197
-#: pysvnmanager/templates/repos/hooks.mako:198
+#: pysvnmanager/templates/repos/hooks.mako:209
+#: pysvnmanager/templates/repos/hooks.mako:210
 msgid "Add repository"
 msgstr ""
 
-#: pysvnmanager/templates/repos/hooks.mako:200
-#: pysvnmanager/templates/repos/hooks.mako:201
+#: pysvnmanager/templates/repos/hooks.mako:212
+#: pysvnmanager/templates/repos/hooks.mako:213
 msgid "Remove blank repository"
 msgstr ""
 
-#: pysvnmanager/templates/repos/hooks.mako:208
+#: pysvnmanager/templates/repos/hooks.mako:220
 msgid "Uninstalled hooks:"
 msgstr ""
 
-#: pysvnmanager/templates/repos/hooks.mako:235
+#: pysvnmanager/templates/repos/hooks.mako:254
 msgid "Install this plugin"
 msgstr ""
 
 #: pysvnmanager/templates/repos/remove.mako:6
 #: pysvnmanager/templates/repos/remove.mako:51
-#: pysvnmanager/templates/repos/remove.mako:71
+#: pysvnmanager/templates/repos/remove.mako:81
 msgid "Remove repository"
 msgstr ""
 
