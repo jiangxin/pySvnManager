@@ -154,7 +154,10 @@ def svnsync(repo, rev, urls, username, password, prop):
     commands = []
     for mirror in urls.split(";"):
         mirror = mirror.strip()
-        commands.append( "svnsync sync %(mirror)s --sync-username %(username)s --sync-password %(password)s" % locals() )
+        if prop:
+            commands.append( "svnsync copy-revprops %(mirror)s %(rev)s --non-interactive --no-auth-cache --sync-username %(username)s --sync-password %(password)s" % locals() )
+        else:
+            commands.append( "svnsync sync %(mirror)s --non-interactive --no-auth-cache --sync-username %(username)s --sync-password %(password)s" % locals() )
 
     for command in commands:
         proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
