@@ -1,4 +1,4 @@
-pysvnmanager (1:0.5.2r176-60) unstable; urgency=low
+pysvnmanager (1:0.5.2r178-61) unstable; urgency=low
 
   * New plugin: SvnSyncMaster, which will sync master svn to mirrors.
 
