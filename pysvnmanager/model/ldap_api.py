@@ -60,8 +60,6 @@ class LDAP(object):
             return None
 
         try:
-            u = None
-            dn = None
             log.debug("LDAP: Setting misc. options...")
             ldap.set_option(ldap.OPT_PROTOCOL_VERSION, ldap.VERSION3) # ldap v2 is outdated
             ldap.set_option(ldap.OPT_REFERRALS, getattr(self.config, 'ldap_referrals', 0))
@@ -102,7 +100,7 @@ class LDAP(object):
             if self.verbose: log.debug("LDAP: Bound with binddn %r" % ldap_binddn)
 
         except ldap.INVALID_CREDENTIALS, err:
-            log.debug("LDAP: invalid credentials (wrong password?) for dn %r (username: %r)" % (dn, username))
+            log.debug("LDAP bind failed, invalid bind credentials.")
             return None # if ldap says no, we veto the user and don't let him in
 
         except:
@@ -150,7 +148,7 @@ class LDAP(object):
                         log.debug("    %r: %r" % (key, val))
 
         except ldap.INVALID_CREDENTIALS, err:
-            log.debug("LDAP: invalid credentials (wrong password?) for dn %r (username: %r)" % (dn, username))
+            log.debug("LDAP bind failed, invalid bind credentials.")
             return None # if ldap says no, we veto the user and don't let him in
 
         except:
@@ -169,7 +167,6 @@ class LDAP(object):
 
         lusers = self.fetch_user(username)
 
-
         result_length = len(lusers)
         if result_length != 1:
             if result_length > 1:
@@ -185,7 +182,7 @@ class LDAP(object):
             self.l.simple_bind_s(dn, password.encode(self.coding))
 
         except ldap.INVALID_CREDENTIALS, err:
-            log.debug("LDAP: invalid credentials (wrong password?) for dn %r (username: %r)" % (dn, username))
+            log.debug("LDAP bind failed, invalid bind credentials.")
             return False # if ldap says no, we veto the user and don't let him in
 
         except:
@@ -229,7 +226,7 @@ class LDAP(object):
                         log.debug("    %r: %r" % (key, val))
 
         except ldap.INVALID_CREDENTIALS, err:
-            log.debug("LDAP: invalid credentials (wrong password?) for dn %r (username: %r)" % (dn, username))
+            log.debug("LDAP bind failed, invalid bind credentials.")
             return None # if ldap says no, we veto the user and don't let him in
 
         except:

@@ -19,7 +19,7 @@
 
 from pysvnmanager.hooks.plugins import *
 from pysvnmanager.hooks.plugins import _
-import webhelpers
+from webhelpers.util import html_escape
 
 class TracPostCommit(PluginBase):
 
@@ -105,17 +105,17 @@ class TracPostCommit(PluginBase):
         result += _("Trac environment location: ")
         result += "\n<dd>"
         result += "<input type='text' name='trac_env' size='50' value=\"%s\">" % \
-                webhelpers.util.html_escape(self.get_config(self.key_trac_env))
+                html_escape(self.get_config(self.key_trac_env))
         result += "\n<dt>"
         result += _("Repository name in trac (default is blank): ")
         result += "\n<dd>"
         result += "<input type='text' name='trac_repos_name' size='20' value=\"%s\">" % \
-                webhelpers.util.html_escape(self.get_config(self.key_trac_repos_name))
+                html_escape(self.get_config(self.key_trac_repos_name))
         result += "\n<dt>"
         result += _("Fixed ticket status (default is closed): ")
         result += "\n<dd>"
         result += "<input type='text' name='trac_fixed_status' size='10' value=\"%s\">" % \
-                webhelpers.util.html_escape(self.get_config(self.key_trac_fixed_status))
+                html_escape(self.get_config(self.key_trac_fixed_status))
         result += "\n</dl>"
         result += "</blockquote>"
         return result

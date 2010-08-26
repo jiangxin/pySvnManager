@@ -141,7 +141,7 @@ function new_module()
     refresh_user_list();
 }
 
-function uf_name(name)
+function uf_name(name, title)
 {
     if (name.charAt(0)=='@')
         name = '${_('Group:')}'+name.substring(1,name.length);
@@ -154,15 +154,15 @@ function uf_name(name)
     else if (name =='$anonymous')
         name = '${_('Anonymous')}';
     else if (all_users[name])
-        name = '${_('User:')}'+ all_users[name];
+        name = ( title && '${_('User:')}' || '' ) + all_users[name];
     else
-        name = '${_('User:')}'+ name;
+        name = ( title && '${_('User:')}' || '' ) + name;
     return name;
 }
 
 function uf_rule(name,rights)
 {
-    name = uf_name(name);
+    name = uf_name(name, true);
     if (rights == 'r')
     {
         rights = '${_('Readonly')}';
@@ -354,7 +354,7 @@ function refresh_user_list()
         if (all_users_id[i] == ml[j])
             continue;
 
-        name = uf_name(all_users_id[i])
+        name = uf_name(all_users_id[i], false)
         user_list.options[k] = new Option(name, all_users_id[i]);
         k+=1;
     }

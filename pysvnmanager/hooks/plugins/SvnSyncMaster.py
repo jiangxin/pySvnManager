@@ -21,60 +21,40 @@ from pysvnmanager.hooks.plugins import *
 from pysvnmanager.hooks.plugins import _
 from webhelpers.util import html_escape
 
-class EmailNotify(PluginBase):
+class SvnSyncMaster(PluginBase):
 
     # Brief name for this plugin.
-    name = _("Send email notify for commit event")
+    name = _("Sync with downstream svn mirrors")
     
     # Both description and detail are reStructuredText format. 
     # Reference about reStructuredText: http://docutils.sourceforge.net/docs/user/rst/quickref.html
 
     # Short description for this plugin.
-    description = _("Send a notification email describing either a commit or "
-                    "a revprop-change action on a Subversion repository.")
+    description = _("This subversion repository is a svnsync master server. "
+                    "Each new commit will propagate to downstream svn mirrors.")
     
     # Long description for this plugin.
-    detail = _("""
-You must provide proper options to commit-email.pl using the
-configuration form for this plugin.
-
-You can simply just provide the email_addr as the options.
-
-  [options] email_addr [email_addr ...]
-
-But to be more versitile, you can setup a path-based email 
-notifier.
-
-  [-m regex1] [options] [email_addr ...]
-  [-m regex2] [options] [email_addr ...] 
-  ...
-
-Options:
-
--m regex              Regular expression to match committed path
---from email_address  Email address for 'From:' (overrides -h)
--r email_address      Email address for 'Reply-To:
--s subject_prefix     Subject line prefix
---diff n              Do not include diff in message (default: y)
-""")
+    detail = _("This master svn repository maybe configured with one or several svn mirrors."
+               "You must give the url svn mirrors (one with each line), and give the username "
+               "and password who initiates the mirror task.")
     
     # Hooks-plugin type: T_START_COMMIT, ..., T_POST_UNLOCK
     type = T_POST_COMMIT
     
     # Plugin config option/value in config ini file.
-    # email_notify_enable = yes|no
-    # email_notify_config = -m "." --diff y --from <from@addr> -r <reply@addr> -s "[prefix]" to@addr
-    key_switch = "email_notify_enable"
-    key_config = "email_notify_config"
+    key_switch = "mirror_enabled"
+    key_username = "mirror_username"
+    key_password = "mirror_password"
+    key_urls = "mirror_urls"
     
-    section = 'email'
+    section = "mirror"
     
     def enabled(self):
         """
         Return True, if this plugin has been installed.
         Simply call 'has_config()'.
         """
-        return self.has_config(self.key_switch) and self.has_config(self.key_config)
+        return self.has_config(self.key_switch)
     
     def install_info(self):
         """
@@ -88,11 +68,19 @@ Options:
             result += "\n\n"
             result += "**" + _("Current configuration") + "**\n\n"
             if self.get_config(self.key_switch) == "yes":
-                result += "- " + _("Email notify enabled.")
+                result += "- " + _("Mirror enabled.")
             else:
-                result += "- " + _("Email notify disabled.")
+                result += "- " + _("Mirror disabled.")
             result += "\n"
-            result += "- " + _("Parameters: ") + "``" + self.get_config(self.key_config) + "``\n"
+            username = self.get_config(self.key_username)
+            if username:
+                result += "- " + _("Svnsync username:") + " ``" + username + "``"
+            result += "\n"
+            urls = self.get_config(self.key_urls)
+            if urls:
+                result += "- " + _("Url of downstream svn mirrors:") + "\n\n"
+                for url in urls.split(';'):
+                    result += "  * ``" + url + "``" + "\n"
 
         return result
     
@@ -114,18 +102,29 @@ Options:
         result += "<blockquote>"
         result += "<dl>"
         result += "\n<dt>"
-        result += _("Enable email notify.")
+        result += _("Enable svn repo mirror: ")
         result += "\n<dd>"
         result += "<input type='radio' name='switch' value='yes' " + \
                 enable_checked  + ">" + _("Enable") + "&nbsp;"
         result += "<input type='radio' name='switch' value='no' " + \
                 disable_checked + ">" + _("Disable") + "<br>"
         result += "\n<dt>"
-        result += _("Input email notify configurations: ")
+        result += _("Svnsync username:")
         result += "\n<dd>"
-        result += "<textarea name='config' rows='5' cols='40'>"
-        result += html_escape(self.get_config(self.key_config))
+        result += "<input type='text' name='username' size='18' value='%s'>" % \
+                self.get_config(self.key_username)
+        result += "\n<dt>"
+        result += _("Svnsync password:")
+        result += "\n<dd>"
+        result += "<input type='password' name='password' size='18' value='%s'>" % \
+                self.get_config(self.key_password)
+        result += "\n<dt>"
+        result += _("Url of downstream svn mirrors:")
+        result += "\n<dd>"
+        result += "<textarea name='urls' rows='3' cols='40'>"
+        result += html_escape( "\n".join( self.get_config(self.key_urls).split(';') ) )
         result += "</textarea>"
+
         result += "\n</dl>"
         result += "</blockquote>"
         return result
@@ -135,8 +134,10 @@ Options:
         Uninstall hooks-plugin from repository.
         Simply call 'unset_config()' and 'save()'.
         """
-        self.unset_config(self.key_config)
+        self.unset_config(self.key_username)
+        self.unset_config(self.key_password)
         self.unset_config(self.key_switch)
+        self.unset_config(self.key_urls)
         self.save()
     
     def install(self, params=None):
@@ -149,11 +150,19 @@ Options:
         switch = params.get('switch', 'yes')
         if switch != 'yes':
             switch = 'no'
-        config = params.get('config')
-        if not config:
-            raise Exception, _("Wrong configuration.")
+        username = params.get('username')
+        password = params.get('password')
+        urls     = params.get('urls')
+        if urls:
+            urls = ';'.join( urls.splitlines() )
+        else:
+            urls = ''
+        if urls == '':
+            switch = 'no'
         self.set_config(self.key_switch, switch)
-        self.set_config(self.key_config, config)
+        self.set_config(self.key_username, username)
+        self.set_config(self.key_password, password)
+        self.set_config(self.key_urls, urls)
         self.save()
         
 def execute(repospath=""):
@@ -164,4 +173,4 @@ def execute(repospath=""):
     @rtype: Plugin
     @return: Plugin object
     """
-    return EmailNotify(repospath)
+    return SvnSyncMaster(repospath)
