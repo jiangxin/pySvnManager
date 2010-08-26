@@ -56,8 +56,10 @@ TOOLS_DIR=$REPOS/hooks/scripts
 
 source $REPOS/hooks/parse_ini.sh
 CONFIG=$REPOS/conf/hooks.ini
-readconf email 
-readconf mirror
+if [ -f $CONFIG ]; then
+  readconf email 
+  readconf mirror
+fi
 
 if [ "$email_notify_enable" = "yes" ]; then
     #$TOOLS_DIR/commit-email.pl --revprop-change "$REPOS" "$REV" "$USER" "$PROPNAME" -m "." --from noreply@foo.bar -r noreply@foo.bar -s "[Prefix]" list@foo.bar

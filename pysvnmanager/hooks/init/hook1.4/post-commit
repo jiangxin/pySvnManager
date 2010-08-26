@@ -50,10 +50,12 @@ TOOLS_DIR=$REPOS/hooks/scripts
 
 source $REPOS/hooks/parse_ini.sh
 CONFIG=$REPOS/conf/hooks.ini
-readconf post_commit
-readconf email 
-readconf trac
-readconf mirror
+if [ -f $CONFIG ]; then
+  readconf post_commit
+  readconf email 
+  readconf trac
+  readconf mirror
+fi
 
 if [ "$email_notify_enable" = "yes" ]; then
     #$TOOLS_DIR/log-commit.py --repository "$REPOS" --revision "$REV"
@@ -65,8 +67,6 @@ fi
 ## Sync with downstream mirror sites using svnsync
 if [ "$mirror_enabled" = "yes" ]; then
     mirrorcmd="$TOOLS_DIR/svn_mirror.py --repo \"$REPOS\" --rev \"$REV\" --urls \"$mirror_urls\" --user \"$mirror_username\" --password \"$mirror_password\" --logfile /var/log/apache2/svnsync.log"
-    eval $mirrorcmd
-fi
     eval $mirrorcmd
 fi
 
