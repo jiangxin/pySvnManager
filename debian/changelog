@@ -1,3 +1,9 @@
+pysvnmanager (1:0.5.2r175-60) unstable; urgency=low
+
+  * New plugin: SvnSyncMaster, which will sync master svn to mirrors.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Fri, 27 Aug 2010 01:23:31 +0800
+
 pysvnmanager (1:0.5.2r168-60) unstable; urgency=low
 
   * bugfix: if username is the same with reposname, not show user
