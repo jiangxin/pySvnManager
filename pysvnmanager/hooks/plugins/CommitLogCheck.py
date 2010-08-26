@@ -19,7 +19,7 @@
 
 from pysvnmanager.hooks.plugins import *
 from pysvnmanager.hooks.plugins import _
-import webhelpers
+from webhelpers.util import html_escape
 
 class CommitLogCheck(PluginBase):
 
@@ -110,18 +110,18 @@ class CommitLogCheck(PluginBase):
         result += _("Minimal size of commit log: ")
         result += "\n<dd>"
         result += "<input type='text' name='size' size='5' value=\"%s\">" % \
-                webhelpers.util.html_escape(self.get_config(self.key_size))
+                html_escape(self.get_config(self.key_size))
         result += "\n<dt>"
         result += _("Pattern which commit log must match against: ")
         result += "\n<dd>"
         result += "<textarea name='permit' rows='3' cols='40'>"
-        result += webhelpers.util.html_escape(self.get_config(self.key_permit))
+        result += html_escape(self.get_config(self.key_permit))
         result += "</textarea>"
         result += "\n<dt>"
         result += _("Pattern which commit log must <b>NOT</b> match against: ")
         result += "\n<dd>"
         result += "<textarea name='prohibit' rows='3' cols='40'>"
-        result += webhelpers.util.html_escape(self.get_config(self.key_prohibit))
+        result += html_escape(self.get_config(self.key_prohibit))
         result += "</textarea>"
         result += "\n</dl>"
         result += "</blockquote>"
