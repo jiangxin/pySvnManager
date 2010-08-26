@@ -21,6 +21,7 @@ from pysvnmanager.hooks.plugins import *
 from pysvnmanager.hooks.plugins import _
 from webhelpers.util import html_escape
 from subprocess import Popen, PIPE, STDOUT
+import re
 
 SVNCMD = "LC_ALL=C svn --non-interactive --no-auth-cache --trust-server-cert "
 SVNSYNCCMD = "LC_ALL=C svnsync --non-interactive --no-auth-cache --trust-server-cert "
@@ -53,6 +54,10 @@ class SvnSyncMaster(PluginBase):
     
     section = "mirror"
 
+    passwd_re = re.compile(r"(password|passwd)[\s=]+\S+")
+
+    def strip_password(self, command):
+        return self.passwd_re.sub("password=**********", command)
     
     def enabled(self):
         """
@@ -183,12 +188,12 @@ class SvnSyncMaster(PluginBase):
             proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
             output = proc.communicate()[0]
             if proc.returncode != 0:
-                log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (command, proc.returncode))
+                log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (self.strip_password(command), proc.returncode))
                 if output:
                     log.error( "Command output:\n" + output )
-                raise Exception("Mirror %(url)s can not access. %(command)s, Detail: %(output)s." % locals())
+                raise Exception("Mirror %(url)s can not access. Detail: %(output)s." % locals())
             else:
-                log.debug( "command: %s" % command )
+                log.debug( "command: %s" % self.strip_password(command) )
                 if output:
                     log.debug( "output:\n" + output )
             return SVN_INFO(output)
@@ -201,12 +206,12 @@ class SvnSyncMaster(PluginBase):
             proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
             output = proc.communicate()[0]
             if proc.returncode != 0:
-                log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (command, proc.returncode))
+                log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (self.strip_password(command), proc.returncode))
                 if output:
                     log.error( "Command output:\n" + output )
                 raise Exception("Revprop of mirror %(url)s can not access. Detail: %(output)s." % locals())
             else:
-                log.debug( "command: %s" % command )
+                log.debug( "command: %s" % self.strip_password(command) )
                 if output:
                     log.debug( "output:\n" + output )
             return SVN_SYNC_INFO(output)
@@ -231,12 +236,12 @@ class SvnSyncMaster(PluginBase):
                 proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
                 output = proc.communicate()[0]
                 if proc.returncode != 0:
-                    log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (command, proc.returncode))
+                    log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (self.strip_password(command), proc.returncode))
                     if output:
                         log.error( "Command output:\n" + output )
                     raise Exception("Svnsync init failed! Detail: %(output)s." % locals())
                 else:
-                    log.debug( "command: %s" % command )
+                    log.debug( "command: %s" % self.strip_password(command) )
                     if output:
                         log.debug( "output:\n" + output )
 
@@ -250,12 +255,12 @@ class SvnSyncMaster(PluginBase):
                     proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
                     output = proc.communicate()[0]
                     if proc.returncode != 0:
-                        log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (command, proc.returncode))
+                        log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (self.strip_password(command), proc.returncode))
                         if output:
                             log.error( "Command output:\n" + output )
                         raise Exception("Reset sync-last-merged-rev failed! Detail: %(output)s." % locals())
                     else:
-                        log.debug( "command: %s" % command )
+                        log.debug( "command: %s" % self.strip_password(command) )
                         if output:
                             log.debug( "output:\n" + output )
 
@@ -268,12 +273,12 @@ class SvnSyncMaster(PluginBase):
                 proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
                 output = proc.communicate()[0]
                 if proc.returncode != 0:
-                    log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (command, proc.returncode))
+                    log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (self.strip_password(command), proc.returncode))
                     if output:
                         log.error( "Command output:\n" + output )
                     raise Exception("Reset sync-from-url failed! Detail: %(output)s." % locals())
                 else:
-                    log.debug( "command: %s" % command )
+                    log.debug( "command: %s" % self.strip_password(command) )
                     if output:
                         log.debug( "output:\n" + output )
 

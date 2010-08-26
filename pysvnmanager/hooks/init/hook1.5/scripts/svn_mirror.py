@@ -156,21 +156,27 @@ def svnsync(repo, rev, urls, username, password, prop):
     commands = []
     for mirror in urls.split(";"):
         mirror = mirror.strip()
-        if prop:
-            commands.append( SVNSYNCCMD + "copy-revprops %(mirror)s %(rev)s --sync-username %(username)s --sync-password %(password)s" % locals() )
+        if username and password:
+            extra_opt = " --sync-username %(username)s --sync-password %(password)s " % locals()
         else:
-            commands.append( SVNSYNCCMD + "sync %(mirror)s --sync-username %(username)s --sync-password %(password)s" % locals() )
+            extra_opt = " "
+        if prop:
+            commands.append( SVNSYNCCMD + extra_opt + "copy-revprops %(mirror)s %(rev)s" % locals() )
+        else:
+            commands.append( SVNSYNCCMD + extra_opt + "sync %(mirror)s" % locals() )
 
     for command in commands:
         proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
 
         output = proc.communicate()[0]
         if proc.returncode != 0:
-            log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (command, proc.returncode))
+            log.error( "Failed when execute: %s\n\tgenerate warnings with returncode %d." % (
+                        prop and "svnsync copy-revprops" or "svnsync sync",
+                        proc.returncode) )
             if output:
                 log.error( "Command output:\n" + output )
         else:
-            log.debug( "command: %s" % command )
+            log.debug( "command: %s" % (prop and "svnsync copy-revprops" or "svnsync sync") )
             if output:
                 log.debug( "output:\n" + output )
     
