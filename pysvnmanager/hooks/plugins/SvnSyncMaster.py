@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2008 OpenSourceXpress Ltd. (http://www.ossxp.com)
@@ -218,65 +217,52 @@ class SvnSyncMaster(PluginBase):
 
         sinfo = svn_info("file://"+self.repos, None, None)
         for url in urls.split(';'):
+            cmdlist = []
             # if mirror SVN can not access, exception raised.
             dinfo = svn_info(url, username, password)
 
             # UUID matched?
             if sinfo.uuid != dinfo.uuid:
                 raise Exception("UUID not matched, %s not like a mirror." % url)
+            uuid = sinfo.uuid
+
             sync_info = svn_revprop0(url, username, password)
 
             # Sync not initialized, initiate it now.
             srcurl = "file://" + self.repos
             if sync_info.sync_url is None:
-                if username and password:
-                    command = SVNSYNCCMD + "init %(url)s %(srcurl)s --sync-username %(username)s --sync-password %(password)s" % locals()
-                else:
-                    command = SVNSYNCCMD + "init %(url)s %(srcurl)s" % locals()
-                proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
-                output = proc.communicate()[0]
-                if proc.returncode != 0:
-                    log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (self.strip_password(command), proc.returncode))
-                    if output:
-                        log.error( "Command output:\n" + output )
-                    raise Exception("Svnsync init failed! Detail: %(output)s." % locals())
-                else:
-                    log.debug( "command: %s" % self.strip_password(command) )
-                    if output:
-                        log.debug( "output:\n" + output )
 
-                # If dinfo.rev is not 0, reset sync-last-merged-rev to dinfo.rev
-                if dinfo.rev and int(dinfo.rev) > 0:
+                if dinfo.rev is None or int(dinfo.rev) == 0:
+                    if username and password:
+                        cmdlist.append( SVNSYNCCMD + "init %(url)s %(srcurl)s --sync-username %(username)s --sync-password %(password)s" % locals() )
+                    else:
+                        cmdlist.append( SVNSYNCCMD + "init %(url)s %(srcurl)s" % locals() )
+                else:
                     newrev = dinfo.rev
                     if username and password:
-                        command = SVNCMD + "ps --revprop -r0 svn:sync-last-merged-rev %(newrev)s %(url)s --username %(username)s --password %(password)s" % locals()
+                        cmdlist.append( SVNCMD + "ps --revprop -r0 svn:sync-last-merged-rev %(newrev)s %(url)s --username %(username)s --password %(password)s" % locals() )
+                        cmdlist.append( SVNCMD + "ps --revprop -r0 svn:sync-from-url %(srcurl)s %(url)s --username %(username)s --password %(password)s" % locals() )
+                        cmdlist.append( SVNCMD + "ps --revprop -r0 svn:sync-from-uuid %(uuid)s %(url)s --username %(username)s --password %(password)s" % locals() )
                     else:
-                        command = SVNCMD + "ps --revprop -r0 svn:sync-last-merged-rev %(newrev)s %(url)s" % locals()
-                    proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
-                    output = proc.communicate()[0]
-                    if proc.returncode != 0:
-                        log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (self.strip_password(command), proc.returncode))
-                        if output:
-                            log.error( "Command output:\n" + output )
-                        raise Exception("Reset sync-last-merged-rev failed! Detail: %(output)s." % locals())
-                    else:
-                        log.debug( "command: %s" % self.strip_password(command) )
-                        if output:
-                            log.debug( "output:\n" + output )
+                        cmdlist.append( SVNCMD + "ps --revprop -r0 svn:sync-last-merged-rev %(newrev)s %(url)s" % locals() )
+                        cmdlist.append( SVNCMD + "ps --revprop -r0 svn:sync-from-url %(srcurl)s %(url)s" % locals() )
+                        cmdlist.append( SVNCMD + "ps --revprop -r0 svn:sync-from-uuid %(uuid)s %(url)s" % locals() )
 
             # sync_info.sync_url is not srcurl, reset it to srcurl
             elif sync_info.sync_url and sync_info.sync_url != srcurl:
                 if username and password:
-                    command = SVNCMD + "ps --revprop -r0 svn:sync-from-url %(srcurl)s %(url)s --username %(username)s --password %(password)s" % locals()
+                    cmdlist.append( SVNCMD + "ps --revprop -r0 svn:sync-from-url %(srcurl)s %(url)s --username %(username)s --password %(password)s" % locals() )
                 else:
-                    command = SVNCMD + "ps --revprop -r0 svn:sync-from-url %(srcurl)s %(url)s" % locals()
+                    cmdlist.append( SVNCMD + "ps --revprop -r0 svn:sync-from-url %(srcurl)s %(url)s" % locals() )
+            for command in cmdlist:
                 proc = Popen( command, stdout=PIPE, stderr=STDOUT, close_fds=True, shell=True )
                 output = proc.communicate()[0]
                 if proc.returncode != 0:
                     log.error("Failed when execute: %s\n\tgenerate warnings with returncode %d." % (self.strip_password(command), proc.returncode))
                     if output:
                         log.error( "Command output:\n" + output )
-                    raise Exception("Reset sync-from-url failed! Detail: %(output)s." % locals())
+                    raise Exception("Failed when execute: %(command)s\n   Detail: %(output)s." % {
+                                    'command': self.strip_password(command), 'output': output } )
                 else:
                     log.debug( "command: %s" % self.strip_password(command) )
                     if output:
