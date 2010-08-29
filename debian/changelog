@@ -1,6 +1,8 @@
-pysvnmanager (1:0.5.2r179-61) unstable; urgency=low
+pysvnmanager (1:0.5.2r179-62) unstable; urgency=low
 
   * Bugfix for SvnSyncMaster: for sync target with commits, init failed.
+  * Do not depends on certain python-central version, which break install
+    on certain platform.
 
  -- Jiang Xin <worldhello.net@gmail.com>  Sun, 29 Aug 2010 13:00:43 +0800
 

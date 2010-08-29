@@ -16,7 +16,7 @@ Description: Meta package for pySvnManager.
 
 Package: pysvnmanager-common
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, ossxp-apache2, libapache2-mod-wsgi
+Depends: python, python-central, ossxp-apache2, libapache2-mod-wsgi
 Recommends: rcs, python-subversion, python-ldap, pysvnmanager-doc
 Conflicts: pysvnmanager (<= 1:0)
 XB-Python-Version: ${python:Versions}
