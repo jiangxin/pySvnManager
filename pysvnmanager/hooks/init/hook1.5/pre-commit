@@ -60,7 +60,9 @@ TOOLS_DIR=$REPOS/hooks/scripts
 
 source $REPOS/hooks/parse_ini.sh
 CONFIG=$REPOS/conf/hooks.ini
-readconf pre_commit
+if [ -f $CONFIG ]; then
+  readconf pre_commit
+fi
 
 if [ "$commit_log_check_enable" = "yes" ]; then
     # Check commit log, by <WorldHello.net.AT.gmail.com>

@@ -19,7 +19,7 @@
 
 from pysvnmanager.hooks.plugins import *
 from pysvnmanager.hooks.plugins import _
-import webhelpers
+from webhelpers.util import html_escape
 
 class EmailNotify(PluginBase):
 
@@ -124,7 +124,7 @@ Options:
         result += _("Input email notify configurations: ")
         result += "\n<dd>"
         result += "<textarea name='config' rows='5' cols='40'>"
-        result += webhelpers.util.html_escape(self.get_config(self.key_config))
+        result += html_escape(self.get_config(self.key_config))
         result += "</textarea>"
         result += "\n</dl>"
         result += "</blockquote>"
