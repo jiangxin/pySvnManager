@@ -114,6 +114,11 @@ class PluginBase(object):
         self.__configfile = "%s/conf/hooks.ini" % self.__repospath
         self.__read_config()
 
+    def __get_repos(self):
+        return self.__repospath
+
+    repos = property(__get_repos)
+
     def __read_config(self, force=False):
         # only read config file if out-of-date.
         if force or self.__is_outofdate():
