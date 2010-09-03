@@ -49,7 +49,9 @@ USER="$2"
 
 source $REPOS/hooks/parse_ini.sh
 CONFIG=$REPOS/conf/hooks.ini
-readconf start_commit
+if [ -f $CONFIG ]; then
+  readconf start_commit
+fi
 
 if [ "$mirror_readonly" = "yes" ]; then
     # Readonly repos if this repos is a mirror using svnsync
