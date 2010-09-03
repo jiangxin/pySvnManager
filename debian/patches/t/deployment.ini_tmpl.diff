@@ -11,7 +11,7 @@ Signed-off-by: Jiang <jiangxin@ossxp.com>
  2 files changed, 30 insertions(+), 20 deletions(-)
 
 diff --git a/pysvnmanager/config/deployment.ini_tmpl b/pysvnmanager/config/deployment.ini_tmpl
-index 66e5fcc..e3eeff0 100644
+index 66e5fcc..16e891c 100644
 --- a/pysvnmanager/config/deployment.ini_tmpl
 +++ b/pysvnmanager/config/deployment.ini_tmpl
 @@ -4,7 +4,7 @@
@@ -55,7 +55,7 @@ index 66e5fcc..e3eeff0 100644
 +prefix = /svnadmin
 +scheme = https
 +
-+#[pipeline:main]
++[pipeline:main]
 +## Direct connect without proxy
 +pipeline = myapp
  
@@ -108,4 +108,4 @@ index 0b56a15..948efce 100644
 +    ## If needs to expire certain cookie, list here.
 +    #logout_cookie = ['cookiename']
 -- 
-tg: (2164c01..) t/deployment.ini_tmpl (depends on: master)
+tg: (c10aca6..) t/deployment.ini_tmpl (depends on: master)

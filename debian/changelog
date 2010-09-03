@@ -1,3 +1,9 @@
+pysvnmanager (1:0.5.2r179-63) unstable; urgency=low
+
+  * Bugfix for deployment.ini: not comments pipeline section.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Fri, 03 Sep 2010 23:32:33 +0800
+
 pysvnmanager (1:0.5.2r179-62) unstable; urgency=low
 
   * Bugfix for SvnSyncMaster: for sync target with commits, init failed.
