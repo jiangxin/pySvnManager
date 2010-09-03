@@ -58,7 +58,7 @@ use = egg:PasteDeploy#prefix
 prefix = /svnadmin
 scheme = https
 
-#[pipeline:main]
+[pipeline:main]
 ## Direct connect without proxy
 pipeline = myapp
 
