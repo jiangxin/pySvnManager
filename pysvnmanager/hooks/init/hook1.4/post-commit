@@ -69,8 +69,11 @@ fi
 
 ## Sync with downstream mirror sites using svnsync
 if [ "$mirror_enabled" = "yes" ]; then
-    #mirrorcmd="python $TOOLS_DIR/svn_mirror.py --repo \"$REPOS\" --rev \"$REV\" --urls \"$mirror_urls\" --user \"$mirror_username\" --password \"$mirror_password\" -l debug --logfile /tmp/svnsync.log"
-    mirrorcmd="python $TOOLS_DIR/svn_mirror.py --repo \"$REPOS\" --rev \"$REV\" --urls \"$mirror_urls\" --user \"$mirror_username\" --password \"$mirror_password\" -l debug -f /tmp/sync.txt"
+    # log to file: -l debug --logfile /tmp/svnsync.log
+    mirrorcmd="python $TOOLS_DIR/svn_mirror.py --repo \"$REPOS\" --rev \"$REV\" --urls \"$mirror_urls\" --user \"$mirror_username\" --password \"$mirror_password\""
+    if [ "$mirror_debug" = "yes" ]; then
+      mirrorcmd="$mirrorcmd -l debug"
+    fi
     eval $mirrorcmd 2>>$LOGFILE
 fi
 
