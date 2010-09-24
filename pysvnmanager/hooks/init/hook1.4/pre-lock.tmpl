@@ -30,7 +30,7 @@
 # 'pre-lock.bat' or 'pre-lock.exe',
 # but the basic idea is the same.
 #
-# Here is an example hook script, for a Unix /bin/sh interpreter:
+# Here is an example hook script, for a Unix /bin/bash interpreter:
 
 REPOS="$1"
 LOCKPATH="$2"
@@ -40,7 +40,7 @@ USER="$3"
 # to be stolen (e.g., with 'svn lock --force ...').
 
 # (Maybe this script could send email to the lock owner?)
-SVNLOOK=/opt/svn/bin/svnlook
+SVNLOOK=/usr/bin/svnlook
 GREP=/bin/grep
 SED=/bin/sed
 
