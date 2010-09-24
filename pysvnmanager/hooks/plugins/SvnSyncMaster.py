@@ -50,6 +50,7 @@ class SvnSyncMaster(PluginBase):
     key_username = "mirror_username"
     key_password = "mirror_password"
     key_urls = "mirror_urls"
+    key_debug = "mirror_debug"
     
     section = "mirror"
 
@@ -90,6 +91,8 @@ class SvnSyncMaster(PluginBase):
                 result += "- " + _("Url of downstream svn mirrors:") + "\n\n"
                 for url in urls.split(';'):
                     result += "  * ``" + url + "``" + "\n"
+            if self.get_config(self.key_debug) == "yes":
+                result += "- debug on\n"
 
         return result
     
@@ -105,6 +108,13 @@ class SvnSyncMaster(PluginBase):
         else:
             enable_checked  = "checked"
             disable_checked = ""
+
+        if self.get_config(self.key_debug)=="yes":
+            enable_debug = "checked"
+            disable_debug = ""
+        else:
+            enable_debug = ""
+            disable_debug = "checked"
 
         result = ""
         result += "<p><strong>%s</strong></p>" % _("Fill this form")
@@ -133,6 +143,13 @@ class SvnSyncMaster(PluginBase):
         result += "<textarea name='urls' rows='3' cols='40'>"
         result += html_escape( "\n".join( self.get_config(self.key_urls).split(';') ) )
         result += "</textarea>"
+        result += "\n<dt>"
+        result += _("Debug: ")
+        result += "\n<dd>"
+        result += "<input type='radio' name='debug' value='yes' " + \
+                enable_debug  + ">" + _("Enable") + "&nbsp;"
+        result += "<input type='radio' name='debug' value='no' " + \
+                disable_debug + ">" + _("Disable") + "<br>"
 
         result += "\n</dl>"
         result += "</blockquote>"
@@ -147,6 +164,7 @@ class SvnSyncMaster(PluginBase):
         self.unset_config(self.key_password)
         self.unset_config(self.key_switch)
         self.unset_config(self.key_urls)
+        self.unset_config(self.key_debug)
         self.save()
     
     def install(self, params=None):
@@ -162,6 +180,7 @@ class SvnSyncMaster(PluginBase):
         username = params.get('username')
         password = params.get('password')
         urls     = params.get('urls')
+        debug    = params.get('debug')
         if urls:
             urls = ';'.join( urls.splitlines() )
         else:
@@ -176,6 +195,7 @@ class SvnSyncMaster(PluginBase):
         self.set_config(self.key_username, username)
         self.set_config(self.key_password, password)
         self.set_config(self.key_urls, urls)
+        self.set_config(self.key_debug, debug)
         self.save()
 
     def svnsync_init(self, urls, username, password):

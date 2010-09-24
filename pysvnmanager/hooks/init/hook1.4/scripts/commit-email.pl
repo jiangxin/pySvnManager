@@ -22,7 +22,7 @@
 # ====================================================================
 
 
-$ENV{PATH} = "/bin:/sbin:/usr/bin:/usr/sbin:/opt/svn/bin";
+$ENV{PATH} = "/bin:/sbin:/usr/bin:/usr/sbin";
 $ENV{'LANG'} = 'zh_CN.UTF8';
 $ENV{'LC_ALL'} = 'zh_CN.UTF8';
 
@@ -49,7 +49,8 @@ my ($sendmail, $smtp_server);
 $sendmail = "/usr/sbin/sendmail";
 
 # Svnlook path.
-my $svnlook = "/opt/svn/bin/svnlook";
+my $svnlook = "/usr/bin/svnlook";
+my $diffstat = "/usr/bin/diffstat";
 
 # By default, when a file is deleted from the repository, svnlook diff
 # prints the entire contents of the file.  If you want to save space
@@ -222,7 +223,7 @@ while (@ARGV)
               }
             elsif ($arg eq '-L')
               {
-		$maxdifflines = $value;
+                $maxdifflines = $value;
               }
             else
               {
@@ -614,14 +615,24 @@ foreach my $project (@project_settings_list)
     push(@head, "\n");
 
     my ($len, $body_more_notes);
-    if ($diff_wanted and not @difflines)
+    my $diffcmd="";
+    if (not @difflines and $mode eq 'commit')
       {
-        # Get the diff from svnlook.
-        my @no_diff_deleted = $no_diff_deleted ? ('--no-diff-deleted') : ();
-        my @no_diff_added = $no_diff_added ? ('--no-diff-added') : ();
-        @difflines = &read_from_process($svnlook, 'diff', $repos,
-                                        '-r', $rev, @no_diff_deleted,
-                                        @no_diff_added);
+        if ($diff_wanted)
+          {
+            # Get the diff from svnlook.
+            $diffcmd = "$svnlook 'diff' $repos -r $rev";
+            $diffcmd = "$diffcmd --no-diff-deleted" if ($no_diff_deleted);
+            $diffcmd = "$diffcmd --no-diff-added" if ($no_diff_added);
+          }
+        else
+          {
+            $diffcmd = "$svnlook 'diff' $repos -r $rev | iconv -f utf8 -t gbk -c | $diffstat | iconv -f gbk -t utf8 -c";
+          }
+      }
+    if ($diffcmd)
+      {
+        @difflines = &read_from_process($diffcmd);
         @difflines = map { /[\r\n]+$/ ? $_ : "$_\n" } @difflines;
 
         $len = scalar(@difflines)-1;
@@ -641,7 +652,7 @@ foreach my $project (@project_settings_list)
         if (open(SENDMAIL, "| $command"))
           {
             print SENDMAIL @head, @body;
-            if ($diff_wanted)
+            if (@difflines)
               {
                 print SENDMAIL @difflines[0..$len];
                 print SENDMAIL $body_more_notes if ($body_more_notes ne "");
@@ -661,7 +672,7 @@ foreach my $project (@project_settings_list)
         handle_smtp_error($smtp, $smtp->recipient(@email_addresses));
         handle_smtp_error($smtp, $smtp->data());
         handle_smtp_error($smtp, $smtp->datasend(@head, @body));
-        if ($diff_wanted)
+        if (@difflines)
           {
             handle_smtp_error($smtp, $smtp->datasend(@difflines[0..$len]));
             handle_smtp_error($smtp, $smtp->datasend($body_more_notes)) if ($body_more_notes ne "");
@@ -676,7 +687,7 @@ foreach my $project (@project_settings_list)
         if (open(LOGFILE, ">> $log_file"))
           {
             print LOGFILE @head, @body;
-            print LOGFILE @difflines if $diff_wanted;
+            print LOGFILE @difflines if @difflines;
             close LOGFILE
               or warn "$0: error in closing `$log_file' for appending: $!\n";
           }
@@ -765,7 +776,7 @@ sub parse_boolean
   die "$0: valid boolean options are 'y' or 'n', not '$_[0]'\n";
 }
 
-# Start a child process safely without using /bin/sh.
+# Start a child process safely without using /bin/bash.
 sub safe_read_from_pipe
 {
   unless (@_)
@@ -829,3 +840,5 @@ sub read_from_process
       return @output;
     }
 }
+
+# vim: et sw=2 ts=2
