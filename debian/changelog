@@ -1,3 +1,10 @@
+pysvnmanager (1:0.5.2r185-63) unstable; urgency=low
+
+  * Add batch support for svnsync. List or Sycn repositories
+    under svnroot.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Sat, 25 Sep 2010 00:46:22 +0800
+
 pysvnmanager (1:0.5.2r184-63) unstable; urgency=low
 
   * Add our own svnsync lock, and do not block by svn:svnsync-lock prop.
