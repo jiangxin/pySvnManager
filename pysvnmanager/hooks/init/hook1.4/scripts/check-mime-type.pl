@@ -41,7 +41,7 @@ use Carp;
 # Configuration section.
 
 # Svnlook path.
-my $svnlook = "/opt/svn/bin/svnlook";
+my $svnlook = "/usr/bin/svnlook";
 $ENV{'LANG'} = 'zh_CN.UTF8';
 $ENV{'LC_ALL'} = 'zh_CN.UTF8';
 
