@@ -72,6 +72,7 @@ pysvnmanager/hooks/init/hook1.4/scripts/log-police.py
 pysvnmanager/hooks/init/hook1.4/scripts/pre-commit-check.py
 pysvnmanager/hooks/init/hook1.4/scripts/pre-lock-require-needs-lock.py
 pysvnmanager/hooks/init/hook1.4/scripts/svn2rss.py
+pysvnmanager/hooks/init/hook1.4/scripts/svn_mirror.py
 pysvnmanager/hooks/init/hook1.4/scripts/svnperms.conf
 pysvnmanager/hooks/init/hook1.4/scripts/svnperms.conf.example
 pysvnmanager/hooks/init/hook1.4/scripts/svnperms.py
@@ -104,6 +105,7 @@ pysvnmanager/hooks/init/hook1.5/scripts/log-police.py
 pysvnmanager/hooks/init/hook1.5/scripts/pre-commit-check.py
 pysvnmanager/hooks/init/hook1.5/scripts/pre-lock-require-needs-lock.py
 pysvnmanager/hooks/init/hook1.5/scripts/svn2rss.py
+pysvnmanager/hooks/init/hook1.5/scripts/svn_mirror.py
 pysvnmanager/hooks/init/hook1.5/scripts/svnperms.conf
 pysvnmanager/hooks/init/hook1.5/scripts/svnperms.conf.example
 pysvnmanager/hooks/init/hook1.5/scripts/svnperms.py
@@ -116,6 +118,7 @@ pysvnmanager/hooks/plugins/CommitLogCheck.py
 pysvnmanager/hooks/plugins/EmailNotify.py
 pysvnmanager/hooks/plugins/EolStyleCheck.py
 pysvnmanager/hooks/plugins/ReadonlySvnMirror.py
+pysvnmanager/hooks/plugins/SvnSyncMaster.py
 pysvnmanager/hooks/plugins/TracPostCommit.py
 pysvnmanager/hooks/plugins/__init__.py
 pysvnmanager/i18n/pysvnmanager.pot

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # A pre-commit hook to detect changes that look like forgotten
 # conflict markers. If any additions starting with '>>>>>>>',
@@ -9,7 +9,7 @@
 REPOS=$1
 TXN=$2
 
-SVNLOOK=/opt/svn/bin/svnlook
+SVNLOOK=/usr/bin/svnlook
 
 # Check arguments
 if [ -z "$REPOS" -o -z "$TXN" ]; then

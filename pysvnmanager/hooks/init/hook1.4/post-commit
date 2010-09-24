@@ -37,7 +37,7 @@
 # If you're having unexpected problems with a hook program, the
 # culprit may be unusual (or missing) environment variables.
 # 
-# Here is an example hook script, for a Unix /bin/sh interpreter.
+# Here is an example hook script, for a Unix /bin/bash interpreter.
 # For more examples and pre-written hooks, see those in
 # the Subversion repository at
 # http://svn.collab.net/repos/svn/trunk/tools/hook-scripts/ and
@@ -50,6 +50,7 @@ TOOLS_DIR=$REPOS/hooks/scripts
 
 source $REPOS/hooks/parse_ini.sh
 CONFIG=$REPOS/conf/hooks.ini
+LOGFILE=$REPOS/conf/tmplog
 if [ -f $CONFIG ]; then
   readconf post_commit
   readconf email 
@@ -57,18 +58,23 @@ if [ -f $CONFIG ]; then
   readconf mirror
 fi
 
+:> $LOGFILE
+
 if [ "$email_notify_enable" = "yes" ]; then
     #$TOOLS_DIR/log-commit.py --repository "$REPOS" --revision "$REV"
     #$TOOLS_DIR/commit-email.pl "$REPOS" "$REV" -m "." --diff y --from noreply@foo.bar -r noreply@foo.bar -s "[Prefix]" list@foo.bar
     mailcmd="$TOOLS_DIR/commit-email.pl \"$REPOS\" \"$REV\" $email_notify_config"
-    eval $mailcmd &
+    eval $mailcmd 2>>$LOGFILE
 fi
 
 ## Sync with downstream mirror sites using svnsync
 if [ "$mirror_enabled" = "yes" ]; then
-    #mirrorcmd="python $TOOLS_DIR/svn_mirror.py --repo \"$REPOS\" --rev \"$REV\" --urls \"$mirror_urls\" --user \"$mirror_username\" --password \"$mirror_password\" -l debug --logfile /tmp/svnsync.log"
+    # log to file: -l debug --logfile /tmp/svnsync.log
     mirrorcmd="python $TOOLS_DIR/svn_mirror.py --repo \"$REPOS\" --rev \"$REV\" --urls \"$mirror_urls\" --user \"$mirror_username\" --password \"$mirror_password\""
-    eval $mirrorcmd &
+    if [ "$mirror_debug" = "yes" ]; then
+      mirrorcmd="$mirrorcmd -l debug"
+    fi
+    eval $mirrorcmd 2>>$LOGFILE
 fi
 
 ############################################################
@@ -76,21 +82,23 @@ fi
 TRAC_POST_COMMIT_HOOK=/usr/share/doc/trac/contrib/trac-post-commit-hook
 if [ "$trac_post_commit_enabled" = "yes" ]; then
     if [ ! -z "$trac_env" ]; then
-        if [ -z "$trac_repos_name" ]; then
-            traccmd="$TRAC_POST_COMMIT_HOOK -p $trac_env -r $REV"
-        else
-            traccmd="$TRAC_POST_COMMIT_HOOK -p $trac_env -r $REV -R $trac_repos_name"
+        traccmd="$TRAC_POST_COMMIT_HOOK -p $trac_env -r $REV"
+        if [ ! -z "$trac_repos_name" ]; then
+            traccmd="$traccmd -R $trac_repos_name"
         fi
-        eval $traccmd
+        if [ ! -z "$trac_fixed_status" ]; then
+            traccmd="$traccmd --status $trac_fixed_status"
+        fi
+        eval $traccmd 2>>$LOGFILE
     fi 
 fi
 
 ############################################################
 # Mantisbt integration
 if [ "$mantis_integration" = "yes" ]; then
-    SVNLOOK=/opt/svn/bin/svnlook
+    SVNLOOK=/usr/bin/svnlook
     MANTISBT=/opt/mantis/web
-    PHP=/opt/php5/bin/php5
+    PHP=/usr/bin/php5
 
     if [ -f "$MANTISBT/core/checkin.php" ]; then
       export LC_ALL=zh_CN.utf8
@@ -110,3 +118,8 @@ EOF
     fi
 fi
 
+if [ -s $LOGFILE ]; then
+  cat $LOGFILE 1>&2
+  rm $LOGFILE
+  exit 1
+fi
