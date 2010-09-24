@@ -108,4 +108,4 @@ index ded2193..b466e58 100644
      def failed(self):
          return render('/auth_failed.mako')
 -- 
-tg: (3bdbed7..) t/remote_user_login (depends on: master)
+tg: (8fda7ff..) t/remote_user_login (depends on: master)

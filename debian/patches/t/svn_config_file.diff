@@ -37,4 +37,4 @@ index 7904636..a26f476 100644
 -jiangxin:qy86xgNhihxc.
 +## manage passwd file using 'htpasswd' command.
 -- 
-tg: (e6dec75..) t/svn_config_file (depends on: master)
+tg: (a82db53..) t/svn_config_file (depends on: master)

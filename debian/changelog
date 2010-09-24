@@ -1,3 +1,9 @@
+pysvnmanager (1:0.5.2r184-63) unstable; urgency=low
+
+  * Add our own svnsync lock, and do not block by svn:svnsync-lock prop.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Fri, 24 Sep 2010 17:43:46 +0800
+
 pysvnmanager (1:0.5.2r179-63) unstable; urgency=low
 
   * Bugfix for deployment.ini: not comments pipeline section.
