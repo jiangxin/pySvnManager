@@ -101,7 +101,7 @@ def check_po(pool, repos_path, txn):
   editor = ChangeReceiver(txn_root, base_root, pool)
   e_ptr, e_baton = delta.make_editor(editor, pool)
   repos.dir_delta(base_root, '', '', txn_root, '',
-                  e_ptr, e_baton, authz_cb, 0, 1, 0, 0, pool)
+		  e_ptr, e_baton, authz_cb, 0, 1, 0, 0, pool)
 
 
 if __name__ == '__main__':

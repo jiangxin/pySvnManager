@@ -20,7 +20,7 @@ import sys, os, re, string, locale
 if os.name == 'nt':
     SVNLOOK = 'C:/Apps/Subversion/bin/svnlook.exe'
 else:
-    SVNLOOK = '/opt/svn/bin/svnlook'
+    SVNLOOK = '/usr/bin/svnlook'
 
 os.environ['LANG'] = os.environ['LC_ALL'] = 'zh_CN.UTF8'
 
