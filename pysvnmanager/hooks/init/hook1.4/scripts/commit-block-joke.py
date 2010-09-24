@@ -3,7 +3,7 @@
 
 import sys, os, string
 
-SVNLOOK='/opt/svn/bin/svnlook'
+SVNLOOK='/usr/bin/svnlook'
 MESSAGE="""
 Dear {AUTHOR}:
 
