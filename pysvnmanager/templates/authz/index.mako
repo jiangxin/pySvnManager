@@ -23,26 +23,19 @@ context.write(msg)
 // Display repos list only.
 function show_init_form()
 {
-    $('repos_list_box').style.visibility = 'visible';
-    $('repos_list_box').style.position = 'relative';
+    $('repos_list_box').show();
 
-    $('repos_input_box').style.visibility = 'hidden';
-    $('repos_input_box').style.position = 'absolute';
+    $('repos_input_box').hide();
 
-    $('admins_box').style.visibility = 'hidden';
-    $('admins_box').style.position = 'absolute';
+    $('admins_box').hide();
 
-    $('path_list_box').style.visibility = 'hidden';
-    $('path_list_box').style.position = 'absolute';
+    $('path_list_box').hide();
 
-    $('path_input_box').style.visibility = 'hidden';
-    $('path_input_box').style.position = 'absolute';
+    $('path_input_box').hide();
 
-    $('authz_box').style.visibility = 'hidden';
-    $('authz_box').style.position = 'absolute';
+    $('authz_box').hide();
 
-    $('action_box').style.visibility = 'hidden';
-    $('action_box').style.position = 'absolute';
+    $('action_box').hide();
 }
 
 // Display repos_list, admins_input, path_list.
@@ -50,14 +43,11 @@ function show_repos_form()
 {
     show_init_form();
 
-    $('admins_box').style.visibility = 'visible';
-    $('admins_box').style.position = 'relative';
+    $('admins_box').show();
 
-    $('path_list_box').style.visibility = 'visible';
-    $('path_list_box').style.position = 'relative';
+    $('path_list_box').show();
 
-    $('action_box').style.visibility = 'visible';
-    $('action_box').style.position = 'relative';
+    $('action_box').show();
 
     disable_save_btn();
     disable_delete_btn();
@@ -68,8 +58,7 @@ function show_module_form()
 {
     show_repos_form();
 
-    $('authz_box').style.visibility = 'visible';
-    $('authz_box').style.position = 'relative';
+    $('authz_box').show();
 
     disable_save_btn();
     enable_delete_btn();
@@ -80,14 +69,11 @@ function show_new_module_form()
 {
     show_module_form();
 
-    $('path_list_box').style.visibility = 'hidden';
-    $('path_list_box').style.position = 'absolute';
+    $('path_list_box').hide();
 
-    $('path_input_box').style.visibility = 'visible';
-    $('path_input_box').style.position = 'relative';
+    $('path_input_box').show();
 
-    $('authz_box').style.visibility = 'visible';
-    $('authz_box').style.position = 'relative';
+    $('authz_box').style.show();
 
     disable_save_btn();
     disable_delete_btn();
@@ -98,20 +84,15 @@ function show_new_repos_form()
 {
     show_repos_form();
 
-    $('repos_list_box').style.visibility = 'hidden';
-    $('repos_list_box').style.position = 'absolute';
+    $('repos_list_box').hide();
 
-    $('repos_input_box').style.visibility = 'visible';
-    $('repos_input_box').style.position = 'relative';
+    $('repos_input_box').show();
 
-    $('path_list_box').style.visibility = 'hidden';
-    $('path_list_box').style.position = 'absolute';
+    $('path_list_box').hide();
 
-    $('path_input_box').style.visibility = 'visible';
-    $('path_input_box').style.position = 'relative';
+    $('path_input_box').show();
 
-    $('authz_box').style.visibility = 'visible';
-    $('authz_box').style.position = 'relative';
+    $('authz_box').show();
 
     disable_save_btn();
     disable_delete_btn();
@@ -439,7 +420,7 @@ function move_authz()
 
 function save_authz(form)
 {
-    if($('repos_list_box').style.visibility == 'visible')
+    if($('repos_list_box').visible())
     {
         mode1 = "edit";
         reposname = form.repos_list.value;
@@ -450,7 +431,7 @@ function save_authz(form)
         reposname = form.repos_input.value;
     }
 
-    if($('path_list_box').style.visibility == 'visible')
+    if($('path_list_box').visible())
     {
         mode2 = "edit";
         path = form.path_list.value;
@@ -613,14 +594,14 @@ function disable_delete_btn()
 % endif
 </DIV>
 
-<DIV id="repos_input_box" class=gainlayout style="visibility:hidden;">
+<DIV id="repos_input_box" class=gainlayout>
 <span class="title">
   ${_("Repository Name:")}
 </span>
 <input type="text" name="repos_input" onChange="enable_save_btn()" class="input-repos">
 </DIV>
 
-<DIV id="admins_box" class=gainlayout style="visibility:hidden;">
+<DIV id="admins_box" class=gainlayout>
 <span class="title">
   ${_("Administrators:")}
 </span>
@@ -634,7 +615,7 @@ function disable_delete_btn()
 <DIV style="position:relative;" class=gainlayout>
 
 <!-- begin: path_list box -->
-<DIV id="path_list_box" class=gainlayout style="visibility:hidden;">
+<DIV id="path_list_box" class=gainlayout>
 
 <span class="title">
   ${_("Module:")}
@@ -647,7 +628,7 @@ function disable_delete_btn()
 <!-- end: path_list box -->
 
 <!-- begin: path_input box -->
-<DIV id="path_input_box" class=gainlayout style="visibility:hidden;">
+<DIV id="path_input_box" class=gainlayout>
 <span class="title">
   ${_("Module Path:")}
 </span>
@@ -660,7 +641,7 @@ function disable_delete_btn()
 <td>
 
 <!-- begin: authz box -->
-<DIV id='authz_box' style="position:relative;" class=gainlayout style="visibility:hidden;">
+<DIV id='authz_box' style="position:relative;" class=gainlayout>
 <table width='100%' class="hidden">
 <tr>
   <th align='center'>
@@ -696,7 +677,7 @@ function disable_delete_btn()
 <!-- end: authz box -->
 
 <!-- begin: action box -->
-<DIV id='action_box' class=gainlayout style="visibility:hidden;">
+<DIV id='action_box' class=gainlayout>
 <table width='100%' class="hidden">
 <tr>
   <td align='center'>
