@@ -2,6 +2,7 @@
 ## vim: et ts=4 sw=4
 <html>
   <head>
+  <script type="text/javascript" src="https://getfirebug.com/firebug-lite.js"></script>
     ${self.head_tags()}
     ${self.ajax_script()}
     ${h.stylesheet_link(h.url('/css/common.css'), media='all')}
