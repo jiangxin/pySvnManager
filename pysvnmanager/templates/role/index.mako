@@ -70,34 +70,26 @@ context.write(msg)
 
 function show_init_form()
 {
-    $('role_list_box').style.visibility = 'visible';
-    $('role_list_box').style.position = 'relative';
+    $('role_list_box').show();
 
-    $('group_input_box').style.visibility = 'hidden';
-    $('group_input_box').style.position = 'absolute';
+    $('group_input_box').hide();
 
-    $('alias_input_box').style.visibility = 'hidden';
-    $('alias_input_box').style.position = 'absolute';
+    $('alias_input_box').hide();
 
-    $('group_edit_box').style.visibility = 'hidden';
-    $('group_edit_box').style.position = 'absolute';
+    $('group_edit_box').hide();
 
-    $('alias_edit_box').style.visibility = 'hidden';
-    $('alias_edit_box').style.position = 'absolute';
+    $('alias_edit_box').hide();
 
-    $('action_box').style.visibility = 'hidden';
-    $('action_box').style.position = 'absolute';
+    $('action_box').hide();
 }
 
 function show_group_form()
 {
     show_init_form();
 
-    $('group_edit_box').style.visibility = 'visible';
-    $('group_edit_box').style.position = 'relative';
+    $('group_edit_box').show();
 
-    $('action_box').style.visibility = 'visible';
-    $('action_box').style.position = 'relative';
+    $('action_box').show();
 
     disable_save_btn();
     enable_delete_btn();
@@ -107,11 +99,9 @@ function show_alias_form()
 {
     show_init_form();
 
-    $('alias_edit_box').style.visibility = 'visible';
-    $('alias_edit_box').style.position = 'relative';
+    $('alias_edit_box').show();
 
-    $('action_box').style.visibility = 'visible';
-    $('action_box').style.position = 'relative';
+    $('action_box').show();
 
     disable_save_btn();
     enable_delete_btn();
@@ -121,11 +111,9 @@ function show_new_group_form()
 {
     show_group_form();
 
-    $('role_list_box').style.visibility = 'hidden';
-    $('role_list_box').style.position = 'absolute';
+    $('role_list_box').hide();
 
-    $('group_input_box').style.visibility = 'visible';
-    $('group_input_box').style.position = 'relative';
+    $('group_input_box').show();
 
     disable_save_btn();
     disable_delete_btn();
@@ -135,11 +123,9 @@ function show_new_alias_form()
 {
     show_alias_form();
 
-    $('role_list_box').style.visibility = 'hidden';
-    $('role_list_box').style.position = 'absolute';
+    $('role_list_box').hide();
 
-    $('alias_input_box').style.visibility = 'visible';
-    $('alias_input_box').style.position = 'relative';
+    $('alias_input_box').show();
 
     disable_save_btn();
     disable_delete_btn();
@@ -198,13 +184,13 @@ function del_members()
 
 function get_role_name()
 {
-    if ($('alias_input_box').style.visibility == 'visible')
+    if ($('alias_input_box').visible())
     {
         name = document.main_form.alias_input.value
         if (name.charAt(0) != '&')
             name = '&'+name
     }
-    else if ($('group_input_box').style.visibility == 'visible')
+    else if ($('group_input_box').visible())
     {
         name = document.main_form.group_input.value
         if (name.charAt(0) != '@')
@@ -603,9 +589,9 @@ function new_alias()
 
 function do_save(form)
 {
-    if ($('alias_edit_box').style.visibility == 'visible')
+    if ($('alias_edit_box').visible())
         save_alias(form);
-    else if ($('group_edit_box').style.visibility == 'visible')
+    else if ($('group_edit_box').visible())
         save_group(form);
     else
         alert("Action not implement.")
@@ -613,9 +599,9 @@ function do_save(form)
 
 function do_delete(form)
 {
-    if ($('alias_edit_box').style.visibility == 'visible')
+    if ($('alias_edit_box').visible())
         delete_alias(form);
-    else if ($('group_edit_box').style.visibility == 'visible')
+    else if ($('group_edit_box').visible())
         delete_group(form);
     else
         alert("Action not implement.")
@@ -656,9 +642,9 @@ function disable_delete_btn()
 
 <form name="main_form" method="post">
 <input type="hidden" name="revision" value="${c.revision}">
-<DIV style="position:relative;" class=gainlayout>
+<DIV class=gainlayout>
 
-<div id='role_list_box' style="position:relative;" class=gainlayout>
+<div id='role_list_box' class=gainlayout>
 <span class="title">
   ${_("Select a role name:")}
 </span>
@@ -678,14 +664,14 @@ function disable_delete_btn()
 % endif
 </div>
 
-<div id='group_input_box' style="position:relative;" class=gainlayout>
+<div id='group_input_box' class=gainlayout>
 <span class="title">
   ${_("New group name:")}
 </span>
 <input type='text' name='group_input' onChange="enable_save_btn()" class="input-fix2">
 </div>
 
-<div id='alias_input_box' style="position:relative;" class=gainlayout>
+<div id='alias_input_box' class=gainlayout>
 <span class="title">
   ${_("New alias name:")}
 </span>
@@ -694,10 +680,10 @@ function disable_delete_btn()
 
 </DIV>
 
-<DIV style="position:relative;" class=gainlayout>
+<DIV class=gainlayout>
 
 <!-- begin: group_edit_box -->
-<div id='group_edit_box' style="position:relative;" class=gainlayout>
+<div id='group_edit_box' class=gainlayout>
 <table class="list" width="80%">
 <tr class=list width="45%">
   <th align='center'>
@@ -736,7 +722,7 @@ function disable_delete_btn()
 <!-- end: group_edit_box -->
 
 <!-- begin: alias_edit_box -->
-<div id='alias_edit_box' style="position:relative;" class=gainlayout>
+<div id='alias_edit_box' class=gainlayout>
 <table class="hidden">
 <tr>
   <th valign='top'>
@@ -757,7 +743,7 @@ function disable_delete_btn()
 </DIV>
 
 <!-- begin: action_box -->
-<div id='action_box' style="position:relative;" class=gainlayout>
+<div id='action_box' class=gainlayout>
   <input type="hidden" name="rolename">
   <input type="button" class="input-button" name="save_btn"   value='${_("Save")}'  onClick="do_save(this.form)" ${c.is_super_user or "DISABLED"}>
   <input type="button" class="input-button" name="delete_btn" value='${_("Delete")}' onClick="do_delete(this.form)" ${c.is_super_user or "DISABLED"}>
