@@ -38,6 +38,22 @@ if dpkg --compare-versions "$2" lt-nl "1:0.5.2r167-58"; then
   fi
 fi
 
+## update /etc/subversion/hooks, because /etc/subversion/hooks maintain in other package.
+if dpkg --compare-versions "$2" lt "1:0.5.2r186-64"; then
+  if [ -d /etc/subversion/hooks ]; then
+    ldir=/etc/subversion/hooks
+    rdir=/opt/pysvnmanager/contrib/hooks
+    for f in post-commit post-revprop-change scripts/svn_mirror.py; do
+      if ! diff -q $ldir/$f $rdir/$f 2>/dev/null; then
+        echo -n "Update $ldir/$f ...	"
+        cp $rdir/$f $ldir/$f
+        chmod a+x $ldir/$f
+        echo "done"
+      fi
+    done
+  fi
+fi
+
 ## update production.ini
 if dpkg --compare-versions "$2" lt-nl "1:0.5.2r167-58"; then
   for ini in /opt/pysvnmanager/sites/*/production.ini; do

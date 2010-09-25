@@ -4,3 +4,4 @@ debian/package_info/*      opt/ossxp/lib/packages
 debian/virtualenv/Makefile opt/pysvnmanager/virtualenv
 contrib/*                  opt/pysvnmanager/contrib
 debian/contrib/*           opt/pysvnmanager/contrib
+pysvnmanager/hooks/init/hook1.5/* opt/pysvnmanager/contrib/hooks
