@@ -56,20 +56,29 @@ TOOLS_DIR=$REPOS/hooks/scripts
 
 source $REPOS/hooks/parse_ini.sh
 CONFIG=$REPOS/conf/hooks.ini
+LOGFILE=$REPOS/conf/tmplog.revprop
 if [ -f $CONFIG ]; then
   readconf email 
   readconf mirror
 fi
 
+:> $LOGFILE
+
 if [ "$email_notify_enable" = "yes" ]; then
     #$TOOLS_DIR/commit-email.pl --revprop-change "$REPOS" "$REV" "$USER" "$PROPNAME" -m "." --from noreply@foo.bar -r noreply@foo.bar -s "[Prefix]" list@foo.bar
     mailcmd="$TOOLS_DIR/commit-email.pl --revprop-change \"$REPOS\" \"$REV\" \"$USER\" \"$PROPNAME\" $email_notify_config"
-    eval $mailcmd &
+    eval $mailcmd 2>>$LOGFILE
 fi
 
 ## Sync with downstream mirror sites using svnsync
 if [ "$mirror_enabled" = "yes" ]; then
-    #mirrorcmd="python $TOOLS_DIR/svn_mirror.py --prop --repo \"$REPOS\" --rev \"$REV\" --urls \"$mirror_urls\" --user \"$mirror_username\" --password \"$mirror_password\" -l debug --logfile /tmp/svnsync.log"
+    # log to file: -l debug --logfile /tmp/svnsync.log
     mirrorcmd="python $TOOLS_DIR/svn_mirror.py --prop --repo \"$REPOS\" --rev \"$REV\" --urls \"$mirror_urls\" --user \"$mirror_username\" --password \"$mirror_password\""
-    eval $mirrorcmd &
+    eval $mirrorcmd 2>>$LOGFILE
+fi
+
+if [ -s $LOGFILE ]; then
+  cat $LOGFILE 1>&2
+  rm $LOGFILE
+  exit 1
 fi
