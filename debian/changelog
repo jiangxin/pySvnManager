@@ -1,3 +1,10 @@
+pysvnmanager (1:0.5.2r187-64) unstable; urgency=low
+
+  * IE8 css bugfix: using prototype's show and hide method for
+    IE compatibility.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Sat, 25 Sep 2010 17:34:12 +0800
+
 pysvnmanager (1:0.5.2r186-64) unstable; urgency=low
 
   * Save hooks scripts in /opt/pysvnmanager/contrib/hooks
