@@ -13,17 +13,13 @@
 // Display repos list only.
 function show_init_form()
 {
-    $('repos_list_box').style.visibility = 'visible';
-    $('repos_list_box').style.position = 'relative';
+    $('repos_list_box').show();
 
-    $('uninstall_hook_box').style.visibility = 'hidden';
-    $('uninstall_hook_box').style.position = 'absolute';
+    $('uninstall_hook_box').hide();
 
-    $('hook_setting_box').style.visibility = 'hidden';
-    $('hook_setting_box').style.position = 'absolute';
+    $('hook_setting_box').hide();
 
-    $('installed_hook_box').style.visibility = 'visible';
-    $('installed_hook_box').style.position = 'relative';
+    $('installed_hook_box').show();
 }
 
 
@@ -119,15 +115,12 @@ function ajax_repos_changed(code)
         eval(code);
         if (total==1)
         {
-            $('uninstall_hook_box').style.visibility = 'hidden';
-            $('uninstall_hook_box').style.position = 'absolute';
-            $('hook_setting_box').style.visibility = 'hidden';
-            $('hook_setting_box').style.position = 'absolute';
+            $('uninstall_hook_box').hide();
+            $('hook_setting_box').hide();
         }
         else
         {
-            $('uninstall_hook_box').style.visibility = 'visible';
-            $('uninstall_hook_box').style.position = 'relative';
+            $('uninstall_hook_box').show();
             for (var i=0; i < total; i++)
             {
                 unset_plugin_list.options[i] = new Option(name[i], id[i]);
@@ -148,8 +141,7 @@ function select_unset_hook_list()
     if (pluginname=='...'||pluginname=='')
     {
         $('hook_setting_form_contents').innerHTML = "";
-        $('hook_setting_box').style.visibility = 'hidden';
-        $('hook_setting_box').style.position = 'absolute';
+        $('hook_setting_box').hide();
     }
     else
     {
@@ -162,8 +154,7 @@ function show_hook_config_form(hookid)
     var reposname  = document.main_form.repos_list.value;
     var params = {repos:reposname, plugin:hookid};
 
-    $('hook_setting_box').style.visibility = 'visible';
-    $('hook_setting_box').style.position = 'relative';
+    $('hook_setting_box').show();
     showNoticesPopup();
     new Ajax.Updater(
         {success:'hook_setting_form_contents'},
@@ -196,7 +187,7 @@ function installed_hook_form_submit(form)
 <h2>${_("Repos management")}</h2>
 
 <form name="main_form" method="post">
-<DIV style="position:relative;" class=gainlayout>
+<DIV class=gainlayout>
 
 <DIV id="repos_list_box" class=gainlayout>
 <span class="title">
@@ -214,7 +205,7 @@ function installed_hook_form_submit(form)
 % endif
 </DIV>
 
-<DIV id="uninstall_hook_box" class=gainlayout style="visibility:hidden;position:absolute">
+<DIV id="uninstall_hook_box" class=gainlayout>
 <hr>
 <span class="title">
   ${_("Uninstalled hooks:")}
@@ -223,7 +214,7 @@ function installed_hook_form_submit(form)
     </select>
 </form>
 </DIV>
-<DIV id="hook_setting_box" class=gainlayout style="visibility:hidden;position:absolute">
+<DIV id="hook_setting_box" class=gainlayout>
 ## <form name="hook_setting_form" method="post" action="${h.url(controller="repos", action='setup_hook')}">
 <br>
 
@@ -260,7 +251,7 @@ function installed_hook_form_submit(form)
 
 <hr>
 
-<DIV id="installed_hook_box" class=gainlayout style="visibility:visible;position:relative">
+<DIV id="installed_hook_box" class=gainlayout>
 ## <form name="installed_hook_form" method="post" action="${h.url(controller="repos", action='remove_hook')}"
 ##         onSubmit="installed_hook_form_submit(this)">
 
