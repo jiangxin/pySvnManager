@@ -1,3 +1,9 @@
+pysvnmanager (1:0.5.2r188-64) unstable; urgency=low
+
+  * Remove firebug-lite loader.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Wed, 29 Sep 2010 11:08:47 +0800
+
 pysvnmanager (1:0.5.2r187-64) unstable; urgency=low
 
   * IE8 css bugfix: using prototype's show and hide method for
