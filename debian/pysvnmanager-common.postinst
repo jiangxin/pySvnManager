@@ -43,7 +43,21 @@ if dpkg --compare-versions "$2" lt "1:0.5.2r186-64"; then
   if [ -d /etc/subversion/hooks ]; then
     ldir=/etc/subversion/hooks
     rdir=/opt/pysvnmanager/contrib/hooks
-    for f in post-commit post-revprop-change scripts/svn_mirror.py; do
+    for f in post-commit post-revprop-change; do
+      if ! diff -q $ldir/$f $rdir/$f 2>/dev/null; then
+        echo -n "Update $ldir/$f ...	"
+        cp $rdir/$f $ldir/$f
+        chmod a+x $ldir/$f
+        echo "done"
+      fi
+    done
+  fi
+fi
+if dpkg --compare-versions "$2" lt "1:0.5.2r189-64"; then
+  if [ -d /etc/subversion/hooks ]; then
+    ldir=/etc/subversion/hooks
+    rdir=/opt/pysvnmanager/contrib/hooks
+    for f in scripts/svn_mirror.py; do
       if ! diff -q $ldir/$f $rdir/$f 2>/dev/null; then
         echo -n "Update $ldir/$f ...	"
         cp $rdir/$f $ldir/$f

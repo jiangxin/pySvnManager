@@ -1,3 +1,9 @@
+pysvnmanager (1:0.5.2r189-64) unstable; urgency=low
+
+  * New svn_mirror.py support force svnsync.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Wed, 17 Nov 2010 18:10:48 +0800
+
 pysvnmanager (1:0.5.2r188-64) unstable; urgency=low
 
   * Remove firebug-lite loader.
