@@ -6,7 +6,7 @@
 Usage:
 
     %(program)s [options] --repo </path/to/repo> --rev <rev> --urls <mirror_urls> [--prop]
-    %(program)s [list | sync] </path/to/repo>
+    %(program)s [list | sync] </path/to/svn/root>
 
 Options:
 
@@ -18,6 +18,9 @@ Options:
 
     -f|--logfile filename
             Save log to file
+
+    --force
+            Start svnsync even if master sync flag is off.
 
     -q|--quiet
             Quiet mode
@@ -135,7 +138,7 @@ class HOOK_INFO(object):
         self.repos = repos
         self.mirror_readonly = False
         self.mirror_admin = ""
-        self.mirror_enabled = False
+        self.mirror_enabled = None
         self.mirror_username = ""
         self.mirror_password = ""
         self.mirror_urls = []
@@ -156,8 +159,13 @@ class HOOK_INFO(object):
                 pass
 
             try:
-                if cp.get( 'mirror', 'mirror_enabled' ) == 'yes':
-                    self.mirror_enabled = True
+                if cp.has_option( 'mirror', 'mirror_enabled' ):
+                    if cp.get( 'mirror', 'mirror_enabled' ) == 'yes':
+                        self.mirror_enabled = True
+                    else:
+                        self.mirror_enabled = False
+                else:
+                    self.mirror_enabled = None
                 self.mirror_username = cp.get( 'mirror', 'mirror_username' )
                 self.mirror_password = cp.get( 'mirror', 'mirror_password' )
                 self.mirror_urls = cp.get( 'mirror', 'mirror_urls' ).split(';')
@@ -169,7 +177,7 @@ def parse_options(argv=None):
     try:
         opts, args = getopt.getopt( 
                 argv, "hvqPR:r:u:p:U:l:f:", 
-                ["help", "verbose", "quiet", "prop", "repo=", "rev=", "user=", "password=", "urls=", "loglevel=", "logfile="])
+                ["help", "verbose", "quiet", "prop", "force", "repo=", "rev=", "user=", "password=", "urls=", "loglevel=", "logfile="])
     except getopt.error, msg:
         return usage(1, msg)
 
@@ -185,6 +193,7 @@ def parse_options(argv=None):
     obj.logfile = None
     obj.verbose = False
     obj.args = args
+    obj.force = False
 
     for opt, arg in opts:
         if opt in ("-h", "--help"):
@@ -199,6 +208,8 @@ def parse_options(argv=None):
             obj.logfile = arg
         elif opt in ("-P", "--prop"):
             obj.prop = True
+        elif opt in ("--force"):
+            obj.force = True
         elif opt in ("-R", "--repo"):
             obj.repo = arg
         elif opt in ("-r", "--rev"):
@@ -265,11 +276,14 @@ def main(argv=None):
             elif len(opts.args) == 2 and opts.args[0].lower() == "list":
                 check_repos( opts.args[-1] )
             elif len(opts.args) == 2 and opts.args[0].lower() == "sync":
-                sync_repos( opts.args[-1] )
+                sync_repos( opts.args[-1], opts.force )
 
-        else:
+        elif opts.repo:
             do_sync_repos(opts.repo, opts.rev, opts.urls, opts.username,
                     opts.password, opts.prop)
+        else:
+            return usage(1)
+
 
     except Exception, e:
         sys.stderr.write("error: %s\n" % str(e))
@@ -291,11 +305,14 @@ def check_repos( repos_root ):
         repo_type = "single"
         if hookinfo.mirror_readonly:
             repo_type = "slave"
-        elif hookinfo.mirror_enabled:
-            repo_type = "master"
+        elif hookinfo.mirror_enabled is not None:
+            if hookinfo.mirror_enabled:
+                repo_type = "master"
+            else:
+                repo_type = "master (disabled)"
 
         mirrors_info = []
-        if repo_type == "master":
+        if repo_type.startswith("master"):
             svninfo = SVN_INFO( "file://" + repos )
             for url in hookinfo.mirror_urls:
                 mirrors_info.append( SLAVE_SVN_INFO( url, hookinfo.mirror_username, hookinfo.mirror_password ) )
@@ -311,7 +328,7 @@ def check_repos( repos_root ):
             if svninfo.sync_lock:
                 print " " * 8 + "**LOCKED** !"
 
-        elif repo_type == "master":
+        elif repo_type.startswith("master"):
             for mirror in mirrors_info:
                 print " " * 5 + ">> %s" % mirror.url
                 print " " * 5 + "   rev      : %-8s, uuid     : %s" % ( mirror.rev, mirror.uuid )
@@ -320,14 +337,19 @@ def check_repos( repos_root ):
                     print " " * 5 + "   " + "**LOCKED** !"
 
 
-def sync_repos( repos_root ):
+def sync_repos( repos_root, force = False ):
     for repos in find_repos( repos_root ):
         hookinfo = HOOK_INFO( repos )
         repo_type = "single"
         if hookinfo.mirror_readonly:
             repo_type = "slave"
-        elif hookinfo.mirror_enabled:
-            repo_type = "master"
+        elif hookinfo.mirror_enabled is not None:
+            if hookinfo.mirror_enabled or force:
+                repo_type = "master"
+            else:
+                repo_type = "master (disabled)"
+        else:
+            repo_type = "single"
 
         mirrors_info = []
         if repo_type == "master":
