@@ -35,19 +35,17 @@ if [ -z "$2" ]; then
     fi
 fi
 
-if [ ! -f /opt/pysvnmanager/virtualenv/bin/activate ]; then
-    make -C /opt/pysvnmanager/virtualenv all || echo "** Install virtualenv failed **"
-elif dpkg --compare-versions "$2" lt "1:0.5.2r165-53" ; then
-    ## version 1:0.5.2r165-52: + simplejson.
-    make -C /opt/pysvnmanager/virtualenv all || echo "** Install virtualenv failed **"
+if [ ! -f /opt/pysvnmanager/virtualenv/bin/activate ] || \
+   dpkg --compare-versions "$2" lt "1:0.5.2r165-53" ; then
+    echo "To initial your virtual environment, run:"
+    echo "    make -C /opt/pysvnmanager/virtualenv all"
+    echo ""
 fi
 
 if [ -z "$2" ] && [ ! -d $SITE ]; then
-    if [ -f /opt/pysvnmanager/virtualenv/bin/activate ]; then
-        . /opt/pysvnmanager/virtualenv/bin/activate
-    fi
-
-    /opt/pysvnmanager/bin/new_instance default || true
+    echo "To create new instance, run:"
+    echo "    . /opt/pysvnmanager/virtualenv/bin/activate"
+    echo "    /opt/pysvnmanager/bin/new_instance default"
 fi
 
 exit 0
