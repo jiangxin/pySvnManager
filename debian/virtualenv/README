@@ -1,0 +1,16 @@
+== How to use pypi mirror? ==
+
+* If using PIP, crate PIP config file: /root/.pip/pip.conf
+
+    [global]
+    index-url = http://192.168.99.10/pypi/
+
+* If using easy_install, check mirror config in /root/.pydistutils.cfg
+
+    [easy_install]
+    index_url = http://192.168.99.10/pypi/
+
+* If using easy_install, pass PYPI environ for Makefile
+
+    $ sudo PYPI=http://192.168.99.10/pypi/ ALLOWHOSTS=192.168.99.10 make all
+

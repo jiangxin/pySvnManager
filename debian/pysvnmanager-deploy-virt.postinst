@@ -35,17 +35,17 @@ if [ -z "$2" ]; then
     fi
 fi
 
-if [ ! -f /opt/pysvnmanager/virtualenv/bin/activate ] || \
-   dpkg --compare-versions "$2" lt "1:0.5.2r165-53" ; then
-    echo "To initial your virtual environment, run:"
-    echo "    make -C /opt/pysvnmanager/virtualenv all"
-    echo ""
-fi
+cat <<EOF
 
-if [ -z "$2" ] && [ ! -d $SITE ]; then
-    echo "To create new instance, run:"
-    echo "    . /opt/pysvnmanager/virtualenv/bin/activate"
-    echo "    /opt/pysvnmanager/bin/new_instance default"
-fi
+== Intial virtualenv ==
+
+  $ make -C /opt/pysvnmanager/virtualenv all
+
+== Create new pySvnManager instance ==
+
+  $ . /opt/pysvnmanager/virtualenv/bin/activate
+  $ /opt/pysvnmanager/bin/new_instance default
+
+EOF
 
 exit 0

@@ -1,3 +1,9 @@
+pysvnmanager (1:0.5.2r189-65) unstable; urgency=low
+
+  * Do not initial virtual env automatically.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Sat, 04 Jun 2011 13:53:59 +0800
+
 pysvnmanager (1:0.5.2r189-64) unstable; urgency=low
 
   * New svn_mirror.py support force svnsync.
