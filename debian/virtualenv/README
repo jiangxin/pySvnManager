@@ -1,4 +1,13 @@
-== How to use pypi mirror? ==
+== Virtualenv init offline ==
+
+Virtualenv bootstrap initial from fixed url:
+    http://pypi.python.org/packages/source/d/distribute/.
+
+If failed because of network issue, add a record in /etc/hosts:
+
+    192.168.99.10  pypi.python.org
+
+== Install pylons and related packages offline ==
 
 * If using PIP, crate PIP config file: /root/.pip/pip.conf
 
@@ -13,4 +22,3 @@
 * If using easy_install, pass PYPI environ for Makefile
 
     $ sudo PYPI=http://192.168.99.10/pypi/ ALLOWHOSTS=192.168.99.10 make all
-
