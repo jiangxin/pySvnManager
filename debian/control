@@ -40,6 +40,7 @@ Architecture: all
 Pre-Depends: python-virtualenv, python-setuptools
 Provides: pysvnmanager-deploy
 Depends: pysvnmanager-common
+Recommends: python-dev
 Conflicts: pysvnmanager-deploy
 XB-Python-Version: ${python:Versions}
 Description: subversion administration web interface based on pylons.

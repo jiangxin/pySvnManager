@@ -1,4 +1,4 @@
-pysvnmanager (1:0.5.2r189-67) unstable; urgency=low
+pysvnmanager (1:0.5.2r189-68) unstable; urgency=low
 
   * Do not initial virtual env automatically.
   * Install packages using PIP with pip.conf define mirrors.
