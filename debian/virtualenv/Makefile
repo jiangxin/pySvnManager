@@ -12,19 +12,20 @@ ifdef PYPI
     EASYINSTALL:=$(EASYINSTALL) --allow-hosts $(ALLOWHOSTS)
   endif
 else
-  EASYINSTALL:=pip install
+  EASYINSTALL:=PIP_CONFIG_FILE=pip.conf pip install
 endif
 
 help:
 	@cat README
-	@echo "make env:    create virtual env"
-	@echo "make pylons: install pylons"
-	@echo "make site-packages: virutal env use site-packages"
 
 all: env no-site-packages pylons with-site-packages
 
 require-mirror:
-	@if [ -z "$(PYPI)" ] && [ ! -f ~/.pip/pip.conf ]; then cat README; echo "Error: mirror not set."; exit 1; fi
+	@if [ -z "$(PYPI)" ] && [ ! -f pip.conf ]; then \
+		cat README; \
+		echo "Error: create a pip.conf from pip.conf.in, to use PYPI mirror."; \
+		exit 1; \
+	fi
 
 env: require-mirror
 	## Create virtual environment using virtualenv

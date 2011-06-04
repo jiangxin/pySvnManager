@@ -9,16 +9,24 @@ If failed because of network issue, add a record in /etc/hosts:
 
 == Install pylons and related packages offline ==
 
-* If using PIP, crate PIP config file: /root/.pip/pip.conf
+* If using PIP, crate PIP config file: /root/.pip/pip.conf or $ENV["PIP_CONFIG_FILE"]
 
     [global]
     index-url = http://192.168.99.10/pypi/
 
-* If using easy_install, check mirror config in /root/.pydistutils.cfg
+* [obsolte] If using easy_install, check mirror config in /root/.pydistutils.cfg
 
     [easy_install]
     index_url = http://192.168.99.10/pypi/
 
-* If using easy_install, pass PYPI environ for Makefile
+* [obsolte] If using easy_install, pass PYPI environ for Makefile
 
     $ sudo PYPI=http://192.168.99.10/pypi/ ALLOWHOSTS=192.168.99.10 make all
+
+== Usage ==
+
+* make env                            : Virtualenv initial
+* make pylons                         : Install pylons under virtualenv
+* make all                            : make env + make pylons
+* ../bin/new_instance <instance_name> : Create instance.
+
