@@ -18,6 +18,7 @@
 
 import datetime
 import logging
+import re
 
 from pysvnmanager.lib.base import *
 from pylons.i18n import _, ungettext, N_
@@ -100,7 +101,11 @@ class SecurityController(BaseController):
             response.set_cookie(cookie, '', expires=datetime.datetime(1970,1,1))
 
         if getattr(cfg, 'logout_url', None):
-            if request.environ.get('HTTP_REFERER'):
+            # if access from IP Address, do not use sso.
+            if re.compile('^(\d){1,3}\.(\d){1,3}\.(\d){1,3}\.(\d){1,3}').search(
+                request.environ.get('HTTP_HOST', request.environ.get('SERVER_NAME',''))):
+                redirect(url("login"))
+            elif request.environ.get('HTTP_REFERER'):
                 redirect( cfg.logout_url + "?" +  request.environ.get('HTTP_REFERER') )
             else:
                 redirect( cfg.logout_url )
