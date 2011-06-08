@@ -25,7 +25,7 @@ class LocalConfig(DefaultConfig):
     ldap_binddn = 'cn=ldapadmin,dc=foo,dc=bar'
     ldap_bindpw = 'guess'
     ldap_base = 'dc=foo,dc=bar'
-    ldap_filter = '(authorizedService=svn)(ossxpConfirmed=TRUE)'
+    ldap_filter = '(authorizedService=svn)(ossxpConfirmed=TRUE)(!(objectClass=gosaUserTemplate))'
 
     ## Logout redirect url, if using external auth backend
     logout_url = 'http://weblogin.foo.bar/cgi-bin/logout'
