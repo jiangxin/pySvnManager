@@ -9,7 +9,8 @@ If failed because of network issue, add a record in /etc/hosts:
 
 == Install pylons and related packages offline ==
 
-* If using PIP, crate PIP config file: /root/.pip/pip.conf or $ENV["PIP_CONFIG_FILE"]
+* If using PIP, crate PIP config file: /root/.pip/pip.conf or
+  pip.conf in this directory, point through $ENV["PIP_CONFIG_FILE"].
 
     [global]
     index-url = http://192.168.99.10/pypi/
@@ -23,10 +24,12 @@ If failed because of network issue, add a record in /etc/hosts:
 
     $ sudo PYPI=http://192.168.99.10/pypi/ ALLOWHOSTS=192.168.99.10 make all
 
-== Usage ==
+== Virtual env initial ==
 
 * make env                            : Virtualenv initial
 * make pylons                         : Install pylons under virtualenv
 * make all                            : make env + make pylons
-* ../bin/new_instance <instance_name> : Create instance.
+
+== Create new instance ==
+* ../bin/new_instance default : Create default instance.
 

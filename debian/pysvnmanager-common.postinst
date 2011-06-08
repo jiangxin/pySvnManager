@@ -53,6 +53,21 @@ if dpkg --compare-versions "$2" lt "1:0.5.2r186-64"; then
     done
   fi
 fi
+
+# for new install
+if [ -z "$2" ]; then
+  ## link /opt/pysvnmanager/contrib/hooks to /etc/subversion/hooks, if not exists.
+  if [ ! -e /etc/subversion/hooks ]; then
+      ln -s /opt/pysvnmanager/contrib/hooks /etc/subversion/hooks
+  fi
+  
+  ## Create /opt/svn/svnroot, if not exists.
+  if [ ! -e /opt/svn/svnroot ]; then
+      mkdir -p /opt/svn/svnroot
+      chown www-data.www-data /opt/svn/svnroot
+  fi
+fi
+
 if dpkg --compare-versions "$2" lt "1:0.5.2r189-64"; then
   if [ -d /etc/subversion/hooks ]; then
     ldir=/etc/subversion/hooks
@@ -108,6 +123,5 @@ if dpkg --compare-versions "$2" lt-nl "1:0.5.2r167-60"; then
     chmod a+x ${instance}/cgi-bin/pysvnmanager.wsgi
   done
 fi
-
 
 exit 0
