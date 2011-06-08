@@ -66,6 +66,9 @@ if [ -z "$2" ]; then
       mkdir -p /opt/svn/svnroot
       chown www-data.www-data /opt/svn/svnroot
   fi
+
+  ## enable wsgi module
+  a2enmod -q wsgi
 fi
 
 if dpkg --compare-versions "$2" lt "1:0.5.2r189-64"; then

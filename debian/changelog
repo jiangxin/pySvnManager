@@ -1,7 +1,9 @@
-pysvnmanager (1:0.5.2r189-72) unstable; urgency=low
+pysvnmanager (1:0.5.2r189-73) unstable; urgency=low
 
   * Create link /etc/subversion/hooks.
   * Create /opt/svn/svnroot.
+  * Add recommends for subversion, libapache2-svn, ...
+  * Enable wsgi apache module.
 
  -- Jiang Xin <worldhello.net@gmail.com>  Tue, 07 Jun 2011 19:52:56 +0800
 
