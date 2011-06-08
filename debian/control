@@ -11,6 +11,7 @@ Homepage: http://www.ossxp.com/trac/pysvnmanager
 Package: pysvnmanager
 Architecture: all
 Depends: pysvnmanager-common (= ${binary:Version}), pysvnmanager-deploy-virt (= ${binary:Version}) | pysvnmanager-deploy-sys (= ${binary:Version})
+Recommends: subversion, subversion-tools, libapache2-svn
 Description: Meta package for pySvnManager.
  pySvnManager is a subversion web interface based on pylons.
 

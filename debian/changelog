@@ -1,4 +1,4 @@
-pysvnmanager (1:0.5.2r189-71) unstable; urgency=low
+pysvnmanager (1:0.5.2r189-72) unstable; urgency=low
 
   * Create link /etc/subversion/hooks.
   * Create /opt/svn/svnroot.
