@@ -68,7 +68,7 @@ index 66e5fcc..16e891c 100644
  # Logging configuration
  [loggers]
 diff --git a/pysvnmanager/config/localconfig.py.in b/pysvnmanager/config/localconfig.py.in
-index 0b56a15..948efce 100644
+index 0b56a15..58aa03b 100644
 --- a/pysvnmanager/config/localconfig.py.in
 +++ b/pysvnmanager/config/localconfig.py.in
 @@ -10,19 +10,25 @@ class LocalConfig(DefaultConfig):
@@ -100,7 +100,7 @@ index 0b56a15..948efce 100644
 +    ldap_binddn = 'cn=ldapadmin,dc=foo,dc=bar'
 +    ldap_bindpw = 'guess'
 +    ldap_base = 'dc=foo,dc=bar'
-+    ldap_filter = '(authorizedService=svn)(ossxpConfirmed=TRUE)'
++    ldap_filter = '(authorizedService=svn)(ossxpConfirmed=TRUE)(!(objectClass=gosaUserTemplate))'
 +
 +    ## Logout redirect url, if using external auth backend
 +    logout_url = 'http://weblogin.foo.bar/cgi-bin/logout'
