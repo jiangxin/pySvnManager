@@ -73,7 +73,7 @@ function show_new_module_form()
 
     $('path_input_box').show();
 
-    $('authz_box').style.show();
+    $('authz_box').show();
 
     disable_save_btn();
     disable_delete_btn();
