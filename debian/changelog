@@ -1,3 +1,9 @@
+pysvnmanager (1:0.5.2r191-75) unstable; urgency=low
+
+  * Add url for logout if auth failed.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Sun, 26 Jun 2011 16:17:29 +0800
+
 pysvnmanager (1:0.5.2r190-75) unstable; urgency=low
 
   * Bugfix: wrong dom operation code cause user list not update.
