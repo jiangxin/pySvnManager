@@ -143,7 +143,7 @@ class AuthzController(BaseController):
         d = request.params
         reposname = d.get('reposname')
         path = d.get('path')
-        if '\\' in path:
+        if path is not None and '\\' in path:
             path = path.replace('\\', '/')
         module = self.authz.get_module(reposname, path)
         if not module:
@@ -172,7 +172,7 @@ class AuthzController(BaseController):
         path      = d.get('path')
         rules     = d.get('rules')
         revision  = d.get('revision', self.authz.version)
-        if '\\' in path:
+        if path is not None and '\\' in path:
             path = path.replace('\\', '/')
         # mode1: new or edit repository
         mode1     = d.get('mode1')
@@ -240,7 +240,7 @@ class AuthzController(BaseController):
 
         reposname = d.get('reposname')
         path  = d.get('path')
-        if '\\' in path:
+        if path is not None and '\\' in path:
             path = path.replace('\\', '/')
         revision  = d.get('revision', self.authz.version)
         
