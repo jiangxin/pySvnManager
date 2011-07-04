@@ -9,41 +9,39 @@
 # Jiang Xin <worldhello.net@gmail.com>, 2008, 2009, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: pysvnmanager\n"
+"Project-Id-Version:  pysvnmanager\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-08-26 20:17+0800\n"
+"POT-Creation-Date: 2011-07-04 18:04+0800\n"
 "PO-Revision-Date: 2010-08-26 20:18+0800\n"
 "Last-Translator: Jiang Xin <worldhello.net@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"Generated-By: Babel 0.9.4\n"
-"X-Generator: Lokalize 1.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
 
 #: pysvnmanager/controllers/authz.py:69
-#: pysvnmanager/templates/authz/index.mako:151
+#: pysvnmanager/templates/authz/index.mako:132
 #: pysvnmanager/templates/check/index.mako:11
 msgid "All users(with anon)"
 msgstr "所有用户(含匿名)"
 
 #: pysvnmanager/controllers/authz.py:70
-#: pysvnmanager/templates/authz/index.mako:153
+#: pysvnmanager/templates/authz/index.mako:134
 #: pysvnmanager/templates/check/index.mako:12
 msgid "Known users"
 msgstr "注册用户"
 
 #: pysvnmanager/controllers/authz.py:71
-#: pysvnmanager/templates/authz/index.mako:155
+#: pysvnmanager/templates/authz/index.mako:136
 #: pysvnmanager/templates/check/index.mako:13
 msgid "Anonymous"
 msgstr "匿名用户"
 
 #: pysvnmanager/controllers/authz.py:76 pysvnmanager/controllers/role.py:83
 #: pysvnmanager/controllers/role.py:103
-#: pysvnmanager/templates/authz/index.mako:147
+#: pysvnmanager/templates/authz/index.mako:128
 #: pysvnmanager/templates/check/index.mako:18
 #: pysvnmanager/templates/role/index.mako:20
 #: pysvnmanager/templates/role/index.mako:42
@@ -52,7 +50,7 @@ msgstr "团队:"
 
 #: pysvnmanager/controllers/authz.py:79 pysvnmanager/controllers/role.py:88
 #: pysvnmanager/controllers/role.py:105
-#: pysvnmanager/templates/authz/index.mako:149
+#: pysvnmanager/templates/authz/index.mako:130
 #: pysvnmanager/templates/check/index.mako:20
 #: pysvnmanager/templates/role/index.mako:25
 #: pysvnmanager/templates/role/index.mako:47
@@ -69,32 +67,32 @@ msgstr "别名:"
 msgid "Please choose..."
 msgstr "请选择..."
 
-#: pysvnmanager/controllers/authz.py:188
+#: pysvnmanager/controllers/authz.py:191
 #, python-format
 msgid "User %(user)s changed authz rules. (rev:%(rev)s)"
 msgstr "用户 %(user)s 修改了授权策略。(rev:%(rev)s)"
 
-#: pysvnmanager/controllers/authz.py:203
+#: pysvnmanager/controllers/authz.py:206
 #, python-format
 msgid "Repository %s not exist."
 msgstr "版本库 %s 不存在。"
 
-#: pysvnmanager/controllers/authz.py:211
+#: pysvnmanager/controllers/authz.py:214
 #, python-format
 msgid "Module %s not exist."
 msgstr "模组 %s 不存在。"
 
-#: pysvnmanager/controllers/authz.py:217
+#: pysvnmanager/controllers/authz.py:220
 msgid "You can not delete yourself from admin list."
 msgstr "您不能将自己从管理员列表中删除。"
 
-#: pysvnmanager/controllers/authz.py:242
+#: pysvnmanager/controllers/authz.py:247
 #, python-format
 msgid "User %(user)s delete authz rules. (rev:%(rev)s)"
 msgstr "用户 %(user)s 删除了授权策略。(rev:%(rev)s)"
 
 #: pysvnmanager/controllers/check.py:93
-#: pysvnmanager/templates/auth_failed.mako:3
+#: pysvnmanager/templates/auth_failed.mako:2
 msgid "Permission denied."
 msgstr "没有权限。"
 
@@ -149,7 +147,7 @@ msgid "Plugin name"
 msgstr "插件名称"
 
 #: pysvnmanager/controllers/repos.py:134
-#: pysvnmanager/hooks/plugins/__init__.py:326
+#: pysvnmanager/hooks/plugins/__init__.py:331
 msgid "Type"
 msgstr "类型"
 
@@ -204,7 +202,13 @@ msgstr ""
 msgid "Create repository '%(repos)s' success."
 msgstr "成功创建版本库'%(repos)s'。"
 
-#: pysvnmanager/controllers/repos.py:262
+#: pysvnmanager/controllers/repos.py:259
+#, python-format
+#| msgid "Delete blank repository '%(repos)s' success."
+msgid "Delete blank repos: %s."
+msgstr "删除空版本库: %s。"
+
+#: pysvnmanager/controllers/repos.py:265
 #, python-format
 msgid ""
 "Delete repository '%(repos)s' Failed. Error message:<br>\n"
@@ -213,7 +217,7 @@ msgstr ""
 "删除版本库'%(repos)s'失败。错误信息：<br>\n"
 "%(msg)s"
 
-#: pysvnmanager/controllers/repos.py:268
+#: pysvnmanager/controllers/repos.py:271
 #, python-format
 msgid "Delete blank repository '%(repos)s' success."
 msgstr "成功删除版本库'%(repos)s'。"
@@ -272,13 +276,10 @@ msgstr "允许用户修改提交说明等版本属性"
 
 #: pysvnmanager/hooks/plugins/AllowRevpropChange.py:35
 msgid ""
-"Commit-log is the only rev-prop we allow to change. Because the changes of "
-"rev-prop can not be reverted back, administrator must setup email "
+"Commit-log is the only rev-prop we allow to change. Because the changes "
+"of rev-prop can not be reverted back, administrator must setup email "
 "notification to record this irreversible action."
-msgstr ""
-"提交说明是我们唯一允许修改的版本属性。因为版本属性本身未被版本控制，修改版本"
-"属性是不可恢复的操作，所以管理员在启用本功能前，应该考虑设置变更通知以记录修"
-"改事件。"
+msgstr "提交说明是我们唯一允许修改的版本属性。因为版本属性本身未被版本控制，修改版本属性是不可恢复的操作，所以管理员在启用本功能前，应该考虑设置变更通知以记录修改事件。"
 
 #: pysvnmanager/hooks/plugins/BugtrackMantis.py:26
 msgid "Mantis bugtracking integration"
@@ -287,29 +288,25 @@ msgstr "整合 Mantis 缺陷跟踪系统"
 #: pysvnmanager/hooks/plugins/BugtrackMantis.py:32
 msgid ""
 "Integration Subversion with Mantis bugtracking. If commit-log has proper "
-"format (contains bugid), it will change bug status and append commint-log "
-"and code differ as comment of bug status change."
+"format (contains bugid), it will change bug status and append commint-log"
+" and code differ as comment of bug status change."
 msgstr ""
-"与 Mantis 缺陷跟踪系统整合。当提交日志符合特定的规范（包含 bugid），将会触发 "
-"Mantis 缺陷跟踪系统，将 bug 的状态修改为已修改，并将commit-log 以及代码变更添"
-"加到说明中。"
+"与 Mantis 缺陷跟踪系统整合。当提交日志符合特定的规范（包含 bugid），将会触发 Mantis 缺陷跟踪系统，将 bug "
+"的状态修改为已修改，并将commit-log 以及代码变更添加到说明中。"
 
 #: pysvnmanager/hooks/plugins/CapCheckMergeInfo.py:26
 msgid "Subversion client version check (>1.5.0)"
 msgstr "Subversion 客户端版本检查 (>1.5.0)"
 
 #: pysvnmanager/hooks/plugins/CapCheckMergeInfo.py:32
-msgid ""
-"Check subversion client version. if version below 1.5.0, checkin denied."
+msgid "Check subversion client version. if version below 1.5.0, checkin denied."
 msgstr "检查 subversion 客户端版本。如果版本号小于 1.5.0，禁止客户端提交。"
 
 #: pysvnmanager/hooks/plugins/CapCheckMergeInfo.py:35
 msgid ""
 "SVN below 1.5.0 can not handle mergeinfo properly.It can mess up our "
 "automated merge tracking!"
-msgstr ""
-"小于 1.5.0 版本的 SVN 客户端不能正确处理 mergeinfo。会破坏自动的合并追踪功"
-"能！"
+msgstr "小于 1.5.0 版本的 SVN 客户端不能正确处理 mergeinfo。会破坏自动的合并追踪功能！"
 
 #: pysvnmanager/hooks/plugins/CaseInsensitive.py:26
 msgid "Detect case-insensitive filename clashes"
@@ -349,7 +346,7 @@ msgstr "用户在代码提交时，必须提供提交说明。"
 #: pysvnmanager/hooks/plugins/EmailNotify.py:89
 #: pysvnmanager/hooks/plugins/EolStyleCheck.py:63
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:65
-#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:69
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:79
 #: pysvnmanager/hooks/plugins/TracPostCommit.py:66
 msgid "Current configuration"
 msgstr "当前设置"
@@ -380,7 +377,7 @@ msgstr "提交说明 **不能** 出现类似内容："
 #: pysvnmanager/hooks/plugins/EmailNotify.py:113
 #: pysvnmanager/hooks/plugins/EolStyleCheck.py:87
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:91
-#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:101
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:120
 #: pysvnmanager/hooks/plugins/TracPostCommit.py:94
 msgid "Fill this form"
 msgstr "填写表单"
@@ -392,7 +389,8 @@ msgstr "启用提交说明检查："
 #: pysvnmanager/hooks/plugins/CommitLogCheck.py:106
 #: pysvnmanager/hooks/plugins/EmailNotify.py:120
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:98
-#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:108
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:127
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:150
 #: pysvnmanager/hooks/plugins/TracPostCommit.py:101
 msgid "Enable"
 msgstr "启用"
@@ -400,7 +398,8 @@ msgstr "启用"
 #: pysvnmanager/hooks/plugins/CommitLogCheck.py:108
 #: pysvnmanager/hooks/plugins/EmailNotify.py:122
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:100
-#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:110
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:129
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:152
 #: pysvnmanager/hooks/plugins/TracPostCommit.py:103
 msgid "Disable"
 msgstr "关闭"
@@ -525,11 +524,9 @@ msgstr "宽松模式"
 
 #: pysvnmanager/hooks/plugins/EolStyleCheck.py:99
 msgid ""
-"Permit checkin without svn:eol-style properity if is in Unix file format (no "
-"crlf in text file)."
-msgstr ""
-"当提交的文本文件为 Unix 格式时（文本文件内容中不包含CRLF），可以不提供 svn:"
-"eol-style 属性。"
+"Permit checkin without svn:eol-style properity if is in Unix file format "
+"(no crlf in text file)."
+msgstr "当提交的文本文件为 Unix 格式时（文本文件内容中不包含CRLF），可以不提供 svn:eol-style 属性。"
 
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:26
 msgid "Subversion readonly mirror"
@@ -537,19 +534,16 @@ msgstr "SVN 只读镜像"
 
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:32
 msgid ""
-"This subversion repository is a svnsync readonly mirror. Nobody can checkin, "
-"except the svnsync admin user."
-msgstr ""
-"本 SVN 版本库是一个 svnsync 的只读镜像。除了 svnsync 管理员，任何人都不能提"
-"交。"
+"This subversion repository is a svnsync readonly mirror. Nobody can "
+"checkin, except the svnsync admin user."
+msgstr "本 SVN 版本库是一个 svnsync 的只读镜像。除了 svnsync 管理员，任何人都不能提交。"
 
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:36
 msgid ""
-"Commit to the remote svn server, this repository is a readonly svn mirror.It "
-"is the svnsync admin's duty to synchronize svnsync server and mirror."
-msgstr ""
-"提交到远程的 SVN 服务器，本地服务器是一个只读的 SVN 镜像。同步远程与本地的 "
-"SVN 服务器，是管理员的职责。"
+"Commit to the remote svn server, this repository is a readonly svn "
+"mirror.It is the svnsync admin's duty to synchronize svnsync server and "
+"mirror."
+msgstr "提交到远程的 SVN 服务器，本地服务器是一个只读的 SVN 镜像。同步远程与本地的 SVN 服务器，是管理员的职责。"
 
 #: pysvnmanager/hooks/plugins/ReadonlySvnMirror.py:67
 msgid "Readonly mirror enabled."
@@ -571,53 +565,54 @@ msgstr "启用只读镜像："
 msgid "Svnsync administrator: "
 msgstr "Svnsync 管理员:"
 
-#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:27
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:31
 msgid "Sync with downstream svn mirrors"
 msgstr "同步到下游的SVN镜像服务器"
 
-#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:33
-msgid ""
-"This subversion repository is a svnsync master server. Each new commit will "
-"propagate to downstream svn mirrors."
-msgstr ""
-"本 SVN 版本库是一个 svnsync 的主版本库。每一个提交都会同步给下游的 SVN 镜像版"
-"本库。"
-
 #: pysvnmanager/hooks/plugins/SvnSyncMaster.py:37
 msgid ""
-"This master svn repository maybe configured with one or several svn mirrors."
-"You must give the url svn mirrors (one with each line), and give the "
-"username and password who initiates the mirror task."
-msgstr ""
-"此 SVN 主版本库可以配置一个或多个下游的 SVN 镜像版本库。 您必须提供下游 SVN "
-"镜像的 URL（每个一行），并且还要提供 发起同步的用户名和口令。此用户要对下游版"
-"本库具有写权限。"
+"This subversion repository is a svnsync master server. Each new commit "
+"will propagate to downstream svn mirrors."
+msgstr "本 SVN 版本库是一个 svnsync 的主版本库。每一个提交都会同步给下游的 SVN 镜像版本库。"
 
-#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:71
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:41
+msgid ""
+"This master svn repository maybe configured with one or several svn "
+"mirrors.You must give the url svn mirrors (one with each line), and give "
+"the username and password who initiates the mirror task."
+msgstr ""
+"此 SVN 主版本库可以配置一个或多个下游的 SVN 镜像版本库。 您必须提供下游 SVN 镜像的 URL（每个一行），并且还要提供 "
+"发起同步的用户名和口令。此用户要对下游版本库具有写权限。"
+
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:81
 msgid "Mirror enabled."
 msgstr "镜像启用。"
 
-#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:73
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:83
 msgid "Mirror disabled."
 msgstr "镜像禁用。"
 
-#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:77
-#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:112
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:87
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:131
 msgid "Svnsync username:"
 msgstr "发起同步的用户名："
 
-#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:81
-#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:122
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:91
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:141
 msgid "Url of downstream svn mirrors:"
 msgstr "下游 SVN 镜像的 URL："
 
-#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:105
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:124
 msgid "Enable svn repo mirror: "
 msgstr "启用 SVN 版本库镜像："
 
-#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:117
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:136
 msgid "Svnsync password:"
 msgstr "发起同步的用户口令："
+
+#: pysvnmanager/hooks/plugins/SvnSyncMaster.py:147
+msgid "Debug: "
+msgstr ""
 
 #: pysvnmanager/hooks/plugins/TracPostCommit.py:27
 msgid "Trac integration with subversion's post commit hook."
@@ -628,8 +623,8 @@ msgid ""
 "Integrate subversion with trac: Commit log of subversion appends to trac "
 "tickets if subversion commit log contains ticket id."
 msgstr ""
-"整合 SVN 与 trac： 如果 subversion 的提交说明包含 ticket id，则更新对应 trac "
-"实例的 ticket 状态，将提交说明附加到 ticket 后。"
+"整合 SVN 与 trac： 如果 subversion 的提交说明包含 ticket id，则更新对应 trac 实例的 ticket "
+"状态，将提交说明附加到 ticket 后。"
 
 #: pysvnmanager/hooks/plugins/TracPostCommit.py:68
 msgid "Trac post commit hook is enabled."
@@ -669,25 +664,25 @@ msgstr "标记为修复的 ticket 状态 (缺省为 closed):"
 msgid "repos '%s' not exist!"
 msgstr "版本库 %s 不存在！"
 
-#: pysvnmanager/hooks/plugins/__init__.py:168
+#: pysvnmanager/hooks/plugins/__init__.py:173
 #, python-format
 msgid "Conflict: plugin '%s' is modified by others."
 msgstr "冲突：插件'%s'被其他人修改了。"
 
-#: pysvnmanager/hooks/plugins/__init__.py:198
-#: pysvnmanager/hooks/plugins/__init__.py:224
-#: pysvnmanager/hooks/plugins/__init__.py:246
-#: pysvnmanager/hooks/plugins/__init__.py:344
-#: pysvnmanager/hooks/plugins/__init__.py:351
-#: pysvnmanager/hooks/plugins/__init__.py:360
+#: pysvnmanager/hooks/plugins/__init__.py:203
+#: pysvnmanager/hooks/plugins/__init__.py:229
+#: pysvnmanager/hooks/plugins/__init__.py:251
+#: pysvnmanager/hooks/plugins/__init__.py:349
+#: pysvnmanager/hooks/plugins/__init__.py:356
+#: pysvnmanager/hooks/plugins/__init__.py:365
 msgid "Plugin not fully implemented."
 msgstr "插件未完全实现。"
 
-#: pysvnmanager/hooks/plugins/__init__.py:325
+#: pysvnmanager/hooks/plugins/__init__.py:330
 msgid "Name"
 msgstr "名称"
 
-#: pysvnmanager/hooks/plugins/__init__.py:327
+#: pysvnmanager/hooks/plugins/__init__.py:332
 msgid "Description"
 msgstr "说明"
 
@@ -696,9 +691,7 @@ msgstr "说明"
 msgid ""
 "Some one maybe you, has modified the svn authz file by hands. Please "
 "%(begin)ssave once%(end)s to fix possible config error."
-msgstr ""
-"有人可能是您，手工修改了 svn 授权文件，这可能导致 svn 不能工作。请  %(begin)s"
-"保存一次%(end)s，以修正可能的错误。"
+msgstr "有人可能是您，手工修改了 svn 授权文件，这可能导致 svn 不能工作。请  %(begin)s保存一次%(end)s，以修正可能的错误。"
 
 #: pysvnmanager/lib/base.py:98
 msgid "Modified external, save to avoid configuration error."
@@ -714,7 +707,7 @@ msgstr "版本库根不存在：%s"
 msgid "Repos %s already exists."
 msgstr "版本库 %s 已经存在。"
 
-#: pysvnmanager/model/repos.py:193
+#: pysvnmanager/model/repos.py:191
 #, python-format
 msgid "Repos %s is not a blank repository."
 msgstr "版本库 %s 不是一个空的版本库。"
@@ -747,48 +740,47 @@ msgstr "非法用户名: %s"
 msgid "Group %s is referenced by group %s."
 msgstr "用户组 %s 被组 %s 引用。"
 
-#: pysvnmanager/model/svnauthz.py:1316
+#: pysvnmanager/model/svnauthz.py:1314
 msgid "Update failed! You are working on a out-of-date revision."
 msgstr "更新失败！您的更改是基于一个过期的版本，请先刷新再更改。"
 
-#: pysvnmanager/model/svnauthz.py:1593 pysvnmanager/model/svnauthz.py:1600
-#: pysvnmanager/model/svnauthz.py:1604
+#: pysvnmanager/model/svnauthz.py:1591 pysvnmanager/model/svnauthz.py:1598
+#: pysvnmanager/model/svnauthz.py:1602
 #, python-format
 msgid "Unknown rule format: %s"
 msgstr "未知策略格式: %s"
 
-#: pysvnmanager/model/svnauthz.py:1618
+#: pysvnmanager/model/svnauthz.py:1616
 #, python-format
 msgid "No module exist for %s:%s"
 msgstr "模块不存在: %s:%s"
 
-#: pysvnmanager/model/svnauthz.py:1728
+#: pysvnmanager/model/svnauthz.py:1726
 #, python-format
 msgid "Alias %s is referenced by group %s."
 msgstr "别名 %s 为用户组 %s 引用。"
 
-#: pysvnmanager/model/svnauthz.py:1740
+#: pysvnmanager/model/svnauthz.py:1738
 #, python-format
 msgid "%s is referenced by [%s]."
 msgstr "%s 在 [%s] 中被引用。"
 
-#: pysvnmanager/model/svnauthz.py:1876
+#: pysvnmanager/model/svnauthz.py:1874
 #, python-format
 msgid "User %(username)s has Full (RW) rights for module %(repos)s:%(path)s"
 msgstr "用户 %(username)s 对模组 %(repos)s:%(path)s 具有完全权限 (RW)"
 
-#: pysvnmanager/model/svnauthz.py:1878
+#: pysvnmanager/model/svnauthz.py:1876
 #, python-format
-msgid ""
-"User %(username)s has ReadOnly (RO) rights for module %(repos)s:%(path)s"
+msgid "User %(username)s has ReadOnly (RO) rights for module %(repos)s:%(path)s"
 msgstr "用户 %(username)s 对模组 %(repos)s:%(path)s 具有只读权限 (RO)"
 
-#: pysvnmanager/model/svnauthz.py:1880
+#: pysvnmanager/model/svnauthz.py:1878
 #, python-format
 msgid "User %(username)s can *NOT* access to module %(repos)s:%(path)s"
 msgstr "用户 %(username)s 对模组 %(repos)s:%(path)s *没有* 访问权限 (XX)"
 
-#: pysvnmanager/model/svnauthz.py:1920
+#: pysvnmanager/model/svnauthz.py:1918
 #, python-format
 msgid ""
 "\n"
@@ -807,7 +799,7 @@ msgstr ""
 "禁用: %(deny)s\n"
 "\n"
 
-#: pysvnmanager/model/svnauthz.py:1939
+#: pysvnmanager/model/svnauthz.py:1937
 #, python-format
 msgid ""
 "\n"
@@ -838,6 +830,11 @@ msgstr ""
 "%(deny)s\n"
 "%(sep)s\n"
 
+#: pysvnmanager/templates/auth_failed.mako:3
+#: pysvnmanager/templates/base.mako:94
+msgid "Logout"
+msgstr "登出"
+
 #: pysvnmanager/templates/base.mako:35
 msgid "Loading, please wait..."
 msgstr "数据加载中，请稍后..."
@@ -849,11 +846,11 @@ msgstr "清除消息"
 #: pysvnmanager/templates/base.mako:63
 #, python-format
 msgid ""
-"Powered by <a href=\"%(url1)s\">pySvnManager</a> &copy; 2008-2010 <a href="
-"\"%(url2)s\">ossxp.com</a>"
+"Powered by <a href=\"%(url1)s\">pySvnManager</a> &copy; 2008-2010 <a "
+"href=\"%(url2)s\">ossxp.com</a>"
 msgstr ""
-"基于 <a href=\"%(url1)s\">pySvnManager</a> &copy; 2008-2010 <a href="
-"\"%(url2)s\">北京群英汇</a>"
+"基于 <a href=\"%(url1)s\">pySvnManager</a> &copy; 2008-2010 <a "
+"href=\"%(url2)s\">北京群英汇</a>"
 
 #: pysvnmanager/templates/base.mako:76
 msgid "Check permissions"
@@ -865,13 +862,13 @@ msgstr "角色管理"
 
 #: pysvnmanager/templates/base.mako:80
 #: pysvnmanager/templates/authz/index.mako:6
-#: pysvnmanager/templates/authz/index.mako:598
+#: pysvnmanager/templates/authz/index.mako:579
 msgid "ACL management"
 msgstr "权限控制"
 
 #: pysvnmanager/templates/base.mako:82
 #: pysvnmanager/templates/repos/hooks.mako:6
-#: pysvnmanager/templates/repos/hooks.mako:196
+#: pysvnmanager/templates/repos/hooks.mako:187
 msgid "Repos management"
 msgstr "版本库管理"
 
@@ -887,10 +884,6 @@ msgstr "帮助"
 msgid "Welcome"
 msgstr "欢迎,"
 
-#: pysvnmanager/templates/base.mako:94
-msgid "Logout"
-msgstr "登出"
-
 #: pysvnmanager/templates/catch_e.mako:4
 msgid "Exception:"
 msgstr "异常："
@@ -899,147 +892,147 @@ msgstr "异常："
 msgid "Error Traceback"
 msgstr "错误跟踪:"
 
-#: pysvnmanager/templates/authz/index.mako:157
-#: pysvnmanager/templates/authz/index.mako:159
+#: pysvnmanager/templates/authz/index.mako:138
+#: pysvnmanager/templates/authz/index.mako:140
 msgid "User:"
 msgstr "用户:"
 
-#: pysvnmanager/templates/authz/index.mako:168
+#: pysvnmanager/templates/authz/index.mako:149
 msgid "Readonly"
 msgstr "只读"
 
-#: pysvnmanager/templates/authz/index.mako:172
-#: pysvnmanager/templates/authz/index.mako:690
+#: pysvnmanager/templates/authz/index.mako:153
+#: pysvnmanager/templates/authz/index.mako:671
 msgid "Full"
 msgstr "完全权限"
 
-#: pysvnmanager/templates/authz/index.mako:176
-#: pysvnmanager/templates/authz/index.mako:691
+#: pysvnmanager/templates/authz/index.mako:157
+#: pysvnmanager/templates/authz/index.mako:672
 msgid "Denied"
 msgstr "禁用"
 
-#: pysvnmanager/templates/authz/index.mako:379
+#: pysvnmanager/templates/authz/index.mako:360
 msgid "No rights selected! Please check proper rights for selected users."
 msgstr "未选择权限！请为用户选择合适的权限。"
 
-#: pysvnmanager/templates/authz/index.mako:390
+#: pysvnmanager/templates/authz/index.mako:371
 msgid "Unknown rights: "
 msgstr "未知权限: "
 
-#: pysvnmanager/templates/authz/index.mako:479
+#: pysvnmanager/templates/authz/index.mako:460
 msgid "Please input repository name."
 msgstr "请输入版本库名称。"
 
-#: pysvnmanager/templates/authz/index.mako:485
+#: pysvnmanager/templates/authz/index.mako:466
 msgid "Save failed."
 msgstr "保存失败。"
 
-#: pysvnmanager/templates/authz/index.mako:491
+#: pysvnmanager/templates/authz/index.mako:472
 msgid "Please input module path."
 msgstr "请输入模组路径。"
 
-#: pysvnmanager/templates/authz/index.mako:511
+#: pysvnmanager/templates/authz/index.mako:492
 msgid "Update ACL failed:"
 msgstr "更新ACL失败："
 
-#: pysvnmanager/templates/authz/index.mako:516
+#: pysvnmanager/templates/authz/index.mako:497
 msgid "Update ACL successfully."
 msgstr "成功更新ACL。"
 
-#: pysvnmanager/templates/authz/index.mako:537
+#: pysvnmanager/templates/authz/index.mako:518
 msgid "No path selected."
 msgstr "未选择路径。"
 
-#: pysvnmanager/templates/authz/index.mako:542
+#: pysvnmanager/templates/authz/index.mako:523
 msgid "Are you sure to delete module:"
 msgstr "您确认要删除模组:"
 
-#: pysvnmanager/templates/authz/index.mako:544
-#: pysvnmanager/templates/role/index.mako:451
-#: pysvnmanager/templates/role/index.mako:536
+#: pysvnmanager/templates/authz/index.mako:525
+#: pysvnmanager/templates/role/index.mako:437
+#: pysvnmanager/templates/role/index.mako:522
 msgid "Click Ok to proceed, or click cancel"
 msgstr "点击 OK 继续，或者点击取消"
 
-#: pysvnmanager/templates/authz/index.mako:565
+#: pysvnmanager/templates/authz/index.mako:546
 msgid "Can not delete module "
 msgstr "无法删除模组 "
 
-#: pysvnmanager/templates/authz/index.mako:570
+#: pysvnmanager/templates/authz/index.mako:551
 msgid "Successfully delete module:"
 msgstr "成功删除模组:"
 
-#: pysvnmanager/templates/authz/index.mako:606
-#: pysvnmanager/templates/repos/hooks.mako:203
+#: pysvnmanager/templates/authz/index.mako:587
+#: pysvnmanager/templates/repos/hooks.mako:194
 msgid "Repository:"
 msgstr "版本库:"
 
-#: pysvnmanager/templates/authz/index.mako:612
+#: pysvnmanager/templates/authz/index.mako:593
 msgid "New repository"
 msgstr "新版本库"
 
-#: pysvnmanager/templates/authz/index.mako:618
+#: pysvnmanager/templates/authz/index.mako:599
 msgid "Repository Name:"
 msgstr "版本库名称:"
 
-#: pysvnmanager/templates/authz/index.mako:625
+#: pysvnmanager/templates/authz/index.mako:606
 msgid "Administrators:"
 msgstr "管理员:"
 
-#: pysvnmanager/templates/authz/index.mako:640
+#: pysvnmanager/templates/authz/index.mako:621
 msgid "Module:"
 msgstr "模组:"
 
-#: pysvnmanager/templates/authz/index.mako:645
+#: pysvnmanager/templates/authz/index.mako:626
 msgid "New module"
 msgstr "新模组"
 
-#: pysvnmanager/templates/authz/index.mako:652
+#: pysvnmanager/templates/authz/index.mako:633
 msgid "Module Path:"
 msgstr "模组路径:"
 
-#: pysvnmanager/templates/authz/index.mako:667
+#: pysvnmanager/templates/authz/index.mako:648
 msgid "ACL"
 msgstr "ACL"
 
-#: pysvnmanager/templates/authz/index.mako:672
+#: pysvnmanager/templates/authz/index.mako:653
 msgid "Users"
 msgstr "用户"
 
-#: pysvnmanager/templates/authz/index.mako:680
-#: pysvnmanager/templates/role/index.mako:717
+#: pysvnmanager/templates/authz/index.mako:661
+#: pysvnmanager/templates/role/index.mako:703
 msgid "Add membership"
 msgstr "添加成员"
 
-#: pysvnmanager/templates/authz/index.mako:682
-#: pysvnmanager/templates/role/index.mako:719
+#: pysvnmanager/templates/authz/index.mako:663
+#: pysvnmanager/templates/role/index.mako:705
 msgid "Remove membership"
 msgstr "移除成员"
 
-#: pysvnmanager/templates/authz/index.mako:687
+#: pysvnmanager/templates/authz/index.mako:668
 #: pysvnmanager/templates/check/index.mako:138
 #: pysvnmanager/templates/check/index.mako:147
 #: pysvnmanager/templates/check/index.mako:159
-#: pysvnmanager/templates/role/index.mako:724
-#: pysvnmanager/templates/role/index.mako:749
+#: pysvnmanager/templates/role/index.mako:710
+#: pysvnmanager/templates/role/index.mako:735
 msgid "Manual input"
 msgstr "手工输入"
 
-#: pysvnmanager/templates/authz/index.mako:689
+#: pysvnmanager/templates/authz/index.mako:670
 msgid "ReadOnly"
 msgstr "只读"
 
-#: pysvnmanager/templates/authz/index.mako:704
-#: pysvnmanager/templates/role/index.mako:762
+#: pysvnmanager/templates/authz/index.mako:685
+#: pysvnmanager/templates/role/index.mako:748
 msgid "Save"
 msgstr "保存"
 
-#: pysvnmanager/templates/authz/index.mako:705
-#: pysvnmanager/templates/role/index.mako:763
+#: pysvnmanager/templates/authz/index.mako:686
+#: pysvnmanager/templates/role/index.mako:749
 msgid "Delete"
 msgstr "删除"
 
-#: pysvnmanager/templates/authz/index.mako:706
-#: pysvnmanager/templates/role/index.mako:764
+#: pysvnmanager/templates/authz/index.mako:687
+#: pysvnmanager/templates/role/index.mako:750
 msgid "Cancel"
 msgstr "取消"
 
@@ -1131,21 +1124,21 @@ msgstr "创建版本库"
 msgid "Repository name:"
 msgstr "版本库名称："
 
-#: pysvnmanager/templates/repos/hooks.mako:209
-#: pysvnmanager/templates/repos/hooks.mako:210
+#: pysvnmanager/templates/repos/hooks.mako:200
+#: pysvnmanager/templates/repos/hooks.mako:201
 msgid "Add repository"
 msgstr "添加版本库"
 
-#: pysvnmanager/templates/repos/hooks.mako:212
-#: pysvnmanager/templates/repos/hooks.mako:213
+#: pysvnmanager/templates/repos/hooks.mako:203
+#: pysvnmanager/templates/repos/hooks.mako:204
 msgid "Remove blank repository"
 msgstr "删除空版本库"
 
-#: pysvnmanager/templates/repos/hooks.mako:220
+#: pysvnmanager/templates/repos/hooks.mako:211
 msgid "Uninstalled hooks:"
 msgstr "尚未安装的插件："
 
-#: pysvnmanager/templates/repos/hooks.mako:254
+#: pysvnmanager/templates/repos/hooks.mako:245
 msgid "Install this plugin"
 msgstr "安装此插件"
 
@@ -1156,101 +1149,90 @@ msgid "Remove repository"
 msgstr "删除版本库"
 
 #: pysvnmanager/templates/role/index.mako:7
-#: pysvnmanager/templates/role/index.mako:655
+#: pysvnmanager/templates/role/index.mako:641
 msgid "Role Management"
 msgstr "角色管理"
 
-#: pysvnmanager/templates/role/index.mako:423
+#: pysvnmanager/templates/role/index.mako:409
 msgid "Update group failed:"
 msgstr "更新用户组失败："
 
-#: pysvnmanager/templates/role/index.mako:429
+#: pysvnmanager/templates/role/index.mako:415
 msgid "Update group successfully."
 msgstr "成功更新用户组。"
 
-#: pysvnmanager/templates/role/index.mako:449
+#: pysvnmanager/templates/role/index.mako:435
 msgid "Are you sure to delete group:"
 msgstr "您确认要删除用户组:"
 
-#: pysvnmanager/templates/role/index.mako:472
+#: pysvnmanager/templates/role/index.mako:458
 msgid "Delete group failed:"
 msgstr "更新用户组失败："
 
-#: pysvnmanager/templates/role/index.mako:477
+#: pysvnmanager/templates/role/index.mako:463
 msgid "Delete group successfully."
 msgstr "成功删除用户组。"
 
-#: pysvnmanager/templates/role/index.mako:510
+#: pysvnmanager/templates/role/index.mako:496
 msgid "Update alias failed:"
 msgstr "更新别名失败："
 
-#: pysvnmanager/templates/role/index.mako:515
+#: pysvnmanager/templates/role/index.mako:501
 msgid "Update alias successfully."
 msgstr "成功更新别名。"
 
-#: pysvnmanager/templates/role/index.mako:534
+#: pysvnmanager/templates/role/index.mako:520
 msgid "Are you sure to delete alias:"
 msgstr "您确认要删除别名:"
 
-#: pysvnmanager/templates/role/index.mako:557
+#: pysvnmanager/templates/role/index.mako:543
 msgid "Delete alias failed:"
 msgstr "删除别名失败："
 
-#: pysvnmanager/templates/role/index.mako:562
+#: pysvnmanager/templates/role/index.mako:548
 msgid "Delete alias successfully."
 msgstr "成功删除别名。"
 
-#: pysvnmanager/templates/role/index.mako:663
+#: pysvnmanager/templates/role/index.mako:649
 msgid "Select a role name:"
 msgstr "选择一个角色:"
 
-#: pysvnmanager/templates/role/index.mako:668
-#: pysvnmanager/templates/role/index.mako:669
+#: pysvnmanager/templates/role/index.mako:654
+#: pysvnmanager/templates/role/index.mako:655
 msgid "New Group"
 msgstr "新用户组"
 
-#: pysvnmanager/templates/role/index.mako:671
-#: pysvnmanager/templates/role/index.mako:672
+#: pysvnmanager/templates/role/index.mako:657
+#: pysvnmanager/templates/role/index.mako:658
 msgid "New Alias"
 msgstr "新别名"
 
-#: pysvnmanager/templates/role/index.mako:675
-#: pysvnmanager/templates/role/index.mako:676
+#: pysvnmanager/templates/role/index.mako:661
+#: pysvnmanager/templates/role/index.mako:662
 msgid "Users update from LDAP"
 msgstr "和LDAP用户同步"
 
-#: pysvnmanager/templates/role/index.mako:683
+#: pysvnmanager/templates/role/index.mako:669
 msgid "New group name:"
 msgstr "新用户组名称:"
 
-#: pysvnmanager/templates/role/index.mako:690
+#: pysvnmanager/templates/role/index.mako:676
 msgid "New alias name:"
 msgstr "新别名名称:"
 
-#: pysvnmanager/templates/role/index.mako:704
+#: pysvnmanager/templates/role/index.mako:690
 msgid "Members list"
 msgstr "成员列表"
 
-#: pysvnmanager/templates/role/index.mako:709
+#: pysvnmanager/templates/role/index.mako:695
 msgid "Other users"
 msgstr "其他用户"
 
-#: pysvnmanager/templates/role/index.mako:731
+#: pysvnmanager/templates/role/index.mako:717
 msgid "Ignore recursive"
 msgstr "忽略组间循环引用"
 
-#: pysvnmanager/templates/role/index.mako:743
+#: pysvnmanager/templates/role/index.mako:729
 msgid "User name:"
 msgstr "用户名:"
 
-#~ msgid "Sync with username: "
-#~ msgstr "发起同步的用户名："
-
-#~ msgid "Downstream svn mirrors: "
-#~ msgstr "下游 SVN 镜像："
-
-#~ msgid "Select repository"
-#~ msgstr "选择版本库"
-
-#~ msgid "Select module"
-#~ msgstr "选择模组"
