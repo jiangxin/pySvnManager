@@ -1308,11 +1308,9 @@ class SvnAuthz(object):
             
         if self.__file:
             assert isinstance(self.__file, (basestring, StringIO.StringIO))
-            #if not revision:
-            #    revision = self.version
             last_rev = self.get_revision_from_file()
             log.debug("this revision: %s, last: %s" % (revision, last_rev))
-            if last_rev and revision != last_rev:
+            if (revision is not None) and last_rev and revision != last_rev:
                 raise Exception, _("Update failed! You are working on a out-of-date revision.") + " (%s <> %s)" % (revision, last_rev)
 
             self.update_revision()

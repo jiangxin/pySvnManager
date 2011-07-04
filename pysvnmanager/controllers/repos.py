@@ -256,6 +256,9 @@ class ReposController(BaseController):
             reposname = d.get("repos_list")
             self.validate_repos(reposname)
             self.repos.delete(reposname)
+            comment = _("Delete blank repos: %s.") % reposname
+            self.authz.del_repos(reposname, recursive=True)
+            self.authz.save(revision=None, comment=comment)
         except Exception, e:
             result = json.dumps( {
                     "type": "error",
