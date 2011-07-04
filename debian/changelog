@@ -1,7 +1,8 @@
-pysvnmanager (1:0.5.2r198-75) unstable; urgency=low
+pysvnmanager (1:0.5.2r198-76) unstable; urgency=low
 
   * Convert DOS style path to unix style.
   * Delete auth rules if delete blank repository.
+  * Reload apache2 if package update.
 
  -- Jiang Xin <worldhello.net@gmail.com>  Mon, 04 Jul 2011 19:21:04 +0800
 

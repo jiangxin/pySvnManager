@@ -2,6 +2,18 @@
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin 
 
+apache_force_reload() {
+    if apache2ctl configtest 2>/dev/null; then
+        if [ -x /usr/sbin/invoke-rc.d ]; then
+          invoke-rc.d apache2 reload || true
+        else
+          /etc/init.d/apache2 reload || true
+        fi
+    else
+        echo "Your apache2 configuration is broken, please fix it and restart apache2 manually."
+    fi
+}
+
 case "$1" in
     configure)
     ;;
@@ -126,5 +138,7 @@ if dpkg --compare-versions "$2" lt-nl "1:0.5.2r167-60"; then
     chmod a+x ${instance}/cgi-bin/pysvnmanager.wsgi
   done
 fi
+
+apache_force_reload
 
 exit 0
