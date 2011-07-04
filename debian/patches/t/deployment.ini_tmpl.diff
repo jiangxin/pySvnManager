@@ -108,4 +108,4 @@ index 0b56a15..58aa03b 100644
 +    ## If needs to expire certain cookie, list here.
 +    #logout_cookie = ['cookiename']
 -- 
-tg: (e1973c9..) t/deployment.ini_tmpl (depends on: master)
+tg: (b2f272f..) t/deployment.ini_tmpl (depends on: master)

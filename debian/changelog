@@ -1,3 +1,10 @@
+pysvnmanager (1:0.5.2r198-75) unstable; urgency=low
+
+  * Convert DOS style path to unix style.
+  * Delete auth rules if delete blank repository.
+
+ -- Jiang Xin <worldhello.net@gmail.com>  Mon, 04 Jul 2011 19:21:04 +0800
+
 pysvnmanager (1:0.5.2r191-75) unstable; urgency=low
 
   * Add url for logout if auth failed.
